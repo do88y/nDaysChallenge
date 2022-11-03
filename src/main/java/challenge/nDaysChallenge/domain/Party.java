@@ -10,8 +10,10 @@ import javax.persistence.Id;
 @Entity
 @NoArgsConstructor
 public class Party {
+
     @Id @GeneratedValue
-    private int member_number;
+    @Column(name = "member_number")
+    private int number;
 
     private String member_nickname;
 
