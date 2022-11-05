@@ -3,11 +3,10 @@ package challenge.nDaysChallenge.domain;
 import lombok.CustomLog;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.beans.ConstructorProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -17,9 +16,13 @@ public class Dajim {
     @Column(name = "dajim_number")
     private int number;
 
-    private int room_number;
+    @ManyToOne
+    @JoinColumn(name="room_number")
+    private Room room;
 
-    private int member_number;
+    @ManyToOne
+    @JoinColumn(name = "member_number")
+    private Member member;
 
     private String dajim_like;
 

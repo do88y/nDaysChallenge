@@ -1,14 +1,20 @@
 package challenge.nDaysChallenge.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Like {
 
-    private int member_number;
-    private int dajim_number;
+    @Id @GeneratedValue
+    @Column(name = "like_number")
+    private int number;
+
+    @ManyToOne
+    @JoinColumn(name = "member_number")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "dajim_number")
+    private Dajim dajim;
 
 }
