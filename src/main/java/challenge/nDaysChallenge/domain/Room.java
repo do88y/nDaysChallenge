@@ -1,35 +1,37 @@
 package challenge.nDaysChallenge.domain;
 
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter @Setter
 @NoArgsConstructor
 public class Room {
-    @Id@GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "room_number")
     private int number;
 
     @Column(name = "room_name")
     private String name;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private String reward;
 
-    private int category;
+    @Enumerated(EnumType.STRING)
+    private Category category;  //카테고리 [MINDFULNESS, EXERCISE, ROUTINE, ETC]
 
     private int successCount;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Room_status status;  //챌린지 상태 [CONTINUE, END]
 
 
 }

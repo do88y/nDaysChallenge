@@ -1,21 +1,27 @@
 package challenge.nDaysChallenge.domain;
 
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor
+@Getter @Setter
 public class Party {
 
     @Id @GeneratedValue
-    @Column(name = "member_number")
+    @Column(name = "party_number")
     private int number;
 
-    private String member_nickname;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    private int room_number;
+    @ManyToOne
+    @JoinColumn(name = "member_nickname")
+    private Member nickname;
+
+    @ManyToOne
+    @JoinColumn(name = "room_number")
+    private Room room;
 }
