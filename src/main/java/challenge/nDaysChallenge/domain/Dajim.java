@@ -14,7 +14,7 @@ public class Dajim {
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
-    private int number;
+    private Long number;
 
     @ManyToOne
     @JoinColumn(name="room_number")
@@ -24,8 +24,11 @@ public class Dajim {
     @JoinColumn(name = "member_number")
     private Member member;
 
-    private String dajim_like;
+    private String like;
 
-    private String dajim_content;
+    private String content;
+
+    //공개 여부 enum
+    private Open open;
 
 }
