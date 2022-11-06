@@ -14,8 +14,8 @@ import javax.persistence.Id;
 public class Member {
 
     @Id @GeneratedValue
-    @Column(name = "member_id")
-    private int number;
+    @Column(name = "member_number")
+    private Long number;
 
     private String nickname;
 
@@ -26,4 +26,7 @@ public class Member {
     private int image;
 
     private int room_limit;
-}
+
+    //==비즈니스 로직==//
+    }
+
