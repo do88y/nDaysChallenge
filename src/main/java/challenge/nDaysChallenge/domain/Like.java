@@ -8,6 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Like {
 
+    @Id
     private int member_number;
     private int dajim_number;
 
