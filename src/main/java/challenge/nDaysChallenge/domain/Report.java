@@ -1,9 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Report {
@@ -12,15 +9,21 @@ public class Report {
     @Column(name = "report_number")
     private int number;
 
-    private int dajim_number;
+    @ManyToOne
+    @JoinColumn(name = "dajim_number")
+    private Dajim dajim;
 
-    private int comment_number;
+    @ManyToOne
+    @JoinColumn(name = "comment_number")
+    private Dajim_comment comment;
 
-    private int member_number;
+    @ManyToOne
+    @JoinColumn(name = "member_number")
+    private Member member;
 
     private int cause;
 
-    private boolean dajim;
+    private boolean isDajim;
 
     private String content;
 
