@@ -16,13 +16,23 @@ public class Dajim {
     @Column(name = "dajim_number")
     private Long number;
 
-    @ManyToOne
-    @JoinColumn(name="room_number")
-    private Room room;
+    //다중 @OneToMany 로 인한 N+1 오류는 BatchSize + Join Fetch 로 해결할 예정
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Like> likes = new ArrayList<>();
 
-    @ManyToOne
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Dajim_comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Report> reports = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "party_number")
+    private Party party;
 
     private String like;
 
