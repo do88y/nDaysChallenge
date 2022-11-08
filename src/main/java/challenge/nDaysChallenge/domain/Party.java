@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+
 import javax.persistence.*;
 
 @Entity
