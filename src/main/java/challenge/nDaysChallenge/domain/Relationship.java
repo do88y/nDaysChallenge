@@ -12,18 +12,18 @@ public class Relationship {
     @Column(name = "relationship_number")
     private Long number;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member user_number;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member friend_number;
 
 
     private LocalDateTime date;
 
-    //친구신청 상태//
+    //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
     private Enum status;
 
