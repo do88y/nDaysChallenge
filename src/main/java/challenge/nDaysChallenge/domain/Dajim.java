@@ -3,11 +3,10 @@ package challenge.nDaysChallenge.domain;
 import lombok.CustomLog;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.beans.ConstructorProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -15,14 +14,31 @@ public class Dajim {
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
-    private int number;
+    private Long number;
 
-    private int room_number;
+    //다중 @OneToMany 로 인한 N+1 오류는 BatchSize + Join Fetch 로 해결할 예정
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Like> likes = new ArrayList<>();
 
-    private int member_number;
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Dajim_comment> comments = new ArrayList<>();
 
-    private String dajim_like;
+    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Report> reports = new ArrayList<>();
 
-    private String dajim_content;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_number")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "party_number")
+    private Party party;
+
+    private String like;
+
+    private String content;
+
+    //공개 여부 enum
+    private Open open;
 
 }
