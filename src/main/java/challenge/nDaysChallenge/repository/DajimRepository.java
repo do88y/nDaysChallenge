@@ -1,2 +1,4 @@
-package challenge.nDaysChallenge.repository;public class DajimRepository {
+package challenge.nDaysChallenge.repository;
+
+public class DajimRepository {
 }
