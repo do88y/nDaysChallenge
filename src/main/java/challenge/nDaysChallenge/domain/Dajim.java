@@ -1,10 +1,8 @@
 package challenge.nDaysChallenge.domain;
 
-import lombok.CustomLog;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class Dajim {
     List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Dajim_comment> comments = new ArrayList<>();
+    List<DajimComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reports = new ArrayList<>();
@@ -39,6 +37,7 @@ public class Dajim {
     private String content;
 
     //공개 여부 enum
+    @Enumerated(EnumType.STRING)
     private Open open;
 
 }
