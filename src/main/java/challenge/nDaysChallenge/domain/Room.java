@@ -20,10 +20,10 @@ public class Room {
     private String name;
 
     @Column(nullable = false)
-    private LocalDateTime start_date;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDateTime end_date;
+    private LocalDateTime endDate;
 
     @Column(length = 50)
     private String reward;
@@ -31,10 +31,10 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private Category category;  //카테고리 [MINDFULNESS, EXERCISE, ROUTINE, ETC]
 
-    private int success_count;
+    private int successCount;
 
     @Enumerated(EnumType.STRING)
-    private Room_status status;  //챌린지 상태 [CONTINUE, END]
+    private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-public class Dajim_comment {
+public class DajimComment {
 
     @Id @GeneratedValue
     @Column(name = "comment_number")
