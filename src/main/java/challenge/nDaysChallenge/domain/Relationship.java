@@ -13,11 +13,11 @@ public class Relationship {
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
+    @JoinColumn
     private Member user_number;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
+    @JoinColumn
     private Member friend_number;
 
 
@@ -25,6 +25,6 @@ public class Relationship {
 
     //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
-    private Enum status;
+    private RelationshipStatus status;
 
 }
