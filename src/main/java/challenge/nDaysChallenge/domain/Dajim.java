@@ -37,6 +37,7 @@ public class Dajim {
     private String content;
 
     //공개 여부 enum
+    @Enumerated(EnumType.STRING)
     private Open open;
 
 }
