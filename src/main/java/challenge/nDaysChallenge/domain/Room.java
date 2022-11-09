@@ -34,7 +34,7 @@ public class Room {
     private int success_count;
 
     @Enumerated(EnumType.STRING)
-    private Room_status status;  //챌린지 상태 [CONTINUE, END]
+    private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
 
 }
