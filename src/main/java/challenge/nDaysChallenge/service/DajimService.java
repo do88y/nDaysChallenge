@@ -1,2 +1,4 @@
-package challenge.nDaysChallenge.service;public class DajimService {
+package challenge.nDaysChallenge.service;
+
+public class DajimService {
 }

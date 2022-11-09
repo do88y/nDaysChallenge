@@ -18,7 +18,7 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_number")
-    private Dajim_comment comment;
+    private DajimComment comment;
 
     private int cause;
 

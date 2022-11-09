@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
-public enum Room_status {
+public enum RoomStatus {
 
     CONTINUE, END
 }
