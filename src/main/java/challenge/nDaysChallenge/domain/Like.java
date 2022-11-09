@@ -1,19 +1,22 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
 public class Like {
 
     @Id @GeneratedValue
     @Column(name = "like_number")
-    private int number;
+    private Long number;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dajim_number")
     private Dajim dajim;
 
