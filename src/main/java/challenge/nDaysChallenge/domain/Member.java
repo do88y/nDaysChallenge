@@ -18,10 +18,10 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(length = 6 ,nullable = false)
+    @Column(unique = true, length = 6 ,nullable = false)
     private String nickname;
 
-    @Column(length = 15, nullable = false)
+    @Column(name = "member_id",length = 15, nullable = false)
     private String id;
 
     @Column(length = 15, nullable = false)
@@ -30,8 +30,7 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-    private int room_limit;  //챌린지 5개 제한
+    private int roomLimit;
 
-    //==비즈니스 로직==//
     }
 
