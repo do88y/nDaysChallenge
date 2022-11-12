@@ -30,7 +30,7 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-    private int room_limit;
+    private int room_limit;  //챌린지 5개 제한
 
     //==비즈니스 로직==//
     }
