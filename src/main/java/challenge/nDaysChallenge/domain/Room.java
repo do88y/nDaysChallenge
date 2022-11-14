@@ -1,12 +1,11 @@
 package challenge.nDaysChallenge.domain;
 
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class Room {
     @Column(name = "room_number")
     private Long number;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMembers = new ArrayList<>();
 
     @Column(name = "room_name", nullable = false, length = 30)
@@ -32,29 +31,54 @@ public class Room {
     private LocalDateTime endDate;
 
     @Column(length = 50)
-    private String reward = null;
+    private String reward;
 
     @Enumerated(EnumType.STRING)
     private Category category;  //카테고리 [MINDFULNESS, EXERCISE, ROUTINE, ETC]
 
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
+
     private int successCount;
 
-    @Enumerated(EnumType.STRING)
-    private RoomStatus status = RoomStatus.CONTINUE;  //챌린지 상태 [CONTINUE, END]
 
-    
     //==연관관계 메서드==//
     public void addRoomMember(RoomMember roomMember) {
         roomMembers.add(roomMember);
         roomMember.setRoom(this);
     }
+/*
+    //==생성 메서드==// 생성자 이용
+    public static Room createRoom(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
+        Room room = new Room(List.of(roomMembers), name);
 
-    //==생성 메서드==// 연관관계 걸면서 세팅
-    public static Room createRoom() {
-        Room room = new Room();
-        for (Object o : ) {
-            
+        room.name = name;
+        room.startDate = LocalDateTime.now();
+        room.endDate = startDate.plusDays(30);
+        room.reward = reward;
+
+        for (RoomMember roomMember : roomMembers) {
+            room.addRoomMember(roomMember);
+        }
+
+
+        room.status = RoomStatus.CONTINUE;
+        return room;
+    }*/
+
+    //==생성 메서드==// 빌더패턴 이용
+    @Builder
+    public Room(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
+        this.name = name;
+        this.startDate = LocalDateTime.now();
+        this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
+        this.category = category;
+        this.status = RoomStatus.CONTINUE;
+        for (RoomMember roomMember : roomMembers) {
+            this.addRoomMember(roomMember);
         }
     }
+
+
 }
 

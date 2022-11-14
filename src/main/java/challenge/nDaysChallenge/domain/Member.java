@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -30,7 +28,17 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
+    private int room_limit;  //챌린지 5개 제한
 
-    //==비즈니스 로직==//
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+    @Builder
+    public Member(String id, String pw, Authority authority) {
+        this.id = id;
+        this.pw = pw;
+        this.authority = authority;
     }
+
+}
 
