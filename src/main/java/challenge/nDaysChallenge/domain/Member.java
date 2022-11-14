@@ -28,7 +28,6 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-<<<<<<< HEAD
     private int room_limit;  //챌린지 5개 제한
 
     @Enumerated(EnumType.STRING)
@@ -40,9 +39,6 @@ public class Member {
         this.pw = pw;
         this.authority = authority;
     }
-=======
->>>>>>> 4669dd57f1a76bffd8a1dbe1af1ac4fc2d72cc80
 
-    //==비즈니스 로직==//
-    }
+}
 

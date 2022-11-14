@@ -1,8 +1,5 @@
 package challenge.nDaysChallenge.service;
 
-<<<<<<< HEAD
-public class RoomService {
-=======
 import challenge.nDaysChallenge.domain.Room;
 import challenge.nDaysChallenge.repository.RoomRepository;
 import lombok.AllArgsConstructor;
@@ -38,5 +35,4 @@ public class RoomService {
     public Room findOnd(Long roomNumber) {
         return roomRepository.findOne(roomNumber);
     }
->>>>>>> 4669dd57f1a76bffd8a1dbe1af1ac4fc2d72cc80
 }
