@@ -25,4 +25,5 @@ public class RoomRepository {
         return em.createQuery("select r from Room r", Room.class)
                 .getResultList();
     }
+
 }
