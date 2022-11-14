@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.repository;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +32,22 @@ public class MemberRepository {
 
     //
 
+    public void saveMemberRoom(RoomMember roomMember) {
+        em.persist(roomMember);
+    }
 
+    public RoomMember findMemberRoom(Member memberNumber) {
+        return em.find(RoomMember.class, memberNumber);
+    }
+
+/*
+    public MemberRoom findCount(Long memberNumber) {
+        return em.createQuery("select mr.count from MemberRoom mr where mr.member = :memberNumber", MemberRoom.class)
+                .setParameter("memberNumber", memberNumber)
+                .getSingleResult();
+
+    }
+*/
 
 
 }

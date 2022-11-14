@@ -32,7 +32,7 @@ public class RoomService {
     }
 
     //특정 챌린지 조회
-    public Room findOnd(Long roomNumber) {
+    public Room findOne(Long roomNumber) {
         return roomRepository.findOne(roomNumber);
     }
 }

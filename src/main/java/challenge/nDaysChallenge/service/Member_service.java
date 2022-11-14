@@ -1,12 +1,11 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,6 +22,20 @@ public class Member_service {
 
     }
 
+    /**
+     * room +1
+     */
+    public void addRoom(Member memberNumber) {
+        RoomMember roomMember = member_repository.findMemberRoom(memberNumber);
+        roomMember.add();
+    }
 
+    /**
+     * room -1
+     */
+    public void reduceRoom(Member memberNumber) {
+        RoomMember roomMember = member_repository.findMemberRoom(memberNumber);
+        roomMember.reduce();
+    }
 
 }
