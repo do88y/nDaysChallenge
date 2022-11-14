@@ -1,51 +1,18 @@
 package challenge.nDaysChallenge.repository;
 
 import challenge.nDaysChallenge.domain.Member;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member,Long> {
 
-    private final EntityManager em;
+    Member findByNumber(Long number);
 
-    //멤버 Id(email)저장//
-    public Member saveId(Member memberId){
-        em.persist(memberId.getId());
-        return memberId;
-    }
-
-    //비밀번호 저장//
-    public Member savePw(Member memberPw){
-        em.persist(memberPw.getPw());
-        return em.find(Member.class,memberPw);
-    }
-
-    //닉네임 저장//
-    public Member saveNickName(Member memberNickname){
-        em.persist(memberNickname.getNickname());
-        return memberNickname;
-    }
-
-    //프로필이미지 저장//
-    public Member saveProfile(Member memberImage){
-        em.persist(memberImage.getImage());
-        return em.find(Member.class, memberImage);
-    }
-
-    //멤버 조회(단건)//
-    public Member findOneId(Long id){
-        return em.find(Member.class, id);
-    }
-
-    //멤버조회(닉네임으로)//
-    public Member findNickname(String nickname){
-        return em.find(Member.class, nickname);
-    }
-
+    Member findByNickname(String nickname);
 
 
 
@@ -53,3 +20,6 @@ public class MemberRepository {
 
 
 }
+
+
+
