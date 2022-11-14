@@ -15,6 +15,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     //비밀번호 저장//
     void savePw(String pw);
 
+
     //닉네임 저장//
     void saveNickname(String nickname);
 
