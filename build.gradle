@@ -35,6 +35,20 @@ dependencies {
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//보안 기술
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-security' //스프링 시큐리티
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5' //로그인된 사용자 정보 가져오기
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+
 }
 
 tasks.named('test') {

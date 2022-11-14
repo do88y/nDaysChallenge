@@ -29,14 +29,15 @@ public class Dajim {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "party_number")
-    private Party party;
+    @JoinColumn(name = "member_room_number")
+    private MemberRoom memberRoom;
 
     private String like;
 
     private String content;
 
     //공개 여부 enum
+    @Enumerated(EnumType.STRING)
     private Open open;
 
 }

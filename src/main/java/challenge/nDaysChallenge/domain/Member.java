@@ -30,7 +30,7 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-    private int roomLimit;
+
 
     }
 
