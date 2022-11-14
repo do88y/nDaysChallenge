@@ -2,11 +2,10 @@ package challenge.nDaysChallenge.domain;
 
 
 import lombok.*;
-import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,12 @@ public class Room {
     private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
     private int successCount;
+    private int passCount;
+
+    @Transient
+    private int totalDays;
+    @Transient
+    private int failCount;
 
 
     //==연관관계 메서드==//
@@ -66,19 +71,46 @@ public class Room {
         return room;
     }*/
 
-    //==생성 메서드==// 빌더패턴 이용
+    //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
-    public Room(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
+    public Room(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, int passCount, RoomMember... roomMembers) {
         this.name = name;
         this.startDate = LocalDateTime.now();
         this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
         this.category = category;
         this.status = RoomStatus.CONTINUE;
+        this.passCount = 0;
         for (RoomMember roomMember : roomMembers) {
             this.addRoomMember(roomMember);
         }
+
+
     }
 
+    //==비즈니스 로직==//
+
+    /**
+     * 챌린지 삭제(패스 횟수 초과)
+     */
+    public void delete() {
+        if (passCount > failCount) {
+            for (RoomMember roomMember : roomMembers) {
+                roomMember.delete();
+            }
+        }
+    }
+
+    /**
+     * 버튼 클릭 시
+     */
+    public void pushButton() {
+        if (true) {
+            successCount += 1;
+        } else if (false) {
+            failCount += 1;
+            passCount += 1;
+        }
+    }
 
 }
 

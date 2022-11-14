@@ -26,4 +26,8 @@ public class RoomRepository {
                 .getResultList();
     }
 
+    public void delete(Long Number) {
+        em.remove(Number);
+    }
+
 }

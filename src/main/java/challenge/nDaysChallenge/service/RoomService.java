@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Room;
+import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.repository.RoomRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,20 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
+    @Transactional
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
+    }
+
     /**
      * 챌린지 생성
      */
     @Transactional
-    public Long createRoom(Room room) {
+    Long createRoom(Long roomNumber, Room room) {
+
+        //엔티티 조회
+        roomRepository.findOne(roomNumber);
+
         roomRepository.save(room);
         return room.getNumber();
     }
@@ -34,5 +44,12 @@ public class RoomService {
     //특정 챌린지 조회
     public Room findOne(Long roomNumber) {
         return roomRepository.findOne(roomNumber);
+    }
+
+    /**
+     * 챌린지 삭제
+     */
+    public void deleteRoom(Long number) {
+        roomRepository.delete(number);
     }
 }
