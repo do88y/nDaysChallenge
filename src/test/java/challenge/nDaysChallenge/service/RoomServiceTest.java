@@ -22,8 +22,7 @@ public class RoomServiceTest {
     @Test
     public void 챌린지_생성() throws Exception {
         //given
-        Room room = new Room();
-        room.set
+
         //when
 
         //then
