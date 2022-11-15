@@ -14,11 +14,11 @@ public class Relationship {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Member user_number;
+    private Member userNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    private Member friend_number;
+    private Member friendNumber;
 
 
     private LocalDateTime date;
