@@ -27,4 +27,9 @@ public class Relationship {
     @Enumerated(EnumType.STRING)
     private RelationshipStatus status;
 
+
+    //==비즈니스 로직==//
+
+
+
 }

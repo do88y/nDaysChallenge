@@ -23,6 +23,11 @@ public class RoomService {
     private final RoomMemberRepository roomMemberRepository;
 
 
+    @Transactional
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
+    }
+
     /**
      * 챌린지 생성  **방장에게만 reduce()
      */
