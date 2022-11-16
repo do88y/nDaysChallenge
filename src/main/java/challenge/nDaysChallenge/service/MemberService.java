@@ -29,7 +29,7 @@ public class MemberService {
 
     //==id(email)중복체크==//
     private void validateDuplicateEmail(Member member){
-        Member findMember = memberRepository.findOneId(member.getNumber());
+        Member findMember = memberRepository.findByNumber(member.getNumber());
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
