@@ -19,6 +19,11 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Member findByPw(String pw);
 
     Member findByImage(int image);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728
 
 
 
@@ -27,5 +32,8 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728

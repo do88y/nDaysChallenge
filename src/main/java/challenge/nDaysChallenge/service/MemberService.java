@@ -3,7 +3,11 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberDto;
+<<<<<<< HEAD
 import challenge.nDaysChallenge.repository.MemberRepository;
+=======
+
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728
 
 import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
@@ -24,7 +28,13 @@ public class MemberService {
     //==회원가입==//
     public Member saveMember(Member member){
         validateDuplicateEmail(member);
+<<<<<<< HEAD
         return memberRepository.findByIdEquals(member.getId());
+=======
+        
+        return memberRepository.findByIdEquals(member.getId());
+
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728
     }
 
     //==id(email)중복체크==//
@@ -39,11 +49,21 @@ public class MemberService {
     public Member saveNickname(Member memberNickname){
         validateDuplicateNickname(memberNickname);
         return memberRepository.findByNickname(memberNickname.getNickname());
+<<<<<<< HEAD
+=======
+
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728
     }
 
     //==닉네임 중복체크==//
     private void validateDuplicateNickname(Member member) {
+<<<<<<< HEAD
         Member findNickname = memberRepository.findByNickname(member.getNickname());
+=======
+
+        Member findNickname = memberRepository.findByNickname(member.getNickname());
+
+>>>>>>> c6d133435887460881ef3988055bfa1d95015728
         if(findNickname != null){
             throw new IllegalStateException("이미 존재하는 닉네임입니다.");
         }
