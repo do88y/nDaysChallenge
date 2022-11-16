@@ -2,8 +2,7 @@ package challenge.nDaysChallenge.service;
 
 
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.MemberDto;
-import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
+import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +51,7 @@ public class MemberService {
 
     //입력한 아이디에 해당하는 사용자 정보 가져오기
     public MemberResponseDto getMemberInfo(String id){
-        return memberRepository.findById(validateDuplicateEmail(id))
+        return memberRepository.findById(id)
                 .map(MemberResponseDto::of)
                 .orElseThrow(()->new RuntimeException("해당 id의 유저 정보가 없습니다"));
     }

@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.controller.dto;
+package challenge.nDaysChallenge.dto.response;
 
 import challenge.nDaysChallenge.domain.Member;
 import lombok.AllArgsConstructor;
