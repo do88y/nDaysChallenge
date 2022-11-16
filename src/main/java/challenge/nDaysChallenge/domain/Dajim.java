@@ -29,8 +29,8 @@ public class Dajim {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_room_number")
-    private MemberRoom memberRoom;
+    @JoinColumn(name = "room_member_number")
+    private RoomMember roomMember;
 
     private String like;
 

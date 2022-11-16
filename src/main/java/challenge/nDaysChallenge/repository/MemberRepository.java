@@ -9,15 +9,15 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
-    //아이디(이메일) 저장//
-    void saveId(String id);
+    Member findByNumber(Long number);
 
-    //비밀번호 저장//
-    void savePw(String pw);
+    Member findByIdEquals(String id);
 
+    Member findByNickname(String nickname);
 
-    //닉네임 저장//
-    void saveNickname(String nickname);
+    Member findByPw(String pw);
+
+    Member findByImage(int image);
 
     //이메일로 유저 찾기//
     Optional<Member> findById(String id);
@@ -26,3 +26,4 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     boolean existsById(String id);
 
 }
+
