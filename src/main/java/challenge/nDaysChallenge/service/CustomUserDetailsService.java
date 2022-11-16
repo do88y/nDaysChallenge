@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findById(username)
                 .map(this::createUserDetails) //현 클래스의 createUserDetails 메소드와 매핑
-                .orElseThrow(()-> new UsernameNotFoundException(username + "db에서 사용자를 찾을 수 없습니다"));
+                .orElseThrow(()-> new UsernameNotFoundException(username + " db에서 사용자를 찾을 수 없습니다"));
     }
 
     //db에 사용자 값 있을 때 UserDetails 객체 리턴

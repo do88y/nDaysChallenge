@@ -53,13 +53,18 @@ public class Room {
 
     //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
+<<<<<<< HEAD
     public Room(String name, Period period, Category category) {
+=======
+    public Room(String name, Category category, RoomMember... roomMembers) {
+>>>>>>> dbc2e4c5690ae87e879269700ffd1ca1a038eb2f
         this.name = name;
 //        this.startDate = LocalDateTime.now();
 //        this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
         this.category = category;
 //        this.status = RoomStatus.CONTINUE;
 //        this.passCount = 0;
+<<<<<<< HEAD
 //        for (RoomMember roomMember : roomMembers) {
 //            this.addRoomMember(roomMember);
 //        }
@@ -83,6 +88,14 @@ public class Room {
         room.status = RoomStatus.CONTINUE;
         return room;
     }*/
+=======
+        for (RoomMember roomMember : roomMembers) {
+            this.addRoomMember(roomMember);
+        }
+
+
+    }
+>>>>>>> dbc2e4c5690ae87e879269700ffd1ca1a038eb2f
 
     //==비즈니스 로직==//
 
