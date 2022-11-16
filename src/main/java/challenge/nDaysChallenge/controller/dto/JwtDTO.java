@@ -2,6 +2,8 @@ package challenge.nDaysChallenge.controller.dto;
 
 import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 public class JwtDTO {
