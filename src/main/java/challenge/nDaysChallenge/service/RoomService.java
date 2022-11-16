@@ -23,6 +23,11 @@ public class RoomService {
     private final RoomMemberRepository roomMemberRepository;
 
 
+    @Transactional
+    public void saveRoom(Room room) {
+        roomRepository.save(room);
+    }
+
     /**
      * 챌린지 생성  **방장에게만 reduce()
      */
@@ -34,6 +39,13 @@ public class RoomService {
         Member member = memberRepository.findById(memberNumber).get();
         RoomMember roomMember = roomMemberRepository.findByMemberNumber(memberNumber);
 
+        //챌린지 생성
+        Room newRoom = Room.builder()
+                .name(name).build();
+
+        //챌린지 저장  **먼저 친구추가 필요
+        roomRepository.save(newRoom);
+
         //챌린지 멤버 생성
         RoomMember setRoomMember = RoomMember.builder()
                 .member(member)
@@ -43,15 +55,9 @@ public class RoomService {
         //챌린지 멤버 저장
         roomMemberRepository.save(roomMember);
 
-        //챌린지 생성
-        Room newRoom = Room.builder()
-                .name(name).build();
-
         //roomCount -1
         roomMember.add();
 
-        //챌린지 저장  **먼저 친구추가 필요
-        roomRepository.save(newRoom);
         return newRoom.getNumber();
     }
 
