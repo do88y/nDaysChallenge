@@ -3,7 +3,7 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+
 
 import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
@@ -24,12 +24,14 @@ public class MemberService {
     //==회원가입==//
     public Member saveMember(Member member){
         validateDuplicateEmail(member);
+        
         return memberRepository.findByIdEquals(member.getId());
+
     }
 
     //==id(email)중복체크==//
     private void validateDuplicateEmail(Member member){
-        Member findMember = memberRepository.findOneId(member.getNumber());
+        Member findMember = memberRepository.findByNumber(member.getNumber());
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
@@ -39,11 +41,14 @@ public class MemberService {
     public Member saveNickname(Member memberNickname){
         validateDuplicateNickname(memberNickname);
         return memberRepository.findByNickname(memberNickname.getNickname());
+
     }
 
     //==닉네임 중복체크==//
     private void validateDuplicateNickname(Member member) {
+
         Member findNickname = memberRepository.findByNickname(member.getNickname());
+
         if(findNickname != null){
             throw new IllegalStateException("이미 존재하는 닉네임입니다.");
         }
