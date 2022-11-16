@@ -9,9 +9,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lombok.AccessLevel.*;
+
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 public class Room {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
@@ -20,13 +23,13 @@ public class Room {
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMembers = new ArrayList<>();
 
-    @Column(name = "room_name", nullable = false, length = 30)
+    @Column(name = "room_name", length = 30)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime endDate;
 
     @Column(length = 50)
@@ -52,34 +55,17 @@ public class Room {
         roomMembers.add(roomMember);
         roomMember.setRoom(this);
     }
-/*
-    //==생성 메서드==// 생성자 이용
-    public static Room createRoom(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
-        Room room = new Room(List.of(roomMembers), name);
 
-        room.name = name;
-        room.startDate = LocalDateTime.now();
-        room.endDate = startDate.plusDays(30);
-        room.reward = reward;
-
-        for (RoomMember roomMember : roomMembers) {
-            room.addRoomMember(roomMember);
-        }
-
-
-        room.status = RoomStatus.CONTINUE;
-        return room;
-    }*/
 
     //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
-    public Room(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, int passCount, RoomMember... roomMembers) {
+    public Room(String name, Category category, RoomMember... roomMembers) {
         this.name = name;
-        this.startDate = LocalDateTime.now();
-        this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
+//        this.startDate = LocalDateTime.now();
+//        this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
         this.category = category;
-        this.status = RoomStatus.CONTINUE;
-        this.passCount = 0;
+//        this.status = RoomStatus.CONTINUE;
+//        this.passCount = 0;
         for (RoomMember roomMember : roomMembers) {
             this.addRoomMember(roomMember);
         }
@@ -88,17 +74,6 @@ public class Room {
     }
 
     //==비즈니스 로직==//
-
-    /**
-     * 챌린지 삭제(패스 횟수 초과)
-     */
-    public void delete() {
-        if (passCount > failCount) {
-            for (RoomMember roomMember : roomMembers) {
-                roomMember.delete();
-            }
-        }
-    }
 
     /**
      * 버튼 클릭 시

@@ -2,7 +2,10 @@ package challenge.nDaysChallenge.domain;
 
 
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -45,7 +48,7 @@ public class RoomMember {
     //==비즈니스 로직==// 객체지향적 관점에서 데이터가 있는 곳에 비지니스 메서드가 있는 것이 좋음
 
     /**
-     * room +1
+     * roomCount +1
      */
     public void add() {
         if (count > 5) {
@@ -55,7 +58,7 @@ public class RoomMember {
     }
 
     /**
-     * room -1
+     * roomCount -1
      */
     public void reduce() {
         int restRoom = this.count - 1;
@@ -65,7 +68,4 @@ public class RoomMember {
         this.count = restRoom;
     }
 
-    public void delete() {
-
-    }
 }

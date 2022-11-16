@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,11 +8,12 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -19,8 +21,13 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(name = "member_id", length = 15, nullable = false)
-    @Email(message = "이메일 형식으로 입력해주세요.")
+    @OneToMany(mappedBy = "friendNumber")
+    private List<Relationship> friends = new ArrayList<>();
+
+    @Column(length = 6 ,nullable = false)
+    private String nickname;
+
+    @Column(length = 15, nullable = false)
     private String id;
 
     @Column(length = 15, nullable = false)
