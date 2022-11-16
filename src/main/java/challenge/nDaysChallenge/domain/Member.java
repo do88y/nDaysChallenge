@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -57,5 +58,7 @@ public class Member {
                 .build();
         return member;
     }
+
+
 }
 

@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.service;
 
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 
 import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
@@ -23,7 +24,7 @@ public class MemberService {
     //==회원가입==//
     public Member saveMember(Member member){
         validateDuplicateEmail(member);
-        return memberRepository.saveId(member);
+        return memberRepository.findByIdEquals(member.getId());
     }
 
     //==id(email)중복체크==//
@@ -37,12 +38,12 @@ public class MemberService {
     //==닉네임==//
     public Member saveNickname(Member memberNickname){
         validateDuplicateNickname(memberNickname);
-        return memberRepository.saveNickName(memberNickname);
+        return memberRepository.findByNickname(memberNickname.getNickname());
     }
 
     //==닉네임 중복체크==//
     private void validateDuplicateNickname(Member member) {
-        Member findNickname = memberRepository.findNickname(member.getNickname());
+        Member findNickname = memberRepository.findByNickname(member.getNickname());
         if(findNickname != null){
             throw new IllegalStateException("이미 존재하는 닉네임입니다.");
         }
@@ -55,7 +56,7 @@ public class MemberService {
 
     //입력한 아이디에 해당하는 사용자 정보 가져오기
     public MemberResponseDto getMemberInfo(String id){
-        return memberRepository.findById(id)
+        return memberRepository.findById(validateDuplicateEmail(id))
                 .map(MemberResponseDto::of)
                 .orElseThrow(()->new RuntimeException("해당 id의 유저 정보가 없습니다"));
     }

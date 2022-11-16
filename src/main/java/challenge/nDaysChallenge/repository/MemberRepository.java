@@ -12,7 +12,13 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByNumber(Long number);
 
+    Member findByIdEquals(String id);
+
     Member findByNickname(String nickname);
+
+    Member findByPw(String pw);
+
+    Member findByImage(int image);
 
 
 

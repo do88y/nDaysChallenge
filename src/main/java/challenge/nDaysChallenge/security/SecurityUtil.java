@@ -10,7 +10,7 @@ public class SecurityUtil {
     private SecurityUtil(){}
 
     //시큐리티컨텍스트에 저장된 유저의 username 리턴
-    public static String getCurrentMemberId(){
+    public static long getCurrentMemberId(){
         final Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
