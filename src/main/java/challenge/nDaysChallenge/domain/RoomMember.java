@@ -12,11 +12,8 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-<<<<<<< HEAD
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-=======
->>>>>>> dbc2e4c5690ae87e879269700ffd1ca1a038eb2f
 public class RoomMember {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

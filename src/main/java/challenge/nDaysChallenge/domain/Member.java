@@ -7,15 +7,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.List;
-=======
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
->>>>>>> dbc2e4c5690ae87e879269700ffd1ca1a038eb2f
 
 @Entity
 @Getter
@@ -27,12 +22,6 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "friendNumber")
-    private List<Relationship> friends = new ArrayList<>();
-
-    @Column(length = 15, nullable = false)
-=======
 
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
@@ -41,8 +30,6 @@ public class Member {
     private List<Relationship> friends = new ArrayList<>();
 
     @Column(length = 6 ,nullable = false)
-  
->>>>>>> dbc2e4c5690ae87e879269700ffd1ca1a038eb2f
     private String id;
 
     @Column(length = 15, nullable = false)
