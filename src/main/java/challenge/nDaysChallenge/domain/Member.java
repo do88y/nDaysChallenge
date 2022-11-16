@@ -8,8 +8,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.validation.constraints.Email;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -21,13 +22,15 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
+
+    @Column(name = "member_id", length = 15, nullable = false)
+    @Email(message = "이메일 형식으로 입력해주세요.")
+
     @OneToMany(mappedBy = "friendNumber")
     private List<Relationship> friends = new ArrayList<>();
 
     @Column(length = 6 ,nullable = false)
-    private String nickname;
-
-    @Column(length = 15, nullable = false)
+  
     private String id;
 
     @Column(length = 15, nullable = false)
@@ -64,5 +67,6 @@ public class Member {
                 .build();
         return member;
     }
+
 }
 
