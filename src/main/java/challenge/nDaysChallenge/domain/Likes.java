@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Likes {
 
     @Id @GeneratedValue
-    @Column(name = "like_number")
+    @Column(name = "likes_number")
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY)
