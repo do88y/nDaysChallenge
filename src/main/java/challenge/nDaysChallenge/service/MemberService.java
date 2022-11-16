@@ -3,12 +3,9 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberDto;
-
-
 import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
 
     //==회원가입==//
     public Member saveMember(Member member){
@@ -54,11 +50,6 @@ public class MemberService {
         }
     }
 
-
-
-
-
-
     //입력한 아이디에 해당하는 사용자 정보 가져오기
     public MemberResponseDto getMemberInfo(String id){
         return memberRepository.findById(validateDuplicateEmail(id))
@@ -72,6 +63,5 @@ public class MemberService {
                 .map(MemberResponseDto::of)
                 .orElseThrow(()->new RuntimeException("로그인한 유저 정보가 없습니다"));
     }
-
 
 }

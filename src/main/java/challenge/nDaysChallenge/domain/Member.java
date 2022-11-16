@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.*;
-
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
