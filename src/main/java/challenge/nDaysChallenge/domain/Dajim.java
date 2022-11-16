@@ -16,7 +16,7 @@ public class Dajim {
 
     //다중 @OneToMany 로 인한 N+1 오류는 BatchSize + Join Fetch 로 해결할 예정
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Like> likes = new ArrayList<>();
+    List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<DajimComment> comments = new ArrayList<>();
@@ -31,8 +31,6 @@ public class Dajim {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_member_number")
     private RoomMember roomMember;
-
-    private String like;
 
     private String content;
 
