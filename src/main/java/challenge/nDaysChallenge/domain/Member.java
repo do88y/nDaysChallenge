@@ -9,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 @Entity
 @Getter
@@ -29,6 +31,10 @@ public class Member {
     //==친구목록==//
     @OneToMany(mappedBy = "friendNumber")
     private List<Relationship> friends = new ArrayList<>();
+
+
+    @Column(length = 6 ,nullable = false)
+    private String id;
 
 
     @Column(length = 15, nullable = false)

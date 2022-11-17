@@ -5,7 +5,6 @@ import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,9 +19,11 @@ public class MemberService implements MemberServiceIn {
     private final PasswordEncoder passwordEncoder;
 
 
+
     @Transactional
     @Override
     public String signUp(MemberSignUpDto signUpDto) throws Exception {
+
 
         if (memberRepository.existsById(signUpDto.getId()) == true) {
             throw new Exception("이미 존재하는 이메일입니다.");
@@ -38,8 +39,6 @@ public class MemberService implements MemberServiceIn {
         return signUpDto.getId();
     }
 }
-
-
 
 
 

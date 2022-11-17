@@ -21,14 +21,15 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByImage(int image);
 
+    //이메일로 유저 찾기//
+    Optional<Member> findById(String id);
 
     //중복 가입 방지//
     boolean existsById(String id);
 
-
-
     //중복 닉네임 방지//
     boolean existsByNickname(String nickname);
+
 
 
 }

@@ -11,11 +11,3 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 //        em.remove(Number);
 //    }
 
-<<<<<<< HEAD
-
-    
-
-}
-=======
-}
->>>>>>> 343006a52ce06dbbd3998f7c7e339a9e4bf36f5b
