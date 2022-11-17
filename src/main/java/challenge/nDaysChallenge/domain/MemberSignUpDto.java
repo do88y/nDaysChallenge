@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.domain;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +9,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @NoArgsConstructor
+@Data
 @Getter
-public class MemberDto {
+public class MemberSignUpDto {
 
     private Long number;
 
@@ -28,12 +30,13 @@ public class MemberDto {
     private int roomLimit;
 
     @Builder
-    public  MemberDto(Long number, String id, String pw,String nickname, int image, int roomLimit){
-        this.number=number;
-        this.id=id;
-        this.pw=pw;
-        this.nickname=nickname;
-        this.image=image;
-        this.roomLimit=roomLimit;
+    public  Member memberToEntity(){
+        return Member.builder()
+                .number(number)
+                .email(id)
+                .nickname(nickname)
+                .pw(pw)
+                .image(image)
+                .build();
     }
 }

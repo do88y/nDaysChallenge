@@ -12,7 +12,7 @@ public class Relationship {
     @Column(name = "relationship_number")
     private Long number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn
     private Member userNumber;
 
