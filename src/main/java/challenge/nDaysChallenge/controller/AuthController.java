@@ -1,8 +1,8 @@
 package challenge.nDaysChallenge.controller;
 
-import challenge.nDaysChallenge.controller.dto.JwtDTO;
-import challenge.nDaysChallenge.controller.dto.JwtRequestDTO;
-import challenge.nDaysChallenge.controller.dto.MemberRequestDto;
+import challenge.nDaysChallenge.dto.JwtDTO;
+import challenge.nDaysChallenge.dto.request.JwtRequestDTO;
+import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
