@@ -1,8 +1,8 @@
 package challenge.nDaysChallenge.service;
 
-import challenge.nDaysChallenge.controller.dto.JwtDTO;
-import challenge.nDaysChallenge.controller.dto.JwtRequestDTO;
-import challenge.nDaysChallenge.controller.dto.MemberRequestDto;
+import challenge.nDaysChallenge.dto.JwtDTO;
+import challenge.nDaysChallenge.dto.request.JwtRequestDTO;
+import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.jwt.JwtProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
 import challenge.nDaysChallenge.repository.MemberRepository;
