@@ -7,8 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-//    public void delete(Long Number) {
-//        em.remove(Number);
-//    }
 
 }
