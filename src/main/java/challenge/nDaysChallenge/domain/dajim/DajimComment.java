@@ -1,5 +1,7 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.dajim;
 
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.Report;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;

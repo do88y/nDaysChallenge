@@ -41,7 +41,7 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-    private int room_limit;  //챌린지 5개 제한
+    private int roomLimit;  //챌린지 5개 제한
 
     @Enumerated(EnumType.STRING)
     private Authority authority;

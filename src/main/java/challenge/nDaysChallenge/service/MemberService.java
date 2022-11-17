@@ -2,8 +2,7 @@ package challenge.nDaysChallenge.service;
 
 
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.MemberDto;
-import challenge.nDaysChallenge.controller.dto.MemberResponseDto;
+import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
