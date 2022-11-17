@@ -1,66 +1,45 @@
 package challenge.nDaysChallenge.service;
-
-
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberSignUpDto;
+import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements MemberServiceIn {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    //==회원가입==//
-    public Member saveMember(Member member){
-        validateDuplicateEmail(member);
-        
-        return memberRepository.findByIdEquals(member.getId());
 
-    }
 
-    //==id(email)중복체크==//
-    private void validateDuplicateEmail(Member member){
-        Member findMember = memberRepository.findByNumber(member.getNumber());
-        if(findMember != null){
-            throw new IllegalStateException("이미 가입된 회원입니다.");
+    @Transactional
+    @Override
+    public String signUp(MemberSignUpDto signUpDto) throws Exception {
+
+
+        if (memberRepository.existsById(signUpDto.getId()) == true) {
+            throw new Exception("이미 존재하는 이메일입니다.");
         }
-    }
 
-    //==닉네임==//
-    public Member saveNickname(Member memberNickname){
-        validateDuplicateNickname(memberNickname);
-        return memberRepository.findByNickname(memberNickname.getNickname());
-
-    }
-
-    //==닉네임 중복체크==//
-    private void validateDuplicateNickname(Member member) {
-
-        Member findNickname = memberRepository.findByNickname(member.getNickname());
-
-        if(findNickname != null){
-            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
+        if (memberRepository.existsByNickname(signUpDto.getNickname()) == true) {
+            throw new Exception("이미 존재하는 닉네임입니다.");
         }
-    }
 
-    //입력한 아이디에 해당하는 사용자 정보 가져오기
-    public MemberResponseDto getMemberInfo(String id){
-        return memberRepository.findById(id)
-                .map(MemberResponseDto::of)
-                .orElseThrow(()->new RuntimeException("해당 id의 유저 정보가 없습니다"));
+        Member member = memberRepository.save(signUpDto.memberToEntity());
+        member.encodePassword(passwordEncoder);
+        member.authority();
+        return signUpDto.getId();
     }
-
-    //시큐리티컨텍스트 상 사용자 정보 가져오기
-    public MemberResponseDto getMyInfo(){
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .map(MemberResponseDto::of)
-                .orElseThrow(()->new RuntimeException("로그인한 유저 정보가 없습니다"));
-    }
-
 }
+
+
+
+
