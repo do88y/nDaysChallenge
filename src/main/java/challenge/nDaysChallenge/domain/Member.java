@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class Member {
 
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
-    private String email;
+    private String id;
 
 
     //==친구목록==//
@@ -41,25 +40,27 @@ public class Member {
     @Column(nullable = false)
     private int image;
 
-    private int room_limit;  //챌린지 5개 제한
+    private int roomLimit;  //챌린지 5개 제한
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
     @Builder
-    public Member(Long number, String email, String pw, String nickname, int image, Authority authority) {
+    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.number = number;
-        this.email = email;
+        this.id = id;
         this.pw = pw;
         this.nickname = nickname;
         this.image = image;
+        this.roomLimit=roomLimit;
         this.authority = authority;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.pw= passwordEncoder.encode(pw);
     }
-    public void addUserAuthority() {
+    public Authority authority() {
+        return authority;
     }
 }
 

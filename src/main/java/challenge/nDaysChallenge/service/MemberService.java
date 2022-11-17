@@ -1,8 +1,11 @@
 package challenge.nDaysChallenge.service;
-
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberSignUpDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.response.MemberResponseDto;
+import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.security.SecurityUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ public class MemberService implements MemberServiceIn {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     @Transactional
     @Override
@@ -29,12 +33,14 @@ public class MemberService implements MemberServiceIn {
         }
 
         Member member = memberRepository.save(signUpDto.memberToEntity());
-
-        member.addUserAuthority();
+        member.encodePassword(passwordEncoder);
+        member.authority();
         return signUpDto.getId();
     }
-
-
 }
+
+
+
+
 
 

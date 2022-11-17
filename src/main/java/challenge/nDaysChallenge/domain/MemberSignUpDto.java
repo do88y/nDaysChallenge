@@ -33,7 +33,7 @@ public class MemberSignUpDto {
     public  Member memberToEntity(){
         return Member.builder()
                 .number(number)
-                .email(id)
+                .id(id)
                 .nickname(nickname)
                 .pw(pw)
                 .image(image)

@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
+@Getter
 @Entity
 public class RoomMember {
 
