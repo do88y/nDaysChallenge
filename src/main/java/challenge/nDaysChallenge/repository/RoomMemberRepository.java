@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
 
-
     public RoomMember findByMemberNumber(Long member);
+
+    public RoomMember findByRoomNumber(Long room);
 }

@@ -1,17 +1,9 @@
 package challenge.nDaysChallenge.repository.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.Room;
-import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.domain.dajim.Open;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller.dajim;
 
+<<<<<<< HEAD
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
@@ -49,3 +50,7 @@ public class DajimController { ////dto->엔티티 전환 어떻게??어디서??
     }
 
 }
+=======
+public class DajimController {
+}
+>>>>>>> develop

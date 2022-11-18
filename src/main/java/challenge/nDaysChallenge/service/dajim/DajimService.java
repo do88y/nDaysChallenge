@@ -33,7 +33,7 @@ public class DajimService {
                 .content(content)
                 .build();
 
-        Dajim savedDajim=dajimRepository.save(dajim);
+        Dajim savedDajim = dajimRepository.save(dajim);
         Long savedDajimNumber = savedDajim.getNumber();
 
         return savedDajimNumber;
@@ -47,7 +47,7 @@ public class DajimService {
 
         try {
             dajims = dajimRepository.findAllByRoomNumber(roomNumber);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("다짐을 확인할 수 없습니다."); //임시 RuntimeException
         }
 

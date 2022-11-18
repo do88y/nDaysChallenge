@@ -2,11 +2,12 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Report;
-import challenge.nDaysChallenge.domain.Room;
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;

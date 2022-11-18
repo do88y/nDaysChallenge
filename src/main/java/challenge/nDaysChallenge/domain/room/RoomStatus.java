@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.room;
 
 public enum RoomStatus {
 
