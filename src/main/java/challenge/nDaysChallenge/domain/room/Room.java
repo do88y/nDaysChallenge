@@ -1,6 +1,7 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.room;
 
 
+import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,16 +11,17 @@ import java.util.List;
 import static lombok.AccessLevel.*;
 
 @Entity
-@Getter
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
+@Getter
 public class Room {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
     private Long number;
 
-    @OneToMany(mappedBy = "member")
-    private List<RoomMember> roomMembers = new ArrayList<>();
 
     @Column(name = "room_name", length = 30)
     private String name;
@@ -44,25 +46,14 @@ public class Room {
 
 
 
-    //==연관관계 메서드==//
-    public void addRoomMember(RoomMember roomMember) {
-        roomMembers.add(roomMember);
-        roomMember.setRoom(this);
-    }
-
-
     //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
     public Room(String name, Period period, Category category) {
         this.name = name;
-//        this.startDate = LocalDateTime.now();
-//        this.endDate = startDate.plusDays(30);  //파라미터 받는 변수로 수정해야 함
+        this.period = period;
         this.category = category;
-//        this.status = RoomStatus.CONTINUE;
-//        this.passCount = 0;
-//        for (RoomMember roomMember : roomMembers) {
-//            this.addRoomMember(roomMember);
-//        }
+        this.status = RoomStatus.CONTINUE;
+        this.passCount = 0;
 
     }
 /*

@@ -1,8 +1,7 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.room.Period;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 
 public class PeriodTest {
@@ -13,8 +12,9 @@ public class PeriodTest {
         //given
         Period period = new Period(5L);
         //when
-        System.out.println("period.getEndDate = " + period.getEndDate());
+
         //then
+        System.out.println("period.getEndDate = " + period.getEndDate());
 
     }
 }

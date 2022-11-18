@@ -1,6 +1,9 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.*;
+import challenge.nDaysChallenge.domain.room.Category;
+import challenge.nDaysChallenge.domain.room.Period;
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.RoomRepository;
@@ -10,10 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,7 +29,7 @@ public class RoomServiceTest {
     @Test
     public void 챌린지_생성() throws Exception {
         //given
-        Member member1 = new Member(1L, "aaa", "123","asdf", 1, Authority.ROLE_USER);
+        Member member1 = new Member(1L, "aaa", "123","asdf", 1,4, Authority.ROLE_USER);
 
 
         Period period = new Period(5L);

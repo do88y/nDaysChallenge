@@ -1,9 +1,12 @@
 package challenge.nDaysChallenge.repository;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.Relationship;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,7 +14,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByNumber(Long number);
 
-    Member findByIdEquals(String id);
+
+    //이메일로 유저 찾기//
+    Optional<Member> findById(String id);
 
     Member findByNickname(String nickname);
 
@@ -19,11 +24,17 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByImage(int image);
 
-    //이메일로 유저 찾기//
-    Optional<Member> findById(String id);
 
     //중복 가입 방지//
     boolean existsById(String id);
+
+    //중복 닉네임 방지//
+    boolean existsByNickname(String nickname);
+
+
+    //fetch join
+    @Query("select m from Member m join fetch m.friends")
+    List<Relationship> findAllFetchJoin();
 
 }
 

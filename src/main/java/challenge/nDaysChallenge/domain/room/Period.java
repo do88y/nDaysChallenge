@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.room;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,12 +15,16 @@ public class Period {
 
     private LocalDate startDate;
     private LocalDate endDate;
+    private Long totalDays;
 
+
+    //==생성 메서드==//
     public Period(Long totalDays) {
         this.startDate = LocalDate.now();
         this.endDate = startDate.plusDays(totalDays-1);
     }
 
+    //==값 타입 비교==//  인스턴스가 아닌 값이 같은지 비교해야 함
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
