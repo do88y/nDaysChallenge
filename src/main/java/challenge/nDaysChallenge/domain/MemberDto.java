@@ -28,7 +28,7 @@ public class MemberDto {
     private int roomLimit;
 
     @Builder
-    public  MemberDto(Long number, String id, String pw,String nickname, int image, int roomLimit){
+    public MemberDto(Long number, String id, String pw,String nickname, int image, int roomLimit){
         this.number=number;
         this.id=id;
         this.pw=pw;
@@ -36,4 +36,5 @@ public class MemberDto {
         this.image=image;
         this.roomLimit=roomLimit;
     }
+
 }
