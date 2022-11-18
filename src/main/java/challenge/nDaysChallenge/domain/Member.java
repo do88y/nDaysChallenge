@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,16 +28,6 @@ public class Member {
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
 
-
-    //==친구목록==//
-    @OneToMany(mappedBy = "friendNumber")
-    private List<Relationship> friends = new ArrayList<>();
-
-
-    @Column(length = 6 ,nullable = false)
-    private String id;
-
-
     @Column(length = 15, nullable = false)
     private String pw;
 
@@ -50,6 +41,15 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Room room;
+
+    //==친구목록==//
+    @OneToMany(mappedBy = "friendNumber")
+    private List<Relationship> friends = new ArrayList<>();
+
 
     @Builder
     public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {

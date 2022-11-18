@@ -1,6 +1,9 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.*;
+import challenge.nDaysChallenge.domain.room.Category;
+import challenge.nDaysChallenge.domain.room.Period;
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.RoomRepository;
@@ -19,15 +22,14 @@ public class RoomServiceTest {
     @Autowired RoomRepository roomRepository;
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired RoomService roomService;
-    @Autowired
-    MemberServiceIn memberService;
+    @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
 
 
     @Test
     public void 챌린지_생성() throws Exception {
         //given
-        Member member1 = new Member(1L, "aaa", "123","asdf", 1, Authority.ROLE_USER);
+        Member member1 = new Member(1L, "aaa", "123","asdf", 1,4, Authority.ROLE_USER);
 
 
         Period period = new Period(5L);
