@@ -1,6 +1,11 @@
 package challenge.nDaysChallenge.service;
 
-import challenge.nDaysChallenge.domain.Room;
+import challenge.nDaysChallenge.domain.*;
+import challenge.nDaysChallenge.domain.room.Category;
+import challenge.nDaysChallenge.domain.room.Period;
+import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.RoomRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,23 +14,43 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class RoomServiceTest {
 
-    @Autowired RoomService roomService;
     @Autowired RoomRepository roomRepository;
+    @Autowired RoomMemberRepository roomMemberRepository;
+    @Autowired RoomService roomService;
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
+
 
     @Test
     public void 챌린지_생성() throws Exception {
         //given
-        Room room = new Room();
-        room.set
+        Member member1 = new Member(1L, "aaa", "123","asdf", 1,4, Authority.ROLE_USER);
+
+
+        Period period = new Period(5L);
+        Room room = new Room("기상", period, Category.ROUTINE);
+
+        //when
+        Room createRoom = Room.builder()
+                .name("기상")
+                .category(Category.ROUTINE)
+                .build();
+
+        //then
+    }
+
+    @Test
+    public void 챌린지_삭제() throws Exception {
+        //given
+
         //when
 
         //then
     }
+
 }

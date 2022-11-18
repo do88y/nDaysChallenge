@@ -1,37 +1,40 @@
 package challenge.nDaysChallenge.repository;
 
 import challenge.nDaysChallenge.domain.Member;
-import lombok.RequiredArgsConstructor;
+import challenge.nDaysChallenge.domain.Relationship;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member,Long> {
 
-    private final EntityManager em;
-
-    //멤버 Id(email)저장//
-    public void saveId(Member memberId){
-        em.persist(memberId.getId());
-    }
-
-    //비밀번호 저장//
-    public void savePw(Member memberPw){
-        em.persist(memberPw.getPw());
-    }
-
-    //닉네임 저장//
-    public void saveNickName(Member memberNicname){
-        em.persist(memberNicname.getNickname());
-    }
+    Member findByNumber(Long number);
 
 
+    //이메일로 유저 찾기//
+    Optional<Member> findById(String id);
 
-    //
+    Member findByNickname(String nickname);
+
+    Member findByPw(String pw);
+
+    Member findByImage(int image);
 
 
+    //중복 가입 방지//
+    boolean existsById(String id);
 
+    //중복 닉네임 방지//
+    boolean existsByNickname(String nickname);
+
+
+    //fetch join
+    @Query("select m from Member m join fetch m.friends")
+    List<Relationship> findAllFetchJoin();
 
 }
+

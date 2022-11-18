@@ -1,15 +1,16 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.dajim;
 
+import challenge.nDaysChallenge.domain.Member;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
-public class Like {
+public class Likes {
 
     @Id @GeneratedValue
-    @Column(name = "like_number")
+    @Column(name = "likes_number")
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,36 +1,72 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.room.Room;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_number")
     private Long number;
 
-    @Column(length = 6 ,nullable = false)
-    private String nickname;
 
-    @Column(length = 15, nullable = false)
+    @Column(name = "member_id", length = 15, nullable = false)
+    @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
 
     @Column(length = 15, nullable = false)
     private String pw;
 
+    @Column(unique = true, length = 6, nullable = false)
+    private String nickname;
+
     @Column(nullable = false)
     private int image;
 
+    private int roomLimit;  //챌린지 5개 제한
 
-    //==비즈니스 로직==//
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Room room;
+
+    //==친구목록==//
+    @OneToMany(mappedBy = "friendNumber")
+    private List<Relationship> friends = new ArrayList<>();
+
+
+    @Builder
+    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
+        this.number = number;
+        this.id = id;
+        this.pw = pw;
+        this.nickname = nickname;
+        this.image = image;
+        this.roomLimit=roomLimit;
+        this.authority = authority;
     }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.pw= passwordEncoder.encode(pw);
+    }
+    public Authority authority() {
+        return authority;
+    }
+}
 
