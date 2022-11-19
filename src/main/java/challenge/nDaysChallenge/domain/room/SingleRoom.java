@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 public class SingleRoom extends Room {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
 }

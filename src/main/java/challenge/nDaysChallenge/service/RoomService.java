@@ -65,7 +65,7 @@ public class RoomService {
         roomMemberRepository.save(roomMember);
 
         //roomCount -1
-        roomMember.add();
+        roomMember.addCount();
 
         return newRoom.getNumber();
     }
@@ -89,12 +89,14 @@ public class RoomService {
         Room room = roomRepository.findById(roomNumber).get();
         RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
 
-
         //챌린지 삭제
         roomRepository.delete(room);
 
+        //RoomMember 삭제
+
+
         //roomCount +1
-        roomMember.add();
+        roomMember.addCount();
     }
 
     /**
@@ -120,7 +122,7 @@ public class RoomService {
 
         //roomCount +1
         RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
-        roomMember.add();
+        roomMember.addCount();
 
     }
 

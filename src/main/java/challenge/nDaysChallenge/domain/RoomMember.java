@@ -36,7 +36,7 @@ public class RoomMember {
     //==연관관계 메서드==//
     public void setRoom(Room room) {
         this.room = room;
-//        room.getRoomMembers().add(this);
+        room.getRoomMembers().add(this);
     }
 
     //==생성 메서드==//
@@ -56,11 +56,12 @@ public class RoomMember {
     /**
      * roomCount +1
      */
-    public void add() {
-        if (roomCount > 5) {
-            throw new IllegalStateException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
+    public void addCount() {
+        if (roomCount >= 5) {
+            throw new NotEnoughRoomException("no more room");
+        }else {
+            this.roomCount += 1;
         }
-        this.roomCount += 1;
     }
 
     /**
@@ -69,9 +70,10 @@ public class RoomMember {
     public void reduce() {
         int restRoom = this.roomCount - 1;
         if (restRoom < 0) {
-            throw new NotEnoughRoomException("no more room");
+            throw new IllegalStateException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
+        } else {
+            this.roomCount = restRoom;
         }
-        this.roomCount = restRoom;
     }
 
 }

@@ -17,6 +17,11 @@ public class GroupRoom extends Room {
 
 
     //==연관관계 메서드==//
+    public void setGroupRoom(Room room) {
+        this.room = room;
+        room.getRoomMembers().add(this);
+    }
+
     public void addRoomMember(RoomMember roomMember) {
         roomMemberList.add(roomMember);
         roomMember.setRoom(this);
