@@ -2,15 +2,25 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Report;
+import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.RoomMember;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
+@Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Dajim {
 
     @Id @GeneratedValue
@@ -32,13 +42,26 @@ public class Dajim {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_member_number")
-    private RoomMember roomMember;
+    @JoinColumn(name = "room_number")
+    private Room room;
+
+    private Long roomNumber;
 
     private String content;
 
     //공개 여부 enum
     @Enumerated(EnumType.STRING)
     private Open open;
+
+    public Dajim(Long number, Member member, String content){
+        this.number=number;
+        this.member=member;
+        this.content=content;
+    }
+
+    public Dajim(Member member, Room room){
+        this.roomNumber=room.getNumber();
+        this.member=member;
+    }
 
 }

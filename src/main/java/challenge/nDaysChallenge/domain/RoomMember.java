@@ -1,8 +1,8 @@
 package challenge.nDaysChallenge.domain;
 
 
-import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
+import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
