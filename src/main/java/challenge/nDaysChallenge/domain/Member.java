@@ -44,18 +44,15 @@ public class Member {
     private Authority authority;
 
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
+    private List<RoomMember> roomMemberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
     //==친구목록==//
     @OneToMany(mappedBy = "friendNumber")
     private List<Relationship> friends = new ArrayList<>();
-
-    //==연관관계 메서드==//
-    public void addSingleRooms(SingleRoom singleRoom) {
-        singleRooms.add(singleRoom);
-        singleRoom.set
-    }
 
 
     @Builder
