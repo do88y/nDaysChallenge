@@ -1,28 +1,25 @@
 package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.RoomMember;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@DiscriminatorValue("group")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoom extends Room {
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
 
-    //==연관관계 메서드==//
-    public void addRoomMember(RoomMember roomMember) {
-        roomMemberList.add(roomMember);
-        roomMember.setRoom(this);
-    }
-
     //==비즈니스 로직==//
+
     /**
      * 챌린지 삭제
      */

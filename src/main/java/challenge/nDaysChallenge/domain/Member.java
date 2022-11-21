@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,8 +50,11 @@ public class Member {
     private Authority authority;
 
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private Room room;
+    @OneToMany(mappedBy = "member")
+    private List<RoomMember> roomMemberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<SingleRoom> singleRooms = new ArrayList<>();
 
     //==친구목록==//
     @OneToMany(mappedBy = "friendNumber")
