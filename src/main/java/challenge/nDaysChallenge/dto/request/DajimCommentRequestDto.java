@@ -17,4 +17,5 @@ public class DajimCommentRequestDto {
 
     String content; //댓글 내용
 
+
 }

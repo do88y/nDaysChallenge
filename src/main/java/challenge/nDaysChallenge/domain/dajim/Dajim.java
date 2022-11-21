@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.*;
-import challenge.nDaysChallenge.domain.room.Room;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +21,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Dajim extends BaseEntity implements Persistable<Long> {
+
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
@@ -45,7 +46,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     private Room room;
 
     private Long roomNumber;
-
 
     private String content;
 
@@ -73,4 +73,5 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     public boolean isNew() {
         return getCreatedDate()==null;
     }
+
 }

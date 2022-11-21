@@ -1,15 +1,10 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-import challenge.nDaysChallenge.dto.request.DajimCommentRequestDto;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.request.LikesRequestDto;
-import challenge.nDaysChallenge.dto.response.DajimCommentResponseDto;
 import challenge.nDaysChallenge.dto.response.DajimResponseDto;
 import challenge.nDaysChallenge.dto.response.LikesResponseDto;
+import challenge.nDaysChallenge.dto.response.dajimCommentsResponseDto;
 import challenge.nDaysChallenge.security.UserDetailsImpl;
-import challenge.nDaysChallenge.service.dajim.DajimCommentService;
 import challenge.nDaysChallenge.service.dajim.DajimFeedService;
-import challenge.nDaysChallenge.service.dajim.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,17 +27,15 @@ public class DajimFeedController { //피드 내 다짐
 
     @GetMapping("/feed")
     //다짐 피드 전체 (다짐 + 좋아요 + 댓글)
-    public ResponseEntity<?> viewDajimOnFeed(DajimRequestDto dajimRequestDto, LikesRequestDto likesRequestDto, DajimCommentRequestDto dajimCommentRequestDto,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+    public ResponseEntity<?> viewDajimOnFeed(@PathVariable("roomNumber") Long roomNumber,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         //다짐, 좋아요, 댓글 List 대입
         List<DajimResponseDto> dajimsList;
         List<LikesResponseDto> likesList;
-        List<DajimCommentResponseDto> dajimCommentsList;
+        List<dajimCommentsResponseDto> dajimCommentsList;
 
         try {
             dajimsList = dajimFeedService.viewDajimOnFeed(roomNumber,userDetailsImpl);
-            likesList = likesService.viewLikesOnDajim();
-            dajimCommentsList = dajimCommentService.viewDajimCommentsOnDajim();
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
