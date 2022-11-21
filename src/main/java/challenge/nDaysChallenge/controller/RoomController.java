@@ -16,6 +16,6 @@ public class RoomController {
     public String deleteRoom(@PathVariable() Long user, @PathVariable Long challengeId) {
 
         roomService.deleteRoom(challengeId);
-        return "redirect:/";
+        return "redirect:/challenge";
     }
 }

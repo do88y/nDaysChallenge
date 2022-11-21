@@ -1,8 +1,9 @@
 package challenge.nDaysChallenge.domain;
 
 
-import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
+import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,30 +22,45 @@ public class RoomMember {
     @Column(name = "room_member_number")
     private Long number;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_number")
     private Room room;
 
     @Column(name = "member_room_count")
-    private int roomCount;  //챌린지 5개 제한
+    private int roomCount = 0;  //챌린지 5개 제한
 
 
-    //==연관관계 메서드==//
-    public void setRoom(Room room) {
-        this.room = room;
-//        room.getRoomMembers().add(this);
+    //==연관관계 메서드==//  RoomMember의 room에 roomNumber값 넣으면서 roomMemberList에도 roomNumber 세팅되게
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getRoomMemberList().add(this);
+    }
+    public void joinRoom(GroupRoom groupRoom) {
+        this.room = groupRoom;
+        groupRoom.getRoomMemberList().add(this);
     }
 
     //==생성 메서드==//
-    @Builder
+/*    @Builder  빌더패턴 이용
     public RoomMember(Member member, Room room, int roomCount) {
         this.member = member;
         this.room = room;
-        this.roomCount = 0;
+        this.roomCount += 1;
+    }*/
+
+    //생성자 이용
+    public static RoomMember createRoomMember(Member member, Room room) {
+        RoomMember roomMember = new RoomMember();
+        roomMember.setMember(member);
+        roomMember.joinRoom((GroupRoom) room);
+        roomMember.roomCount += 1;
+
+        return roomMember;
     }
 
 
@@ -53,14 +69,16 @@ public class RoomMember {
     public void delete() {
 
     }
+
     /**
      * roomCount +1
      */
-    public void add() {
-        if (roomCount > 5) {
-            throw new IllegalStateException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
+    public void addCount() {
+        if (roomCount >= 5) {
+            throw new NotEnoughRoomException("no more room");
+        }else {
+            this.roomCount += 1;
         }
-        this.roomCount += 1;
     }
 
     /**
@@ -69,9 +87,10 @@ public class RoomMember {
     public void reduce() {
         int restRoom = this.roomCount - 1;
         if (restRoom < 0) {
-            throw new NotEnoughRoomException("no more room");
+            throw new IllegalStateException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
+        } else {
+            this.roomCount = restRoom;
         }
-        this.roomCount = restRoom;
     }
 
 }

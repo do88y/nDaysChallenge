@@ -1,10 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.*;
-import challenge.nDaysChallenge.domain.room.Category;
-import challenge.nDaysChallenge.domain.room.GroupRoom;
-import challenge.nDaysChallenge.domain.room.Period;
-import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.RoomRepository;
@@ -27,49 +24,6 @@ public class RoomService {
     private final GroupRoomRepository groupRoomRepository;
 
 
-    @Transactional
-    public void saveRoom(Room room) {
-        roomRepository.save(room);
-    }
-
-    /**
-     * 챌린지 생성
-     */
-    @Transactional
-    Long createRoom(Long memberNumber, String name, Period period, Category category) {
-
-        //엔티티 조회
-        Room room = roomRepository.findById(memberNumber).get();
-        Member member = memberRepository.findById(memberNumber).get();
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(memberNumber);
-
-        //
-
-        //챌린지 생성
-        Room newRoom = Room.builder()
-                .name(name)
-                .period(new Period(period.getTotalDays()))
-                .category(category)
-                .build();
-
-        //챌린지 저장
-        roomRepository.save(newRoom);
-
-        //챌린지 멤버 생성
-        RoomMember setRoomMember = RoomMember.builder()
-                .member(member)
-                .room(room)
-                .build();
-
-        //챌린지 멤버 저장
-        roomMemberRepository.save(roomMember);
-
-        //roomCount -1
-        roomMember.add();
-
-        return newRoom.getNumber();
-    }
-
     //챌린지 전체 조회
     public List<Room> findRooms() {
         return roomRepository.findAll();
@@ -81,6 +35,67 @@ public class RoomService {
     }
 
     /**
+     * 그룹 챌린지 생성
+     */
+    @Transactional
+    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+
+        //엔티티 조회
+        Room room = roomRepository.findById(memberNumber).get();
+        Member member = memberRepository.findById(memberNumber).get();
+
+        //챌린지 생성
+        Room newRoom = GroupRoom.builder()
+                .name(name)
+                .period(new Period(period.getTotalDays()))
+                .category(category)
+                .passCount(passCount)
+                .build();
+
+        //챌린지 저장
+        roomRepository.save(newRoom);
+
+        //챌린지 멤버 생성
+        RoomMember createRoomMember = RoomMember.createRoomMember(member, room);
+
+        //챌린지 멤버 저장
+        roomMemberRepository.save(createRoomMember);
+
+        return newRoom.getNumber();
+    }
+
+    /**
+     * 개인 챌린지 생성
+     */
+    @Transactional
+    Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+
+        //엔티티 조회
+        Room room = roomRepository.findById(memberNumber).get();
+        Member member = memberRepository.findById(memberNumber).get();
+
+        //챌린지 생성
+        Room newRoom = SingleRoom.builder()
+                .name(name)
+                .period(new Period(period.getTotalDays()))
+                .category(category)
+                .passCount(passCount)
+                .build();
+
+        //챌린지 저장
+        roomRepository.save(newRoom);
+
+        //챌린지 멤버 생성
+        SingleRoom addRoomMember = SingleRoom.addRoomMember(member);
+
+        //챌린지 멤버 저장
+        roomRepository.save(addRoomMember);
+
+        return newRoom.getNumber();
+    }
+
+
+    /**
      * 챌린지 삭제
      */
     @Transactional
@@ -89,12 +104,14 @@ public class RoomService {
         Room room = roomRepository.findById(roomNumber).get();
         RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
 
-
         //챌린지 삭제
         roomRepository.delete(room);
 
+        //RoomMember 삭제
+
+
         //roomCount +1
-        roomMember.add();
+        roomMember.addCount();
     }
 
     /**
@@ -120,7 +137,7 @@ public class RoomService {
 
         //roomCount +1
         RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
-        roomMember.add();
+        roomMember.addCount();
 
     }
 
