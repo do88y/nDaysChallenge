@@ -1,14 +1,13 @@
 package challenge.nDaysChallenge.domain.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.Report;
-import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,7 +20,8 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dajim {
+public class Dajim extends BaseEntity implements Persistable<Long> {
+
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
@@ -60,8 +60,18 @@ public class Dajim {
     }
 
     public Dajim(Member member, Room room){
-        this.roomNumber=room.getNumber();
         this.member=member;
+        this.room=room;
+    }
+
+    @Override
+    public Long getId() {
+        return number;
+    }
+
+    @Override
+    public boolean isNew() {
+        return getCreatedDate()==null;
     }
 
 }
