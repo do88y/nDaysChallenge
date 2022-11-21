@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,12 +27,6 @@ public class Member {
 
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
-
-    @OneToMany(mappedBy = "friendNumber")
-    private List<Relationship> friends = new ArrayList<>();
-
-    @Column(length = 6 ,nullable = false)
-
     private String id;
 
     @Column(length = 15, nullable = false)
@@ -49,8 +44,11 @@ public class Member {
     private Authority authority;
 
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private Room room;
+    @OneToMany(mappedBy = "member")
+    private List<RoomMember> roomMemberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<SingleRoom> singleRooms = new ArrayList<>();
 
     //==친구목록==//
     @OneToMany(mappedBy = "friendNumber")
