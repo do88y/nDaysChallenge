@@ -41,8 +41,8 @@ public class DajimFeedController { //피드 내 다짐
 
         try {
             dajimsList = dajimFeedService.viewDajimOnFeed(roomNumber,userDetailsImpl);
-            likesList = likesService.viewLikesOnDajim();
-            dajimCommentsList = dajimCommentService.viewDajimCommentsOnDajim();
+            likesList = likesService.viewLikesOnDajim(dajimNumber, userDetailsImpl);
+            dajimCommentsList = dajimCommentService.viewDajimCommentsOnDajim(dajimNumber, userDetailsImpl);
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
@@ -53,8 +53,8 @@ public class DajimFeedController { //피드 내 다짐
         Map<String, Object> dajimCommentsListMap = new HashMap<>();
 
         dajimsListMap.put("다짐 리스트",dajimsList);
-//        likesListMap.put("좋아요 리스트",likesList);
-//        dajimCommentsListMap.put("댓글 리스트",dajimCommentsList);
+        likesListMap.put("좋아요 리스트",likesList);
+        dajimCommentsListMap.put("댓글 리스트",dajimCommentsList);
 
         //최종 List
         List<Map> dajimFeed = new ArrayList<>();
