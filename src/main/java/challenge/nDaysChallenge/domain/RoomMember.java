@@ -5,7 +5,6 @@ import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +27,7 @@ public class RoomMember {
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_number")
-    private Room room;
+    private GroupRoom room;
 
     @Column(name = "member_room_count")
     private int roomCount = 0;  //챌린지 5개 제한
@@ -58,7 +57,7 @@ public class RoomMember {
         RoomMember roomMember = new RoomMember();
         roomMember.setMember(member);
         roomMember.joinRoom((GroupRoom) room);
-        roomMember.roomCount += 1;
+        roomMember.addCount();
 
         return roomMember;
     }
@@ -75,7 +74,7 @@ public class RoomMember {
      */
     public void addCount() {
         if (roomCount >= 5) {
-            throw new NotEnoughRoomException("no more room");
+            throw new NotEnoughRoomException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
         }else {
             this.roomCount += 1;
         }
@@ -84,10 +83,10 @@ public class RoomMember {
     /**
      * roomCount -1
      */
-    public void reduce() {
+    public void reduceCount() {
         int restRoom = this.roomCount - 1;
         if (restRoom < 0) {
-            throw new IllegalStateException("챌린지는 최대 5개까지만 생성할 수 있습니다.");
+            throw new IllegalStateException("no more room");
         } else {
             this.roomCount = restRoom;
         }
