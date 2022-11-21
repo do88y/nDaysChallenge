@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ import java.util.Map;
 public class DajimFeedController { //피드 내 다짐
 
     private final DajimFeedService dajimFeedService;
+    private final LikesService likesService;
+    private final DajimCommentService dajimCommentService;
 
     @GetMapping("/feed")
     //다짐 피드 전체 (다짐 + 좋아요 + 댓글)

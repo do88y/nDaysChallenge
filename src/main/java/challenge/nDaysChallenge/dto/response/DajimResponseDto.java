@@ -18,15 +18,9 @@ public class DajimResponseDto {
 
     private String content;
 
-    private String message;
-
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보
     public DajimResponseDto(String nickname, String content){
         this.nickname=nickname;
-        this.content=content;
-    }
-
-    public DajimResponseDto(String content){
         this.content=content;
     }
 
