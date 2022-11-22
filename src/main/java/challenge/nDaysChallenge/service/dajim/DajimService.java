@@ -2,6 +2,8 @@ package challenge.nDaysChallenge.service.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.dto.response.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -44,6 +48,7 @@ public class DajimService {
         }
 
         return dajims;
+
     }
 
 }

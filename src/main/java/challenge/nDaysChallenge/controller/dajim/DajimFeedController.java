@@ -34,23 +34,23 @@ public class DajimFeedController { //피드 내 다짐
         List<LikesResponseDto> likesList;
 
         try {
-            dajimsList = dajimFeedService.viewDajimOnFeed(roomNumber,userDetailsImpl);
-            likesList = likesService.viewLikesOnDajim(dajimNumber, userDetailsImpl);
+            dajimsList = dajimFeedService.viewDajimOnFeed(1L,userDetailsImpl); ////roomNumber 파라미터 수정 예정
+            //likesList = likesService.viewLikesOnDajim(dajimNumber, userDetailsImpl);
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
 
         //Map에 대입
         Map<String, Object> dajimsListMap = new HashMap<>();
-        Map<String, Object> likesListMap = new HashMap<>();
+        //Map<String, Object> likesListMap = new HashMap<>();
 
         dajimsListMap.put("다짐 리스트",dajimsList);
-        likesListMap.put("좋아요 리스트",likesList);
+        //likesListMap.put("좋아요 리스트",likesList);
 
         //최종 List
         List<Map> dajimFeed = new ArrayList<>();
         dajimFeed.add(dajimsListMap);
-        dajimFeed.add(likesListMap);
+        //dajimFeed.add(likesListMap);
 
         return ResponseEntity.ok().body(dajimFeed);
     }

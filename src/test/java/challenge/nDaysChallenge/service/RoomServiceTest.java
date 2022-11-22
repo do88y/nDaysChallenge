@@ -6,7 +6,7 @@ import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
-import challenge.nDaysChallenge.repository.RoomRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,12 @@ public class RoomServiceTest {
 
 
         Period period = new Period(5L);
-        Room room = new Room("기상", period, Category.ROUTINE);
 
         //when
         Room createRoom = Room.builder()
                 .name("기상")
                 .category(Category.ROUTINE)
+                .passCount(0)
                 .build();
 
         //then

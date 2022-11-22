@@ -2,18 +2,17 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.*;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.Report;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Getter
@@ -44,7 +43,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
 
     private Long roomNumber;
 
-
     private String content;
 
     //공개 여부 enum
@@ -71,4 +69,5 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     public boolean isNew() {
         return getCreatedDate()==null;
     }
+
 }

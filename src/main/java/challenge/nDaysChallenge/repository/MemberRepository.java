@@ -34,7 +34,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     //fetch join
     @Query("select m from Member m join fetch m.friends")
-    List<Relationship> findAllFetchJoin();
+    public List<Relationship> findAllWithFriendsFetchJoin();
 
 }
 
