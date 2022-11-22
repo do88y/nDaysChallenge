@@ -16,6 +16,6 @@ public interface DajimFeedRepository extends JpaRepository<Dajim, Long> { //피�
     List<Dajim> findAllByRoomNumberAndOpen(Long roomNumber);
 
     //다짐별 좋아요/댓글
-    List<String> findAllByDajimandMember(Dajim dajim, Member member);
+    List<String> findAllByDajimAndMember(Dajim dajim, Member member);
 
 }

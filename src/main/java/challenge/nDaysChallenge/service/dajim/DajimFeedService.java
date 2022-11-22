@@ -26,8 +26,7 @@ public class DajimFeedService {
         Member loggedInMember = userDetailsImpl.getMember(); //로그인 사용자
 
         List<Dajim> dajims = dajimFeedRepository.findAllByRoomNumberAndOpen(roomNumber); //다짐 조회
-        String likes = dajimFeedRepository.findAllByDajimandMember(dajim,userDetailsImpl.getMember()); //좋아요 조회
-        String comments = dajimFeedRepository.findAllByDajimandMember(dajim,userDetailsImpl.getMember()); //댓글 조회
+        List<String> likes = dajimFeedRepository.findAllByDajimAndMember(dajim,userDetailsImpl.getMember()); //좋아요 조회
 
         if (dajims==null){
             throw new RuntimeException("다짐을 확인할 수 없습니다."); //임시 RuntimeException

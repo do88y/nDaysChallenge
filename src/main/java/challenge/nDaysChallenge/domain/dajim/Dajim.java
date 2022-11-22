@@ -30,8 +30,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<DajimComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reports = new ArrayList<>();
