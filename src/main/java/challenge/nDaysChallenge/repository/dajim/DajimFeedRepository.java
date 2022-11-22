@@ -1,5 +1,9 @@
 package challenge.nDaysChallenge.repository.dajim;
 
+<<<<<<< HEAD
+import challenge.nDaysChallenge.domain.Member;
+=======
+>>>>>>> develop
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +18,14 @@ public interface DajimFeedRepository extends JpaRepository<Dajim, Long> { //피�
     @Query("select d from Dajim d where d.roomNumber = :roomNumber or d.open = 'PUBLIC'")
     List<Dajim> findAllByRoomNumberAndOpen(Long roomNumber);
 
+<<<<<<< HEAD
+    //다짐별 좋아요/댓글
+    List<String> findAllByDajimAndMember(Dajim dajim, Member member);
+=======
     //다짐별 좋아요
 
 
     //다짐 내 댓글
+>>>>>>> develop
 
 }

@@ -1,6 +1,10 @@
 package challenge.nDaysChallenge.domain;
 
+<<<<<<< HEAD
+
+=======
 import challenge.nDaysChallenge.domain.room.GroupRoom;
+>>>>>>> develop
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;

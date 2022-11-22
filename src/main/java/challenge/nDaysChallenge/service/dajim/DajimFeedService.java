@@ -25,14 +25,15 @@ public class DajimFeedService {
     public List<DajimResponseDto> viewDajimOnFeed(Long roomNumber, UserDetailsImpl userDetailsImpl) {
         Member loggedInMember = userDetailsImpl.getMember(); //로그인 사용자
 
-        List<Dajim> dajims = dajimFeedRepository.findAllByRoomNumberAndOpen(roomNumber);
+        List<Dajim> dajims = dajimFeedRepository.findAllByRoomNumberAndOpen(roomNumber); //다짐 조회
+        //List<String> likes = dajimFeedRepository.findAllByDajimAndMember(dajim,userDetailsImpl.getMember()); //좋아요 조회
 
         if (dajims==null){
             throw new RuntimeException("다짐을 확인할 수 없습니다."); //임시 RuntimeException
         }
 
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
-                        new DajimResponseDto(dajim, userDetailsImpl))
+                        new DajimResponseDto(userDetailsImpl.getMember().getNickname(),dajim.getContent()))
                 .collect(Collectors.toList());
 
         return dajimsList;
