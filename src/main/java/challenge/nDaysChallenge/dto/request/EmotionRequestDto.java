@@ -9,8 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LikesRequestDto {
+public class EmotionRequestDto {
 
-    boolean likes;
+    Long dajimNumber; //다짐 번호
+
+    String sticker; //감정스티커 받아오기
 
 }

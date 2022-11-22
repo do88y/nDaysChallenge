@@ -32,7 +32,9 @@ public class DajimController {
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
         Dajim dajim = dajimService.uploadDajim(roomNumber, dajimRequestDto, userDetailsImpl);
-        return ResponseEntity.ok().body(new DajimResponseDto(dajim.getMember().getNickname(),dajim.getContent()));
+        DajimResponseDto savedDajim = new DajimResponseDto(dajim.getNumber(), dajim.getMember().getNickname(),dajim.getContent());
+
+        return ResponseEntity.ok().body(savedDajim);
     }
 
     //다짐 조회
@@ -42,8 +44,12 @@ public class DajimController {
         checkLogin(userDetailsImpl);
         List<Dajim> dajims = dajimService.viewDajimInRoom(roomNumber);
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
-                new DajimResponseDto(dajim.getMember().getNickname(), dajim.getContent())
-                ).collect(Collectors.toList());
+                new DajimResponseDto(
+                        dajim.getNumber(),
+                        dajim.getMember().getNickname(),
+                        dajim.getContent()))
+                    .collect(Collectors.toList());
+
         return ResponseEntity.ok().body(dajimsList);
     }
 
