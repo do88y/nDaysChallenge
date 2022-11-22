@@ -82,6 +82,15 @@ public class Room {
     //==비즈니스 로직==//
 
     /**
+     * 챌린지 삭제
+     */
+    public void delete() {
+        if (type == RoomType.GROUP) {
+
+        }
+    }
+
+    /**
      * 버튼 클릭 시
      */
     public void pushButton() {

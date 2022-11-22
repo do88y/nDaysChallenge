@@ -7,6 +7,7 @@ import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +28,22 @@ public class RoomServiceTest {
 
 
     @Test
-    public void 챌린지_생성() throws Exception {
+    public void 개인_챌린지_생성() throws Exception {
         //given
-        Member member1 = new Member(1L, "aaa", "123","asdf", 1,4, Authority.ROLE_USER);
-
-
-        Period period = new Period(5L);
+        Period period = new Period(30L);
 
         //when
-        Room createRoom = Room.builder()
+        Long newRoom = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+/*        Room createRoom = Room.builder()
                 .name("기상")
+                .period(period)
                 .category(Category.ROUTINE)
-                .passCount(0)
-                .build();
+                .passCount(2)
+                .build();*/
 
         //then
+        Room room = roomRepository.findById(newRoom).get();
+        Assertions.assertThat(room.getNumber()).isEqualTo(newRoom);
     }
 
     @Test
