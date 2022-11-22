@@ -36,6 +36,9 @@ public class Room {
     private String reward;
 
     @Enumerated(EnumType.STRING)
+    private RoomType type;  //챌린지 종류 [GROUP, SINGLE]
+
+    @Enumerated(EnumType.STRING)
     private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
     private int passCount = 0;
@@ -48,10 +51,11 @@ public class Room {
 
     //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
-    public Room(String name, Period period, Category category, int passCount) {
+    public Room(String name, Period period, Category category, RoomType type, int passCount) {
         this.name = name;
         this.period = period;
         this.category = category;
+        this.type = type;
         this.status = RoomStatus.CONTINUE;
         this.passCount = passCount;
 

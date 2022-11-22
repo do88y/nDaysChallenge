@@ -4,7 +4,7 @@ import challenge.nDaysChallenge.domain.*;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
-import challenge.nDaysChallenge.repository.RoomRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ public class RoomService {
     private final GroupRoomRepository groupRoomRepository;
 
 
-    //챌린지 전체 조회
-    public List<Room> findRooms() {
-        return roomRepository.findAll();
+    //단체 챌린지 조회
+    public List<GroupRoom> findAllGroupRoomUsingFetchJoin() {
+        return groupRoomRepository.findAllWithRoomMemberUsingFetchJoin();
     }
 
     //특정 챌린지 조회
@@ -38,7 +38,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+    Long groupRoom(Long memberNumber, String name, Period period, Category category, RoomType type, int passCount) {
 
         //엔티티 조회
         Room room = roomRepository.findById(memberNumber).get();
@@ -49,6 +49,7 @@ public class RoomService {
                 .name(name)
                 .period(new Period(period.getTotalDays()))
                 .category(category)
+                .type(type)
                 .passCount(passCount)
                 .build();
 
@@ -96,23 +97,27 @@ public class RoomService {
 
 
     /**
-     * 챌린지 삭제
+     * 그룹 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Long roomNumber) {
+    public void deleteRoom(Long memberNumber, Long roomNumber) {
         //엔티티 조회
         Room room = roomRepository.findById(roomNumber).get();
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
+        List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
 
         //챌린지 삭제
         roomRepository.delete(room);
 
-        //RoomMember 삭제
-
-
-        //roomCount +1
-        roomMember.addCount();
+        //roomCount -1, RoomMember 삭제
+        for (RoomMember roomMember : roomMembers) {
+            roomMember.reduceCount();
+            roomMember.delete();
+        }
     }
+
+    /**
+     * 개인 챌린지 삭제
+     */
 
     /**
      * 단체 챌린지 실패
