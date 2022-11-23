@@ -1,12 +1,14 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.request.LikesRequestDto;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
+import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.DajimResponseDto;
-import challenge.nDaysChallenge.dto.response.LikesResponseDto;
+import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
 import challenge.nDaysChallenge.security.UserDetailsImpl;
 import challenge.nDaysChallenge.service.dajim.DajimFeedService;
-import challenge.nDaysChallenge.service.dajim.LikesService;
+import challenge.nDaysChallenge.service.dajim.EmotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,42 +19,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class DajimFeedController { //피드 내 다짐
 
     private final DajimFeedService dajimFeedService;
-    private final LikesService likesService;
 
     @GetMapping("/feed")
-    //피드 전체 조회 (다짐 + 좋아요 + 댓글)
-    public ResponseEntity<?> viewDajimOnFeed(DajimRequestDto dajimRequestDto, LikesRequestDto likesRequestDto,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
-        //다짐, 좋아요, 댓글 List 대입
-        List<DajimResponseDto> dajimsList;
-        List<LikesResponseDto> likesList;
+    //피드 전체 조회 (다짐 + 감정스티커 리스트)
+    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
 
-        try {
-            dajimsList = dajimFeedService.viewDajimOnFeed(1L,userDetailsImpl); ////roomNumber 파라미터 수정 예정
-            //likesList = likesService.viewLikesOnDajim(dajimNumber, userDetailsImpl);
-        } catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+        List<Dajim> dajims = dajimFeedService.viewDajimOnFeed(userDetailsImpl);
 
-        //Map에 대입
-        Map<String, Object> dajimsListMap = new HashMap<>();
-        //Map<String, Object> likesListMap = new HashMap<>();
+        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+                new DajimFeedResponseDto(
+                        dajim.getNumber(),
+                        dajim.getMember().getNickname(),
+                        dajim.getContent(),
+                        dajim.getEmotions()
+                )).collect(Collectors.toList());
 
-        dajimsListMap.put("다짐 리스트",dajimsList);
-        //likesListMap.put("좋아요 리스트",likesList);
-
-        //최종 List
-        List<Map> dajimFeed = new ArrayList<>();
-        dajimFeed.add(dajimsListMap);
-        //dajimFeed.add(likesListMap);
-
-        return ResponseEntity.ok().body(dajimFeed);
+        return ResponseEntity.ok().body(dajimFeedList);
     }
 
 }
