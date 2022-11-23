@@ -69,7 +69,7 @@ public class RoomServiceTest {
         Long newRoom1 = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
 
         //when
-        roomService.deleteRoom(newRoom1, member.getNumber());
+//        roomService.deleteRoom(newRoom1, member.getNumber());
 
         //then
         Room room = roomRepository.findById(newRoom1).get();

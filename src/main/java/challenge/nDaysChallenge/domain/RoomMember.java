@@ -56,7 +56,7 @@ public class RoomMember {
     }*/
 
     //생성자 이용
-    public static RoomMember createRoomMember(Member member, Room room, Member... selectedMember) {
+    public static RoomMember createRoomMember(Member member, GroupRoom room, Member... selectedMember) {
         RoomMember roomMember = new RoomMember();
         roomMember.setMember(member);  //방장
         for (Member members : selectedMember) {  //그 외 멤버

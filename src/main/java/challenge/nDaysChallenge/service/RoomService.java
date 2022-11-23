@@ -43,7 +43,7 @@ public class RoomService {
     Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
-        Room room = roomRepository.findById(memberNumber).get();
+        GroupRoom room = groupRoomRepository.findById(memberNumber).get();
         Member member = memberRepository.findById(memberNumber).get();
 
         //챌린지 생성
