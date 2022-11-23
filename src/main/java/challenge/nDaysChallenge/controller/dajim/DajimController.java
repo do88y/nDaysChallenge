@@ -4,6 +4,11 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.response.DajimResponseDto;
+import challenge.nDaysChallenge.security.UserDetailsImpl;
+import challenge.nDaysChallenge.service.dajim.DajimService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +40,10 @@ public class DajimController {
                                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
         List<Dajim> dajims = dajimService.viewDajimInRoom(roomNumber);
-        return ResponseEntity.ok().body(dajims);
+        List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
+                new DajimResponseDto(dajim.getMember().getNickname(), dajim.getContent())
+                ).collect(Collectors.toList());
+        return ResponseEntity.ok().body(dajimsList);
     }
 
     private void checkLogin(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {

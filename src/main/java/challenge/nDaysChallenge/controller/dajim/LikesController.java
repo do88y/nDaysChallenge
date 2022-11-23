@@ -1,6 +1,5 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -10,7 +9,4 @@ public class LikesController {
 
     //좋아요 undo
 
-=======
-public class LikesController {
->>>>>>> develop
 }

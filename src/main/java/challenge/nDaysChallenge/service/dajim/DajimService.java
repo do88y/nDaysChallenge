@@ -2,6 +2,8 @@ package challenge.nDaysChallenge.service.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.dto.response.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +46,7 @@ public class DajimService {
         }
 
         return dajims;
-        
+
     }
 
 }

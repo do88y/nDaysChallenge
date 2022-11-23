@@ -40,7 +40,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
         Room room = roomRepository.findById(memberNumber).get();
@@ -59,7 +59,10 @@ public class RoomService {
         roomRepository.save(newRoom);
 
         //챌린지 멤버 생성
-        RoomMember createRoomMember = RoomMember.createRoomMember(member, room);
+        RoomMember createRoomMember = RoomMember.createRoomMember(member, room);  //방장
+        for (Member members : selectedMember) {
+            RoomMember.createRoomMember(members, room);
+        }
 
         //챌린지 멤버 저장
         roomMemberRepository.save(createRoomMember);
@@ -102,9 +105,9 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteGroupRoom(Long memberNumber, Long roomNumber) {
+    public void deleteRoom(Long memberNumber, Long roomNumber) {
         //엔티티 조회
-        Room room = roomRepository.findById(roomNumber).get();
+        SingleRoom room = (SingleRoom) roomRepository.findById(roomNumber).get();
         List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
         Member member = memberRepository.findById(memberNumber).get();
 
@@ -144,7 +147,7 @@ public class RoomService {
 
         if (passCount > failCount) {
             for (RoomMember roomMember : roomMembers) {
-                roomRepository.deleteById(roomNumber);
+                roomRepository.deleteById(roomMember.getNumber());
 
             }
         }
@@ -163,6 +166,5 @@ public class RoomService {
         int roomCount = roomMember.getRoomCount();
         return roomCount;
     }
-
 
 }

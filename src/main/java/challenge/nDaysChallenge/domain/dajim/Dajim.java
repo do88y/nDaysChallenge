@@ -1,19 +1,18 @@
 package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.*;
-
+import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.Report;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Getter
@@ -21,7 +20,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Dajim extends BaseEntity implements Persistable<Long> {
-
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
@@ -31,8 +29,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<DajimComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reports = new ArrayList<>();

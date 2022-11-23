@@ -15,7 +15,7 @@ public class RoomController {
     @DeleteMapping("/challenge/{user}/{challengeId}")
     public String deleteRoom(@PathVariable() Long user, @PathVariable Long challengeId) {
 
-        roomService.deleteGroupRoom(user, challengeId);
+        roomService.deleteRoom(user, challengeId);
         return "redirect:/challenge";
     }
 }
