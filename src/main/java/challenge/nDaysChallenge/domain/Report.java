@@ -1,7 +1,10 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+<<<<<<< HEAD
 import challenge.nDaysChallenge.domain.dajim.DajimComment;
+=======
+>>>>>>> refs/remotes/origin/develop
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -17,10 +20,6 @@ public class Report {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dajim_number")
     private Dajim dajim;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_number")
-    private DajimComment comment;
 
     private int cause;
 

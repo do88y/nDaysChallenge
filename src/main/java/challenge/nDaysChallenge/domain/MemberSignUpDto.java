@@ -39,4 +39,5 @@ public class MemberSignUpDto {
                 .image(image)
                 .build();
     }
+
 }
