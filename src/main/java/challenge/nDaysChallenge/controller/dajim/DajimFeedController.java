@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class DajimFeedController { //피드 내 다짐
 
     private final DajimFeedService dajimFeedService;
-    private final EmotionService emotionsService;
 
     @GetMapping("/feed")
     //피드 전체 조회 (다짐 + 감정스티커 리스트)

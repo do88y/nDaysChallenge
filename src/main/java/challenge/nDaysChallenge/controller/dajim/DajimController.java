@@ -10,10 +10,7 @@ import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,7 @@ public class DajimController {
     private final DajimService dajimService;
 
     //다짐 업로드, 수정
-    @GetMapping(name = "/challenge/{challengeId}/upload")
+    @PostMapping(name = "/challenge/{challengeId}/upload")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){

@@ -2,14 +2,13 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.BaseEntity;
 import challenge.nDaysChallenge.domain.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
