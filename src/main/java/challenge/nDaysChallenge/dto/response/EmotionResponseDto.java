@@ -14,11 +14,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EmotionResponseDto {
 
-    Long dajimNumber; //좋아요 등록한 다짐 넘버
+    private Long dajimNumber; //좋아요 등록한 다짐 넘버
 
-    Long memberNumber;//좋아요 등록한 멤버 넘버
+    private Long memberNumber;//좋아요 등록한 멤버 넘버
 
-    Stickers stickers; //선택한 감정스티커
+    private Stickers stickers; //선택한 감정스티커
 
     public EmotionResponseDto(Long dajimNumber, Long memberNumber, String stickers){
         this.dajimNumber=dajimNumber;

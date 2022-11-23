@@ -2,11 +2,14 @@ package challenge.nDaysChallenge.dto.response;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @Builder
