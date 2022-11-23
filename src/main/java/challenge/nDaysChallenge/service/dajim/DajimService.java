@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.response.DajimResponseDto;
@@ -21,10 +22,12 @@ public class DajimService {
 
     //다짐 업로드
     public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl) {
+        Room room = dajimRepository.findByRoomNumber(roomNumber);
+
         Dajim dajim = new Dajim();
         dajim.builder()
+                .room(room)
                 .member(userDetailsImpl.getMember())
-                .roomNumber(roomNumber)
                 .content(requestDto.getContent())
                 .build();
 

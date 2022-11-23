@@ -22,7 +22,6 @@ public class Room {
     @Column(name = "room_number")
     private Long number;
 
-
     @Column(name = "room_name", length = 30)
     private String name;
 

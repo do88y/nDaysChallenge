@@ -25,10 +25,8 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @Column(name = "dajim_number")
     private Long number;
 
-    //다중 @OneToMany 로 인한 N+1 오류는 BatchSize + Join Fetch 로 해결할 예정
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Likes> likes = new ArrayList<>();
-
+    List<Emotion> emotions = new ArrayList<>();
 
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reports = new ArrayList<>();
@@ -41,23 +39,16 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @JoinColumn(name = "room_number")
     private Room room;
 
-    private Long roomNumber;
-
     private String content;
 
     //공개 여부 enum
     @Enumerated(EnumType.STRING)
     private Open open;
 
-    public Dajim(Long number, Member member, String content){
-        this.number=number;
+    public Dajim(Room room, Member member, String content){
+        this.room=room;
         this.member=member;
         this.content=content;
-    }
-
-    public Dajim(Member member, Room room){
-        this.member=member;
-        this.room=room;
     }
 
     @Override
