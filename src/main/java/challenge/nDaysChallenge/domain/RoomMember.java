@@ -2,10 +2,7 @@ package challenge.nDaysChallenge.domain;
 
 
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import static javax.persistence.FetchType.*;
 
 @Getter
 @Entity
+@RequiredArgsConstructor
 public class RoomMember {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,8 @@ public class RoomMember {
 
     @Column(name = "member_room_count")
     private int count;  //챌린지 5개 제한
+
+
 
 
     //==연관관계 메서드==//

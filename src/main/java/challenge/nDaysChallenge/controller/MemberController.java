@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/auth")
 @RestController
 public class MemberController {
 
     private final MemberServiceIn memberServiceIn;
     private final MemberRepository memberRepository;
 
-    @PostMapping("/auth/signup")
+    @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
     public String join(@Valid @RequestBody MemberSignUpDto signUpDto)throws Exception{
         return memberServiceIn.signUp(signUpDto);

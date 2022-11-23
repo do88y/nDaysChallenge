@@ -28,6 +28,10 @@ public class MemberService implements MemberServiceIn {
             throw new Exception("이미 존재하는 이메일입니다.");
         }
 
+        if(!signUpDto.getPw().equals(signUpDto.getPw())){
+            throw new Exception("비밀번호가 일치하지않습니다.");
+        }
+
         if (memberRepository.existsByNickname(signUpDto.getNickname()) == true) {
             throw new Exception("이미 존재하는 닉네임입니다.");
         }

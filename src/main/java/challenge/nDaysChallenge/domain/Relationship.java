@@ -14,7 +14,7 @@ public class Relationship {
 
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn
-    private Member userNumber;
+    private Member memberNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
