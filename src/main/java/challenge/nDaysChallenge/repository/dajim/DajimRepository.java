@@ -10,12 +10,16 @@ import java.util.List;
 @Repository
 public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
+    //다짐 등록
+    @Override
+    <S extends Dajim> S save(S entity);
+
     //룸멤버 (1~4명) 다짐 상세 조회
-//    @Query("SELECT d FROM Dajim d WHERE d.room.number=:roomNumber")
+    @Query("SELECT d FROM Dajim d WHERE d.room.number=:roomNumber")
     List<Dajim> findAllByRoomNumber(Long roomNumber);
 
     //룸 넘버로 룸 객체 찾기
-//    @Query("SELECT r FROM Room r WHERE r.number=:roomNumber")
-    Room findByRoomNumber(Long roomNumber);
+    //@Query("SELECT r FROM Room r WHERE r.number=:roomNumber")
+    Room findByNumber(Long roomNumber);
 
 }
