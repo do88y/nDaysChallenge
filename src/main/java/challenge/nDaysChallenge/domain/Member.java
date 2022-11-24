@@ -1,20 +1,17 @@
 package challenge.nDaysChallenge.domain;
 
-import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import reactor.core.dynamic.annotation.On;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-=======
-import java.util.Optional;
->>>>>>> refs/remotes/origin/develop
 
 
 @Entity
@@ -27,21 +24,16 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-<<<<<<< HEAD
 
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
 
 
-    //==친구목록==//
-    @OneToMany(mappedBy = "friendNumber")
-    private List<Relationship> friends = new ArrayList<>();
+    //내가 수락한 친구들만 리스트에 들어가게//
+    @OneToMany(mappedBy = "friend_number")
+    private List<Member> friendsList = new ArrayList<Member>();
 
-=======
-    @Column(length = 6 ,nullable = false)
-    private String id;
->>>>>>> refs/remotes/origin/develop
 
     @Column(length = 15, nullable = false)
     private String pw;
@@ -58,15 +50,15 @@ public class Member {
     private Authority authority;
 
 
+
+
+
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
-    //==친구목록==//
-    @OneToMany(mappedBy = "friendNumber")
-    private List<Relationship> friends = new ArrayList<>();
 
 
     @Builder

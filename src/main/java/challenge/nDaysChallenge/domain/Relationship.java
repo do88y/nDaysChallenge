@@ -1,10 +1,13 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
-import java.sql.Date;
-import java.time.LocalDateTime;
+
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Relationship {
 
     @Id
@@ -14,21 +17,26 @@ public class Relationship {
 
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn
-    private Member memberNumber;
+    private Member userNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn
     private Member friendNumber;
 
-
-    private LocalDateTime date;
 
     //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
     private RelationshipStatus status;
 
 
-    //==비즈니스 로직==//
+    //빌더는 값을 받아야 하는 것들만//
+    @Builder
+    public Relationship(Member userNumber, Member friendNumber){
+        this.userNumber=userNumber;
+        this.friendNumber=friendNumber;
+        this.status=RelationshipStatus.REQUEST;
+        //대기가 기본값이게//
+    }
 
 
 
