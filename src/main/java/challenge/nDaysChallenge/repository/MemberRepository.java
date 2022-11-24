@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.repository;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByNumber(Long number);
 
@@ -38,6 +39,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query("select m from Member m join fetch m.friendsList")
     public List<Relationship> findAllWithFriendsFetchJoin();
 
-
+    @Query("select m from Member m join fetch m.singleRooms")
+    public List<SingleRoom> findAllWithSingleRoomsFetchJoin();
 }
 

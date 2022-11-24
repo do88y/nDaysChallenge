@@ -1,9 +1,5 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-<<<<<<< HEAD
-public class DajimController {
-=======
-
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
@@ -59,5 +55,4 @@ public class DajimController {
         }
     }
 
->>>>>>> refs/remotes/origin/develop
 }

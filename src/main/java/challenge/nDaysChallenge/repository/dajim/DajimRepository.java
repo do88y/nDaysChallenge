@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.repository.dajim;
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 <<<<<<< HEAD
 import challenge.nDaysChallenge.domain.dajim.Open;
