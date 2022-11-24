@@ -37,15 +37,7 @@ public class RoomServiceTest {
     public void 개인_챌린지_생성() throws Exception {
         //given
         Period period = new Period(30L);
-        Member member = Member.builder()
-                .number(1L)
-                .id("asd")
-                .pw("asd")
-                .nickname("dobby")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
+        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
         //when
         Long newRoom = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);

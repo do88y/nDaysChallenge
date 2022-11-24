@@ -22,10 +22,9 @@ public class DajimService {
 
     //다짐 업로드
     public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl) {
-        Room room = dajimRepository.findByRoomNumber(roomNumber);
+        Room room = dajimRepository.findByNumber(roomNumber);
 
-        Dajim dajim = new Dajim();
-        dajim.builder()
+        Dajim dajim =Dajim.builder()
                 .room(room)
                 .member(userDetailsImpl.getMember())
                 .content(requestDto.getContent())
