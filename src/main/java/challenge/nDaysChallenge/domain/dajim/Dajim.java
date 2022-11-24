@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.lang.Nullable;
 
@@ -16,22 +17,19 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@DynamicUpdate
 public class Dajim extends BaseEntity implements Persistable<Long> {
 
     @Id @GeneratedValue
     @Column(name = "dajim_number")
     private Long number;
 
-    @Builder.Default
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Emotion> emotions = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Report> reports = new ArrayList<>();
+//    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+//    List<Report> reports = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_number")
@@ -47,10 +45,12 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @Enumerated(EnumType.STRING)
     private Open open;
 
-    public Dajim(Room room, Member member, String content){
+    @Builder
+    public Dajim(Room room, Member member, String content, Open open){
         this.room=room;
         this.member=member;
         this.content=content;
+        this.open=open;
     }
 
     @Override
@@ -61,6 +61,12 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     @Override
     public boolean isNew() {
         return getCreatedDate()==null;
+    }
+
+    public Dajim update(Open open, String content) {
+        this.open = open;
+        this.content = content;
+        return this;
     }
 
 }

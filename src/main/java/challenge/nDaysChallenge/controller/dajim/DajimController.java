@@ -22,29 +22,53 @@ public class DajimController {
 
     private final DajimService dajimService;
 
-    //다짐 업로드, 수정
+    //다짐 업로드
     @PostMapping(name = "/challenge/{challengeId}/upload")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
         Dajim dajim = dajimService.uploadDajim(roomNumber, dajimRequestDto, userDetailsImpl);
-        DajimResponseDto savedDajim = new DajimResponseDto(dajim.getNumber(), dajim.getMember().getNickname(),dajim.getContent());
+        DajimResponseDto savedDajim = new DajimResponseDto(dajim.getNumber(), dajim.getMember().getNickname(),dajim.getContent(),dajim.getOpen());
+
+        if (savedDajim==null){
+            throw new RuntimeException("다짐 작성에 실패했습니다.");
+        }
 
         return ResponseEntity.ok().body(savedDajim);
     }
 
-    //다짐 조회
+
+    //다짐 수정 (다짐내용, 공개여부 리턴)
+    @PutMapping(name = "/challenge/{challengeId}/{dajimId}")
+    public ResponseEntity<?> updateDajim(@PathVariable("dajimId") Long dajimNumber,
+                                         @RequestBody DajimRequestDto dajimRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+        checkLogin(userDetailsImpl);
+
+        Dajim updatedDajim = dajimService.updateDajim(dajimNumber, dajimRequestDto, userDetailsImpl);
+        DajimResponseDto newDajim = new DajimResponseDto(updatedDajim.getNumber(), updatedDajim.getMember().getNickname(),updatedDajim.getContent(),updatedDajim.getOpen());
+
+        if (newDajim==null){
+            throw new RuntimeException("다짐 작성에 실패했습니다.");
+        }
+
+        return ResponseEntity.ok().body(newDajim);
+    }
+
+    //전체 다짐 조회
     @GetMapping(name = "/challenge/{challengeId}")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
+
         List<Dajim> dajims = dajimService.viewDajimInRoom(roomNumber);
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
                 new DajimResponseDto(
                         dajim.getNumber(),
                         dajim.getMember().getNickname(),
-                        dajim.getContent()))
+                        dajim.getContent(),
+                        dajim.getOpen()))
                     .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(dajimsList);

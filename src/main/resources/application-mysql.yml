@@ -12,7 +12,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create  #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
+      ddl-auto: none  #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false

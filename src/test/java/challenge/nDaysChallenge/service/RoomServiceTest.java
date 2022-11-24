@@ -29,7 +29,7 @@ public class RoomServiceTest {
     @Test
     public void 챌린지_생성() throws Exception {
         //given
-        Member member1 = new Member(1L, "aaa", "123","asdf", 1,4, Authority.ROLE_USER);
+        Member member1 = new Member("aaa", "123","asdf", 1,4, Authority.ROLE_USER);
 
 
         Period period = new Period(5L);

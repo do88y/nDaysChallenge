@@ -1,10 +1,13 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class Relationship {
 
     @Id
@@ -19,7 +22,6 @@ public class Relationship {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member friendNumber;
-
 
     private LocalDateTime date;
 

@@ -32,7 +32,6 @@ public class MemberSignUpDto {
     @Builder
     public  Member memberToEntity(){
         return Member.builder()
-                .number(number)
                 .id(id)
                 .nickname(nickname)
                 .pw(pw)
