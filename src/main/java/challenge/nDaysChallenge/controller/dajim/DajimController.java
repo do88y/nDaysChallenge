@@ -1,6 +1,5 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;

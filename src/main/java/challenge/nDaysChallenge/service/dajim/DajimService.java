@@ -1,5 +1,8 @@
 package challenge.nDaysChallenge.service.dajim;
 
+<<<<<<< HEAD
+public class DajimService {
+=======
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
@@ -12,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,4 +54,5 @@ public class DajimService {
 
     }
 
+>>>>>>> refs/remotes/origin/develop
 }

@@ -1,6 +1,10 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+<<<<<<< HEAD
+import challenge.nDaysChallenge.domain.dajim.DajimComment;
+=======
+>>>>>>> refs/remotes/origin/develop
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
