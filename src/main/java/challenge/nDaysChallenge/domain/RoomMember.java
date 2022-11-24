@@ -2,16 +2,12 @@ package challenge.nDaysChallenge.domain;
 
 
 import challenge.nDaysChallenge.domain.room.GroupRoom;
-import challenge.nDaysChallenge.domain.room.RoomType;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
-import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import java.util.List;
 
 import static javax.persistence.FetchType.*;
 
@@ -48,21 +44,10 @@ public class RoomMember {
     }
 
     //==생성 메서드==//
-/*    @Builder  빌더패턴 이용
-    public RoomMember(Member member, Room room, int roomCount) {
-        this.member = member;
-        this.room = room;
-        this.roomCount += 1;
-    }*/
-
-    //생성자 이용
-    public static RoomMember createRoomMember(Member member, GroupRoom room, Member... selectedMember) {
+    public static RoomMember createRoomMember(Member member, GroupRoom room) {
         RoomMember roomMember = new RoomMember();
-        roomMember.setMember(member);  //방장
-        for (Member members : selectedMember) {  //그 외 멤버
-            roomMember.setMember(members);
-        }
-        roomMember.joinRoom((GroupRoom) room);
+        roomMember.setMember(member);
+        roomMember.joinRoom(room);
         roomMember.addCount();
 
         return roomMember;

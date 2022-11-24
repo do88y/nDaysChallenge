@@ -8,42 +8,47 @@ import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
-//@Transactional
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+//@DataJpaTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RoomServiceTest {
 
+    @Autowired
     RoomRepository roomRepository;
-    RoomMemberRepository roomMemberRepository;
+    @Autowired
     RoomService roomService;
-    MemberService memberService;
-    MemberRepository memberRepository;
 
     @DisplayName("개인 챌린지 생성")
     @Test
     public void 개인_챌린지_생성() throws Exception {
         //given
         Period period = new Period(30L);
-        Long newRoom = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+        Member member = Member.builder()
+                .number(1L)
+                .id("asd")
+                .pw("asd")
+                .nickname("dobby")
+                .image(1)
+                .roomLimit(4)
+                .authority(Authority.ROLE_USER)
+                .build();
 
         //when
-/*        Room createRoom = Room.builder()
-                .name("기상")
-                .period(period)
-                .category(Category.ROUTINE)
-                .passCount(2)
-                .build();*/
+        Long newRoom = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
 
         //then
         Room room = roomRepository.findById(newRoom).get();
