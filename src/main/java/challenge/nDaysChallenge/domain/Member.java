@@ -60,10 +60,19 @@ public class Member {
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
 
-
     @Builder
     public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.number = number;
+        this.id = id;
+        this.pw = pw;
+        this.nickname = nickname;
+        this.image = image;
+        this.roomLimit=roomLimit;
+        this.authority = authority;
+    }
+
+    //테스트용
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
