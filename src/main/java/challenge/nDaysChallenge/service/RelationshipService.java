@@ -46,9 +46,9 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public Relationship confirmFriends (Member userNumber,RelationshipStatus status) {
+/*    public Relationship confirmFriends (Member userNumber,RelationshipStatus status) {
         return relationshipRepository.findRelationshipByUserNumberAndStatus(userNumber, status);
-    }
+    }*/
 
 
 

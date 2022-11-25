@@ -1,8 +1,5 @@
 package challenge.nDaysChallenge.service.dajim;
 
-<<<<<<< HEAD
-public class DajimService {
-=======
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
@@ -54,5 +51,4 @@ public class DajimService {
 
     }
 
->>>>>>> refs/remotes/origin/develop
 }
