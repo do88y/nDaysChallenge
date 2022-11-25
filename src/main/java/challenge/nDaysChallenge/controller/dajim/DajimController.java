@@ -29,7 +29,7 @@ public class DajimController {
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
         Dajim dajim = dajimService.uploadDajim(roomNumber, dajimRequestDto, userDetailsImpl);
-        DajimResponseDto savedDajim = new DajimResponseDto(dajim.getNumber(), dajim.getMember().getNickname(),dajim.getContent(),dajim.getOpen());
+        DajimResponseDto savedDajim = new DajimResponseDto(dajim.getNumber(), dajim.getMember().getNickname(),dajim.getContent(),dajim.getOpen(),dajim.getUpdatedDate());
 
         if (savedDajim==null){
             throw new RuntimeException("다짐 작성에 실패했습니다.");
@@ -47,7 +47,7 @@ public class DajimController {
         checkLogin(userDetailsImpl);
 
         Dajim updatedDajim = dajimService.updateDajim(dajimNumber, dajimRequestDto, userDetailsImpl);
-        DajimResponseDto newDajim = new DajimResponseDto(updatedDajim.getNumber(), updatedDajim.getMember().getNickname(),updatedDajim.getContent(),updatedDajim.getOpen());
+        DajimResponseDto newDajim = new DajimResponseDto(updatedDajim.getNumber(), updatedDajim.getMember().getNickname(),updatedDajim.getContent(),updatedDajim.getOpen(), updatedDajim.getUpdatedDate());
 
         if (newDajim==null){
             throw new RuntimeException("다짐 작성에 실패했습니다.");
@@ -68,7 +68,8 @@ public class DajimController {
                         dajim.getNumber(),
                         dajim.getMember().getNickname(),
                         dajim.getContent(),
-                        dajim.getOpen()))
+                        dajim.getOpen(),
+                        dajim.getUpdatedDate()))
                     .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(dajimsList);

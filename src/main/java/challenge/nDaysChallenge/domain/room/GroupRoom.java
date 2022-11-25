@@ -14,19 +14,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoom extends Room {
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
 
     //==비즈니스 로직==//
 
-    /**
-     * 챌린지 삭제
-     */
-    public void delete() {
-        for (RoomMember roomMember : roomMemberList) {
-            roomMember.delete();
-        }
-    }
 
 }

@@ -46,6 +46,10 @@ public class DajimService {
 
     //다짐 수정
     public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl){
+        if (dajimNumber==null){
+            throw new RuntimeException("아직 작성하지 않은 다짐입니다.");
+        }
+
         Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber);
 
         checkDajimUser(dajim,userDetailsImpl);

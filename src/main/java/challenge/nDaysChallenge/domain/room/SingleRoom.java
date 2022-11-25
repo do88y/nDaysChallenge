@@ -22,6 +22,7 @@ public class SingleRoom extends Room {
         member.getSingleRooms().add(this);
     }
 
+    //==생성 메서드==//
     public static SingleRoom addRoomMember(Member member) {
         SingleRoom singleRoom = new SingleRoom();
         singleRoom.addMember(member);
