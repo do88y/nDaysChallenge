@@ -32,7 +32,7 @@ public class Member {
 
     //내가 수락한 친구들만 리스트에 들어가게//
     @OneToMany(mappedBy = "friend_number")
-    private List<Member> friendsList = new ArrayList<Member>();
+    public List<Member> friendsList = new ArrayList<Member>();
 
 
     @Column(length = 15, nullable = false)
@@ -62,8 +62,7 @@ public class Member {
 
 
     @Builder
-    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
-        this.number = number;
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
