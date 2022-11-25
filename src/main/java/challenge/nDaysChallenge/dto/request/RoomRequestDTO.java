@@ -14,11 +14,11 @@ public class RoomRequestDTO {
 
     private Long room;
     private String name;
-    private Long totalDays;
     private Category category;
     private String reward;
-    private RoomType type;
     private int passCount;
+
+    private Long totalDays;
 
     private Long member;
     private List<Long> memberList = new ArrayList<>();

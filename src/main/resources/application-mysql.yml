@@ -14,7 +14,7 @@ spring:
     hibernate:
       ddl-auto: create  #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       use-new-id-generator-mappings: false
       #show-sql: true  #설정시 JPA 쿼리문 확인 가능
     properties:
