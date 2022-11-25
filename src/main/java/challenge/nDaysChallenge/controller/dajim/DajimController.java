@@ -22,7 +22,7 @@ public class DajimController {
     private final DajimService dajimService;
 
     //다짐 업로드
-    @PostMapping(name = "/challenge/{challengeId}/upload")
+    @PostMapping(name = "/challenge/{challengeId}")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
