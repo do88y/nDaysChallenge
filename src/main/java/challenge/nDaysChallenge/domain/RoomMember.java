@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+
 import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
 import challenge.nDaysChallenge.domain.room.Room;
@@ -44,18 +45,10 @@ public class RoomMember {
     }
 
     //==생성 메서드==//
-/*    @Builder  빌더패턴 이용
-    public RoomMember(Member member, Room room, int roomCount) {
-        this.member = member;
-        this.room = room;
-        this.roomCount += 1;
-    }*/
-
-    //생성자 이용
-    public static RoomMember createRoomMember(Member member, Room room) {
+    public static RoomMember createRoomMember(Member member, GroupRoom room) {
         RoomMember roomMember = new RoomMember();
         roomMember.setMember(member);
-        roomMember.joinRoom((GroupRoom) room);
+        roomMember.joinRoom(room);
         roomMember.addCount();
 
         return roomMember;
@@ -64,9 +57,15 @@ public class RoomMember {
 
     //==비즈니스 로직==// 객체지향적 관점에서 데이터가 있는 곳에 비지니스 메서드가 있는 것이 좋음
 
-    public void delete() {
-
-    }
+    /**
+     * 챌린지 삭제
+     */
+/*    public void delete() {
+        if (room.getType() == RoomType.GROUP)
+        for (RoomMember roomMember : roomMemberList) {
+            roomMember.delete();
+        }
+    }*/
 
     /**
      * roomCount +1

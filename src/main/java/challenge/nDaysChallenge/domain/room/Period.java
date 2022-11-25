@@ -22,6 +22,7 @@ public class Period {
     public Period(Long totalDays) {
         this.startDate = LocalDate.now();
         this.endDate = startDate.plusDays(totalDays-1);
+        this.totalDays = totalDays;
     }
 
     //==값 타입 비교==//  인스턴스가 아닌 값이 같은지 비교해야 함
