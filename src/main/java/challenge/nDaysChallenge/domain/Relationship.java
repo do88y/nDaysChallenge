@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
 import lombok.*;
-
 import javax.persistence.*;
 
 
@@ -23,7 +22,6 @@ public class Relationship {
     @JoinColumn
     private Member friendNumber;
 
-
     //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
     private RelationshipStatus status;
@@ -37,7 +35,5 @@ public class Relationship {
         this.status=RelationshipStatus.REQUEST;
         //대기가 기본값이게//
     }
-
-
 
 }

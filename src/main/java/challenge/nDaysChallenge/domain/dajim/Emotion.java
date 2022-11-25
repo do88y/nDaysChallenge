@@ -9,8 +9,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Emotion extends BaseEntity implements Persistable<Long> {
 
     @Id @GeneratedValue
@@ -27,6 +25,14 @@ public class Emotion extends BaseEntity implements Persistable<Long> {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dajim_number")
     private Dajim dajim;
+
+    @Builder
+    public Emotion(Member member, Dajim dajim, Stickers stickers) {
+        this.member = member;
+        this.dajim = dajim;
+        this.stickers = stickers;
+    }
+
 
     @Override
     public Long getId() {
