@@ -25,6 +25,7 @@ public class EmotionService {
 
     private final DajimRepository dajimRepository;
 
+    //이모션 등록
     public void uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
         Member member = userDetailsImpl.getMember();
 
@@ -41,6 +42,7 @@ public class EmotionService {
         emotionRepository.save(emotion);
     }
 
+    //이모션 변경 및 삭제
     public Emotion updateEmotion(EmotionRequestDto requestDto, UserDetailsImpl userDetailsImpl){
         //수정할 이모션 객체 불러오기
         Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(),

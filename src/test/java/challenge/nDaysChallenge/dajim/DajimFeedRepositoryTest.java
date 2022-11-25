@@ -170,7 +170,7 @@ public class DajimFeedRepositoryTest {
         assertThat(savedEmotion.getStickers().toString()).isEqualTo("SURPRISE");
     }
 
-    @DisplayName("이모션 변경")
+    @DisplayName("이모션 변경 및 삭제")
     @Test
     @Transactional
     @Rollback(value = false)
