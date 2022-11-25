@@ -1,12 +1,9 @@
 package challenge.nDaysChallenge.domain.room;
 
 
-import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static lombok.AccessLevel.*;
 
@@ -41,10 +38,9 @@ public class Room {
     private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
     private int passCount = 0;
+    private int usedPassCount;
     private int successCount;
 
-    @Transient
-    private int failCount;
 
 
 
@@ -86,18 +82,6 @@ public class Room {
     public void delete() {
         if (type == RoomType.GROUP) {
 
-        }
-    }
-
-    /**
-     * 버튼 클릭 시
-     */
-    public void pushButton() {
-        if (true) {
-            successCount += 1;
-        } else if (false) {
-            failCount += 1;
-            passCount += 1;
         }
     }
 

@@ -44,7 +44,7 @@ public class RoomService {
 
         //엔티티 조회
         GroupRoom room = groupRoomRepository.findById(memberNumber).get();
-        Member member = memberRepository.findById(memberNumber).get();
+        Member member = memberRepository.findByNumber(memberNumber);
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()
@@ -59,13 +59,13 @@ public class RoomService {
         roomRepository.save(newRoom);
 
         //챌린지 멤버 생성
-        RoomMember createRoomMember = RoomMember.createRoomMember(member, room);  //방장
-        for (Member members : selectedMember) {
+        RoomMember roomMember = RoomMember.createRoomMember(member, room);  //방장
+        for (Member members : selectedMember) {  //그 외 멤버
             RoomMember.createRoomMember(members, room);
         }
 
         //챌린지 멤버 저장
-        roomMemberRepository.save(createRoomMember);
+        roomMemberRepository.save(roomMember);
 
         return newRoom.getNumber();
     }
@@ -77,7 +77,7 @@ public class RoomService {
     Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-        Member member = memberRepository.findById(memberNumber).get();
+        Member member = memberRepository.findByNumber(memberNumber);
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -107,9 +107,9 @@ public class RoomService {
     @Transactional
     public void deleteRoom(Long memberNumber, Long roomNumber) {
         //엔티티 조회
-        SingleRoom room = (SingleRoom) roomRepository.findById(roomNumber).get();
+        SingleRoom room = singleRoomRepository.findById(roomNumber).get();
         List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
-        Member member = memberRepository.findById(memberNumber).get();
+        Member member = memberRepository.findByNumber(memberNumber);
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
@@ -130,22 +130,38 @@ public class RoomService {
 
     }
 
+    /**
+     * 개인 챌린지 실패
+     */
+    @Transactional
+    public void failSingleRoom(Long roomNumber) {
+        //엔티티 조회
+        SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).get();
+
+        //개인 챌린지 멤버 조회
+        Member member = singleRoom.getMember();
+        int usedPassCount = singleRoom.getUsedPassCount();
+        int passCount = singleRoom.getPassCount();
+
+        if (usedPassCount > passCount) {
+            roomRepository.deleteById(member.getNumber());
+        }
+    }
 
     /**
      * 단체 챌린지 실패
      */
     @Transactional
-    public void failRoom(Long roomNumber) {
+    public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        Room room = roomRepository.findById(roomNumber).get();
         GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).get();
 
         //그룹 챌린지 멤버 조회
         List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
-        int failCount = room.getFailCount();
-        int passCount = room.getPassCount();
+        int usedPassCount = groupRoom.getUsedPassCount();
+        int passCount = groupRoom.getPassCount();
 
-        if (passCount > failCount) {
+        if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
                 roomRepository.deleteById(roomMember.getNumber());
 

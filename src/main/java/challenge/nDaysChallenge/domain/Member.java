@@ -24,15 +24,15 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
 
-
     //내가 수락한 친구들만 리스트에 들어가게//
-    @OneToMany(mappedBy = "friend_number")
-    public List<Member> friendsList = new ArrayList<Member>();
+
+
+    @OneToMany(mappedBy = "friendNumber")
+    private List<Relationship> friendsList = new ArrayList<Relationship>();
 
 
     @Column(length = 15, nullable = false)
@@ -49,17 +49,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-
-
-
-
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<SingleRoom> singleRooms = new ArrayList<>();
-
-
 
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
@@ -78,4 +72,3 @@ public class Member {
         return authority;
     }
 }
-

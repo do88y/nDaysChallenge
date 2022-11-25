@@ -2,31 +2,19 @@ package challenge.nDaysChallenge.domain;
 
 
 import challenge.nDaysChallenge.domain.room.GroupRoom;
-import challenge.nDaysChallenge.domain.room.RoomType;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
-<<<<<<< HEAD
-import lombok.*;
-=======
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
->>>>>>> refs/remotes/origin/develop
 
 import javax.persistence.*;
 
-import java.util.List;
-
 import static javax.persistence.FetchType.*;
 
-@Getter
 @Entity
-<<<<<<< HEAD
-@RequiredArgsConstructor
-=======
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
->>>>>>> refs/remotes/origin/develop
 public class RoomMember {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,14 +33,6 @@ public class RoomMember {
     private int roomCount = 0;  //챌린지 5개 제한
 
 
-<<<<<<< HEAD
-
-
-    //==연관관계 메서드==//
-    public void setRoom(Room room) {
-        this.room = room;
-        room.getRoomMembers().add(this);
-=======
     //==연관관계 메서드==//  RoomMember의 room에 roomNumber값 넣으면서 roomMemberList에도 roomNumber 세팅되게
 
     public void setMember(Member member) {
@@ -62,25 +42,13 @@ public class RoomMember {
     public void joinRoom(GroupRoom groupRoom) {
         this.room = groupRoom;
         groupRoom.getRoomMemberList().add(this);
->>>>>>> refs/remotes/origin/develop
     }
 
     //==생성 메서드==//
-/*    @Builder  빌더패턴 이용
-    public RoomMember(Member member, Room room, int roomCount) {
-        this.member = member;
-        this.room = room;
-        this.roomCount += 1;
-    }*/
-
-    //생성자 이용
-    public static RoomMember createRoomMember(Member member, GroupRoom room, Member... selectedMember) {
+    public static RoomMember createRoomMember(Member member, GroupRoom room) {
         RoomMember roomMember = new RoomMember();
-        roomMember.setMember(member);  //방장
-        for (Member members : selectedMember) {  //그 외 멤버
-            roomMember.setMember(members);
-        }
-        roomMember.joinRoom((GroupRoom) room);
+        roomMember.setMember(member);
+        roomMember.joinRoom(room);
         roomMember.addCount();
 
         return roomMember;

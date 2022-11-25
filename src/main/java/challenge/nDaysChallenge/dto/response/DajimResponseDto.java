@@ -3,6 +3,7 @@ package challenge.nDaysChallenge.dto.response;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
+import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,11 +23,14 @@ public class DajimResponseDto {
 
     private String content;
 
+    private Open open;
+
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보
-    public DajimResponseDto(Long dajimNumber, String nickname, String content){
+    public DajimResponseDto(Long dajimNumber, String nickname, String content, Open open){
         this.dajimNumber=dajimNumber;
         this.nickname=nickname;
         this.content=content;
+        this.open=open;
     }
 
 }

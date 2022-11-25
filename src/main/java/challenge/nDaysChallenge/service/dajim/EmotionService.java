@@ -21,7 +21,7 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
-    public void uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) {//스티커 등록/변경/삭제
+    public void uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
         Member member = userDetailsImpl.getMember();
 
         Long dajimNumber = emotionRequestDto.getDajimNumber();
@@ -30,8 +30,7 @@ public class EmotionService {
         String sticker = emotionRequestDto.getSticker();
         Stickers stickers = Stickers.valueOf(sticker);
 
-        Emotion emotion = new Emotion();
-        emotion.builder()
+        Emotion emotion = Emotion.builder()
                         .member(member)
                         .dajim(dajim)
                         .stickers(stickers)

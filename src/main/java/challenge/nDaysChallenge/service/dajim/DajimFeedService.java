@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 public class DajimFeedService {
 
     private final DajimFeedRepository dajimFeedRepository;
-    private final DajimRepository dajimRepository;
 
     //피드 전체 조회
     public List<Dajim> viewDajimOnFeed(UserDetailsImpl userDetailsImpl) {
