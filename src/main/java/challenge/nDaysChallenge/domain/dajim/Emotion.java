@@ -33,7 +33,6 @@ public class Emotion extends BaseEntity implements Persistable<Long> {
         this.stickers = stickers;
     }
 
-
     @Override
     public Long getId() {
         return number;
@@ -43,4 +42,10 @@ public class Emotion extends BaseEntity implements Persistable<Long> {
     public boolean isNew() {
         return getCreatedDate()==null;
     }
+
+    public Emotion update(Stickers stickers) {
+        this.stickers=stickers;
+        return this;
+    }
+
 }

@@ -121,8 +121,7 @@ public class RoomService {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
-        }
-        else if (room.getType() == RoomType.SINGLE) {
+        } else if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
             singleRoomRepository.delete(room);
             member.getSingleRooms().remove(room);

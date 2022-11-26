@@ -59,17 +59,13 @@ public class Room {
     //==생성 메서드==// 생성자 이용
     public static Room createRoom(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
         Room room = new Room(List.of(roomMembers), name);
-
         room.name = name;
         room.startDate = LocalDateTime.now();
         room.endDate = startDate.plusDays(30);
         room.reward = reward;
-
         for (RoomMember roomMember : roomMembers) {
             room.addRoomMember(roomMember);
         }
-
-
         room.status = RoomStatus.CONTINUE;
         return room;
     }*/
@@ -86,4 +82,3 @@ public class Room {
     }
 
 }
-
