@@ -22,7 +22,7 @@ public class DajimController {
     private final DajimService dajimService;
 
     //다짐 업로드
-    @PostMapping(name = "/challenge/{challengeId}")
+    @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
@@ -39,7 +39,7 @@ public class DajimController {
 
 
     //다짐 수정 (다짐내용, 공개여부 리턴)
-    @PutMapping(name = "/challenge/{challengeId}/{dajimId}")
+    @PutMapping("/challenge/{challengeId}/{dajimId}")
     public ResponseEntity<?> updateDajim(@PathVariable("dajimId") Long dajimNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
@@ -56,7 +56,7 @@ public class DajimController {
     }
 
     //전체 다짐 조회
-    @GetMapping(name = "/challenge/{challengeId}")
+    @GetMapping("/challenge/{challengeId}")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         checkLogin(userDetailsImpl);
