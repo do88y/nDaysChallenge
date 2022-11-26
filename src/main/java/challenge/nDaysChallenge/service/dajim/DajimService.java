@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.domain.Member;
@@ -25,13 +26,14 @@ public class DajimService {
     //다짐 업로드
     public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl) {
         Member member = userDetailsImpl.getMember();
-        Room room = dajimRepository.findByRoomNumber(roomNumber);
+        Room room = dajimRepository.findByRoomNumber(roomNumber)
+                .orElseThrow(()-> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
 
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
                 .content(requestDto.getContent())
-                .open(requestDto.getOpen())
+                .open(Open.valueOf(requestDto.getOpen()))
                 .build();
 
         checkDajimRoomUser(newDajim, room, userDetailsImpl);
@@ -44,15 +46,12 @@ public class DajimService {
 
     //다짐 수정
     public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl){
-        if (dajimNumber==null){
-            throw new RuntimeException("아직 작성하지 않은 다짐입니다.");
-        }
-
-        Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber);
+        Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber)
+                .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
 
         checkDajimUser(dajim,userDetailsImpl);
 
-        Dajim updatedDajim = dajim.update(requestDto.getOpen(), requestDto.getContent());
+        Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
 
         return updatedDajim;
     }
@@ -61,7 +60,6 @@ public class DajimService {
 
     //다짐 조회
     public List<Dajim> viewDajimInRoom(Long roomNumber){
-
         List<Dajim> dajims = null;
 
         try {
@@ -71,7 +69,6 @@ public class DajimService {
         }
 
         return dajims;
-
     }
 
     private void checkDajimRoomUser(Dajim dajim, Room room, UserDetailsImpl userDetailsImpl){

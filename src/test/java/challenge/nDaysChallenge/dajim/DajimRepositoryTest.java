@@ -33,12 +33,12 @@ class DajimRepositoryTest {
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
         //when
-        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", Open.PUBLIC);
+        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PUBLIC");
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
                 .content(dajimRequestDto.getContent())
-                .open(dajimRequestDto.getOpen())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
                 .build();
         Dajim savedDajim = dajimRepository.save(newDajim);
 
@@ -53,17 +53,17 @@ class DajimRepositoryTest {
         //given
         Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4);
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
-        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", Open.PUBLIC);
+        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PUBLIC");
         Dajim dajim = Dajim.builder()
                 .room(room)
                 .member(member)
                 .content(dajimRequestDto.getContent())
-                .open(dajimRequestDto.getOpen())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
                 .build();
-        Dajim savedDajim = dajimRepository.save(dajim);
+        dajimRepository.save(dajim);
 
         //when
-        Dajim newdajim = dajimRepository.findByDajimNumber(1L);
+        Dajim newdajim = dajimRepository.findByDajimNumber(1L).orElseThrow(()->new RuntimeException("현재 다짐을 찾을 수 없습니다."));
         Dajim updatedDajim = newdajim.update(Open.PRIVATE, "새 다짐");
 
         //then
@@ -78,13 +78,13 @@ class DajimRepositoryTest {
         Member member2 = new Member("user2@naver.com","12345","userN2",1,4, Authority.ROLE_USER);
         Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4);
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", Open.PUBLIC);
+        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PUBLIC");
 
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
                 .content(dajimRequestDto.getContent())
-                .open(dajimRequestDto.getOpen())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
                 .build();
         dajimRepository.save(newDajim);
 
@@ -92,7 +92,7 @@ class DajimRepositoryTest {
                 .room(room)
                 .member(member2)
                 .content(dajimRequestDto.getContent())
-                .open(dajimRequestDto.getOpen())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
                 .build();
         dajimRepository.save(newDajim2);
 

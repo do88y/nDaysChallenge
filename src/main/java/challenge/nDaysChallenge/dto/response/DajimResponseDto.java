@@ -24,12 +24,12 @@ public class DajimResponseDto {
 
     private String content;
 
-    private Open open;
+    private String open;
 
     private LocalDateTime updatedDate;
 
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보
-    public DajimResponseDto(Long dajimNumber, String nickname, String content, Open open, LocalDateTime updatedDate){
+    public DajimResponseDto(Long dajimNumber, String nickname, String content, String open, LocalDateTime updatedDate){
         this.dajimNumber=dajimNumber;
         this.nickname=nickname;
         this.content=content;

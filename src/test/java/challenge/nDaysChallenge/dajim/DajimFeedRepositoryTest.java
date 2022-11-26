@@ -152,7 +152,8 @@ public class DajimFeedRepositoryTest {
             .build());
 
         //when
-        Dajim savedDajim = emotionRepository.findByDajimNumberForEmotion(dajim.getNumber());
+        Dajim savedDajim = emotionRepository.findByDajimNumberForEmotion(dajim.getNumber())
+                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
         Stickers sticker = Stickers.valueOf("SURPRISE");
 
@@ -204,7 +205,7 @@ public class DajimFeedRepositoryTest {
         //when
         Emotion updatedEmotion;
 
-        if (requestDto.getSticker()==null||requestDto.getSticker()==""){
+        if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
