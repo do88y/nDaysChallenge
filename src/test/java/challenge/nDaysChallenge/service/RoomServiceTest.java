@@ -77,10 +77,10 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        Long roomNumber = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+        Long roomNumber = roomService.singleRoom(member.getNumber(), "기상", period, Category.ROUTINE, 2);
 
         //then
-        Optional<Room> findSingleRoom = roomRepository.findById(1L);
+        Optional<Room> findSingleRoom = roomRepository.findById(roomNumber);
         assertThat(findSingleRoom.get().getNumber()).isEqualTo(roomNumber);
     }
 
@@ -115,7 +115,7 @@ public class RoomServiceTest {
         em.persist(room);
 
         //when
-        roomRepository.deleteById(1L);
+        roomRepository.deleteById(room.getNumber());
 
         //then
         long count = roomRepository.count();
