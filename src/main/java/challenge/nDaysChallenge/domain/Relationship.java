@@ -16,12 +16,10 @@ public class Relationship {
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     @JoinColumn
-    @Column(name = "user_number")
     private Member user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinColumn
-    @Column(name = "friend_number")
     private Member friend;
 
     //친구신청 상태 enum으로 열거//
