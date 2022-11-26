@@ -50,7 +50,7 @@ public class EmotionService {
 
         Emotion updatedEmotion;
 
-        if (requestDto.getSticker()==null||requestDto.getSticker()==""){
+        if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
