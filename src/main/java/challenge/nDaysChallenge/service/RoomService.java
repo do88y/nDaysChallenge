@@ -43,7 +43,6 @@ public class RoomService {
     public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
-        GroupRoom room = groupRoomRepository.findById(memberNumber).get();
         Member member = memberRepository.findByNumber(memberNumber);
 
         //챌린지 생성
@@ -59,13 +58,14 @@ public class RoomService {
         roomRepository.save(newRoom);
 
         //챌린지 멤버 생성
-        RoomMember roomMember = RoomMember.createRoomMember(member, room);  //방장
+        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
-            RoomMember.createRoomMember(members, room);
+            RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            roomMemberRepository.save(result);
         }
 
         //챌린지 멤버 저장
-        roomMemberRepository.save(roomMember);
 
         return newRoom.getNumber();
     }

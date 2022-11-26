@@ -28,7 +28,7 @@ public class RoomMember {
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_number")
-    private GroupRoom room;
+    private Room room;
 
     @Column(name = "member_room_count")
     private int roomCount = 0;  //챌린지 5개 제한
@@ -38,15 +38,15 @@ public class RoomMember {
 
     public void setMember(Member member) {
         this.member = member;
-        member.getRoomMemberList().add(this);
+//        member.getRoomMemberList().add(this);
     }
-    public void joinRoom(GroupRoom groupRoom) {
+    public void joinRoom(Room groupRoom) {
         this.room = groupRoom;
-        groupRoom.getRoomMemberList().add(this);
+//        groupRoom.getRoomMemberList().add(this);
     }
 
     //==생성 메서드==//
-    public static RoomMember createRoomMember(Member member, GroupRoom room) {
+    public static RoomMember createRoomMember(Member member, Room room) {
         RoomMember roomMember = new RoomMember();
         roomMember.setMember(member);
         roomMember.joinRoom(room);

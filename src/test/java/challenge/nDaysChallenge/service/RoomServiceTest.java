@@ -2,17 +2,15 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -27,13 +25,14 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+@Rollback(value = true)
 public class RoomServiceTest {
 
     @Autowired EntityManager em;
     @Autowired RoomRepository roomRepository;
-    @Autowired RoomService roomService;
+    @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired RoomService roomService;
 
     @DisplayName("개인 챌린지 단독")
     @Test
@@ -78,11 +77,33 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        Long roomNumber = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+        Long roomNumber = roomService.singleRoom(member.getNumber(), "기상", period, Category.ROUTINE, 2);
 
         //then
-        Optional<Room> findSingleRoom = roomRepository.findById(1L);
+        Optional<Room> findSingleRoom = roomRepository.findById(roomNumber);
         assertThat(findSingleRoom.get().getNumber()).isEqualTo(roomNumber);
+    }
+
+    @DisplayName("그룹 챌린지 생성 메서드 전체")
+    @Test
+    public void groupRoomTest() throws Exception {
+        //given
+        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
+        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER);
+        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, 4, Authority.ROLE_USER);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+
+        //when
+        Long groupRoomNo = roomService.groupRoom(member1.getNumber(), "내일까지 마무으리", period, Category.MINDFULNESS, 0, member2, member3);
+
+        //then
+        RoomMember findRoomByMember = roomMemberRepository.findByMemberNumber(member1.getNumber());
+        System.out.println("findRoomByMember" + findRoomByMember);
+
+        RoomMember findRoom = roomMemberRepository.findByMemberNumber(member1.getNumber());
+        assertThat(groupRoomNo).isEqualTo(findRoom.getRoom().getNumber());
     }
 
     @DisplayName("챌린지 삭제")
@@ -94,7 +115,7 @@ public class RoomServiceTest {
         em.persist(room);
 
         //when
-        roomRepository.deleteById(1L);
+        roomRepository.deleteById(room.getNumber());
 
         //then
         long count = roomRepository.count();
