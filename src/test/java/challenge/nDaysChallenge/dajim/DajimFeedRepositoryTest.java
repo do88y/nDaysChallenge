@@ -128,8 +128,6 @@ public class DajimFeedRepositoryTest {
 
     @DisplayName("이모션 등록")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void clickEmotion(){
         //given
         Member member1 = Member.builder()
@@ -172,14 +170,38 @@ public class DajimFeedRepositoryTest {
 
     @DisplayName("이모션 변경 및 삭제")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void updateEmotion(){
+        //given
+        Member member1 = Member.builder()
+                .id("user@naver.com")
+                .pw("12345")
+                .nickname("userN")
+                .image(1)
+                .roomLimit(4)
+                .authority(Authority.ROLE_USER)
+                .build();
+        Room room1 = Room.builder()
+                .name("newRoom")
+                .period(new Period(100L))
+                .category(Category.ROUTINE)
+                .passCount(5)
+                .build();
+        Dajim dajim = dajimRepository.save(Dajim.builder()
+                .room(room1)
+                .member(member1)
+                .content("content")
+                .open(Open.PUBLIC)
+                .build());
+        Emotion emotion = Emotion.builder()
+                .member(member1)
+                .dajim(dajim)
+                .stickers(Stickers.valueOf("CHEER"))
+                .build();
+        emotionRepository.save(emotion);
+
         EmotionRequestDto requestDto = new EmotionRequestDto(1L,"SURPRISE");
 
         //when
-        Emotion emotion = emotionRepository.findByEmotionNumber(1L, 1L);
-
         Emotion updatedEmotion;
 
         if (requestDto.getSticker()==null||requestDto.getSticker()==""){
@@ -195,12 +217,6 @@ public class DajimFeedRepositoryTest {
 
         //then
         assertThat(newEmotion.getStickers()).isEqualTo("SURPRISE");
-    }
-
-    @DisplayName("이모션 삭제")
-    @Test
-    void deleteEmotion(){
-
     }
 
 }

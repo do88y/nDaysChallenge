@@ -19,19 +19,19 @@ public class EmotionController { //감정 스티커 등록
 
     private final EmotionService emotionService;
 
-    @GetMapping("/feed/emotion") //감정 스티커 등록
+    @PostMapping("/feed/emotion") //감정 스티커 등록
     public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
-        emotionService.uploadEmotion(emotionRequestDto,userDetailsImpl);
+        Emotion emotion = emotionService.uploadEmotion(emotionRequestDto, userDetailsImpl);
         EmotionResponseDto savedEmotion = new EmotionResponseDto(emotionRequestDto.getDajimNumber(),
                                                                     userDetailsImpl.getMember().getNumber(),
-                                                                    emotionRequestDto.getSticker());
+                                                                    emotion.getStickers().toString());
 
         return ResponseEntity.ok().body(savedEmotion);
     }
 
-    @PutMapping(name = "/feed/emotion")
-    public ResponseEntity<?> updateDajim(@RequestBody EmotionRequestDto emotionRequestDto,
+    @PutMapping("/feed/emotion")
+    public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         Emotion emotion = emotionService.updateEmotion(emotionRequestDto, userDetailsImpl);
 
