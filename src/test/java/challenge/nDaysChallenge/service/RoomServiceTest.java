@@ -20,14 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Rollback(value = false)
-//@DataJpaTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RoomServiceTest {
 
     @Autowired EntityManager em;
@@ -35,41 +35,29 @@ public class RoomServiceTest {
     @Autowired RoomService roomService;
     @Autowired MemberRepository memberRepository;
 
-    @DisplayName("개인 챌린지 생성")
+    @DisplayName("개인 챌린지 단독")
     @Test
     public void 개인_챌린지_생성() throws Exception {
         //given
-        Period period = new Period(30L);
-//        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-
-//        em.persist(member);
-
-        //when
-        Room newRoom = SingleRoom.builder()
+        Room room = SingleRoom.builder()
                 .name("기상")
-                .period(period)
+                .period(new Period(30L))
                 .category(Category.ROUTINE)
                 .type(RoomType.SINGLE)
                 .passCount(2)
                 .build();
-//        Long newRoom = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
 
-        em.persist(newRoom);
+        em.persist(room);
 
-        em.flush();
-        em.clear();
+        //when
+        Optional<Room> findRoom = roomRepository.findById(1L);
 
 
         //then
-//        Room room = roomRepository.findById(saveRoom.getNumber()).get();
-//        assertThat(room.getNumber()).isEqualTo(newRoom.getNumber());
-        SingleRoom singleRoom = em.createQuery("select s from SingleRoom s", SingleRoom.class)
-                .getSingleResult();
-        System.out.println("singleRoom = " + singleRoom);
-
+        assertThat(room.getNumber()).isEqualTo(findRoom.get().getNumber());
     }
 
-    @DisplayName("단체 챌린지 생성")
+    @DisplayName("단체 챌린지 단독")
     @Test
     public void 단체_챌린지_생성() throws Exception {
         //given
@@ -81,20 +69,38 @@ public class RoomServiceTest {
         //then
     }
 
+    @DisplayName("singleRoom 메서드 전체")
+    @Test
+    public void singleRoom_test() throws Exception {
+        //given
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+
+        em.persist(member);
+
+        //when
+        Long roomNumber = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+
+        //then
+        Optional<Room> findSingleRoom = roomRepository.findById(1L);
+        assertThat(findSingleRoom.get().getNumber()).isEqualTo(roomNumber);
+    }
+
     @DisplayName("챌린지 삭제")
     @Test
     public void 챌린지_삭제() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-        Period period = new Period(30L);
-        Long newRoom1 = roomService.singleRoom(1L, "기상", period, Category.ROUTINE, 2);
+        Room room = new Room("기상", period, Category.ROUTINE, RoomType.GROUP, 2);
+
+        em.persist(room);
 
         //when
-        roomService.deleteRoom(newRoom1, member.getNumber());
+        roomRepository.deleteById(1L);
 
         //then
         long count = roomRepository.count();
         assertThat(count).isEqualTo(0);
     }
+
+    Period period = new Period(30L);
 
 }
