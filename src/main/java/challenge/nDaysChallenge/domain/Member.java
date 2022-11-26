@@ -29,8 +29,11 @@ public class Member {
     private String id;
 
     //내가 수락한 친구들만 리스트에 들어가게//
+
+
     @OneToMany(mappedBy = "friendNumber")
     private List<Relationship> friendsList = new ArrayList<Relationship>();
+
 
     @Column(length = 15, nullable = false)
     private String pw;

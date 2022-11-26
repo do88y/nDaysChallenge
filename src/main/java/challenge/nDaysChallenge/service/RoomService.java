@@ -40,7 +40,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
         GroupRoom room = groupRoomRepository.findById(memberNumber).get();
@@ -74,7 +74,7 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+    public Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
         Member member = memberRepository.findByNumber(memberNumber);

@@ -1,14 +1,12 @@
 package challenge.nDaysChallenge.repository.room;
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
-<<<<<<< HEAD
+    //멤버로 개인 챌린지 갯수 조회
+    public Long countByMember(Member member);
+
 }
-=======
-}
->>>>>>> b88dcb192e09561565f2709b683ca7012a007423
