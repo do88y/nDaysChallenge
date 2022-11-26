@@ -40,7 +40,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
         GroupRoom room = groupRoomRepository.findById(memberNumber).get();
@@ -74,7 +74,7 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+    public Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
         Member member = memberRepository.findByNumber(memberNumber);
@@ -91,8 +91,11 @@ public class RoomService {
         //챌린지 저장
         roomRepository.save(newRoom);
 
+        //SingleRoom에 Member 입력
+        SingleRoom.addMember(member);
+
         //챌린지 멤버 생성
-        SingleRoom addRoomMember = SingleRoom.addRoomMember(member);
+        SingleRoom addRoomMember = SingleRoom.addRoom(newRoom);
 
         //챌린지 멤버 저장
         roomRepository.save(addRoomMember);
@@ -138,7 +141,7 @@ public class RoomService {
         SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).get();
 
         //개인 챌린지 멤버 조회
-        Member member = singleRoom.getMember();
+        Member member = SingleRoom.giveMember();
         int usedPassCount = singleRoom.getUsedPassCount();
         int passCount = singleRoom.getPassCount();
 

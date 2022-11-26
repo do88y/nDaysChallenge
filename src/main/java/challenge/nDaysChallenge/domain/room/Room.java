@@ -9,7 +9,6 @@ import static lombok.AccessLevel.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "dtype")
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 @Getter
@@ -17,7 +16,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
-    private Long number;
+    protected Long number;
 
     @Column(name = "room_name", length = 30)
     private String name;

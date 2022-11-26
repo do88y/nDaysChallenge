@@ -23,10 +23,8 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
-    private final DajimRepository dajimRepository;
-
     //이모션 등록
-    public void uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
+    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
         Member member = userDetailsImpl.getMember();
 
         Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber());
@@ -39,7 +37,9 @@ public class EmotionService {
                         .stickers(sticker)
                         .build();
 
-        emotionRepository.save(emotion);
+        Emotion savedEmotion = emotionRepository.save(emotion);
+
+        return savedEmotion;
     }
 
     //이모션 변경 및 삭제
