@@ -70,6 +70,8 @@ public class RoomServiceTest {
 
     @DisplayName("singleRoom 메서드 전체")
     @Test
+    @Transactional
+    @Rollback(value = false)
     public void singleRoom_test() throws Exception {
         //given
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
@@ -86,6 +88,8 @@ public class RoomServiceTest {
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
+    @Transactional
+    @Rollback(value = false)
     public void groupRoomTest() throws Exception {
         //given
         Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);

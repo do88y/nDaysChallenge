@@ -11,9 +11,13 @@ import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
+import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
+import challenge.nDaysChallenge.service.RoomService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,89 +45,129 @@ public class DajimFeedRepositoryTest {
     @Autowired
     EmotionRepository emotionRepository;
 
+    @Autowired
+    RoomRepository roomRepository;
+
+    @Autowired
+    RoomMemberRepository roomMemberRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
+
     @DisplayName("피드 조회 - 다짐, 이모션")
     @Test
     @Transactional
     @Rollback(value = false)
     void viewFeed(){
         //given
-//        Member member1 = Member.builder()
-//                .id("user@naver.com")
-//                .pw("12345")
-//                .nickname("userN")
-//                .image(1)
-//                .roomLimit(4)
-//                .authority(Authority.ROLE_USER)
-//                .build();
-//        Member member2 = Member.builder()
-//                .id("user2@naver.com")
-//                .pw("12345")
-//                .nickname("userN2")
-//                .image(1)
-//                .roomLimit(4)
-//                .authority(Authority.ROLE_USER)
-//                .build();
-//        Member member3 = Member.builder()
-//                .id("user3@naver.com")
-//                .pw("12345")
-//                .nickname("userN3")
-//                .image(1)
-//                .roomLimit(4)
-//                .authority(Authority.ROLE_USER)
-//                .build();
-//        SingleRoom.addRoomMember(member1);
-//        Room room1 = Room.builder()
-//                .name("newRoom")
-//                .period(new Period(100L))
-//                .category(Category.ROUTINE)
-//                .passCount(5)
-//                .build();
-//        Room room2 = Room.builder()
-//                .name("newRoom2")
-//                .period(new Period(100L))
-//                .category(Category.ROUTINE)
-//                .passCount(5)
-//                .build();
-//        RoomMember.createRoomMember(member2,GroupRoom);
-//        RoomMember.createRoomMember(member3,new GroupRoom());
-//
-//        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", Open.PUBLIC);
-//
-//        Dajim dajim = dajimRepository.save(Dajim.builder()
-//                .room(room1)
-//                .member(member1)
-//                .content(dajimRequestDto.getContent())
-//                .open(dajimRequestDto.getOpen())
-//                .build());
-//        Dajim dajim2 = dajimRepository.save(Dajim.builder()
-//                .room(room1)
-//                .member(member2)
-//                .content(dajimRequestDto.getContent())
-//                .open(dajimRequestDto.getOpen())
-//                .build());
-//        Dajim dajim3 = dajimRepository.save(Dajim.builder()
-//                .room(room2)
-//                .member(member2)
-//                .content(dajimRequestDto.getContent())
-//                .open(dajimRequestDto.getOpen())
-//                .build());
-//
-//        //when
-//        //멤버2이 가입된 룸
-//        List<SingleRoom> singleRooms = member2.getSingleRooms();
-//        List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
-//                        singleRoom.getNumber())
-//                .collect(Collectors.toList());
-//
-//        List<RoomMember> roomMembers = member2.getRoomMemberList();
-//        List<Long> GroupRoomNumbers = roomMembers.stream().map(roomMember ->
-//                        roomMember.getRoom().getNumber())
-//                .collect(Collectors.toList());
-//
-//        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(singleRoomNumbers, GroupRoomNumbers);
-//
-//        //then
-//        assertThat(dajims.size()).isEqualTo(2);
+        //멤버3 룸2
+        Member member1 = Member.builder()
+                .id("user@naver.com")
+                .pw("12345")
+                .nickname("userN")
+                .image(1)
+                .roomLimit(4)
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member2 = Member.builder()
+                .id("user2@naver.com")
+                .pw("12345")
+                .nickname("userN2")
+                .image(1)
+                .roomLimit(4)
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member3 = Member.builder()
+                .id("user3@naver.com")
+                .pw("12345")
+                .nickname("userN3")
+                .image(1)
+                .roomLimit(4)
+                .authority(Authority.ROLE_USER)
+                .build();
+
+        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PRIVATE");
+
+        //싱글룸 (룸1-멤버1)
+        Room room1 = SingleRoom.builder()
+                .name("SingleRoom")
+                .period(new Period(10L))
+                .category(Category.ROUTINE)
+                .type(RoomType.SINGLE)
+                .passCount(2)
+                .build();
+        roomRepository.save(room1);
+        SingleRoom.addMember(member1);
+        SingleRoom singleRoom1 = SingleRoom.addRoom(room1);
+        roomRepository.save(singleRoom1);
+        //싱글룸 다짐
+        Dajim dajim = dajimRepository.save(Dajim.builder()
+                .room(room1)
+                .member(member1)
+                .content(dajimRequestDto.getContent())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .build());
+
+        //그룹룸 (룸2-멤버1,2,3)
+        Room room2 = GroupRoom.builder()
+                .name("GroupRoom")
+                .period(new Period(100L))
+                .category(Category.ETC)
+                .type(RoomType.GROUP)
+                .passCount(3)
+                .build();
+        roomRepository.save(room2);
+        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
+        RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2);
+        RoomMember roomMember3 = RoomMember.createRoomMember(member3, room2);
+        roomMemberRepository.save(roomMember1);
+        roomMemberRepository.save(roomMember2);
+        roomMemberRepository.save(roomMember3);
+        //그룹룸 다짐3
+        Dajim dajim2 = dajimRepository.save(Dajim.builder()
+                .room(room2)
+                .member(member1)
+                .content(dajimRequestDto.getContent())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .build());
+        Dajim dajim3 = dajimRepository.save(Dajim.builder()
+                .room(room2)
+                .member(member2)
+                .content(dajimRequestDto.getContent())
+                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .build());
+        Dajim dajim4 = dajimRepository.save(Dajim.builder()
+                .room(room2)
+                .member(member3)
+                .content(dajimRequestDto.getContent())
+                .open(Open.valueOf("PRIVATE"))
+                .build());
+
+        //when
+        //멤버2 싱글룸 불러오기
+        List<Room> singleRooms = member2.getSingleRooms();
+        List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
+                        singleRoom.getNumber())
+                .collect(Collectors.toList());
+
+        //멤버2 그룹룸 불러오기
+        List<RoomMember> roomMemberList = member2.getRoomMemberList();
+        List<Long> groupRoomNumbers = roomMemberList.stream().map(roomMember ->
+                        roomMember.getRoom().getNumber())
+                .collect(Collectors.toList());
+
+        //해당 룸넘버들의 다짐 불러오기
+        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRoomNumbers, singleRoomNumbers);
+
+        //then
+        for (Dajim c : dajims){
+            System.out.println("다짐 넘버 리스트 : "+c.getNumber());
+        }
+
+        //멤버2
+        //assertThat(singleRooms.size()).isEqualTo(0); //싱글룸 0개
+        //assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
+        assertThat(dajims.size()).isEqualTo(3); //해당 그룹룸에 다짐 3개
     }
 
     @DisplayName("이모션 등록")
