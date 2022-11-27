@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,8 @@ public class EmotionService {
 
         Emotion savedEmotion = emotionRepository.save(emotion);
 
+        dajim.getEmotions().add(savedEmotion); //다짐 엔티티 이모션리스트에 추가
+
         return savedEmotion;
     }
 
@@ -50,12 +53,18 @@ public class EmotionService {
                                                                 userDetailsImpl.getMember().getNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
 
+        //기존 이모션 삭제
+        Long dajimNumber = requestDto.getDajimNumber();
+        Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
+        dajim.get().getEmotions().remove(emotion);
+
         Emotion updatedEmotion;
 
         if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
+            dajim.get().getEmotions().add(updatedEmotion);
         }
 
         return updatedEmotion;
