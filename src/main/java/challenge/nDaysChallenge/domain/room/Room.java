@@ -8,7 +8,7 @@ import javax.persistence.*;
 import static lombok.AccessLevel.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 @Getter
@@ -54,19 +54,20 @@ public class Room {
         this.passCount = passCount;
 
     }
+
 /*
     //==생성 메서드==// 생성자 이용
-    public static Room createRoom(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
-        Room room = new Room(List.of(roomMembers), name);
+    public static Room createRoom(String name, Period period, Category category, RoomType type, int passCount) {
+        Room room = new Room();
         room.name = name;
-        room.startDate = LocalDateTime.now();
-        room.endDate = startDate.plusDays(30);
-        room.reward = reward;
-        for (RoomMember roomMember : roomMembers) {
-            room.addRoomMember(roomMember);
-        }
+        room.period = period;
+        room.category = category;
+        room.type = type;
         room.status = RoomStatus.CONTINUE;
+        room.passCount = passCount;
+
         return room;
-    }*/
+    }
+*/
 
 }
