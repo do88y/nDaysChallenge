@@ -34,6 +34,7 @@ public class SingleRoom extends Room {
     //==생성 메서드==//
     public static SingleRoom addRoom(Room room) {
         SingleRoom singleRoom = new SingleRoom();
+        singleRoom.addMember(member);
         singleRoom.joinRoom(room.getNumber());
 
         return singleRoom;

@@ -69,15 +69,4 @@ public class Room {
         return room;
     }*/
 
-    //==비즈니스 로직==//
-
-    /**
-     * 챌린지 삭제
-     */
-    public void delete() {
-        if (type == RoomType.GROUP) {
-
-        }
-    }
-
 }
