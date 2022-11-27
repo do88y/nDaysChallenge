@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.*;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -36,39 +37,6 @@ public class RoomService {
         return roomRepository.findById(number);
     }
 
-    /**
-     * 그룹 챌린지 생성
-     */
-    @Transactional
-    public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
-
-        //엔티티 조회
-        Member member = memberRepository.findByNumber(memberNumber);
-
-        //챌린지 생성
-        Room newRoom = GroupRoom.builder()
-                .name(name)
-                .period(new Period(period.getTotalDays()))
-                .category(category)
-                .type(RoomType.GROUP)
-                .passCount(passCount)
-                .build();
-
-        //챌린지 저장
-        roomRepository.save(newRoom);
-
-        //챌린지 멤버 생성
-        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
-        roomMemberRepository.save(roomMember);
-        for (Member members : selectedMember) {  //그 외 멤버
-            RoomMember result = RoomMember.createRoomMember(members, newRoom);
-            roomMemberRepository.save(result);
-        }
-
-        //챌린지 멤버 저장
-
-        return newRoom.getNumber();
-    }
 
     /**
      * 개인 챌린지 생성
@@ -99,6 +67,40 @@ public class RoomService {
 
         //챌린지 멤버 저장
         roomRepository.save(addRoomMember);
+
+        return newRoom.getNumber();
+    }
+
+    /**
+     * 그룹 챌린지 생성
+     */
+    @Transactional
+    public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
+
+        //엔티티 조회
+        Member member = memberRepository.findByNumber(memberNumber);
+
+        //챌린지 생성
+        Room newRoom = GroupRoom.builder()
+                .name(name)
+                .period(new Period(period.getTotalDays()))
+                .category(category)
+                .type(RoomType.GROUP)
+                .passCount(passCount)
+                .build();
+
+        //챌린지 저장
+        roomRepository.save(newRoom);
+
+        //챌린지 멤버 생성
+        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        roomMemberRepository.save(roomMember);
+        for (Member members : selectedMember) {  //그 외 멤버
+            RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            roomMemberRepository.save(result);
+        }
+
+        //챌린지 멤버 저장
 
         return newRoom.getNumber();
     }

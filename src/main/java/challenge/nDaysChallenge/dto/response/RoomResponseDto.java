@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dto.request;
+package challenge.nDaysChallenge.dto.response;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.room.Category;
@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RoomRequestDTO {
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoomResponseDto {
 
     private String name;
     private Category category;
@@ -26,20 +28,8 @@ public class RoomRequestDTO {
     private List<Member> members = new ArrayList<>();
 
 
-/*
-    public  RoomRequestDTO(String name, Category category, String reward, int passCount, Long totalDays) {
-        this.name = name;
-        this.category = category;
-        this.reward = reward;
-        this.passCount = passCount;
-        this.totalDays = totalDays;
-        this.type = RoomType.SINGLE;
-        this.status = RoomStatus.CONTINUE;
-    }
-*/
-
     @Builder
-    public RoomRequestDTO(String name, Category category, String reward, int passCount, Long totalDays, Member member, Member... members) {
+    public RoomResponseDto(String name, Category category, String reward, RoomType type, RoomStatus status, int passCount, Long totalDays, Member member, Member... members) {
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -49,5 +39,9 @@ public class RoomRequestDTO {
         for (Member mem : members) {
             this.members.add(mem);
         }
+    }
+
+    public RoomResponseDto(String name, Category category, String reward, int passCount, Long totalDays) {
+
     }
 }

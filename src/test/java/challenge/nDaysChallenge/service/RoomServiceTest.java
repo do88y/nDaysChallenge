@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -12,12 +13,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.method.P;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -84,6 +87,9 @@ public class RoomServiceTest {
         //then
         Optional<Room> findSingleRoom = roomRepository.findById(roomNumber);
         assertThat(findSingleRoom.get().getNumber()).isEqualTo(roomNumber);
+
+        List<Room> singleRooms = member.getSingleRooms();
+        System.out.println("singleRooms = " + singleRooms);
     }
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
@@ -108,6 +114,11 @@ public class RoomServiceTest {
 
         RoomMember findRoom = roomMemberRepository.findByMemberNumber(member1.getNumber());
         assertThat(groupRoomNo).isEqualTo(findRoom.getRoom().getNumber());
+
+        List<RoomMember> roomMemberList = member2.getRoomMemberList();
+        for (RoomMember roomMember : roomMemberList) {
+            System.out.println("roomMember = " + roomMember);
+        }
     }
 
     @DisplayName("챌린지 삭제")
