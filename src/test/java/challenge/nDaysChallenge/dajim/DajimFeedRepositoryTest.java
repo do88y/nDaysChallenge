@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -143,15 +144,31 @@ public class DajimFeedRepositoryTest {
                 .open(Open.valueOf("PRIVATE"))
                 .build());
 
+        //그룹룸 멤버2 다짐에 이모션 등록
+        Emotion emotion = Emotion.builder()
+                .member(member2)
+                .dajim(dajim3)
+                .stickers(Stickers.valueOf("TOUCHED"))
+                .build();
+
+        Emotion savedEmotion = emotionRepository.save(emotion);
+        dajim3.getEmotions().add(savedEmotion);
+
+        //이모션 불러오기ㅜ
+        List<Emotion> emotions = dajim3.getEmotions();
+        List<String> stickersList = emotions.stream().map(emotion1 ->
+                        emotion1.getStickers().toString())
+                .collect(Collectors.toList());
+
         //when
         //멤버2 싱글룸 불러오기
-        List<Room> singleRooms = member2.getSingleRooms();
+        List<Room> singleRooms = member1.getSingleRooms();
         List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());
 
         //멤버2 그룹룸 불러오기
-        List<RoomMember> roomMemberList = member2.getRoomMemberList();
+        List<RoomMember> roomMemberList = member1.getRoomMemberList();
         List<Long> groupRoomNumbers = roomMemberList.stream().map(roomMember ->
                         roomMember.getRoom().getNumber())
                 .collect(Collectors.toList());
@@ -165,9 +182,11 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-        //assertThat(singleRooms.size()).isEqualTo(0); //싱글룸 0개
-        //assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
-        assertThat(dajims.size()).isEqualTo(3); //해당 그룹룸에 다짐 3개
+        assertThat(singleRooms.size()).isEqualTo(1); //싱글룸 0개
+        assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
+        assertThat(dajims.size()).isEqualTo(4); //해당 그룹룸에 다짐 3개
+        assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
+        assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }
 
     @DisplayName("이모션 등록")
