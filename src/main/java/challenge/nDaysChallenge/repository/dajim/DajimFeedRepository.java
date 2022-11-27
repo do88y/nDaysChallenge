@@ -15,10 +15,10 @@ import java.util.Map;
 @Repository
 public interface DajimFeedRepository extends JpaRepository<Dajim, Long> { //피드 다짐 조회
     //멤버가 속한 챌린지 내 다짐 or open=PUBLIC인 다짐
-    @Query("SELECT d FROM Dajim d JOIN d.room r " +
-            "ON r.number IN :groupRoomNumber " +
-            "OR r.number IN :singleRoomNumber " +
-            "OR d.open = 'PUBLIC'")
+    @Query("SELECT d FROM Dajim d LEFT JOIN Room r ON d.room.number = r.number " +
+            "WHERE d.open = 'PUBLIC' " +
+            "OR r.number IN :groupRoomNumber " +
+            "OR r.number IN :singleRoomNumber")
     List<Dajim> findAllByMemberAndOpen(@Param("groupRoomNumber") List<Long> groupRoomNumber,
                                        @Param("singleRoomNumber") List<Long> singleRoomNumber);
 }

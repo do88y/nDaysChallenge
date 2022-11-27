@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DajimRepository extends JpaRepository<Dajim, Long> {
@@ -24,9 +25,9 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
     //룸 넘버로 룸 객체 찾기
     @Query("SELECT r FROM Room r WHERE r.number = :roomNumber")
-    Room findByRoomNumber(@Param("roomNumber") Long roomNumber);
+    Optional<Room> findByRoomNumber(@Param("roomNumber") Long roomNumber);
 
     @Query("SELECT d FROM Dajim d WHERE d.number = :dajimNumber")
-    Dajim findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
+    Optional<Dajim> findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
 
 }

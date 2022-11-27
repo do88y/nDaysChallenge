@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,8 @@ public class EmotionService {
     public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
         Member member = userDetailsImpl.getMember();
 
-        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber());
+        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())
+                .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
 
         Stickers sticker = Stickers.valueOf(emotionRequestDto.getSticker());
 
@@ -39,6 +41,8 @@ public class EmotionService {
 
         Emotion savedEmotion = emotionRepository.save(emotion);
 
+        dajim.getEmotions().add(savedEmotion); //다짐 엔티티 이모션리스트에 추가
+
         return savedEmotion;
     }
 
@@ -46,7 +50,13 @@ public class EmotionService {
     public Emotion updateEmotion(EmotionRequestDto requestDto, UserDetailsImpl userDetailsImpl){
         //수정할 이모션 객체 불러오기
         Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(),
-                                                                userDetailsImpl.getMember().getNumber());
+                                                                userDetailsImpl.getMember().getNumber())
+                .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
+
+        //기존 이모션 삭제
+        Long dajimNumber = requestDto.getDajimNumber();
+        Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
+        dajim.get().getEmotions().remove(emotion);
 
         Emotion updatedEmotion;
 
@@ -54,6 +64,7 @@ public class EmotionService {
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
+            dajim.get().getEmotions().add(updatedEmotion);
         }
 
         return updatedEmotion;

@@ -97,6 +97,8 @@ public class RoomServiceTest {
 
     @DisplayName("개인 챌린지 생성 메서드 전체")
     @Test
+    @Transactional
+    @Rollback(value = false)
     public void singleRoom_test() throws Exception {
         //give
         UserDetailsImpl testUser = this.mockUserSetup();
@@ -119,7 +121,12 @@ public class RoomServiceTest {
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
+<<<<<<< HEAD
     @WithMockUser
+=======
+    @Transactional
+    @Rollback(value = false)
+>>>>>>> origin/develop
     public void groupRoomTest() throws Exception {
         //given
         UserDetailsImpl testUser = this.mockUserSetup();
