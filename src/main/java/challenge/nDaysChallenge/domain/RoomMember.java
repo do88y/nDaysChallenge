@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.domain;
 
 
-import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.exception.NotEnoughRoomException;
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 
@@ -38,18 +36,17 @@ public class RoomMember {
 
     public void setMember(Member member) {
         this.member = member;
-//        member.getRoomMemberList().add(this);
+        member.getRoomMemberList().add(this);
     }
     public void joinRoom(Room groupRoom) {
         this.room = groupRoom;
-//        groupRoom.getRoomMemberList().add(this);
     }
 
     //==생성 메서드==//
     public static RoomMember createRoomMember(Member member, Room room) {
         RoomMember roomMember = new RoomMember();
-        roomMember.setMember(member);
         roomMember.joinRoom(room);
+        roomMember.setMember(member);
         roomMember.addCount();
 
         return roomMember;
@@ -57,16 +54,6 @@ public class RoomMember {
 
 
     //==비즈니스 로직==// 객체지향적 관점에서 데이터가 있는 곳에 비지니스 메서드가 있는 것이 좋음
-
-    /**
-     * 챌린지 삭제
-     */
-/*    public void delete() {
-        if (room.getType() == RoomType.GROUP)
-        for (RoomMember roomMember : roomMemberList) {
-            roomMember.delete();
-        }
-    }*/
 
     /**
      * roomCount +1
