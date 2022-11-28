@@ -8,7 +8,9 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
+import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +40,25 @@ public class RoomService {
     }
 
 
+    public Room createRoom(UserDetailsImpl userDetailsImpl, RoomRequestDTO dto) {
+        if (dto.getType() == RoomType.SINGLE) {
+            Room singleRoom = singleRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount());
+            return singleRoom;
+        } else if (dto.getType() == RoomType.GROUP) {
+            Room groupRoom = groupRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount(), dto.getMember());
+            return groupRoom;
+        }
+        return null;
+    }
+
     /**
      * 개인 챌린지 생성
      */
     @Transactional
-    public Long singleRoom(Long memberNumber, String name, Period period, Category category, int passCount) {
+    public Room singleRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-        Member member = memberRepository.findByNumber(memberNumber);
+        Member member = userDetailsImpl.getMember();
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -56,29 +69,25 @@ public class RoomService {
                 .passCount(passCount)
                 .build();
 
+
         //챌린지 저장
         roomRepository.save(newRoom);
 
-        //SingleRoom에 Member 입력
-        SingleRoom.addMember(member);
+        //멤버에 챌린지 저장
+        member.getSingleRooms().add(newRoom);
+        memberRepository.save(member);
 
-        //챌린지 멤버 생성
-        SingleRoom addRoomMember = SingleRoom.addRoom(newRoom);
-
-        //챌린지 멤버 저장
-        roomRepository.save(addRoomMember);
-
-        return newRoom.getNumber();
+        return newRoom;
     }
 
     /**
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Long groupRoom(Long memberNumber, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Room groupRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
-        Member member = memberRepository.findByNumber(memberNumber);
+        Member member = userDetailsImpl.getMember();
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()
@@ -102,7 +111,7 @@ public class RoomService {
 
         //챌린지 멤버 저장
 
-        return newRoom.getNumber();
+        return newRoom;
     }
 
 
