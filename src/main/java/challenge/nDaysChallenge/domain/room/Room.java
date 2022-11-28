@@ -1,18 +1,14 @@
 package challenge.nDaysChallenge.domain.room;
 
 
-import challenge.nDaysChallenge.domain.RoomMember;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static lombok.AccessLevel.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "dtype")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 @Getter
@@ -20,7 +16,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
-    private Long number;
+    protected Long number;
 
     @Column(name = "room_name", length = 30)
     private String name;
@@ -41,10 +37,9 @@ public class Room {
     private RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
     private int passCount = 0;
+    private int usedPassCount;
     private int successCount;
 
-    @Transient
-    private int failCount;
 
 
 
@@ -59,47 +54,20 @@ public class Room {
         this.passCount = passCount;
 
     }
+
 /*
     //==생성 메서드==// 생성자 이용
-    public static Room createRoom(String name, LocalDateTime startDate, LocalDateTime endDate, String reward, Category category, RoomStatus status, RoomMember... roomMembers) {
-        Room room = new Room(List.of(roomMembers), name);
-
+    public static Room createRoom(String name, Period period, Category category, RoomType type, int passCount) {
+        Room room = new Room();
         room.name = name;
-        room.startDate = LocalDateTime.now();
-        room.endDate = startDate.plusDays(30);
-        room.reward = reward;
-
-        for (RoomMember roomMember : roomMembers) {
-            room.addRoomMember(roomMember);
-        }
-
-
+        room.period = period;
+        room.category = category;
+        room.type = type;
         room.status = RoomStatus.CONTINUE;
+        room.passCount = passCount;
+
         return room;
-    }*/
-
-    //==비즈니스 로직==//
-
-    /**
-     * 챌린지 삭제
-     */
-    public void delete() {
-        if (type == RoomType.GROUP) {
-
-        }
     }
-
-    /**
-     * 버튼 클릭 시
-     */
-    public void pushButton() {
-        if (true) {
-            successCount += 1;
-        } else if (false) {
-            failCount += 1;
-            passCount += 1;
-        }
-    }
+*/
 
 }
-

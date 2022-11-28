@@ -16,13 +16,11 @@ public class Relationship {
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn
-    @Column(name = "user_number")
+//    @JoinColumn(name = "user_number")
     private Member user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn
-    @Column(name = "friend_number")
+//    @JoinColumn(name = "friend_number")
     private Member friend;
 
 

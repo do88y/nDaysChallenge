@@ -17,8 +17,4 @@ public class GroupRoom extends Room {
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
-
-    //==비즈니스 로직==//
-
-
 }

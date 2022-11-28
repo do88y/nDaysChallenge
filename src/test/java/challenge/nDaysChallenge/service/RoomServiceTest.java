@@ -7,15 +7,8 @@ import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
-import challenge.nDaysChallenge.repository.room.RoomRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
