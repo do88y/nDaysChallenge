@@ -121,12 +121,8 @@ public class RoomServiceTest {
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
-<<<<<<< HEAD
-    @WithMockUser
-=======
     @Transactional
     @Rollback(value = false)
->>>>>>> origin/develop
     public void groupRoomTest() throws Exception {
         //given
         UserDetailsImpl testUser = this.mockUserSetup();

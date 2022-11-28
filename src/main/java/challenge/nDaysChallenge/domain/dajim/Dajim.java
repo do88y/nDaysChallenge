@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain.dajim;
 
+import challenge.nDaysChallenge.domain.BaseEntity;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Report;
@@ -69,4 +70,3 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         return this;
     }
 
-}
