@@ -8,12 +8,11 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +39,16 @@ public class RoomService {
     }
 
 
-    public Room createRoom(UserDetailsImpl userDetailsImpl, RoomRequestDTO dto) {
-        if (dto.getType() == RoomType.SINGLE) {
-            Room singleRoom = singleRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount());
+    public Room createRoom(Member member, RoomRequestDTO dto) {
+        if (dto.getType().equals("SINGLE")) {
+            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
-        } else if (dto.getType() == RoomType.GROUP) {
-            Room groupRoom = groupRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount(), dto.getMember());
+        } else if (dto.getType().equals("GROUP")) {
+            List<Long> groupMemberNums = dto.getGroupMemberNums();
+            for (int i = 0; i < groupMemberNums.size(); i++) {
+                Member groupMember = memberRepository.findByNumber(groupMemberNums.get(i));
+            }
+            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getGroupMemberNums());
             return groupRoom;
         }
         return null;
@@ -55,10 +58,10 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    public Room singleRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount) {
+    public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-        Member member = userDetailsImpl.getMember();
+
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -84,10 +87,9 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Room groupRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
-        Member member = userDetailsImpl.getMember();
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()

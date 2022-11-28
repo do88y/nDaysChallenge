@@ -4,9 +4,12 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
+import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +49,10 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public Relationship confirmFriends (Member user,RelationshipStatus status) {
-        return relationshipRepository.findRelationshipByUserNumberAndStatus(user.getNumber(), status);
+    public List<Relationship> findFriends (UserDetailsImpl userDetailsImpl) {
+        List<Relationship> friends = relationshipRepository.findRelationshipByUserNumberAndStatus(userDetailsImpl, RelationshipStatus.ACCEPT);
+
+        return friends;
     }
 
 

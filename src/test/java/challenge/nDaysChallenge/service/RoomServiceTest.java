@@ -107,7 +107,7 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        Room room = roomService.singleRoom(testUser, "기상", period, Category.ROUTINE, 2);
+        Room room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2);
 
         //then
         Optional<Room> findSingleRoom = roomRepository.findById(room.getNumber());
@@ -121,12 +121,9 @@ public class RoomServiceTest {
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
-<<<<<<< HEAD
     @WithMockUser
-=======
     @Transactional
     @Rollback(value = false)
->>>>>>> origin/develop
     public void groupRoomTest() throws Exception {
         //given
         UserDetailsImpl testUser = this.mockUserSetup();
@@ -138,7 +135,7 @@ public class RoomServiceTest {
         memberRepository.save(member3);
 
         //when
-        Room groupRoomNo = roomService.groupRoom(testUser, "내일까지 마무으리", period, Category.MINDFULNESS, 0, member2, member3);
+        Room groupRoomNo = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0, member2, member3);
 
         //then
         RoomMember findRoomByMember = roomMemberRepository.findByMemberNumber(member1.getNumber());
