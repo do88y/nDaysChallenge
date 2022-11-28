@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 public class DajimFeedService {
 
     private final DajimFeedRepository dajimFeedRepository;
-    private final DajimRepository dajimRepository;
 
     //피드 전체 조회
     public List<Dajim> viewDajimOnFeed(UserDetailsImpl userDetailsImpl) {
@@ -41,7 +40,7 @@ public class DajimFeedService {
                 .collect(Collectors.toList());
 
         //로그인 사용자가 소속된 챌린지 개인룸
-        List<SingleRoom> singleRooms = loggedInMember.getSingleRooms();
+        List<Room> singleRooms = loggedInMember.getSingleRooms();
         List<Long> loggedInSingleRoomNumber = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());

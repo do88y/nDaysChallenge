@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Stickers;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -17,13 +18,16 @@ public class DajimFeedResponseDto {
 
     private String content;
 
-    private List<Emotion> emotionsList;
+    private List<String> stickersList;
 
-    public DajimFeedResponseDto(Long dajimNumber, String nickname, String content, List<Emotion> emotionsList) {
+    private LocalDateTime updatedDate;
+
+    public DajimFeedResponseDto(Long dajimNumber, String nickname, String content, List<String> stickersList, LocalDateTime updatedDate) {
         this.dajimNumber = dajimNumber;
         this.nickname = nickname;
         this.content = content;
-        this.emotionsList = emotionsList;
+        this.stickersList = stickersList;
+        this.updatedDate = updatedDate;
     }
 
 }

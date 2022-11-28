@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
 import lombok.*;
-
 import javax.persistence.*;
 
 
@@ -16,6 +15,7 @@ public class Relationship {
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
+
 //    @JoinColumn(name = "user_number")
     private Member user;
 
@@ -37,7 +37,5 @@ public class Relationship {
         this.status=RelationshipStatus.REQUEST;
         //대기가 기본값이게//
     }
-
-
 
 }

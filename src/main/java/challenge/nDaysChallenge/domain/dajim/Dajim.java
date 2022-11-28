@@ -70,4 +70,3 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         return this;
     }
 
-}

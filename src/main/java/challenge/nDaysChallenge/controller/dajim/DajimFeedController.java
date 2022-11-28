@@ -38,7 +38,10 @@ public class DajimFeedController { //피드 내 다짐
                         dajim.getNumber(),
                         dajim.getMember().getNickname(),
                         dajim.getContent(),
-                        dajim.getEmotions()
+                        dajim.getEmotions().stream().map(emotion ->
+                                        emotion.getStickers().toString())
+                                .collect(Collectors.toList()),
+                        dajim.getUpdatedDate()
                 )).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(dajimFeedList);

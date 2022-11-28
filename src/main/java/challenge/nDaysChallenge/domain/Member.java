@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,13 +57,22 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<SingleRoom> singleRooms = new ArrayList<>();
-
+    @OneToMany(mappedBy = "number")
+    private List<Room> singleRooms = new ArrayList<>();
 
 
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
+        this.id = id;
+        this.pw = pw;
+        this.nickname = nickname;
+        this.image = image;
+        this.roomLimit=roomLimit;
+        this.authority = authority;
+    }
+
+    //테스트용
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;

@@ -4,8 +4,10 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Stickers;
+import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
+import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,23 +24,50 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
-    public void uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) {//스티커 등록/변경/삭제
+    //이모션 등록
+    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
         Member member = userDetailsImpl.getMember();
 
-        Long dajimNumber = emotionRequestDto.getDajimNumber();
-        Dajim dajim = emotionRepository.findByDajimNumber(dajimNumber);
+        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())
+                .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
 
-        String sticker = emotionRequestDto.getSticker();
-        Stickers stickers = Stickers.valueOf(sticker);
+        Stickers sticker = Stickers.valueOf(emotionRequestDto.getSticker());
 
-        Emotion emotion = new Emotion();
-        emotion.builder()
+        Emotion emotion = Emotion.builder()
                         .member(member)
                         .dajim(dajim)
-                        .stickers(stickers)
+                        .stickers(sticker)
                         .build();
 
-        emotionRepository.save(emotion); //createdDate 기준으로 등록 or 업데이트 (stickers에 null 대입 시 null로 업데이트)
+        Emotion savedEmotion = emotionRepository.save(emotion);
+
+        dajim.getEmotions().add(savedEmotion); //다짐 엔티티 이모션리스트에 추가
+
+        return savedEmotion;
+    }
+
+    //이모션 변경 및 삭제
+    public Emotion updateEmotion(EmotionRequestDto requestDto, UserDetailsImpl userDetailsImpl){
+        //수정할 이모션 객체 불러오기
+        Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(),
+                                                                userDetailsImpl.getMember().getNumber())
+                .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
+
+        //기존 이모션 삭제
+        Long dajimNumber = requestDto.getDajimNumber();
+        Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
+        dajim.get().getEmotions().remove(emotion);
+
+        Emotion updatedEmotion;
+
+        if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
+            updatedEmotion = emotion.update(null);
+        } else {
+            updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
+            dajim.get().getEmotions().add(updatedEmotion);
+        }
+
+        return updatedEmotion;
     }
 
 }
