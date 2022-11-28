@@ -29,8 +29,10 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.persistence.EntityManager;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -121,31 +123,31 @@ public class RoomServiceTest {
 
     @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
-<<<<<<< HEAD
     @WithMockUser
-=======
->>>>>>> origin/develop
     @Transactional
     @Rollback(value = false)
     public void groupRoomTest() throws Exception {
         //given
         UserDetailsImpl testUser = this.mockUserSetup();
+        Set<Member> selectedMembers = new HashSet<>();
         Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
         Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER);
         Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, 4, Authority.ROLE_USER);
+        selectedMembers.add(member2);
+        selectedMembers.add(member3);
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
 
+
+
         //when
-        Room groupRoomNo = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0, member2, member3);
+        Room groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0, selectedMembers);
 
         //then
-        RoomMember findRoomByMember = roomMemberRepository.findByMemberNumber(member1.getNumber());
-        System.out.println("findRoomByMember" + findRoomByMember);
-
-        RoomMember findRoom = roomMemberRepository.findByMemberNumber(member2.getNumber());
-        assertThat(groupRoomNo).isEqualTo(findRoom.getRoom());
+        RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom);
+        System.out.println("findRoomByMember = " + findRoomByMember);
+        assertThat(groupRoom).isEqualTo(findRoomByMember.getRoom());
 
         List<RoomMember> roomMemberList = member2.getRoomMemberList();
         for (RoomMember roomMember : roomMemberList) {

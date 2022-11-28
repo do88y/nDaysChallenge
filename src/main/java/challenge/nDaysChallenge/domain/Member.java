@@ -72,6 +72,7 @@ public class Member {
     }
 
     //테스트용
+/*
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
         this.id = id;
         this.pw = pw;
@@ -80,6 +81,7 @@ public class Member {
         this.roomLimit=roomLimit;
         this.authority = authority;
     }
+*/
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.pw= passwordEncoder.encode(pw);

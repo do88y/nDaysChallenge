@@ -22,7 +22,8 @@ import java.util.List;
 @DynamicUpdate
 public class Dajim extends BaseEntity implements Persistable<Long> {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "dajim_number")
     private Long number;
 
@@ -47,11 +48,11 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     private Open open;
 
     @Builder
-    public Dajim(Room room, Member member, String content, Open open){
-        this.room=room;
-        this.member=member;
-        this.content=content;
-        this.open=open;
+    public Dajim(Room room, Member member, String content, Open open) {
+        this.room = room;
+        this.member = member;
+        this.content = content;
+        this.open = open;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
 
     @Override
     public boolean isNew() {
-        return getCreatedDate()==null;
+        return getCreatedDate() == null;
     }
 
     public Dajim update(Open open, String content) {
@@ -69,4 +70,4 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         this.content = content;
         return this;
     }
-
+}

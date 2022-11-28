@@ -1,10 +1,8 @@
 package challenge.nDaysChallenge.dto.request;
 
-import challenge.nDaysChallenge.domain.Member;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,19 +17,19 @@ public class RoomRequestDTO {
     private String type;
 
     private Long memberNumber;
-    private List<Long> groupMemberNums = new ArrayList<>();
+    private Set<Long> groupMembers = new HashSet<>();
 
 
     @Builder
-    public RoomRequestDTO(String name, String category, String reward, int passCount, Long totalDays, Long memberNumber, Long... groupMemberNums) {
+    public RoomRequestDTO(String name, String category, String reward, int passCount, Long totalDays, Long memberNumber, Set<Long> groupMembers) {
         this.name = name;
         this.category = category;
         this.reward = reward;
         this.passCount = passCount;
         this.totalDays = totalDays;
         this.memberNumber = memberNumber;
-        for (Long groupMemberNum : groupMemberNums) {
-            this.groupMemberNums.add(groupMemberNum);
+        for (Long groupMember : groupMembers) {
+            this.groupMembers.add(groupMember);
         }
     }
 }

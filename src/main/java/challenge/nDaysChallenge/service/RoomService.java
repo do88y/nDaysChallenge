@@ -12,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,11 +42,13 @@ public class RoomService {
             Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
-            List<Long> groupMemberNums = dto.getGroupMemberNums();
-            for (int i = 0; i < groupMemberNums.size(); i++) {
-                Member groupMember = memberRepository.findByNumber(groupMemberNums.get(i));
+            Set<Long> groupMemberNums = dto.getGroupMembers();
+            Set<Member> groupMembers = new HashSet<>();
+            for (Long groupMemberNum : groupMemberNums) {
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
-            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getGroupMemberNums());
+
+            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
             return groupRoom;
         }
         return null;
@@ -87,7 +87,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
 
         //엔티티 조회
 
@@ -124,7 +124,7 @@ public class RoomService {
     public void deleteRoom(Long memberNumber, Long roomNumber) {
         //엔티티 조회
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
-        List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
+        Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
         Member member = memberRepository.findByNumber(memberNumber);
 
         if (room.getType() == RoomType.GROUP) {
@@ -169,12 +169,12 @@ public class RoomService {
     @Transactional
     public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).get();
+        Optional<GroupRoom> groupRoom = groupRoomRepository.findById(roomNumber);
 
         //그룹 챌린지 멤버 조회
-        List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
-        int usedPassCount = groupRoom.getUsedPassCount();
-        int passCount = groupRoom.getPassCount();
+        List<RoomMember> roomMembers = groupRoom.get().getRoomMemberList();
+        int usedPassCount = groupRoom.get().getUsedPassCount();
+        int passCount = groupRoom.get().getPassCount();
 
         if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
@@ -184,8 +184,10 @@ public class RoomService {
         }
 
         //roomCount +1
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
-        roomMember.addCount();
+        Set<RoomMember> findGroupMembers = roomMemberRepository.findByRoomNumber(roomNumber);
+        for (RoomMember findGroupMember : findGroupMembers) {
+            findGroupMember.addCount();
+        }
 
     }
 
@@ -193,9 +195,11 @@ public class RoomService {
      * 챌린지 갯수 검색
      */
     public int findRoomCount(Long memberNumber) {
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(memberNumber);
-        int roomCount = roomMember.getRoomCount();
-        return roomCount;
+        Member findMember = memberRepository.findByNumber(memberNumber);
+        int groupRoomCount = roomMemberRepository.countByMember(findMember);
+        int singleRoomCount = singleRoomRepository.countByMember(findMember);
+
+        return groupRoomCount + singleRoomCount;
     }
 
 }
