@@ -32,8 +32,13 @@ public class Member {
 
 
     //내가 수락한 친구들만 리스트에 들어가게//
+<<<<<<< HEAD
     @OneToMany(mappedBy = "friend")
     private List<Relationship> friendsList = new ArrayList<Relationship>();
+=======
+    @OneToMany(mappedBy = "friend_number")
+    public List<Member> friendsList = new ArrayList<Member>();
+>>>>>>> cd56401 (relationship 부분 수정,컨트롤러 작성)
 
 
     @Column(length = 15, nullable = false)
@@ -62,8 +67,7 @@ public class Member {
 
 
     @Builder
-    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
-        this.number = number;
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
