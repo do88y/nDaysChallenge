@@ -1,8 +1,9 @@
 # Request
-POST https://localhost:8080/auth/login
+# @no-redirect
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "id": "user@naver.com",
+  "id": "abc",
   "pw": "12345"
 }

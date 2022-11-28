@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
+import challenge.nDaysChallenge.dto.request.SignupDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
@@ -28,16 +29,16 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberResponseDto signUp(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsById(memberRequestDto.getId())) {
+    public MemberResponseDto signUp(SignupDto signupDto) {
+        if (memberRepository.existsById(signupDto.getId())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
 
-        if (memberRepository.existsByNickname(memberRequestDto.getNickname())) {
+        if (memberRepository.existsByNickname(signupDto.getNickname())) {
             throw new RuntimeException("이미 존재하는 닉네임입니다.");
         }
 
-        Member member = memberRequestDto.toMember(passwordEncoder);
+        Member member = signupDto.toMember(passwordEncoder);
 
         return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
     }
@@ -58,6 +59,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
                 .key(authentication.getName())
                 .value(tokenDto.getRefreshToken())
                 .build();
+
         refreshTokenRepository.save(refreshToken);
 
         //토큰 발급
@@ -85,14 +87,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-        TokenDto jwtToken = tokenProvider.generateToken(authentication);
+        TokenDto tokenDto = tokenProvider.generateToken(authentication);
 
         //저장소에 새 리프레시 토큰 저장
-        RefreshToken newRefreshToken = refreshToken.updateValue(jwtToken.getRefreshToken());
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
-        return jwtToken;
+        return tokenDto;
 
     }
 }
