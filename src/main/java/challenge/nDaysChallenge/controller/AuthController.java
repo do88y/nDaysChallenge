@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
@@ -24,13 +23,13 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 //    }
 
     //로그인
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<JwtDTO> login (@RequestBody MemberRequestDto memberRequestDto){ //파라미터 객체 안에 id, pw 있음
         return ResponseEntity.ok(authService.login(memberRequestDto));
     }
 
     //재발급
-    @PostMapping("/reissue")
+    @PostMapping("/auth/reissue")
     public ResponseEntity<JwtDTO> reissue (@RequestBody JwtRequestDTO jwtRequestDto){ //파라미터 객체 안에 access, refresh 토큰 있음
         return ResponseEntity.ok(authService.reissue(jwtRequestDto));
     }

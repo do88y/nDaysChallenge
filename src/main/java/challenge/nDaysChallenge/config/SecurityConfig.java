@@ -42,16 +42,14 @@ public class SecurityConfig {
 
             .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/auth/login")
                 .usernameParameter("id") ////로그인 아이디의 name 속성값
                 .defaultSuccessUrl("/")
 
             //인증,인가에 대한 path matching & Preflight Request 허용
             .and()
             .authorizeRequests() //요청에 대한 권한 설정
-            .antMatchers("/auth/**").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
-            //.mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            //.antMatchers("/???").hasAnyAuthority("???number")
+            .antMatchers("/","/auth/**").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
             .anyRequest().authenticated() //그외 모든 요청에 대해 인증 필요
 
             //Security Filter에서 발생하는 인증, 인가 오류 처리
