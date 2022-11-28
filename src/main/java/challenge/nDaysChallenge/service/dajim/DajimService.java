@@ -26,6 +26,7 @@ public class DajimService {
     //다짐 업로드
     public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl) {
         Member member = userDetailsImpl.getMember();
+
         Room room = dajimRepository.findByRoomNumber(roomNumber)
                 .orElseThrow(()-> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
 
@@ -54,7 +55,24 @@ public class DajimService {
         Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
 
         return updatedDajim;
+
     }
+
+    //다짐 수정
+    public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, UserDetailsImpl userDetailsImpl){
+        if (dajimNumber==null){
+            throw new RuntimeException("아직 작성하지 않은 다짐입니다.");
+        }
+
+        Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber);
+
+        checkDajimUser(dajim,userDetailsImpl);
+
+        Dajim updatedDajim = dajim.update(requestDto.getOpen(), requestDto.getContent());
+
+        return updatedDajim;
+    }
+
 
 
 
@@ -84,3 +102,4 @@ public class DajimService {
     }
 
 }
+
