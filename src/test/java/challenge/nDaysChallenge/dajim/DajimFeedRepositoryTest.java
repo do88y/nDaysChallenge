@@ -99,8 +99,8 @@ public class DajimFeedRepositoryTest {
                 .build();
         roomRepository.save(room1);
         SingleRoom.addMember(member1);
-        SingleRoom singleRoom1 = SingleRoom.addRoom(room1);
-        roomRepository.save(singleRoom1);
+//        SingleRoom singleRoom1 = SingleRoom.addRoom(room1);
+//        roomRepository.save(singleRoom1);
         //싱글룸 다짐
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
@@ -276,7 +276,7 @@ public class DajimFeedRepositoryTest {
 
         EmotionResponseDto newEmotion = EmotionResponseDto.builder()
                         .dajimNumber(updatedEmotion.getDajim().getNumber())
-                        .memberNumber(updatedEmotion.getMember().getNumber())
+                        .memberNickname(updatedEmotion.getMember().getNickname())
                         .stickers(updatedEmotion.getStickers().toString()).build();
 
         //then

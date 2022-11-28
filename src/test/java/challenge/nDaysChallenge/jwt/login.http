@@ -3,6 +3,6 @@ POST https://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "id": "hello",
-  "pw": "1234"
+  "id": "user@naver.com",
+  "pw": "12345"
 }

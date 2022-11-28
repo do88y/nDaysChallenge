@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-public class JwtDTO {
+public class TokenDto {
 
     private String type; //bearer
     private String accessToken;
