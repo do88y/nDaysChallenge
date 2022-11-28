@@ -51,9 +51,6 @@ public class Member {
     private Authority authority;
 
 
-
-
-
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
@@ -68,19 +65,20 @@ public class Member {
         this.pw = pw;
         this.nickname = nickname;
         this.image = image;
-        this.roomLimit=roomLimit;
+        this.roomLimit = roomLimit;
         this.authority = authority;
     }
 
+
     //테스트용
-    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
-        this.id = id;
-        this.pw = pw;
-        this.nickname = nickname;
-        this.image = image;
-        this.roomLimit=roomLimit;
-        this.authority = authority;
-    }
+//    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
+//        this.id = id;
+//        this.pw = pw;
+//        this.nickname = nickname;
+//        this.image = image;
+//        this.roomLimit=roomLimit;
+//        this.authority = authority;
+//    }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.pw= passwordEncoder.encode(pw);

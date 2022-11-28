@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
-import challenge.nDaysChallenge.domain.MemberSignUpDto;
+import challenge.nDaysChallenge.dto.request.MemberSignUpDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.service.MemberServiceIn;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.service;
 
-import challenge.nDaysChallenge.domain.MemberSignUpDto;
-import org.springframework.transaction.annotation.Transactional;
+import challenge.nDaysChallenge.dto.request.MemberSignUpDto;
 
 
 public interface MemberServiceIn {

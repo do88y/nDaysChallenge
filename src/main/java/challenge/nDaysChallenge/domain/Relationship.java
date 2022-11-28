@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.dto.response.FriendsDTO;
 import lombok.*;
 import javax.persistence.*;
 import java.util.List;

@@ -1,8 +1,6 @@
 package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.MemberSignUpDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
-import challenge.nDaysChallenge.dto.response.MemberResponseDto;
+import challenge.nDaysChallenge.dto.request.MemberSignUpDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
