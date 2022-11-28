@@ -2,12 +2,13 @@ package challenge.nDaysChallenge.domain;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Relationship {
+public  class Relationship {
 
     @Id
     @GeneratedValue
@@ -37,5 +38,6 @@ public class Relationship {
         this.status=RelationshipStatus.REQUEST;
         //대기가 기본값이게//
     }
+
 
 }
