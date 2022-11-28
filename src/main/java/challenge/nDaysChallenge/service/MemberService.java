@@ -40,9 +40,13 @@ public class MemberService implements MemberServiceIn {
         member.encodePassword(passwordEncoder);
         member.authority();
         return signUpDto.getId();
-
-
     }
+
+    //챌린지 갯수 조회 (memberDto에 담아보내기)
+    public int getRoomCount(Member memberNumber) {
+        return memberNumber.countRooms();
+    }
+
 }
 
 

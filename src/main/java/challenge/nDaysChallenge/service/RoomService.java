@@ -78,6 +78,7 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         member.getSingleRooms().add(newRoom);
+        member.countRooms();
         memberRepository.save(member);
 
         return newRoom;
@@ -105,9 +106,11 @@ public class RoomService {
 
         //챌린지 멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        member.countRooms();
         roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
             RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            members.countRooms();
             roomMemberRepository.save(result);
         }
 
@@ -133,7 +136,6 @@ public class RoomService {
 
             //roomCount -1, RoomMember 삭제
             for (RoomMember roomMember : roomMembers) {
-                roomMember.reduceCount();
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
@@ -182,24 +184,6 @@ public class RoomService {
 
             }
         }
-
-        //roomCount +1
-        Set<RoomMember> findGroupMembers = roomMemberRepository.findByRoomNumber(roomNumber);
-        for (RoomMember findGroupMember : findGroupMembers) {
-            findGroupMember.addCount();
-        }
-
-    }
-
-    /**
-     * 챌린지 갯수 검색
-     */
-    public int findRoomCount(Long memberNumber) {
-        Member findMember = memberRepository.findByNumber(memberNumber);
-        int groupRoomCount = roomMemberRepository.countByMember(findMember);
-        int singleRoomCount = singleRoomRepository.countByMember(findMember);
-
-        return groupRoomCount + singleRoomCount;
     }
 
 }

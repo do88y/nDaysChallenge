@@ -20,9 +20,7 @@ public class RoomController {
     private final RoomService roomService;
     private final RoomMemberRepository roomMemberRepository;
 
-    /**
-     * 챌린지 생성
-     */
+    //챌린지 생성
     @PostMapping("/challenge/create")
     public ResponseEntity<?> createRoom(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
                                         @RequestBody RoomRequestDTO roomRequestDTO) {
@@ -45,9 +43,7 @@ public class RoomController {
     }
 
 
-    /**
-     * 챌린지 삭제
-     */
+    //챌린지 삭제
     @DeleteMapping("/challenge/{challengeId}")
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                         @PathVariable("challengeId") Long roomNumber) {

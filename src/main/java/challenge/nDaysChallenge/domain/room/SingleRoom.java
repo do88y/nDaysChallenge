@@ -16,7 +16,7 @@ public class SingleRoom extends Room {
     @JoinColumn(name = "room_number")
     private Room room;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_number")
     private static Member member;
 

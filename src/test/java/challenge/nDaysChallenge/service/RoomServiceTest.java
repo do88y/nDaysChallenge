@@ -74,9 +74,9 @@ public class RoomServiceTest {
     @Autowired MemberRepository memberRepository;
     @Autowired RoomService roomService;
 
-    @DisplayName("개인 챌린지 단독")
     @Test
-    public void 개인_챌린지_생성() throws Exception {
+    @DisplayName("개인 챌린지 단독")
+    public void singleRoom() throws Exception {
         //given
         Room room = SingleRoom.builder()
                 .name("기상")
@@ -96,12 +96,11 @@ public class RoomServiceTest {
         assertThat(room.getNumber()).isEqualTo(findRoom.get().getNumber());
     }
 
-
-    @DisplayName("개인 챌린지 생성 메서드 전체")
     @Test
+    @DisplayName("개인 챌린지 생성 메서드 전체")
     @Transactional
-    @Rollback(value = false)
-    public void singleRoom_test() throws Exception {
+    @Rollback(value = true)
+    public void singleRoomTest() throws Exception {
         //give
         UserDetailsImpl testUser = this.mockUserSetup();
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
@@ -115,17 +114,19 @@ public class RoomServiceTest {
         Optional<Room> findSingleRoom = roomRepository.findById(room.getNumber());
         assertThat(findSingleRoom.get()).isEqualTo(room);
 
+        //멤버에서 singleRooms 조회
         List<Room> singleRooms = member.getSingleRooms();
         for (Room singleRoom : singleRooms) {
             assertThat(singleRoom).isEqualTo(room);
+            System.out.println("singleRoom = " + singleRoom.getName());
         }
     }
 
-    @DisplayName("그룹 챌린지 생성 메서드 전체")
     @Test
+    @DisplayName("그룹 챌린지 생성 메서드 전체")
     @WithMockUser
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void groupRoomTest() throws Exception {
         //given
         UserDetailsImpl testUser = this.mockUserSetup();
@@ -139,8 +140,6 @@ public class RoomServiceTest {
         memberRepository.save(member2);
         memberRepository.save(member3);
 
-
-
         //when
         Room groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0, selectedMembers);
 
@@ -149,15 +148,16 @@ public class RoomServiceTest {
         System.out.println("findRoomByMember = " + findRoomByMember);
         assertThat(groupRoom).isEqualTo(findRoomByMember.getRoom());
 
+        //멤버에서 roomMemberList 조회
         List<RoomMember> roomMemberList = member2.getRoomMemberList();
         for (RoomMember roomMember : roomMemberList) {
-            System.out.println("roomMember = " + roomMember);
+            System.out.println("roomMember = " + roomMember.getRoom().getName());
         }
     }
 
-    @DisplayName("챌린지 삭제")
     @Test
-    public void 챌린지_삭제() throws Exception {
+    @DisplayName("챌린지 삭제")
+    public void deleteRoom() throws Exception {
         //given
         Room room = new Room("기상", period, Category.ROUTINE, RoomType.GROUP, 2);
 

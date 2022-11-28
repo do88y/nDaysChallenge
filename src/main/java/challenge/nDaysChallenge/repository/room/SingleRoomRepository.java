@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
-    public int countByMember(Member member);
 }

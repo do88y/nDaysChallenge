@@ -89,5 +89,12 @@ public class Member {
     public Authority authority() {
         return authority;
     }
-}
 
+
+    //챌린지 갯수 조회
+    public int countRooms() {
+        this.roomLimit = this.getRoomMemberList().size() + this.getSingleRooms().size();
+
+        return roomLimit;
+    }
+}
