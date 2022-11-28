@@ -62,8 +62,7 @@ public class Member {
 
 
     @Builder
-    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
-        this.number = number;
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
@@ -89,4 +88,3 @@ public class Member {
         return authority;
     }
 }
-

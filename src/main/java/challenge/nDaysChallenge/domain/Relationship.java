@@ -2,12 +2,13 @@ package challenge.nDaysChallenge.domain;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Relationship {
+public  class Relationship {
 
     @Id
     @GeneratedValue
@@ -15,12 +16,14 @@ public class Relationship {
     private Long number;
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn
+
+//    @JoinColumn(name = "user_number")
     private Member user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn
+//    @JoinColumn(name = "friend_number")
     private Member friend;
+
 
     //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
@@ -35,5 +38,6 @@ public class Relationship {
         this.status=RelationshipStatus.REQUEST;
         //대기가 기본값이게//
     }
+
 
 }
