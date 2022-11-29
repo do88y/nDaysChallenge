@@ -12,10 +12,8 @@ public class MemberResponseDto {
 
     private String id;
 
-    private String nickname;
-
     public static MemberResponseDto of(Member member){
-        return new MemberResponseDto(member.getId(), member.getNickname());
+        return new MemberResponseDto(member.getId());
     }
 
 }

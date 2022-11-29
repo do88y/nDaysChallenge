@@ -36,7 +36,7 @@ public class Member {
     private List<Relationship> friendsList = new ArrayList<Relationship>();
 
 
-    @Column(length = 15, nullable = false)
+    @Column(length = 150, nullable = false)
     private String pw;
 
     @Column(unique = true, length = 6, nullable = false)
@@ -51,28 +51,13 @@ public class Member {
     private Authority authority;
 
 
-
-
-
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "number")
     private List<Room> singleRooms = new ArrayList<>();
 
-
     @Builder
-    public Member(Long number, String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
-        this.number = number;
-        this.id = id;
-        this.pw = pw;
-        this.nickname = nickname;
-        this.image = image;
-        this.roomLimit=roomLimit;
-        this.authority = authority;
-    }
-
-    //테스트용
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
         this.id = id;
         this.pw = pw;
@@ -82,11 +67,5 @@ public class Member {
         this.authority = authority;
     }
 
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.pw= passwordEncoder.encode(pw);
-    }
-    public Authority authority() {
-        return authority;
-    }
 }
 

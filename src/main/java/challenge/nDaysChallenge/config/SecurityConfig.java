@@ -22,6 +22,11 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     //하단 패턴 리소스 Spring Security 미적용 => 테스트 시 자유롭게 접근 가능
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -45,12 +50,12 @@ public class SecurityConfig {
             .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 에러 핸들링
             .accessDeniedHandler(customAccessDeniedHandler) //인가 에러 핸들링
 
-            .and()
-            .formLogin()
-            .loginPage("/auth/login")
-            .usernameParameter("id") ////로그인 아이디의 name 속성값
-            .passwordParameter("pw")
-            .defaultSuccessUrl("/")
+//            .and()
+//            .formLogin()
+//            .loginPage("/auth/login")
+//            .usernameParameter("id") ////로그인 아이디의 name 속성값
+//            .passwordParameter("pw")
+//            .defaultSuccessUrl("/")
 
             .and()
             .headers()
@@ -60,7 +65,7 @@ public class SecurityConfig {
             //인증,인가에 대한 path matching & Preflight Request 허용
             .and()
             .authorizeRequests() //요청에 대한 권한 설정
-            .antMatchers("/","/auth/**").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
+            .antMatchers("/","/**","/auth/**").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
             .anyRequest().authenticated() //그외 모든 요청에 대해 인증 필요
 
             //JwtFilter를 addFilterBefore로 등록한 JwtSecurityConfig 적용
@@ -70,11 +75,6 @@ public class SecurityConfig {
 
         return http.build();
 
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 //    CORS 허용
