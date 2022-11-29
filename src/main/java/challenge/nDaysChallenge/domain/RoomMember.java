@@ -4,7 +4,6 @@ import challenge.nDaysChallenge.domain.room.Room;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 

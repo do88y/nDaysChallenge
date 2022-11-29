@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class RoomController {
 
     private final RoomService roomService;
-    private final RoomMemberRepository roomMemberRepository;
 
     //챌린지 생성
     @PostMapping("/challenge/create")

@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import reactor.core.dynamic.annotation.On;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
