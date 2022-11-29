@@ -55,9 +55,8 @@ public class DajimService {
         Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
 
         return updatedDajim;
+
     }
-
-
 
     //다짐 조회
     public List<Dajim> viewDajimInRoom(Long roomNumber){
@@ -94,3 +93,4 @@ public class DajimService {
     }
 
 }
+

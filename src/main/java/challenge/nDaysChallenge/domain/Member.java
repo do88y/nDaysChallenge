@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import reactor.core.dynamic.annotation.On;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -58,7 +56,7 @@ public class Member {
     private List<Room> singleRooms = new ArrayList<>();
 
     @Builder
-    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
+    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
@@ -67,5 +65,10 @@ public class Member {
         this.authority = authority;
     }
 
-}
+    //챌린지 갯수 조회
+    public int countRooms() {
+        this.roomLimit = this.getRoomMemberList().size() + this.getSingleRooms().size();
 
+        return roomLimit;
+    }
+}
