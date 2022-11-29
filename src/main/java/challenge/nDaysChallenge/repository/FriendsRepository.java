@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/*
 @Repository
 public interface FriendsRepository extends JpaRepository<FriendsVO, String> {
 
@@ -21,3 +22,4 @@ public interface FriendsRepository extends JpaRepository<FriendsVO, String> {
 
 
 }
+*/

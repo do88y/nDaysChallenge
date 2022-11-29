@@ -13,8 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,11 +39,17 @@ public class RoomService {
 
 
     public Room createRoom(User user, RoomRequestDTO dto) {
-        if (dto.getType() == RoomType.SINGLE) {
-            Room singleRoom = singleRoom(user, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount());
+        if (dto.getType().equals("SINGLE")) {
+            Room singleRoom = singleRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
-        } else if (dto.getType() == RoomType.GROUP) {
-            Room groupRoom = groupRoom(user, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount(), dto.getMember());
+        } else if (dto.getType().equals("GROUP")) {
+            Set<Long> groupMemberNums = dto.getGroupMembers();
+            Set<Member> groupMembers = new HashSet<>();
+            for (Long groupMemberNum : groupMemberNums) {
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
+            }
+
+            Room groupRoom = groupRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
             return groupRoom;
         }
         return null;
@@ -74,6 +79,7 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         member.getSingleRooms().add(newRoom);
+        member.countRooms();
         memberRepository.save(member);
 
         return newRoom;
@@ -102,9 +108,11 @@ public class RoomService {
 
         //챌린지 멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        member.countRooms();
         roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
             RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            members.countRooms();
             roomMemberRepository.save(result);
         }
 
@@ -121,7 +129,7 @@ public class RoomService {
     public void deleteRoom(Long memberNumber, Long roomNumber) {
         //엔티티 조회
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
-        List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
+        Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
         Member member = memberRepository.findByNumber(memberNumber);
 
         if (room.getType() == RoomType.GROUP) {
@@ -130,7 +138,6 @@ public class RoomService {
 
             //roomCount -1, RoomMember 삭제
             for (RoomMember roomMember : roomMembers) {
-                roomMember.reduceCount();
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
@@ -166,12 +173,12 @@ public class RoomService {
     @Transactional
     public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).get();
+        Optional<GroupRoom> groupRoom = groupRoomRepository.findById(roomNumber);
 
         //그룹 챌린지 멤버 조회
-        List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
-        int usedPassCount = groupRoom.getUsedPassCount();
-        int passCount = groupRoom.getPassCount();
+        List<RoomMember> roomMembers = groupRoom.get().getRoomMemberList();
+        int usedPassCount = groupRoom.get().getUsedPassCount();
+        int passCount = groupRoom.get().getPassCount();
 
         if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
@@ -179,20 +186,6 @@ public class RoomService {
 
             }
         }
-
-        //roomCount +1
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
-        roomMember.addCount();
-
-    }
-
-    /**
-     * 챌린지 갯수 검색
-     */
-    public int findRoomCount(Long memberNumber) {
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(memberNumber);
-        int roomCount = roomMember.getRoomCount();
-        return roomCount;
     }
 
     private Member userToMember(User user){
