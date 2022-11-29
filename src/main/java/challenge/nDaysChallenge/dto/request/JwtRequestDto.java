@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JwtRequestDTO {
+public class JwtRequestDto {
 
     private String accessToken;
     private String refreshToken;

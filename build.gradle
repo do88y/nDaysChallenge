@@ -27,7 +27,7 @@ dependencies {
 
 	implementation 'com.google.code.findbugs:jsr305:3.0.2' //nullable
 
-	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA' //entityManagerFactor 빈 생성 지원
+	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA' //entityManagerFactory 빈 생성 지원
 
 	implementation      'org.projectlombok:lombok'
 	testImplementation  'org.projectlombok:lombok'

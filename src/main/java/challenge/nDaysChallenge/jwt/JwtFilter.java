@@ -14,15 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거치도록 제한된 Filter 구현체
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
-    private final JwtProvider jwtProvider;
+    private final TokenProvider tokenProvider;
 
     //JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext에 저장
     @Override
@@ -30,8 +28,8 @@ public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거�
         String jwt = resolveToken(request); //요청헤더에서 토큰 꺼냄
 
         //토큰 유효성 검사 -> Authentication 객체 가져와 SecurityContext애 저장
-        if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)){ //토큰 검증
-            Authentication authentication = jwtProvider.getAuthentication(jwt); //해당 토큰의 사용자 정보 객체 가져옴
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){ //토큰 검증
+            Authentication authentication = tokenProvider.getAuthentication(jwt); //해당 토큰의 사용자 정보 객체 가져옴
             SecurityContextHolder.getContext().setAuthentication(authentication); //시큐리티컨텍스트에 세팅
         }
 
