@@ -3,24 +3,16 @@ package challenge.nDaysChallenge.service.dajim;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
-import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.SingleRoom;
-import challenge.nDaysChallenge.dto.response.DajimResponseDto;
+import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
-import challenge.nDaysChallenge.repository.dajim.DajimRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -29,14 +21,16 @@ public class DajimFeedService {
 
     private final DajimFeedRepository dajimFeedRepository;
 
-    //피드 전체 조회
-    public List<Dajim> viewDajimOnFeed(UserDetailsImpl userDetailsImpl) {
-        Member loggedInMember = userDetailsImpl.getMember(); //로그인 사용자
+    private final MemberRepository memberRepository;
 
+    //피드 전체 조회
+    public List<Dajim> viewDajimOnFeed(User user) {
+        Member loggedInMember = memberRepository.findById(user.getUsername())
+                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
         //로그인 사용자가 소속된 챌린지 단체룸
         List<RoomMember> roomMemberList = loggedInMember.getRoomMemberList();
         List<Long> loggedInGroupRoomNumber = roomMemberList.stream().map(roomMember ->
-                roomMember.getRoom().getNumber())
+                        roomMember.getRoom().getNumber())
                 .collect(Collectors.toList());
 
         //로그인 사용자가 소속된 챌린지 개인룸

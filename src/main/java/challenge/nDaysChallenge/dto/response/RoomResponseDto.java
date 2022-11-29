@@ -7,41 +7,38 @@ import challenge.nDaysChallenge.domain.room.RoomType;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoomResponseDto {
 
     private String name;
-    private Category category;
+    private String category;
     private String reward;
     private int passCount;
-    private RoomType type;
-    private RoomStatus status;
+    private String type;
+    private String status;
 
     private Long totalDays;
 
-    private Member member;
-    private List<Member> members = new ArrayList<>();
+    private Set<Long> groupMembers = new HashSet<>();
 
 
     @Builder
-    public RoomResponseDto(String name, Category category, String reward, RoomType type, RoomStatus status, int passCount, Long totalDays, Member member, Member... members) {
+    public RoomResponseDto(String name, String category, String reward, int passCount, String type, String status, Long totalDays, Set<Long> groupMembers) {
         this.name = name;
         this.category = category;
         this.reward = reward;
+        this.type = type;
         this.passCount = passCount;
         this.totalDays = totalDays;
-        this.member = member;
-        for (Member mem : members) {
-            this.members.add(mem);
+        for (Long members : groupMembers) {
+            this.groupMembers.add(members);
         }
     }
 
-    public RoomResponseDto(String name, Category category, String reward, int passCount, Long totalDays) {
-
-    }
 }

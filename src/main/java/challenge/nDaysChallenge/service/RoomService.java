@@ -8,14 +8,12 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,12 +38,21 @@ public class RoomService {
     }
 
 
-    public Room createRoom(UserDetailsImpl userDetailsImpl, RoomRequestDTO dto) {
-        if (dto.getType() == RoomType.SINGLE) {
-            Room singleRoom = singleRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount());
+    public Room createRoom(User user, RoomRequestDTO dto) {
+
+        Member member = userToMember(user);
+
+        if (dto.getType().equals("SINGLE")) {
+            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
-        } else if (dto.getType() == RoomType.GROUP) {
-            Room groupRoom = groupRoom(userDetailsImpl, dto.getName(), new Period(dto.getTotalDays()), dto.getCategory(), dto.getPassCount(), dto.getMember());
+        } else if (dto.getType().equals("GROUP")) {
+            Set<Long> groupMemberNums = dto.getGroupMembers();
+            Set<Member> groupMembers = new HashSet<>();
+            for (Long groupMemberNum : groupMemberNums) {
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
+            }
+
+            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
             return groupRoom;
         }
         return null;
@@ -55,10 +62,9 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    public Room singleRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount) {
+    public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-        Member member = userDetailsImpl.getMember();
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -75,6 +81,7 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         member.getSingleRooms().add(newRoom);
+        member.countRooms();
         memberRepository.save(member);
 
         return newRoom;
@@ -84,10 +91,9 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Room groupRoom(UserDetailsImpl userDetailsImpl, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
 
         //엔티티 조회
-        Member member = userDetailsImpl.getMember();
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()
@@ -103,9 +109,11 @@ public class RoomService {
 
         //챌린지 멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        member.countRooms();
         roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
             RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            members.countRooms();
             roomMemberRepository.save(result);
         }
 
@@ -119,11 +127,11 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Long memberNumber, Long roomNumber) {
+    public void deleteRoom(User user, Long roomNumber) {
         //엔티티 조회
+        Member member = userToMember(user);
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
-        List<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
-        Member member = memberRepository.findByNumber(memberNumber);
+        Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
@@ -131,7 +139,6 @@ public class RoomService {
 
             //roomCount -1, RoomMember 삭제
             for (RoomMember roomMember : roomMembers) {
-                roomMember.reduceCount();
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
@@ -167,12 +174,12 @@ public class RoomService {
     @Transactional
     public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).get();
+        Optional<GroupRoom> groupRoom = groupRoomRepository.findById(roomNumber);
 
         //그룹 챌린지 멤버 조회
-        List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
-        int usedPassCount = groupRoom.getUsedPassCount();
-        int passCount = groupRoom.getPassCount();
+        List<RoomMember> roomMembers = groupRoom.get().getRoomMemberList();
+        int usedPassCount = groupRoom.get().getUsedPassCount();
+        int passCount = groupRoom.get().getPassCount();
 
         if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
@@ -180,20 +187,13 @@ public class RoomService {
 
             }
         }
-
-        //roomCount +1
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(roomNumber);
-        roomMember.addCount();
-
     }
 
-    /**
-     * 챌린지 갯수 검색
-     */
-    public int findRoomCount(Long memberNumber) {
-        RoomMember roomMember = roomMemberRepository.findByMemberNumber(memberNumber);
-        int roomCount = roomMember.getRoomCount();
-        return roomCount;
+    private Member userToMember(User user){
+        Member member = memberRepository.findById(user.getUsername())
+                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
+
+        return member;
     }
 
 }
