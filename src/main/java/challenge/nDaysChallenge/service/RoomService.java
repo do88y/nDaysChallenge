@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +38,9 @@ public class RoomService {
     }
 
 
-    public Room createRoom(Member member, RoomRequestDTO dto) {
+    public Room createRoom(User user, RoomRequestDTO dto) {
         if (dto.getType().equals("SINGLE")) {
-            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
+            Room singleRoom = singleRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
@@ -48,7 +49,7 @@ public class RoomService {
                 groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
 
-            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
+            Room groupRoom = groupRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
             return groupRoom;
         }
         return null;
@@ -58,10 +59,10 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
+    public Room singleRoom(User user, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-
+        Member member = userToMember(user);
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -88,9 +89,10 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
+    public Room groupRoom(User user, String name, Period period, Category category, int passCount, Member... selectedMember) {
 
         //엔티티 조회
+        Member member = userToMember(user);
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()
@@ -184,6 +186,13 @@ public class RoomService {
 
             }
         }
+    }
+
+    private Member userToMember(User user){
+        Member member = memberRepository.findById(user.getUsername())
+                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
+
+        return member;
     }
 
 }

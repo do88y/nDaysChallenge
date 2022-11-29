@@ -24,10 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     //db 통해 찾은 User - Authentication 간 비밀번호 비교, 검증
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findById(username)
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        return memberRepository.findById(id)
                 .map(this::createUserDetails) //현 클래스의 createUserDetails 메소드와 매핑
-                .orElseThrow(()-> new UsernameNotFoundException(username + " db에서 사용자를 찾을 수 없습니다"));
+                .orElseThrow(()-> new UsernameNotFoundException(id + " db에서 사용자를 찾을 수 없습니다"));
     }
 
 
