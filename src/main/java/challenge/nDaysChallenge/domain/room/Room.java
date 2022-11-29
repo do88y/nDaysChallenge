@@ -2,8 +2,12 @@ package challenge.nDaysChallenge.domain.room;
 
 
 import lombok.*;
+import net.minidev.json.JSONUtil;
 
 import javax.persistence.*;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static lombok.AccessLevel.*;
 
