@@ -17,7 +17,7 @@ public class RelationshipController {
 
     private final RelationshipService relationshipService;
 
-    @PostMapping("/friends")
+/*    @PostMapping("/friends")
     public ResponseEntity<?> updateFriendStatus(@AuthenticationPrincipal User user,
                                                 @RequestBody RelationshipDTO relationshipDTO) {
 
@@ -30,7 +30,7 @@ public class RelationshipController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFriendsList);
-    }
+    }*/
 }
 
 

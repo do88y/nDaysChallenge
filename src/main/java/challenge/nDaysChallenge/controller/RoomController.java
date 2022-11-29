@@ -38,7 +38,6 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
-
     //챌린지 삭제
     @DeleteMapping("/challenge/{challengeId}")
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal User user,
@@ -48,4 +47,5 @@ public class RoomController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
 }
