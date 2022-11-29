@@ -4,7 +4,6 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +48,8 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public List<Relationship> findFriends (UserDetailsImpl userDetailsImpl) {
-        List<Relationship> friends = relationshipRepository.findRelationshipByUserNumberAndStatus(userDetailsImpl, RelationshipStatus.ACCEPT);
+    public List<Relationship> findFriends (Long userNumber) {
+        List<Relationship> friends = relationshipRepository.findRelationshipByUserNumberAndStatus(userNumber, RelationshipStatus.ACCEPT);
 
         return friends;
     }

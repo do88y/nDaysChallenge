@@ -4,17 +4,14 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Stickers;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
-import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
-import challenge.nDaysChallenge.repository.dajim.DajimRepository;
+import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,9 +21,11 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
+    private final MemberRepository memberRepository;
+
     //이모션 등록
-    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, UserDetailsImpl userDetailsImpl) { //스티커 등록/변경/삭제
-        Member member = userDetailsImpl.getMember();
+    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, User user) { //스티커 등록/변경/삭제
+        Member member = userToMember(user);
 
         Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
@@ -47,10 +46,11 @@ public class EmotionService {
     }
 
     //이모션 변경 및 삭제
-    public Emotion updateEmotion(EmotionRequestDto requestDto, UserDetailsImpl userDetailsImpl){
+    public Emotion updateEmotion(EmotionRequestDto requestDto, User user){
         //수정할 이모션 객체 불러오기
-        Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(),
-                                                                userDetailsImpl.getMember().getNumber())
+        Member member = userToMember(user);
+
+        Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(), member.getNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
 
         //기존 이모션 삭제
@@ -68,6 +68,13 @@ public class EmotionService {
         }
 
         return updatedEmotion;
+    }
+
+    private Member userToMember(User user){
+        Member member = memberRepository.findById(user.getUsername())
+                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
+
+        return member;
     }
 
 }

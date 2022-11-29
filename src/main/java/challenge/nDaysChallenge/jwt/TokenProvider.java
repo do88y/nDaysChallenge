@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.jwt;
 
-import challenge.nDaysChallenge.dto.JwtDTO;
+import challenge.nDaysChallenge.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -22,23 +22,23 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtProvider { //유저 정보로 JWT 토큰 생성 or 토큰 통해 유저 정보 가져옴
+public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통해 유저 정보 가져옴
 
     private static final String AUTHORITY = "auth";
-    private static final String BEARER_TYPE = "bearer";
+    private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
 
     private final Key key;
 
     //키값 세팅
-    public JwtProvider (@Value("${jwt.secret}") String secretKey){
+    public TokenProvider(@Value("${jwt.secret}") String secretKey){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     //토큰 생성
-    public JwtDTO generateToken(Authentication authentication){
+    public TokenDto generateToken(Authentication authentication){
         //권한들 가져오기 (문자열 변환)
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -49,10 +49,10 @@ public class JwtProvider { //유저 정보로 JWT 토큰 생성 or 토큰 통해
         //access token 생성
         Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) //페이로드 "sub"
-                .claim(AUTHORITY,authorities) //페이로드 "auth"
-                .setExpiration(accessTokenExpireTime) //페이로드 "exp"
-                .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg"
+                .setSubject(authentication.getName()) //페이로드 "sub":"이름"
+                .claim(AUTHORITY,authorities) //페이로드 "auth":"ROLE_USER"
+                .setExpiration(accessTokenExpireTime) //페이로드 "exp":만료시간
+                .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
                 .compact();
 
         //refresh token 생성
@@ -61,7 +61,7 @@ public class JwtProvider { //유저 정보로 JWT 토큰 생성 or 토큰 통해
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return JwtDTO.builder()
+        return TokenDto.builder()
                 .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime.getTime())

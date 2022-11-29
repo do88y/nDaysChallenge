@@ -7,35 +7,26 @@ import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.security.MockSpringSecurityFilter;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.EntityManager;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,30 +34,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @Rollback(value = true)
 @MockBean(JpaMetamodelMappingContext.class)
 public class RoomServiceTest {
-
-    private MockMvc mvc;
-    private Principal mockPrincipal;
-    @Autowired WebApplicationContext context;
-
-    private UserDetailsImpl mockUserSetup() {
-        String id = "user@gmail.com";
-        String nickname = "테스트";
-        String pw = "test123";
-        int img = 1;
-        int roomLimit = 4;
-        Member testMember = new Member(id, pw, nickname, img, roomLimit, Authority.ROLE_USER);
-        UserDetailsImpl testUser = new UserDetailsImpl(testMember);
-        mockPrincipal = new UsernamePasswordAuthenticationToken(testUser, "", null);
-
-        return testUser;
-    }
-
-    @BeforeEach
-    public void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(springSecurity(new MockSpringSecurityFilter()))
-                .build();
-    }
 
     @Autowired EntityManager em;
     @Autowired RoomRepository roomRepository;
@@ -102,7 +69,6 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void singleRoomTest() throws Exception {
         //give
-        UserDetailsImpl testUser = this.mockUserSetup();
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
 
         em.persist(member);
@@ -129,7 +95,6 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void groupRoomTest() throws Exception {
         //given
-        UserDetailsImpl testUser = this.mockUserSetup();
         Set<Member> selectedMembers = new HashSet<>();
         Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
         Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER);

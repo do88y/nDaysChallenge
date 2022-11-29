@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,10 @@ public class RoomService {
     }
 
 
-    public Room createRoom(Member member, RoomRequestDTO dto) {
+    public Room createRoom(User user, RoomRequestDTO dto) {
+
+        Member member = userToMember(user);
+
         if (dto.getType().equals("SINGLE")) {
             Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
@@ -61,7 +65,6 @@ public class RoomService {
     public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -124,11 +127,11 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Long memberNumber, Long roomNumber) {
+    public void deleteRoom(User user, Long roomNumber) {
         //엔티티 조회
+        Member member = userToMember(user);
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
         Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
-        Member member = memberRepository.findByNumber(memberNumber);
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
@@ -184,6 +187,13 @@ public class RoomService {
 
             }
         }
+    }
+
+    private Member userToMember(User user){
+        Member member = memberRepository.findById(user.getUsername())
+                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
+
+        return member;
     }
 
 }

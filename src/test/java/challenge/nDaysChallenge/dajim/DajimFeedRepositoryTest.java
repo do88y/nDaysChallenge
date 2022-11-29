@@ -275,7 +275,7 @@ public class DajimFeedRepositoryTest {
 
         EmotionResponseDto newEmotion = EmotionResponseDto.builder()
                         .dajimNumber(updatedEmotion.getDajim().getNumber())
-                        .memberNumber(updatedEmotion.getMember().getNumber())
+                        .memberNickname(updatedEmotion.getMember().getNickname())
                         .stickers(updatedEmotion.getStickers().toString()).build();
 
         //then
