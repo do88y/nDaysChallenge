@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-public class MemberController {
+public class MemberController { //마이페이지 전용
 
     private final MemberService memberService;
 
