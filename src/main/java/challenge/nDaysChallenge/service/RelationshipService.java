@@ -5,8 +5,8 @@ import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.RelationshipDTO;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
-import challenge.nDaysChallenge.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +34,8 @@ public class RelationshipService {
 
 
     //클라이언트로 받은 값으로 상태를 업데이트 해주는 메서드//
-    public RelationshipStatus updateFriendStatus(UserDetailsImpl userDetailsImpl, RelationshipDTO dto) {
-        Relationship findUser = relationshipRepository.findByUserNumber(userDetailsImpl,dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
+    public RelationshipStatus updateFriendStatus(User user, RelationshipDTO dto) {
+        Relationship findUser = relationshipRepository.findByUserNumber(user,dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
         RelationshipStatus friendStatus = findUser.getStatus();
         if (dto.getRelationshipStatus() == RelationshipStatus.ACCEPT) {
             friendStatus = RelationshipStatus.ACCEPT;
