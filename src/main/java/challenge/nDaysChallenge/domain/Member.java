@@ -23,7 +23,6 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-
     @Column(name = "member_id", length = 15, nullable = false)
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
@@ -34,7 +33,7 @@ public class Member {
     private List<Relationship> friendsList = new ArrayList<Relationship>();
 
 
-    @Column(length = 15, nullable = false)
+    @Column(length = 20, nullable = false)
     private String pw;
 
     @Column(unique = true, length = 6, nullable = false)
@@ -49,15 +48,11 @@ public class Member {
     private Authority authority;
 
 
-
-
-
     @OneToMany(mappedBy = "member")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "number")
     private List<Room> singleRooms = new ArrayList<>();
-
 
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
@@ -68,26 +63,6 @@ public class Member {
         this.roomLimit=roomLimit;
         this.authority = authority;
     }
-
-    //테스트용
-/*
-    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority){
-        this.id = id;
-        this.pw = pw;
-        this.nickname = nickname;
-        this.image = image;
-        this.roomLimit=roomLimit;
-        this.authority = authority;
-    }
-*/
-
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.pw= passwordEncoder.encode(pw);
-    }
-    public Authority authority() {
-        return authority;
-    }
-
 
     //챌린지 갯수 조회
     public int countRooms() {

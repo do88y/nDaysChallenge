@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.dto.request;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
+import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,28 +11,24 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberRequestDto {
+public class SignupDto {
 
-    private Long number;
-
-    @NotBlank(message = "아이디는 필수 입력값입니다.")
+    @NotBlank(message = "아이디를 입력해주세요.")
     private String id;
 
-    @NotEmpty(message = "비밀번호를 입력해주세요.")
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String pw;
 
-    @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickname;
-
-    @NotEmpty(message = "이미지를 선택해주세요.")
     private int image;
 
     private int roomLimit;
+
 
     @Builder
     public Member toMember(PasswordEncoder passwordEncoder){
@@ -39,6 +36,7 @@ public class MemberRequestDto {
                 .id(id)
                 .pw(passwordEncoder.encode(pw))
                 .authority(Authority.ROLE_USER)
+                .nickname(nickname)
                 .image(image)
                 .roomLimit(roomLimit)
                 .build();

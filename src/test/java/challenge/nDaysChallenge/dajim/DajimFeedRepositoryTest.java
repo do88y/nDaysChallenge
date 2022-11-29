@@ -98,8 +98,10 @@ public class DajimFeedRepositoryTest {
                 .passCount(2)
                 .build();
         roomRepository.save(room1);
+
         SingleRoom singleRoom1 = SingleRoom.addRoom(room1, member1);
         roomRepository.save(singleRoom1);
+
         //싱글룸 다짐
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)

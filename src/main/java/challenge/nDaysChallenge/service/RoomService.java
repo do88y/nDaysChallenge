@@ -62,10 +62,10 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
+
     public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
                 .name(name)
@@ -91,6 +91,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
+
     public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
 
         //엔티티 조회

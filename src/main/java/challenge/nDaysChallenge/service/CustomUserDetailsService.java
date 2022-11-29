@@ -25,19 +25,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        return memberRepository.findById(id)
-                .map(this::createUserDetails) //현 클래스의 createUserDetails 메소드와 매핑
-                .orElseThrow(()-> new UsernameNotFoundException(id + " db에서 사용자를 찾을 수 없습니다"));
+        User user = memberRepository.findById(id)
+                .map(this::createUser) //현 클래스의 createUserDetails 메소드와 매핑
+                .orElseThrow(() -> new UsernameNotFoundException(id + " db에서 사용자를 찾을 수 없습니다"));
+
+        return user;
     }
 
-
-
     //db에 사용자 값 있을 때 UserDetails 객체 리턴
-    private UserDetails createUserDetails(Member member){
+    private User createUser(Member member){
         GrantedAuthority authority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
         return new User(
-                String.valueOf(member.getId()),
+                member.getId(),
                 member.getPw(),
                 Collections.singleton(authority)
         );
