@@ -39,8 +39,11 @@ public class RoomService {
 
 
     public Room createRoom(User user, RoomRequestDTO dto) {
+
+        Member member = userToMember(user);
+
         if (dto.getType().equals("SINGLE")) {
-            Room singleRoom = singleRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
+            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
@@ -49,7 +52,7 @@ public class RoomService {
                 groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
 
-            Room groupRoom = groupRoom(user, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
+            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
             return groupRoom;
         }
         return null;
@@ -59,10 +62,9 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    public Room singleRoom(User user, String name, Period period, Category category, int passCount) {
+    public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
 
         //엔티티 조회
-        Member member = userToMember(user);
 
         //챌린지 생성
         Room newRoom = SingleRoom.builder()
@@ -89,10 +91,9 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public Room groupRoom(User user, String name, Period period, Category category, int passCount, Member... selectedMember) {
+    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
 
         //엔티티 조회
-        Member member = userToMember(user);
 
         //챌린지 생성
         Room newRoom = GroupRoom.builder()
@@ -126,11 +127,11 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Long memberNumber, Long roomNumber) {
+    public void deleteRoom(User user, Long roomNumber) {
         //엔티티 조회
+        Member member = userToMember(user);
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
         Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
-        Member member = memberRepository.findByNumber(memberNumber);
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
