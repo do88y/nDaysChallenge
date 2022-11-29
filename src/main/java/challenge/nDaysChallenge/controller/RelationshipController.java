@@ -1,24 +1,37 @@
 package challenge.nDaysChallenge.controller;
 
 
-import challenge.nDaysChallenge.domain.Relationship;
-import challenge.nDaysChallenge.repository.RelationshipRepository;
+import challenge.nDaysChallenge.domain.RelationshipStatus;
+import challenge.nDaysChallenge.dto.request.RelationshipDTO;
+import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-
-@RequiredArgsConstructor
-@RequestMapping("/friends")
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class RelationshipController {
 
-    private final RelationshipRepository relationshipRepository;
+    private final RelationshipService relationshipService;
 
-    public Relationship makeFriends(@Valid @RequestBody RelationshipRepository relationshipRepository)throws Exception{
-        return (Relationship) relationshipRepository;
+    @PostMapping("/friends")
+    public ResponseEntity<?> updateFriendStatus(@AuthenticationPrincipal User user,
+                                                @RequestBody RelationshipDTO relationshipDTO) {
+
+        RelationshipStatus relationship = relationshipService.updateFriendStatus(user,relationshipDTO);
+        RelationshipDTO savedFriendsList = RelationshipDTO.builder()
+                .id(relationshipDTO.getId())
+                .nickname(relationshipDTO.getNickname())
+                .localDateTime(relationshipDTO.getLocalDateTime())
+                .friendsList(relationshipDTO.getFriendsList())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedFriendsList);
     }
 }
+
+
+
