@@ -33,14 +33,13 @@ public class MemberController { //마이페이지 전용
 
 
     //친구 리스트
-/*    @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> findFriendList(@AuthenticationPrincipal User user,
-                                            @PathVariable("challengeId") Long roomNumber) {
+    @GetMapping("/friends")
+    public ResponseEntity<?> findFriendList(@AuthenticationPrincipal User user) {
 
-        List<Relationship> friends = relationshipService.findFriends(user, roomNumber);
+        List<Relationship> friends = relationshipService.findFriends(user);
 
         //릴레이션십리스폰스dto로 데이터 전달
 
         return ResponseEntity.status(HttpStatus.OK).body(friends);
-    }*/
+    }
 }

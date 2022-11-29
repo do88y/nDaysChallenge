@@ -51,7 +51,7 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public List<Relationship> findFriends (User user, Long roomNumber) {
+    public List<Relationship> findFriends (User user) {
 
         Member member = userToMember(user);
         Long memberNumber = member.getNumber();
