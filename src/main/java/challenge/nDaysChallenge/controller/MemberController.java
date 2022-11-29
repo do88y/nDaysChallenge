@@ -1,29 +1,25 @@
 package challenge.nDaysChallenge.controller;
 
 
-import challenge.nDaysChallenge.domain.MemberSignUpDto;
+import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
-import challenge.nDaysChallenge.service.MemberServiceIn;
+import challenge.nDaysChallenge.security.SecurityUtil;
+import challenge.nDaysChallenge.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RequiredArgsConstructor
-@RequestMapping("/auth")
-
 @RestController
-public class MemberController {
+public class MemberController { //마이페이지 전용
 
-    private final MemberServiceIn memberServiceIn;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
+    @GetMapping("/user")
+    public ResponseEntity<?> findMemberInfoById(){
+        MemberResponseDto memberResponseDto = memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId());
 
-    @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.OK)
-    public String join(@Valid @RequestBody MemberSignUpDto signUpDto)throws Exception{
-        return memberServiceIn.signUp(signUpDto);
+        return ResponseEntity.ok(memberResponseDto);
     }
 
 }

@@ -1,5 +1,6 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.dto.request;
 
+import challenge.nDaysChallenge.domain.Member;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class MemberSignUpDto {
     private int roomLimit;
 
     @Builder
-    public  Member memberToEntity(){
+    public Member memberToEntity(){
         return Member.builder()
                 .id(id)
                 .nickname(nickname)
