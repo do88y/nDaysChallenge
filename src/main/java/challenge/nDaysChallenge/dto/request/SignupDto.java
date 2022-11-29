@@ -18,8 +18,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class SignupDto {
 
-    private Long number;
-
     @NotBlank(message = "아이디를 입력해주세요.")
     private String id;
 
@@ -30,6 +28,7 @@ public class SignupDto {
     private int image;
 
     private int roomLimit;
+
 
     @Builder
     public Member toMember(PasswordEncoder passwordEncoder){
