@@ -3,11 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
-<<<<<<< HEAD
 import challenge.nDaysChallenge.dto.request.SignupDto;
-=======
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
@@ -32,7 +28,6 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-<<<<<<< HEAD
     public MemberResponseDto signUp(SignupDto signupDto) {
         if (memberRepository.existsById(signupDto.getId())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
@@ -43,27 +38,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         Member member = signupDto.toMember(passwordEncoder);
-=======
-    public MemberResponseDto signUp(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsById(memberRequestDto.getId())) {
-            throw new RuntimeException("이미 존재하는 이메일입니다.");
-        }
-
-        if (memberRepository.existsByNickname(memberRequestDto.getNickname())) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
-        }
-
-        Member member = memberRequestDto.toMember(passwordEncoder);
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
 
         return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
     }
 
-<<<<<<< HEAD
     public TokenDto login(SignupDto signupDto) {
-=======
-    public TokenDto login(MemberRequestDto memberRequestDto) {
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
         UsernamePasswordAuthenticationToken authenticationToken = signupDto.toAuthentication();
 
@@ -107,22 +86,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-<<<<<<< HEAD
         TokenDto tokenDto = tokenProvider.generateToken(authentication);
-=======
-        TokenDto jwtToken = tokenProvider.generateToken(authentication);
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
 
         //저장소에 새 리프레시 토큰 저장
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
-<<<<<<< HEAD
         return tokenDto;
-=======
-        return jwtToken;
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
 
     }
 }

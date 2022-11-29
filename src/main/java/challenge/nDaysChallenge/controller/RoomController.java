@@ -23,10 +23,7 @@ public class RoomController {
                                         @RequestBody RoomRequestDTO roomRequestDTO) {
 
         Room room = roomService.createRoom(user, roomRequestDTO);
-<<<<<<< HEAD
-=======
 
->>>>>>> cedc1d880e101d6df25ed2baaf8f9f2d210d442d
         RoomResponseDto savedRoom = RoomResponseDto.builder()
                 .name(room.getName())
                 .category(room.getCategory().name())
