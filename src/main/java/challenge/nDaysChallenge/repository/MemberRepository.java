@@ -29,4 +29,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     public List<SingleRoom> findAllWithSingleRoomsFetchJoin();
 
     Member findByNumber(Long memberNumber);
+
+
 }

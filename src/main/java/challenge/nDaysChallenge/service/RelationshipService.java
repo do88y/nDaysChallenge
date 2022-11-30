@@ -35,8 +35,9 @@ public class RelationshipService {
 
 
     //클라이언트로 받은 값으로 상태를 업데이트 해주는 메서드//
-    public RelationshipStatus updateStatus(RelationshipStatus status, Member userNumber) {
-        Relationship findUser = relationshipRepository.findByUserNumber(userNumber.getNumber());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
+    public RelationshipStatus updateFriendStatus(Member member, RelationshipDTO dto) {
+        Relationship findUser = relationshipRepository.findByUserNumber(member,dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
+
         RelationshipStatus friendStatus = findUser.getStatus();
         if (status == RelationshipStatus.ACCEPT) {
             friendStatus = RelationshipStatus.ACCEPT;
@@ -51,22 +52,8 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public List<Relationship> findFriends (User user) {
-
-        Member member = userToMember(user);
-        Long memberNumber = member.getNumber();
-
-        List<Relationship> friends = relationshipRepository.findRelationshipByUserNumberAndStatus(memberNumber, RelationshipStatus.ACCEPT);
-
-        return friends;
-    }
-
-
-    private Member userToMember(User user){
-        Member member = memberRepository.findById(user.getUsername())
-                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
-
-        return member;
+    public Relationship searchFriends (Member member,RelationshipStatus status) {
+        return relationshipRepository.findRelationshipByUserNumberAndStatus(member.getNumber(), status);
     }
 
 }

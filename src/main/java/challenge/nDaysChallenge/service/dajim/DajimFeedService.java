@@ -24,8 +24,8 @@ public class DajimFeedService {
     private final MemberRepository memberRepository;
 
     //피드 전체 조회
-    public List<Dajim> viewDajimOnFeed(User user) {
-        Member loggedInMember = memberRepository.findById(user.getUsername())
+    public List<Dajim> viewDajimOnFeed(Member member) {
+        Member loggedInMember = memberRepository.findById(member.getId())
                 .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
         //로그인 사용자가 소속된 챌린지 단체룸
         List<RoomMember> roomMemberList = loggedInMember.getRoomMemberList();

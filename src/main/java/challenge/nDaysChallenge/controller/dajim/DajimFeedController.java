@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller.dajim;
 
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimFeedService;
@@ -21,9 +22,9 @@ public class DajimFeedController { //피드 내 다짐
 
     @GetMapping("/feed")
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
-    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal User user){
+    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal MemberAdapter memberAdapter){
 
-        List<Dajim> dajims = dajimFeedService.viewDajimOnFeed(user);
+        List<Dajim> dajims = dajimFeedService.viewDajimOnFeed(memberAdapter.getMember());
 
         List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
                 new DajimFeedResponseDto(

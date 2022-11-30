@@ -2,7 +2,9 @@ package challenge.nDaysChallenge.dto.response;
 
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Stickers;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +22,7 @@ public class DajimFeedResponseDto {
 
     private List<String> stickersList;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
 
     public DajimFeedResponseDto(Long dajimNumber, String nickname, String content, List<String> stickersList, LocalDateTime updatedDate) {

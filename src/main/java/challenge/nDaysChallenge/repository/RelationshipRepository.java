@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface RelationshipRepository extends JpaRepository<Relationship, String > {
-    public  Relationship findByUserNumber(Long user_number);
-    public List<Relationship> findRelationshipByUserNumberAndStatus(Long user, RelationshipStatus status);
+    public  Relationship findByUserNumber(Member member, Long user_number);
+    public Relationship findRelationshipByUserNumberAndStatus(Long user, RelationshipStatus status);
 
     //memberNumber로 수락상태인 관계만 검색-> 그룹 챌린지 멤버 후보에 뿌리기
     public List<Member> findByUserNumberAndStatus(Long user, RelationshipStatus status);
