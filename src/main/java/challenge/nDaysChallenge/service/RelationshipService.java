@@ -35,15 +35,12 @@ public class RelationshipService {
         Relationship findUser = relationshipRepository.findByUserNumber(member.getNumber(), dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
         RelationshipStatus friendStatus = findUser.getStatus();
         if (dto.getRelationshipStatus().equals(String.valueOf(RelationshipStatus.ACCEPT))) {
-            friendStatus = RelationshipStatus.ACCEPT;
+            findUser.update(RelationshipStatus.valueOf("ACCEPT"));
         }
-        if (dto.getRelationshipStatus().equals(String.valueOf(RelationshipStatus.REFUSE))) {
-            friendStatus = RelationshipStatus.REFUSE;
-
-        }
-
+        Member friend=memberRepository.findById(dto.getId()
+                ).orElseThrow(()->new RuntimeException("아이디에 해당하는 친구를 찾을 수 없습니다."));    //친구아이디
+        findUser.addFriendList(friend);
         return friendStatus;
-
 
     }
 
@@ -61,5 +58,8 @@ public class RelationshipService {
 
         return (Member) relationshipRepository;
     }
+
+
+
 
 }

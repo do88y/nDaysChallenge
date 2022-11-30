@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
@@ -33,11 +34,11 @@ public class MemberController { //마이페이지 전용
     }
 
 
-    //친구 리스트
+
     @GetMapping("/friends")
     public ResponseEntity<?> findFriendList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
-        List<Relationship> friends = relationshipService.findFriends(memberAdapter.getMember());
+        Member friends = relationshipService.findFriends(memberAdapter.getMember().getId(),memberAdapter.getMember().getNickname());
 
         //릴레이션십리스폰스dto로 데이터 전달
 

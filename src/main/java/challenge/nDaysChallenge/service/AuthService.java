@@ -3,7 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
-import challenge.nDaysChallenge.dto.request.SignupDto;
+import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
@@ -17,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,7 +28,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberResponseDto signup(SignupDto signupDto) {
+    public MemberResponseDto signup(MemberRequestDto signupDto) {
         if (memberRepository.existsById(signupDto.getId())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
@@ -44,7 +42,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
     }
 
-    public TokenDto login(SignupDto signupDto) {
+    public TokenDto login(MemberRequestDto signupDto) {
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
         UsernamePasswordAuthenticationToken authenticationToken = signupDto.toAuthentication();
 
