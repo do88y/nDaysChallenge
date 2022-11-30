@@ -20,6 +20,7 @@ public class RelationshipController {
 
     @PostMapping("/friends")
     public ResponseEntity<?> updateFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter,
+
                                                 @RequestBody RelationshipDTO relationshipDTO) {
 
         RelationshipStatus relationship = relationshipService.updateFriendStatus(memberAdapter.getMember(),relationshipDTO);
@@ -31,7 +32,7 @@ public class RelationshipController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFriendsList);
-    }
+    }*/
 }
 
 
