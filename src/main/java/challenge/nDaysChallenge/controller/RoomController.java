@@ -23,7 +23,7 @@ public class RoomController {
     public ResponseEntity<?> createRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @RequestBody RoomRequestDTO roomRequestDTO) {
 
-        Room room = roomService.createRoom(memberAdapter, roomRequestDTO);
+        Room room = roomService.createRoom(memberAdapter.getMember(), roomRequestDTO);
 
         RoomResponseDto savedRoom = RoomResponseDto.builder()
                 .name(room.getName())
@@ -44,7 +44,7 @@ public class RoomController {
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(memberAdapter, roomNumber);
+        roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
