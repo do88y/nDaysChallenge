@@ -15,6 +15,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //이메일로 유저 찾기
     Optional<Member> findById(String id);
 
+    //닉네임으로 유저찾기
+    Optional<Member> findByNickname(String nickname);
+
     //중복 가입 방지
     boolean existsById(String id);
 
