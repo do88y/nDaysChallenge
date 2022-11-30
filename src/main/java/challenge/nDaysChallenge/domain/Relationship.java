@@ -32,7 +32,8 @@ public  class Relationship {
 
     //빌더는 값을 받아야 하는 것들만//
     @Builder
-    public Relationship(Member userNumber, Member friendNumber){
+    public Relationship(Long number, Member userNumber, Member friendNumber){
+        this.number=number;
         this.user=userNumber;
         this.friend=friendNumber;
         this.status=RelationshipStatus.REQUEST;
