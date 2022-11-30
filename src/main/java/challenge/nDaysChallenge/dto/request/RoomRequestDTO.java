@@ -19,6 +19,15 @@ public class RoomRequestDTO {
     private Long memberNumber;
     private Set<Long> groupMembers = new HashSet<>();
 
+    //필수
+    public RoomRequestDTO(String name, String category, int passCount, Long totalDays, String type, Long memberNumber) {
+        this.name = name;
+        this.category = category;
+        this.passCount = passCount;
+        this.totalDays = totalDays;
+        this.type = type;
+        this.memberNumber = memberNumber;
+    }
 
     @Builder
     public RoomRequestDTO(String name, String category, String reward, int passCount, Long totalDays, Long memberNumber, Set<Long> groupMembers) {

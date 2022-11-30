@@ -33,7 +33,7 @@ public class Member {
     private List<Relationship> friendsList = new ArrayList<Relationship>();
 
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 200, nullable = false)
     private String pw;
 
     @Column(unique = true, length = 6, nullable = false)
@@ -64,10 +64,10 @@ public class Member {
         this.authority = authority;
     }
 
-    //챌린지 갯수 조회
+/*    //챌린지 갯수 조회
     public int countRooms() {
         this.roomLimit = this.getRoomMemberList().size() + this.getSingleRooms().size();
 
         return roomLimit;
-    }
+    }*/
 }
