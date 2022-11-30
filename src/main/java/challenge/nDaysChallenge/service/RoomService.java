@@ -38,9 +38,8 @@ public class RoomService {
     }
 
 
-    public Room createRoom(User user, RoomRequestDTO dto) {
+    public Room createRoom(Member member, RoomRequestDTO dto) {
 
-        Member member = userToMember(user);
         System.out.println("dto.getType() = " + dto.getType());
 
         if (dto.getType().equals("SINGLE")) {
@@ -126,9 +125,8 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(User user, Long roomNumber) {
+    public void deleteRoom(Member member, Long roomNumber) {
         //엔티티 조회
-        Member member = userToMember(user);
         SingleRoom room = singleRoomRepository.findById(roomNumber).get();
         Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
 
@@ -183,16 +181,9 @@ public class RoomService {
         if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
                 roomRepository.deleteById(roomMember.getNumber());
-
             }
         }
     }
 
-    private Member userToMember(User user){
-        Member member = memberRepository.findById(user.getUsername())
-                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
-
-        return member;
-    }
 
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupDto {
+public class MemberRequestDto {
 
     @NotBlank(message = "아이디를 입력해주세요.")
     private String id;
@@ -28,7 +28,6 @@ public class SignupDto {
     private int image;
 
     private int roomLimit;
-
 
     @Builder
     public Member toMember(PasswordEncoder passwordEncoder){

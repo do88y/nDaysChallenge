@@ -65,7 +65,7 @@ class RoomControllerTest {
                         .build();
 
         //when
-        Room newRoom = roomService.createRoom(user, dto);
+        Room newRoom = roomService.createRoom(member, dto);
         RoomResponseDto savedRoom = RoomResponseDto.builder()
                 .name(newRoom.getName())
                 .category(newRoom.getCategory().name())
@@ -93,7 +93,7 @@ class RoomControllerTest {
                         .build();
 
         //when
-        Room newRoom = roomService.createRoom(user, dto);
+        Room newRoom = roomService.createRoom(member, dto);
 
         //then
         assertThat(newRoom.getName()).isEqualTo(room.getName());
