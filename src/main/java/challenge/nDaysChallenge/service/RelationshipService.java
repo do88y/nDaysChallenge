@@ -34,8 +34,8 @@ public class RelationshipService {
 
 
     //클라이언트로 받은 값으로 상태를 업데이트 해주는 메서드//
-    public RelationshipStatus updateFriendStatus(User user, RelationshipDTO dto) {
-        Relationship findUser = relationshipRepository.findByUserNumber(user,dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
+    public RelationshipStatus updateFriendStatus(Member member, RelationshipDTO dto) {
+        Relationship findUser = relationshipRepository.findByUserNumber(member,dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
         RelationshipStatus friendStatus = findUser.getStatus();
         if (dto.getRelationshipStatus() == RelationshipStatus.ACCEPT) {
             friendStatus = RelationshipStatus.ACCEPT;
@@ -49,8 +49,8 @@ public class RelationshipService {
 
 
     //리포지토리에서 친구 리스트 검색하는 메서드//
-    public Relationship searchFriends (Member user,RelationshipStatus status) {
-        return relationshipRepository.findRelationshipByUserNumberAndStatus(user.getNumber(), status);
+    public Relationship searchFriends (Member member,RelationshipStatus status) {
+        return relationshipRepository.findRelationshipByUserNumberAndStatus(member.getNumber(), status);
     }
 
 }

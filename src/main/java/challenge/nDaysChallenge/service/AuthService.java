@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,7 +30,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberResponseDto signUp(SignupDto signupDto) {
+    public MemberResponseDto signup(SignupDto signupDto) {
         if (memberRepository.existsById(signupDto.getId())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
@@ -64,6 +66,13 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         //토큰 발급
         return tokenDto;
 
+    }
+
+    public void logout(String id){
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(id)
+                .orElseThrow(() -> new RuntimeException("사용자의 리프레시 토큰을 찾을 수 없습니다."));
+
+        refreshTokenRepository.delete(refreshToken);
     }
 
     public TokenDto reissue(JwtRequestDto tokenRequestDto) {

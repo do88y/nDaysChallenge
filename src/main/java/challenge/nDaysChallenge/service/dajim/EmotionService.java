@@ -24,9 +24,7 @@ public class EmotionService {
     private final MemberRepository memberRepository;
 
     //이모션 등록
-    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, User user) { //스티커 등록/변경/삭제
-        Member member = userToMember(user);
-
+    public Emotion uploadEmotion(EmotionRequestDto emotionRequestDto, Member member) { //스티커 등록/변경/삭제
         Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
 
@@ -46,14 +44,12 @@ public class EmotionService {
     }
 
     //이모션 변경 및 삭제
-    public Emotion updateEmotion(EmotionRequestDto requestDto, User user){
+    public Emotion updateEmotion(EmotionRequestDto requestDto, Member member){
         //수정할 이모션 객체 불러오기
-        Member member = userToMember(user);
-
         Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(), member.getNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
 
-        //기존 이모션 삭제
+        //타 이모티콘 클릭 시 기존 이모션 삭제
         Long dajimNumber = requestDto.getDajimNumber();
         Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
         dajim.get().getEmotions().remove(emotion);
@@ -67,14 +63,9 @@ public class EmotionService {
             dajim.get().getEmotions().add(updatedEmotion);
         }
 
+        //두번 클릭시 삭제
+
         return updatedEmotion;
-    }
-
-    private Member userToMember(User user){
-        Member member = memberRepository.findById(user.getUsername())
-                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
-
-        return member;
     }
 
 }

@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.controller.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
@@ -19,8 +20,8 @@ public class EmotionController { //감정 스티커 등록
 
     @PostMapping("/feed/emotion") //감정 스티커 등록
     public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
-                                           @AuthenticationPrincipal User user){
-        Emotion emotion = emotionService.uploadEmotion(emotionRequestDto, user);
+                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
+        Emotion emotion = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
 
         EmotionResponseDto savedEmotion = new EmotionResponseDto(emotionRequestDto.getDajimNumber(),
                                                                     emotion.getMember().getNickname(),
@@ -31,9 +32,9 @@ public class EmotionController { //감정 스티커 등록
 
     @PutMapping("/feed/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
-                                         @AuthenticationPrincipal User user){
+                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
 
-        Emotion emotion = emotionService.updateEmotion(emotionRequestDto, user);
+        Emotion emotion = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
 
         EmotionResponseDto updatedEmotion = EmotionResponseDto.builder()
                 .dajimNumber(emotion.getDajim().getNumber())

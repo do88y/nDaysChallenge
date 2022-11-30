@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.RelationshipDTO;
 import challenge.nDaysChallenge.service.RelationshipService;
@@ -18,10 +19,10 @@ public class RelationshipController {
     private final RelationshipService relationshipService;
 
     @PostMapping("/friends")
-    public ResponseEntity<?> updateFriendStatus(@AuthenticationPrincipal User user,
+    public ResponseEntity<?> updateFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                 @RequestBody RelationshipDTO relationshipDTO) {
 
-        RelationshipStatus relationship = relationshipService.updateFriendStatus(user,relationshipDTO);
+        RelationshipStatus relationship = relationshipService.updateFriendStatus(memberAdapter.getMember(),relationshipDTO);
         RelationshipDTO savedFriendsList = RelationshipDTO.builder()
                 .id(relationshipDTO.getId())
                 .nickname(relationshipDTO.getNickname())

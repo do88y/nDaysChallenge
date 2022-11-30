@@ -29,7 +29,6 @@ public class SignupDto {
 
     private int roomLimit;
 
-
     @Builder
     public Member toMember(PasswordEncoder passwordEncoder){
         return Member.builder()
