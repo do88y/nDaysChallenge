@@ -14,8 +14,10 @@ public class MemberResponseDto {
 
     private String nickname;
 
+    private int image;
+
     public static MemberResponseDto of(Member member){
-        return new MemberResponseDto(member.getId(), member.getNickname());
+        return new MemberResponseDto(member.getId(), member.getNickname(), member.getImage());
     }
 
 }

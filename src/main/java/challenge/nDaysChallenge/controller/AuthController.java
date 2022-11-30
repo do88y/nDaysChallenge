@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
 import challenge.nDaysChallenge.dto.request.SignupDto;
@@ -7,6 +8,8 @@ import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +22,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
     //회원가입
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody SignupDto signupDto){
-        MemberResponseDto memberResponseDto = authService.signUp(signupDto);
+        MemberResponseDto memberResponseDto = authService.signup(signupDto);
         return ResponseEntity.ok(memberResponseDto);
 
     }
@@ -30,6 +33,13 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
         //파라미터 객체 안에 id, pw 있음
         TokenDto tokenDto = authService.login(signupDto);
         return ResponseEntity.ok(tokenDto);
+    }
+
+    //로그아웃
+    @PostMapping("/logout")
+    public void logout (@AuthenticationPrincipal MemberAdapter memberAdapter){
+        String id = memberAdapter.getMember().getId();
+        authService.logout(id);
     }
 
     //토큰 재발급

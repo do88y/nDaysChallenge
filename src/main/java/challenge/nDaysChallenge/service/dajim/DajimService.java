@@ -24,9 +24,7 @@ public class DajimService {
     private final MemberRepository memberRepository;
 
     //다짐 업로드
-    public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, User user) {
-        Member member = userToMember(user);
-
+    public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, Member member) {
         Room room = dajimRepository.findByRoomNumber(roomNumber)
                 .orElseThrow(()-> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
 
@@ -37,7 +35,7 @@ public class DajimService {
                 .open(Open.valueOf(requestDto.getOpen()))
                 .build();
 
-        checkDajimRoomUser(newDajim, room, user);
+        checkDajimRoomUser(newDajim, room, member);
 
         Dajim savedDajim = dajimRepository.save(newDajim);
 
@@ -46,11 +44,11 @@ public class DajimService {
     }
 
     //다짐 수정
-    public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, User user){
+    public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, Member member){
         Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber)
                 .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
 
-        checkDajimUser(dajim,user);
+        checkDajimUser(dajim,member);
 
         Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
 
@@ -71,25 +69,16 @@ public class DajimService {
         return dajims;
     }
 
-    private void checkDajimRoomUser(Dajim dajim, Room room, User user){
-        Member member = userToMember(user);
+    private void checkDajimRoomUser(Dajim dajim, Room room, Member member){
         if (dajim.getRoom()!=room || dajim.getMember()!=member){
             throw new RuntimeException("다짐에 대한 권한이 없습니다.");
         }
     }
 
-    private void checkDajimUser(Dajim dajim, User user){
-        Member member = userToMember(user);
+    private void checkDajimUser(Dajim dajim, Member member){
         if (dajim.getMember()!=member){
             throw new RuntimeException("다짐 작성자만 수정할 수 있습니다.");
         }
-    }
-
-    private Member userToMember(User user){
-        Member member = memberRepository.findById(user.getUsername())
-                .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
-
-        return member;
     }
 
 }

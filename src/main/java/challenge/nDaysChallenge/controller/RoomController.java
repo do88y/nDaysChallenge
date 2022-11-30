@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.dto.response.RoomResponseDto;
@@ -19,10 +20,10 @@ public class RoomController {
 
     //챌린지 생성
     @PostMapping("/challenge/create")
-    public ResponseEntity<?> createRoom(@AuthenticationPrincipal User user,
+    public ResponseEntity<?> createRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @RequestBody RoomRequestDTO roomRequestDTO) {
 
-        Room room = roomService.createRoom(user, roomRequestDTO);
+        Room room = roomService.createRoom(memberAdapter, roomRequestDTO);
 
         RoomResponseDto savedRoom = RoomResponseDto.builder()
                 .name(room.getName())
@@ -38,14 +39,14 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
-
     //챌린지 삭제
     @DeleteMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal User user,
+    public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(user, roomNumber);
+        roomService.deleteRoom(memberAdapter, roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
 }
