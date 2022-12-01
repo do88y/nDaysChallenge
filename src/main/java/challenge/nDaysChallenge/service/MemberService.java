@@ -1,6 +1,9 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.RoomStatus;
 import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberInfoResponseDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
@@ -8,6 +11,9 @@ import challenge.nDaysChallenge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service

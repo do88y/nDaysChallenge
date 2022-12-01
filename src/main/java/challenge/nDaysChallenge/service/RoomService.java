@@ -188,9 +188,26 @@ public class RoomService {
     /**
      * 전체 완료 챌린지 조회
      */
-//    public Room viewFinishedChallenges(Member member) {
-//
-//    }
+    public List<Room> findFinishedRooms(Member member) {
 
+        List<Room> finishedRoom = new ArrayList<>();
+
+        List<RoomMember> roomMemberList = member.getRoomMemberList();
+        for (RoomMember roomMember : roomMemberList) {
+            Room groupRoom = roomMember.getRoom();
+            if (groupRoom.getStatus() == RoomStatus.END) {
+                finishedRoom.add(groupRoom);
+            }
+        }
+
+        List<Room> singleRooms = member.getSingleRooms();
+        for (Room singleRoom : singleRooms) {
+            if (singleRoom.getStatus() == RoomStatus.END) {
+                finishedRoom.add(singleRoom);
+            }
+        }
+
+        return finishedRoom;
+    }
 
 }

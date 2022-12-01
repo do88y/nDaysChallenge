@@ -15,6 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class RoomController {
@@ -56,6 +59,30 @@ public class RoomController {
     }
 
     //마이페이지 - 완료챌린지 전체 조회
+    @GetMapping("/user/endChallenge")
+    public ResponseEntity<?> findFinishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+
+        List<Room> findRooms = roomService.findFinishedRooms(memberAdapter.getMember());
+        List<RoomResponseDto> finishedRooms = new ArrayList<>();
+        for (Room room : findRooms) {
+            RoomResponseDto finishedRoom = RoomResponseDto.builder()
+                    .number(room.getNumber())
+                    .name(room.getName())
+                    .category(room.getCategory().name())
+                    .reward(room.getReward())
+                    .type(room.getType().name())
+                    .status(room.getStatus().name())
+                    .passCount(room.getPassCount())
+                    .totalDays(room.getPeriod().getTotalDays())
+                    .startDate(room.getPeriod().getStartDate())
+                    .endDate(room.getPeriod().getEndDate())
+                    .build();
+            finishedRooms.add(finishedRoom);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(finishedRooms);
+    }
+
+    //
     @GetMapping("/user/finished-challenges")
     public ResponseEntity<?> viewFinishedChallenges(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         Member member = memberAdapter.getMember();

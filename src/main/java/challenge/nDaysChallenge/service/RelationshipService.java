@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
@@ -9,6 +10,8 @@ import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,19 +33,33 @@ public class RelationshipService {
 //
 //    }
 
-    //클라이언트로 받은 값으로 상태를 업데이트 해주는 메서드(요청, 수락)//
+    //클라이언트로 받은 값으로 상태를 업데이트 후 프렌드 리스트로 들어가는 메서드(요청 받은거 수락하는 메서드)//
     public RelationshipStatus updateFriendStatus(Member member, RelationshipRequestDTO dto) {
-        Relationship findUser = relationshipRepository.findByUserNumber(member.getNumber(), dto.getId());//relationship 엔티티 정보를 다 가져왔으니 상태만 빼야해//
-        RelationshipStatus friendStatus = findUser.getStatus();
-        if (dto.getRelationshipStatus().equals(String.valueOf(RelationshipStatus.ACCEPT))) {
-            findUser.update(RelationshipStatus.valueOf("ACCEPT"));
-        }
+        //나의 status = member//
+        Relationship user =relationshipRepository.findByUser(member);   //user 찾기
+
+
+//        if (user.getStatus().equals(String.valueOf(RelationshipStatus.ACCEPT))) {
+//            findUser.update(RelationshipStatus.valueOf("ACCEPT"));   //상태 변화//
+//        }
+
         Member friend=memberRepository.findById(dto.getId()
         ).orElseThrow(()->new RuntimeException("아이디에 해당하는 친구를 찾을 수 없습니다."));    //친구아이디
-        findUser.addFriendList(friend);
-        return friendStatus;
 
+
+        return null;
     }
+
+
+    //생성자호출//
+    public Relationship addRelationship (Member user, Member friend, RelationshipRequestDTO relationshipRequestDTO){
+        //변수를 담아야해/
+        Relationship relationship = Relationship.createRelationship(user, friend,relationshipRequestDTO.getRequestedDate(),relationshipRequestDTO.getAcceptedDate());
+
+        return relationship;
+    }
+
+
 
     //리포지토리에서 친구 리스트 검색하는 메서드(리스트조회)//
     public Member findFriends (String id, String nickname){
