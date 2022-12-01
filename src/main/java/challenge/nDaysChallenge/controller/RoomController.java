@@ -33,6 +33,9 @@ public class RoomController {
                 .status(room.getStatus().name())
                 .passCount(room.getPassCount())
                 .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .reward(room.getReward())
                 .groupMembers(roomRequestDTO.getGroupMembers())
                 .build();
 

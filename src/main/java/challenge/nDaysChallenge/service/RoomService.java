@@ -39,6 +39,9 @@ public class RoomService {
 
 
     public Room createRoom(Member member, RoomRequestDTO dto) {
+
+        System.out.println("dto.getType() = " + dto.getType());
+
         if (dto.getType().equals("SINGLE")) {
             Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
             return singleRoom;
@@ -78,7 +81,6 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         member.getSingleRooms().add(newRoom);
-        member.countRooms();
         memberRepository.save(member);
 
         return newRoom;
@@ -107,11 +109,9 @@ public class RoomService {
 
         //챌린지 멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
-        member.countRooms();
         roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
             RoomMember result = RoomMember.createRoomMember(members, newRoom);
-            members.countRooms();
             roomMemberRepository.save(result);
         }
 
