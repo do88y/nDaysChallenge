@@ -24,11 +24,9 @@ public  class Relationship {
 //    @JoinColumn(name = "friend_number")
     private Member friend;
 
-
     //친구신청 상태 enum으로 열거//
     @Enumerated(EnumType.STRING)
     private RelationshipStatus status;
-
 
     //빌더는 값을 받아야 하는 것들만//
     @Builder

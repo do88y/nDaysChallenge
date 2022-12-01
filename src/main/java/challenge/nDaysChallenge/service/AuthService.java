@@ -3,7 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
-import challenge.nDaysChallenge.dto.request.SignupDto;
+import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
@@ -17,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,23 +28,23 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberResponseDto signup(SignupDto signupDto) {
-        if (memberRepository.existsById(signupDto.getId())) {
+    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+        if (memberRepository.existsById(memberRequestDto.getId())) {
             throw new RuntimeException("이미 존재하는 이메일입니다.");
         }
 
-        if (memberRepository.existsByNickname(signupDto.getNickname())) {
+        if (memberRepository.existsByNickname(memberRequestDto.getNickname())) {
             throw new RuntimeException("이미 존재하는 닉네임입니다.");
         }
 
-        Member member = signupDto.toMember(passwordEncoder);
+        Member member = memberRequestDto.toMember(passwordEncoder);
 
         return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
     }
 
-    public TokenDto login(SignupDto signupDto) {
+    public TokenDto login(MemberRequestDto memberRequestDto) {
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
-        UsernamePasswordAuthenticationToken authenticationToken = signupDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
 
         //사용자 비밀번호 검증
         //CustomUserDetailsService의 loadUserByUsername 메소드 실행됨

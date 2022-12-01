@@ -30,7 +30,7 @@ class DajimRepositoryTest {
     void saveDajim(){
         //given
         Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4);
-        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER,null,null,null);
+        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
         //when
         DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PUBLIC");
@@ -52,7 +52,7 @@ class DajimRepositoryTest {
     void modifyDajim(){
         //given
         Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4);
-        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER,null,null,null);
+        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
         DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PUBLIC");
         Dajim dajim = Dajim.builder()
                 .room(room)

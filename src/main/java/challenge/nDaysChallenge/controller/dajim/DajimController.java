@@ -31,6 +31,7 @@ public class DajimController {
         DajimResponseDto savedDajim = new DajimResponseDto(
                                         dajim.getNumber(),
                                         dajim.getMember().getNickname(),
+                                        memberAdapter.getMember().getImage(),
                                         dajim.getContent(),
                                         dajim.getOpen().toString(),
                                         dajim.getUpdatedDate());
@@ -54,6 +55,7 @@ public class DajimController {
         DajimResponseDto newDajim = new DajimResponseDto(
                                         updatedDajim.getNumber(),
                                         updatedDajim.getMember().getNickname(),
+                                        memberAdapter.getMember().getImage(),
                                         updatedDajim.getContent(),
                                         updatedDajim.getOpen().toString(),
                                         updatedDajim.getUpdatedDate());
@@ -76,6 +78,7 @@ public class DajimController {
                 new DajimResponseDto(
                         dajim.getNumber(),
                         dajim.getMember().getNickname(),
+                        memberAdapter.getMember().getImage(),
                         dajim.getContent(),
                         dajim.getOpen().toString(),
                         dajim.getUpdatedDate()))

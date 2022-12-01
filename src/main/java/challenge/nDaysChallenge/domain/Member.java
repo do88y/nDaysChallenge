@@ -28,7 +28,7 @@ public class Member {
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String id;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 150, nullable = false)
     private String pw;
 
     @Column(unique = true, length = 6, nullable = false)
