@@ -61,13 +61,10 @@ public class Member {
         this.authority = authority;
     }
 
-    //챌린지 갯수 조회
+/*    //챌린지 갯수 조회
     public int countRooms() {
         this.roomLimit = this.getRoomMemberList().size() + this.getSingleRooms().size();
 
         return roomLimit;
-    }
-
-
-
+    }*/
 }

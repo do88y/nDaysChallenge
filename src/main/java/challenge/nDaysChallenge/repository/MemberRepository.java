@@ -25,9 +25,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNickname(String nickname);
 
     //fetch join
-    @Query("select m from Member m join fetch m.friendsList")
-    public List<Relationship> findAllWithFriendsFetchJoin();
-
     @Query("select m from Member m join fetch m.singleRooms")
     public List<SingleRoom> findAllWithSingleRoomsFetchJoin();
 

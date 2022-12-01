@@ -1,3 +1,4 @@
+/*
 package challenge.nDaysChallenge.jwt;
 
 import challenge.nDaysChallenge.domain.Member;
@@ -34,3 +35,4 @@ public class loginTest {
         memberRepository.save(member);
     }
 }
+*/
