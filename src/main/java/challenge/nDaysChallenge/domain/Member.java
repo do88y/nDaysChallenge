@@ -50,7 +50,6 @@ public class Member {
     private final List<Room> singleRooms = new ArrayList<>();
 
 
-
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
@@ -60,6 +59,14 @@ public class Member {
         this.roomLimit=roomLimit;
         this.authority = authority;
     }
+
+    public Member update (String nickname, String pw, int image){
+        this.nickname = nickname;
+        this.pw = pw;
+        this.image = image;
+        return this;
+    }
+
 
 /*    //챌린지 갯수 조회
     public int countRooms() {
