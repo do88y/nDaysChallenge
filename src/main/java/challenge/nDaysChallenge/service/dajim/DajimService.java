@@ -23,36 +23,35 @@ public class DajimService {
 
     private final MemberRepository memberRepository;
 
-    //다짐 업로드
+    //다짐 등록 및 수정
     public Dajim uploadDajim(Long roomNumber, DajimRequestDto requestDto, Member member) {
-        Room room = dajimRepository.findByRoomNumber(roomNumber)
-                .orElseThrow(()-> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
+        if (requestDto.getDajimNumber()==null){ //requestDto에 다짐번호가 없으면 새로 등록
+            Room room = dajimRepository.findByRoomNumber(roomNumber)
+                    .orElseThrow(()
+                            -> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
 
-        Dajim newDajim = Dajim.builder()
-                .room(room)
-                .member(member)
-                .content(requestDto.getContent())
-                .open(Open.valueOf(requestDto.getOpen()))
-                .build();
+            Dajim newDajim = Dajim.builder()
+                    .room(room)
+                    .member(member)
+                    .content(requestDto.getContent())
+                    .open(Open.valueOf(requestDto.getOpen()))
+                    .build();
 
-        checkDajimRoomUser(newDajim, room, member);
+            checkDajimRoomUser(newDajim, room, member);
 
-        Dajim savedDajim = dajimRepository.save(newDajim);
+            Dajim savedDajim = dajimRepository.save(newDajim);
 
-        return savedDajim;
+            return savedDajim;
+        } else { //requestDto에서 다짐번호 전달받으면 업데이트
+            Dajim dajim = dajimRepository.findByDajimNumber(requestDto.getDajimNumber())
+                    .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
 
-    }
+            checkDajimUser(dajim,member);
 
-    //다짐 수정
-    public Dajim updateDajim(Long dajimNumber, DajimRequestDto requestDto, Member member){
-        Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber)
-                .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
+            Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
 
-        checkDajimUser(dajim,member);
-
-        Dajim updatedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
-
-        return updatedDajim;
+            return updatedDajim;
+        }
     }
 
     //다짐 조회

@@ -8,6 +8,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class DajimRequestDto {
 
+    private Long dajimNumber;
+
     private String content;
 
     private String open;

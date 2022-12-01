@@ -21,12 +21,13 @@ public class DajimController {
 
     private final DajimService dajimService;
 
-    //다짐 업로드
+    //다짐 업로드 (등록 & 수정)
     @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
+
         Dajim dajim = dajimService.uploadDajim(roomNumber, dajimRequestDto, memberAdapter.getMember());
         DajimResponseDto savedDajim = new DajimResponseDto(
                                         dajim.getNumber(),
@@ -43,29 +44,28 @@ public class DajimController {
         return ResponseEntity.ok().body(savedDajim);
     }
 
-
-    //다짐 수정 (다짐내용, 공개여부 리턴)
-    @PutMapping("/challenge/{challengeId}/{dajimId}")
-    public ResponseEntity<?> updateDajim(@PathVariable("dajimId") Long dajimNumber,
-                                         @RequestBody DajimRequestDto dajimRequestDto,
-                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
-        checkLogin(memberAdapter.getMember());
-
-        Dajim updatedDajim = dajimService.updateDajim(dajimNumber, dajimRequestDto, memberAdapter.getMember());
-        DajimResponseDto newDajim = new DajimResponseDto(
-                                        updatedDajim.getNumber(),
-                                        updatedDajim.getMember().getNickname(),
-                                        memberAdapter.getMember().getImage(),
-                                        updatedDajim.getContent(),
-                                        updatedDajim.getOpen().toString(),
-                                        updatedDajim.getUpdatedDate());
-
-        if (newDajim==null){
-            throw new RuntimeException("다짐 작성에 실패했습니다.");
-        }
-
-        return ResponseEntity.ok().body(newDajim);
-    }
+//    //다짐 수정 (다짐내용, 공개여부 리턴)
+//    @PutMapping("/challenge/{challengeId}/{dajimId}")
+//    public ResponseEntity<?> updateDajim(@PathVariable("dajimId") Long dajimNumber,
+//                                         @RequestBody DajimRequestDto dajimRequestDto,
+//                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
+//        checkLogin(memberAdapter.getMember());
+//
+//        Dajim updatedDajim = dajimService.updateDajim(dajimNumber, dajimRequestDto, memberAdapter.getMember());
+//        DajimResponseDto newDajim = new DajimResponseDto(
+//                                        updatedDajim.getNumber(),
+//                                        updatedDajim.getMember().getNickname(),
+//                                        memberAdapter.getMember().getImage(),
+//                                        updatedDajim.getContent(),
+//                                        updatedDajim.getOpen().toString(),
+//                                        updatedDajim.getUpdatedDate());
+//
+//        if (newDajim==null){
+//            throw new RuntimeException("다짐 작성에 실패했습니다.");
+//        }
+//
+//        return ResponseEntity.ok().body(newDajim);
+//    }
 
     //전체 다짐 조회
     @GetMapping("/challenge/{challengeId}")

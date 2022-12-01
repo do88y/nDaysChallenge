@@ -185,5 +185,12 @@ public class RoomService {
         }
     }
 
+    /**
+     * 전체 완료 챌린지 조회
+     */
+//    public Room viewFinishedChallenges(Member member) {
+//
+//    }
+
 
 }

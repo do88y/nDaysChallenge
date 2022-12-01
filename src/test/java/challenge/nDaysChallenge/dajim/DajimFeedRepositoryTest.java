@@ -87,7 +87,7 @@ public class DajimFeedRepositoryTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto("다짐 내용", "PRIVATE");
+        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
         Room room1 = SingleRoom.builder()
