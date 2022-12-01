@@ -38,7 +38,7 @@ public class EmotionService {
 
         Emotion savedEmotion = emotionRepository.save(emotion);
 
-        dajim.getEmotions().add(savedEmotion); //다짐 엔티티 이모션리스트에 추가
+        dajim.addEmotions(savedEmotion); //다짐 엔티티 이모션리스트에 추가
 
         return savedEmotion;
     }
@@ -49,7 +49,7 @@ public class EmotionService {
         Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(), member.getNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
 
-        //타 이모티콘 클릭 시 기존 이모션 삭제
+        //스티커 변경 - 타 이모티콘 클릭 시 기존 이모션 삭제
         Long dajimNumber = requestDto.getDajimNumber();
         Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
         dajim.get().getEmotions().remove(emotion);
@@ -63,7 +63,7 @@ public class EmotionService {
             dajim.get().getEmotions().add(updatedEmotion);
         }
 
-        //두번 클릭시 삭제
+        //스티커 두 번 클릭 시 삭제
 
         return updatedEmotion;
     }

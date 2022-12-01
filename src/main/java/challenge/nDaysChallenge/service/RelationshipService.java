@@ -38,7 +38,7 @@ public class RelationshipService {
             findUser.update(RelationshipStatus.valueOf("ACCEPT"));
         }
         Member friend=memberRepository.findById(dto.getId()
-                ).orElseThrow(()->new RuntimeException("아이디에 해당하는 친구를 찾을 수 없습니다."));    //친구아이디
+        ).orElseThrow(()->new RuntimeException("아이디에 해당하는 친구를 찾을 수 없습니다."));    //친구아이디
         findUser.addFriendList(friend);
         return friendStatus;
 
@@ -47,19 +47,17 @@ public class RelationshipService {
     //리포지토리에서 친구 리스트 검색하는 메서드(리스트조회)//
     public Member findFriends (String id, String nickname){
         if((id == null)){
-           return memberRepository.findById(id)
-                   .orElseThrow(()->new RuntimeException("해당 아이디가 검색되지 않습니다."));
+            return memberRepository.findById(id)
+                    .orElseThrow(()->new RuntimeException("해당 아이디가 검색되지 않습니다."));
 
         }
         if((nickname==null)){
-           return memberRepository.findByNickname(nickname)
-                   .orElseThrow(()->new RuntimeException("해당 닉네임이 검색되지 않습니다."));
+            return memberRepository.findByNickname(nickname)
+                    .orElseThrow(()->new RuntimeException("해당 닉네임이 검색되지 않습니다."));
         }
 
         return (Member) relationshipRepository;
     }
-
-
 
 
 }
