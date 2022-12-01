@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
 import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.AcceptDTO;
@@ -7,7 +8,9 @@ import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
 import challenge.nDaysChallenge.dto.response.RelationshipResponseDTO;
 import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,7 +54,7 @@ public class RelationshipController {
 
 
     //친구 수락 리스트//
-    @PostMapping("/friend/accept")
+    @PostMapping("/friends/accept")
     public ResponseEntity<?> acceptFriendStatus(@RequestBody RelationshipRequestDTO relationshipRequestDTO) {
 
         AcceptDTO savedAcceptFriendsList = AcceptDTO.builder()
@@ -82,6 +85,17 @@ public class RelationshipController {
 
         return ResponseEntity.ok().body(savedRefuseFriendsList);
 
+    }
+
+    //마이페이지 - 친구리스트 전체 조회
+    @GetMapping("/user/friends")
+    public ResponseEntity<?> viewFriendsList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+
+        Member friends = relationshipService.findFriends(memberAdapter.getMember().getId(),memberAdapter.getMember().getNickname());
+
+        //릴레이션십리스폰스dto로 데이터 전달
+
+        return ResponseEntity.status(HttpStatus.OK).body(friends);
     }
 
 }
