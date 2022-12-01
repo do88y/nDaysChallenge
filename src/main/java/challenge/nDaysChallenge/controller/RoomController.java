@@ -33,12 +33,14 @@ public class RoomController {
                 .status(room.getStatus().name())
                 .passCount(room.getPassCount())
                 .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .reward(room.getReward())
                 .groupMembers(roomRequestDTO.getGroupMembers())
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
-
 
     //챌린지 삭제
     @DeleteMapping("/challenge/{challengeId}")
@@ -49,4 +51,5 @@ public class RoomController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
 }

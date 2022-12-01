@@ -42,8 +42,7 @@ public class RoomServiceTest {
     @Autowired RoomService roomService;
 
     @Test
-    @DisplayName("개인 챌린지 단독")
-    public void singleRoom() throws Exception {
+    public void 개인_챌린지_builder() throws Exception {
         //given
         Room room = SingleRoom.builder()
                 .name("기상")
@@ -51,6 +50,7 @@ public class RoomServiceTest {
                 .category(Category.ROUTINE)
                 .type(RoomType.SINGLE)
                 .passCount(2)
+                .reward("유럽여행")
                 .build();
 
         em.persist(room);
@@ -61,13 +61,23 @@ public class RoomServiceTest {
 
         //then
         assertThat(room.getNumber()).isEqualTo(findRoom.get().getNumber());
+        assertThat(room.getReward()).isEqualTo(findRoom.get().getReward());
+        assertThat(room.getPeriod()).isEqualTo(findRoom.get().getPeriod());
     }
 
     @Test
-    @DisplayName("개인 챌린지 생성 메서드 전체")
+    public void createRoom_메서드_테스트() throws Exception {
+        //given
+
+        //when
+
+        //then
+    }
+
+    @Test
     @Transactional
     @Rollback(value = true)
-    public void singleRoomTest() throws Exception {
+    public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
 
@@ -89,11 +99,9 @@ public class RoomServiceTest {
     }
 
     @Test
-    @DisplayName("그룹 챌린지 생성 메서드 전체")
-    @WithMockUser
     @Transactional
     @Rollback(value = true)
-    public void groupRoomTest() throws Exception {
+    public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Member> selectedMembers = new HashSet<>();
         Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
@@ -121,10 +129,9 @@ public class RoomServiceTest {
     }
 
     @Test
-    @DisplayName("챌린지 삭제")
-    public void deleteRoom() throws Exception {
+    public void 챌린지_삭제() throws Exception {
         //given
-        Room room = new Room("기상", period, Category.ROUTINE, RoomType.GROUP, 2);
+        Room room = new Room("기상", period, Category.ROUTINE, RoomType.GROUP, 2, "");
 
         em.persist(room);
 

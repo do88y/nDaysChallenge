@@ -49,14 +49,14 @@ public class Room {
 
     //==생성 메서드==// 빌더패턴 이용  **단체인 경우 생성하면서 count -1
     @Builder
-    public Room(String name, Period period, Category category, RoomType type, int passCount) {
+    public Room(String name, Period period, Category category, RoomType type, int passCount, String reward) {
         this.name = name;
         this.period = period;
         this.category = category;
         this.type = type;
         this.status = RoomStatus.CONTINUE;
         this.passCount = passCount;
-
+        this.reward = reward;
     }
 
 /*

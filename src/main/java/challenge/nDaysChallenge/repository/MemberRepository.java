@@ -15,6 +15,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //이메일로 유저 찾기
     Optional<Member> findById(String id);
 
+    //닉네임으로 유저찾기
+    Optional<Member> findByNickname(String nickname);
+
     //중복 가입 방지
     boolean existsById(String id);
 
@@ -22,9 +25,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNickname(String nickname);
 
     //fetch join
-    @Query("select m from Member m join fetch m.friendsList")
-    public List<Relationship> findAllWithFriendsFetchJoin();
-
     @Query("select m from Member m join fetch m.singleRooms")
     public List<SingleRoom> findAllWithSingleRoomsFetchJoin();
 
