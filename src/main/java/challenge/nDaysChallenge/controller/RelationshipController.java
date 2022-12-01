@@ -83,8 +83,5 @@ public class RelationshipController {
         return ResponseEntity.ok().body(savedRefuseFriendsList);
 
     }
+
 }
-
-
-
-

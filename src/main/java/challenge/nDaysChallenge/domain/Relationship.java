@@ -34,9 +34,6 @@ public  class Relationship {
     @Enumerated(EnumType.STRING)
     private RelationshipStatus status;
 
-
-
-
     //연관관계//
     public void addFriendList (Member friend){
         this.friendsList.add(friend);
@@ -48,7 +45,6 @@ public  class Relationship {
         return this;
     }
 
-
     //빌더는 값을 받아야 하는 것들만//
     @Builder
     public Relationship(Long number, Member userNumber, Member friendNumber){
@@ -58,6 +54,5 @@ public  class Relationship {
         this.status=RelationshipStatus.REQUEST;
         //대기가 기본값이게//
     }
-
 
 }

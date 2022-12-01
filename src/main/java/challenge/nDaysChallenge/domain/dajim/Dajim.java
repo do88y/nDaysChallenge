@@ -2,14 +2,11 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.Report;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -68,5 +65,9 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         this.open = open;
         this.content = content;
         return this;
+    }
+
+    public void addEmotions(Emotion emotion){
+        this.emotions.add(emotion);
     }
 }

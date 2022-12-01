@@ -1,5 +1,5 @@
 # Request
-POST https://localhost:8080/auth/login
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
