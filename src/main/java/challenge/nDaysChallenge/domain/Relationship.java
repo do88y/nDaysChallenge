@@ -1,8 +1,5 @@
 package challenge.nDaysChallenge.domain;
 
-import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
-import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;

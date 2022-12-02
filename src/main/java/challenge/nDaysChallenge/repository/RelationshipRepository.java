@@ -3,9 +3,7 @@ package challenge.nDaysChallenge.repository;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
-import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +13,7 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Stri
 
 
     Relationship findByUser(Member member);
+
 
 
 

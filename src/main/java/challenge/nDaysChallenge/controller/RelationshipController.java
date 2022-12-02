@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.domain.Relationship;
-import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
-import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
-import challenge.nDaysChallenge.dto.response.AcceptDTO;
+import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
-import challenge.nDaysChallenge.dto.response.RelationshipResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.DeleteResponseDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,33 +38,33 @@ public class RelationshipController {
     }
 
 
-    //요청 리스트 //
+    //친구 요청 //
     @PostMapping("/friends/request")
     public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                                                    @RequestBody RelationshipRequestDTO relationshipRequestDTO) {
+                                                                                    @RequestBody ApplyRequestDTO applyDTO) {
 
         Member user = memberAdapter.getMember();
-        String friendId = relationshipRequestDTO.getId();
+        String friendId = applyDTO.getId();
         Member friend = memberRepository.findById(friendId).orElse(null);
         //relationship생성한걸 받은부분//
 
 
-        RelationshipResponseDTO responseDTO = relationshipService.updateFriendStatus(user,friend, relationshipRequestDTO);
+        AcceptResponseDTO acceptFollowerDTO = relationshipService.updateFriendStatus(user,friend, applyDTO);
 
-        return ResponseEntity.ok().body(responseDTO);
+        return ResponseEntity.ok().body(acceptFollowerDTO);
     }
 
 
-    //친구 수락 리스트//
+    //친구 수락 //
     @PostMapping("/friends/accept")
-    public ResponseEntity<?> acceptFriendStatus(@RequestBody RelationshipRequestDTO relationshipRequestDTO) {
+    public ResponseEntity<?> acceptFriendStatus(@RequestBody ApplyRequestDTO applyDTO) {
 
-        AcceptDTO savedAcceptFriendsList = AcceptDTO.builder()
-                .id(relationshipRequestDTO.getId())
-                .nickname(relationshipRequestDTO.getNickname())
-                .image(relationshipRequestDTO.getImage())
+        AcceptResponseDTO savedAcceptFriendsList = AcceptResponseDTO.builder()
+                .id(applyDTO.getId())
+                .nickname(applyDTO.getNickname())
+                .image(applyDTO.getImage())
                 .acceptedDate(LocalDateTime.now())
-                .relationshipStatus(relationshipRequestDTO.getRelationshipStatus())
+                .relationshipStatus(applyDTO.getRelationshipStatus())
                 .build();
 
         return ResponseEntity.ok().body(savedAcceptFriendsList);
@@ -76,16 +73,16 @@ public class RelationshipController {
 
     //요청거절 relationship 객채 삭제.//
     @DeleteMapping("/friends/request")
-    public ResponseEntity<?> deleteFriendStatus(@RequestBody RelationshipRequestDTO relationshipRequestDTO) {
+    public ResponseEntity<?> deleteFriendStatus(@RequestBody DeleteResponseDTO deleteFollowerDTO) {
 
-        RelationshipResponseDTO savedRefuseFriendsList = RelationshipResponseDTO.builder()
-                .id(relationshipRequestDTO.getId())
-                .nickname(relationshipRequestDTO.getNickname())
-                .image(relationshipRequestDTO.getImage())
-                .relationshipStatus(relationshipRequestDTO.getRelationshipStatus())
+        AcceptResponseDTO deleteRefuseFriends = AcceptResponseDTO.builder()
+                .id(deleteFollowerDTO.getId())
+                .nickname(deleteFollowerDTO.getNickname())
+                .image(deleteFollowerDTO.getImage())
+                .relationshipStatus(deleteFollowerDTO.getRelationshipStatus())
                 .build();
 
-        return ResponseEntity.ok().body(savedRefuseFriendsList);
+        return ResponseEntity.ok().body(deleteRefuseFriends);
 
     }
 
