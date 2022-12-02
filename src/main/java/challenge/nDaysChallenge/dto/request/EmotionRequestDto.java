@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class EmotionRequestDto {
 
@@ -15,4 +13,8 @@ public class EmotionRequestDto {
 
     String sticker; //감정스티커 받아오기
 
+    public EmotionRequestDto(Long dajimNumber, String sticker) {
+        this.dajimNumber = dajimNumber;
+        this.sticker = sticker;
+    }
 }

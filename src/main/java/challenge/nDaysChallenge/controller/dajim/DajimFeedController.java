@@ -24,20 +24,9 @@ public class DajimFeedController { //피드 내 다짐
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
     public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal MemberAdapter memberAdapter){
 
-        List<Dajim> dajims = dajimFeedService.viewDajimOnFeed(memberAdapter.getMember());
+        List<DajimFeedResponseDto> dajimFeedDto = dajimFeedService.viewDajimOnFeed(memberAdapter.getMember());
 
-        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                new DajimFeedResponseDto(
-                        dajim.getNumber(),
-                        dajim.getMember().getNickname(),
-                        dajim.getContent(),
-                        dajim.getEmotions().stream().map(emotion ->
-                                        emotion.getStickers().toString())
-                                .collect(Collectors.toList()),
-                        dajim.getUpdatedDate()
-                )).collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(dajimFeedList);
+        return ResponseEntity.ok().body(dajimFeedDto);
     }
 
 }

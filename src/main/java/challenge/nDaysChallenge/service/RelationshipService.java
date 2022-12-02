@@ -22,6 +22,7 @@ public class RelationshipService {
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
+<<<<<<< HEAD
 
     //relationship 엔티티에 값을 넣는 메서드//
 //    public static void friendRequest(Member user, Member friend){
@@ -35,6 +36,10 @@ public class RelationshipService {
 
     //클라이언트로 받은 값으로 상태를 업데이트 후 프렌드 리스트로 들어가는 메서드(요청 수락하는 메서드)//
     public AcceptResponseDTO updateFriendStatus(Member member, Member friend, ApplyRequestDTO applyDTO) {
+=======
+    //클라이언트로 받은 값으로 상태를 업데이트 후 프렌드 리스트로 들어가는 메서드(요청 받은거 수락하는 메서드)//
+    public RelationshipResponseDTO updateFriendStatus(Member member, Member friend, RelationshipRequestDTO requestDTO) {
+>>>>>>> 89647d2fde1556f1d430afdecafb86b90450eeb3
         //나의 status = member//
 
         //상태가 REQUEST에서 ACCEPT가 되면 서로의 친구리스트에 들어가게 하는 메서드//
@@ -76,8 +81,8 @@ public class RelationshipService {
         if((id == null)){
             return memberRepository.findById(id)
                     .orElseThrow(()->new RuntimeException("해당 아이디가 검색되지 않습니다."));
-
         }
+
         if((nickname==null)){
             return memberRepository.findByNickname(nickname)
                     .orElseThrow(()->new RuntimeException("해당 닉네임이 검색되지 않습니다."));
@@ -85,6 +90,5 @@ public class RelationshipService {
 
         return (Member) relationshipRepository;
     }
-
 
 }

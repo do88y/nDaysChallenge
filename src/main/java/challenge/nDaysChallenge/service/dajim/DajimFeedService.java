@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class DajimFeedService {
     private final MemberRepository memberRepository;
 
     //피드 전체 조회
-    public List<Dajim> viewDajimOnFeed(Member member) {
+    public List<DajimFeedResponseDto> viewDajimOnFeed(Member member) {
         Member loggedInMember = memberRepository.findById(member.getId())
                 .orElseThrow(()->new RuntimeException("로그인한 사용자 정보를 찾을 수 없습니다."));
         //로그인 사용자가 소속된 챌린지 단체룸
@@ -46,7 +47,19 @@ public class DajimFeedService {
             throw new RuntimeException("다짐을 확인할 수 없습니다."); //임시 RuntimeException
         }
 
-        return dajims;
+        //도메인->dto
+        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+                new DajimFeedResponseDto(
+                        dajim.getNumber(),
+                        dajim.getMember().getNickname(),
+                        dajim.getContent(),
+                        dajim.getEmotions().stream().map(emotion ->
+                                        emotion.getStickers().toString())
+                                .collect(Collectors.toList()),
+                        dajim.getUpdatedDate()
+                )).collect(Collectors.toList());
+
+        return dajimFeedList;
     }
 
 }

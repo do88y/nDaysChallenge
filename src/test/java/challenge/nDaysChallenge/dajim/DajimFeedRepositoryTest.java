@@ -153,7 +153,7 @@ public class DajimFeedRepositoryTest {
                 .build();
 
         Emotion savedEmotion = emotionRepository.save(emotion);
-        dajim3.getEmotions().add(savedEmotion);
+        dajim3.addEmotions(savedEmotion);
 
         //이모션 불러오기ㅜ
         List<Emotion> emotions = dajim3.getEmotions();
