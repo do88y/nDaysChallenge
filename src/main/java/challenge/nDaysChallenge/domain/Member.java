@@ -13,7 +13,6 @@ import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,17 +23,13 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(name = "member_id", length = 15, nullable = false)
-    @Email(message = "이메일 형식으로 입력해주세요.")
+    @Column(name = "member_id")
     private String id;
 
-    @Column(length = 150, nullable = false)
     private String pw;
 
-    @Column(unique = true, length = 6, nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
     private int image;
 
     private int roomLimit;  //챌린지 5개 제한
@@ -42,13 +37,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-
     @OneToMany(mappedBy = "member")
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "number")
     private final List<Room> singleRooms = new ArrayList<>();
-
 
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {

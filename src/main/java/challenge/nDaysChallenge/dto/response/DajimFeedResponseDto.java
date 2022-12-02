@@ -22,7 +22,7 @@ public class DajimFeedResponseDto {
 
     private List<String> stickersList;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss")
     private LocalDateTime updatedDate;
 
     public DajimFeedResponseDto(Long dajimNumber, String nickname, String content, List<String> stickersList, LocalDateTime updatedDate) {

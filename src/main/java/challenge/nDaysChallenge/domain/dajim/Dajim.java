@@ -70,4 +70,5 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
     public void addEmotions(Emotion emotion){
         this.emotions.add(emotion);
     }
+
 }
