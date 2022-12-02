@@ -19,12 +19,24 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     private final AuthService authService;
 
-
     //회원가입
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto){
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
         return ResponseEntity.ok(memberResponseDto);
+    }
+
+    //아이디 중복 검사
+    @GetMapping("/id")
+    public ResponseEntity<Boolean> idCheck (@RequestBody String id){
+        return ResponseEntity.ok(authService.idCheck(id));
+    }
+
+
+    //닉네임 중복 검사
+    @GetMapping("/nickname")
+    public ResponseEntity<Boolean> nicknameCheck (@RequestBody String nickname){
+        return ResponseEntity.ok(authService.nicknameCheck(nickname));
     }
 
     //로그인

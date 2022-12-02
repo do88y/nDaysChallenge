@@ -28,20 +28,28 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    //회원가입
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsById(memberRequestDto.getId())) {
-            throw new RuntimeException("이미 존재하는 이메일입니다.");
-        }
-
-        if (memberRepository.existsByNickname(memberRequestDto.getNickname())) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
-        }
-
         Member member = memberRequestDto.toMember(passwordEncoder);
 
         return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
     }
 
+    //아이디 중복 검사
+    public boolean idCheck(String id){
+        boolean exists = memberRepository.existsById(id);
+
+        return exists;
+    }
+
+    //닉네임 중복 검사
+    public boolean nicknameCheck(String nickname){
+        boolean exists = memberRepository.existsById(nickname);
+
+        return exists;
+    }
+
+    //로그인
     public TokenDto login(MemberRequestDto memberRequestDto) {
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
@@ -66,6 +74,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     }
 
+    //로그아웃
     public void logout(String id){
         RefreshToken refreshToken = refreshTokenRepository.findByKey(id)
                 .orElseThrow(() -> new RuntimeException("사용자의 리프레시 토큰을 찾을 수 없습니다."));
@@ -73,6 +82,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         refreshTokenRepository.delete(refreshToken);
     }
 
+    //토큰 재발급
     public TokenDto reissue(JwtRequestDto tokenRequestDto) {
 
         //refresh 토큰 유효성(만료 여부) 검증

@@ -77,7 +77,6 @@ public class RelationshipController {
     //요청거절 relationship 객채 삭제.//
     @DeleteMapping("/friends/request")
     public ResponseEntity<?> deleteFriendStatus(@RequestBody RelationshipRequestDTO relationshipRequestDTO) {
-
         RelationshipResponseDTO savedRefuseFriendsList = RelationshipResponseDTO.builder()
                 .id(relationshipRequestDTO.getId())
                 .nickname(relationshipRequestDTO.getNickname())
@@ -86,7 +85,6 @@ public class RelationshipController {
                 .build();
 
         return ResponseEntity.ok().body(savedRefuseFriendsList);
-
     }
 
 }

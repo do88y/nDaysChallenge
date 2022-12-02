@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class DajimRequestDto {
 
     private Long dajimNumber;
@@ -14,4 +13,9 @@ public class DajimRequestDto {
 
     private String open;
 
+    public DajimRequestDto(Long dajimNumber, String content, String open) {
+        this.dajimNumber = dajimNumber;
+        this.content = content;
+        this.open = open;
+    }
 }

@@ -26,6 +26,14 @@ public class MemberRequestDto {
 
     private int roomLimit;
 
+    public MemberRequestDto(String id, String pw, String nickname, int image, int roomLimit) {
+        this.id = id;
+        this.pw = pw;
+        this.nickname = nickname;
+        this.image = image;
+        this.roomLimit = roomLimit;
+    }
+
     @Builder
     public Member toMember(PasswordEncoder passwordEncoder){
         return Member.builder()
