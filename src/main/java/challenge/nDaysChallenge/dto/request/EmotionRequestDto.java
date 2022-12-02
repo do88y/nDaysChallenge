@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@NoArgsConstructor
 public class EmotionRequestDto {
 
     Long dajimNumber; //다짐 번호

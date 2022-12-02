@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@NoArgsConstructor
 public class MemberRequestDto {
 
     @NotBlank(message = "아이디를 입력해주세요.")

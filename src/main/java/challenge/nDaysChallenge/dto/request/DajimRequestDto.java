@@ -3,8 +3,10 @@ package challenge.nDaysChallenge.dto.request;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class DajimRequestDto {
 
     private Long dajimNumber;
