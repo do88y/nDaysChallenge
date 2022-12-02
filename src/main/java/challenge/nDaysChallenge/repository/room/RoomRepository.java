@@ -11,8 +11,5 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    //완료 상태인 모든 챌린지 검색
-    public List<Room> findByNumberAndStatus(Long number, RoomStatus status);
-
 }
 

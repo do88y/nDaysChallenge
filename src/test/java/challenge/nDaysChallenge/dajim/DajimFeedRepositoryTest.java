@@ -1,3 +1,4 @@
+/*
 package challenge.nDaysChallenge.dajim;
 
 import challenge.nDaysChallenge.domain.Authority;
@@ -163,7 +164,7 @@ public class DajimFeedRepositoryTest {
 
         //when
         //멤버2 싱글룸 불러오기
-        List<Room> singleRooms = member1.getSingleRooms();
+        List<SingleRoom> singleRooms = member1.getSingleRooms();
         List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());
@@ -285,3 +286,4 @@ public class DajimFeedRepositoryTest {
     }
 
 }
+*/

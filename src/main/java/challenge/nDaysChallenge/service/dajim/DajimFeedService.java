@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class DajimFeedService {
                 .collect(Collectors.toList());
 
         //로그인 사용자가 소속된 챌린지 개인룸
-        List<Room> singleRooms = loggedInMember.getSingleRooms();
+        List<SingleRoom> singleRooms = loggedInMember.getSingleRooms();
         List<Long> loggedInSingleRoomNumber = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());

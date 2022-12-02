@@ -43,7 +43,7 @@ public class RoomService {
         System.out.println("dto.getType() = " + dto.getType());
 
         if (dto.getType().equals("SINGLE")) {
-            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount());
+            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
@@ -52,7 +52,7 @@ public class RoomService {
                 groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
 
-            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), groupMembers);
+            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), "", groupMembers);
             return groupRoom;
         }
         return null;
@@ -62,25 +62,16 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
+    public SingleRoom singleRoom(Member member, String name, Period period, Category category, int passCount, String reward) {
 
-    public Room singleRoom(Member member, String name, Period period, Category category, int passCount) {
-
-        //엔티티 조회
         //챌린지 생성
-        Room newRoom = SingleRoom.builder()
-                .name(name)
-                .period(new Period(period.getTotalDays()))
-                .category(category)
-                .type(RoomType.SINGLE)
-                .passCount(passCount)
-                .build();
-
+        SingleRoom newRoom = new SingleRoom(name, new Period(period.getTotalDays()), category, passCount, reward);
 
         //챌린지 저장
-        roomRepository.save(newRoom);
+        singleRoomRepository.save(newRoom);
 
         //멤버에 챌린지 저장
-        member.getSingleRooms().add(newRoom);
+        newRoom.addRoom(newRoom, member);
         memberRepository.save(member);
 
         return newRoom;
@@ -90,24 +81,16 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-
-    public Room groupRoom(Member member, String name, Period period, Category category, int passCount, Set<Member> selectedMember) {
-
-        //엔티티 조회
+    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Member> selectedMember) {
 
         //챌린지 생성
-        Room newRoom = GroupRoom.builder()
-                .name(name)
-                .period(new Period(period.getTotalDays()))
-                .category(category)
-                .type(RoomType.GROUP)
-                .passCount(passCount)
-                .build();
+        GroupRoom newRoom = new GroupRoom(name, new Period(period.getTotalDays()), category, RoomType.GROUP, passCount, reward);
+
 
         //챌린지 저장
-        roomRepository.save(newRoom);
+        groupRoomRepository.save(newRoom);
 
-        //챌린지 멤버 생성
+        //챌린지 멤버 생성&저장
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
         roomMemberRepository.save(roomMember);
         for (Member members : selectedMember) {  //그 외 멤버
@@ -115,11 +98,8 @@ public class RoomService {
             roomMemberRepository.save(result);
         }
 
-        //챌린지 멤버 저장
-
         return newRoom;
     }
-
 
     /**
      * 챌린지 삭제
@@ -200,7 +180,7 @@ public class RoomService {
             }
         }
 
-        List<Room> singleRooms = member.getSingleRooms();
+        List<SingleRoom> singleRooms = member.getSingleRooms();
         for (Room singleRoom : singleRooms) {
             if (singleRoom.getStatus() == RoomStatus.END) {
                 finishedRoom.add(singleRoom);

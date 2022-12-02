@@ -6,7 +6,9 @@ import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -37,6 +39,10 @@ public class RoomServiceTest {
 
     @Autowired EntityManager em;
     @Autowired RoomRepository roomRepository;
+    @Autowired SingleRoomRepository singleRoomRepository;
+    @Autowired GroupRoomRepository groupRoomRepository;
+
+
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
     @Autowired RoomService roomService;
@@ -44,14 +50,8 @@ public class RoomServiceTest {
     @Test
     public void 개인_챌린지_builder() throws Exception {
         //given
-        Room room = SingleRoom.builder()
-                .name("기상")
-                .period(new Period(30L))
-                .category(Category.ROUTINE)
-                .type(RoomType.SINGLE)
-                .passCount(2)
-                .reward("유럽여행")
-                .build();
+        SingleRoom room = new SingleRoom("기상", period, Category.ROUTINE,2, "");
+
 
         em.persist(room);
 
@@ -65,35 +65,30 @@ public class RoomServiceTest {
         assertThat(room.getPeriod()).isEqualTo(findRoom.get().getPeriod());
     }
 
-    @Test
-    public void createRoom_메서드_테스트() throws Exception {
-        //given
-
-        //when
-
-        //then
-    }
 
     @Test
     @Transactional
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
 
         em.persist(member);
 
         //when
-        Room room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2);
+        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        em.flush();
+        em.clear();
 
         //then
-        Optional<Room> findSingleRoom = roomRepository.findById(room.getNumber());
-        assertThat(findSingleRoom.get()).isEqualTo(room);
+        Optional<SingleRoom> findSingleRoom = singleRoomRepository.findById(room.getNumber());
+        assertThat(findSingleRoom.get().getNumber()).isEqualTo(room.getNumber());
+
 
         //멤버에서 singleRooms 조회
-        List<Room> singleRooms = member.getSingleRooms();
+        List<SingleRoom> singleRooms = member.getSingleRooms();
         for (Room singleRoom : singleRooms) {
-            assertThat(singleRoom).isEqualTo(room);
+            assertThat(singleRoom.getName()).isEqualTo(room.getName());
             System.out.println("singleRoom = " + singleRoom.getName());
         }
     }
@@ -114,12 +109,14 @@ public class RoomServiceTest {
         memberRepository.save(member3);
 
         //when
-        Room groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0, selectedMembers);
+        GroupRoom groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        em.flush();
+        em.clear();
 
         //then
         RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom);
         System.out.println("findRoomByMember = " + findRoomByMember);
-        assertThat(groupRoom).isEqualTo(findRoomByMember.getRoom());
+        assertThat(groupRoom.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
 
         //멤버에서 roomMemberList 조회
         List<RoomMember> roomMemberList = member2.getRoomMemberList();
@@ -131,9 +128,11 @@ public class RoomServiceTest {
     @Test
     public void 챌린지_삭제() throws Exception {
         //given
-        Room room = new Room("기상", period, Category.ROUTINE, RoomType.GROUP, 2, "");
+        SingleRoom room = new SingleRoom("기상", period, Category.ROUTINE, 2, "");
 
         em.persist(room);
+        em.flush();
+        em.clear();
 
         //when
         roomRepository.deleteById(room.getNumber());
@@ -141,6 +140,43 @@ public class RoomServiceTest {
         //then
         long count = roomRepository.count();
         assertThat(count).isEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = true)
+    public void 완료_챌린지_리스트() throws Exception {
+        //given
+        SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");
+        SingleRoom singleRoom2 = SingleRoom.createRoom("공부", period, Category.ETC, RoomType.SINGLE, RoomStatus.END, 0, "");
+        SingleRoom singleRoom3 = SingleRoom.createRoom("청소", period, Category.EXERCISE, RoomType.SINGLE, RoomStatus.CONTINUE, 10, "꿀잠");
+        GroupRoom groupRoom = GroupRoom.createRoom("명상", period, Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행");
+        singleRoomRepository.save(singleRoom1);
+        singleRoomRepository.save(singleRoom2);
+        singleRoomRepository.save(singleRoom3);
+        groupRoomRepository.save(groupRoom);
+
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        memberRepository.save(member);
+
+        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
+        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member);
+        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member);
+        singleRoomRepository.save(createSingleRoom1);
+        singleRoomRepository.save(createSingleRoom2);
+        singleRoomRepository.save(createSingleRoom3);
+
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom);
+        roomMemberRepository.save(roomMember);
+
+        em.flush();
+        em.clear();
+
+        //when
+        List<Room> finishedRooms = roomService.findFinishedRooms(member);
+
+        //then
+        assertThat(finishedRooms.size()).isEqualTo(3);
     }
 
     Period period = new Period(30L);

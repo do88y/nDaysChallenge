@@ -3,9 +3,11 @@ package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.RoomType;
 import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.dto.response.RoomResponseDto;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.security.SecurityUtil;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class RoomController {
 
     private final RoomService roomService;
+
 
     //챌린지 생성
     @PostMapping("/challenge/create")
@@ -31,21 +35,39 @@ public class RoomController {
 
         Room room = roomService.createRoom(memberAdapter.getMember(), roomRequestDTO);
 
-        RoomResponseDto savedRoom = RoomResponseDto.builder()
-                .name(room.getName())
-                .category(room.getCategory().name())
-                .reward(room.getReward())
-                .type(room.getType().name())
-                .status(room.getStatus().name())
-                .passCount(room.getPassCount())
-                .totalDays(room.getPeriod().getTotalDays())
-                .startDate(room.getPeriod().getStartDate())
-                .endDate(room.getPeriod().getEndDate())
-                .reward(room.getReward())
-                .groupMembers(roomRequestDTO.getGroupMembers())
-                .build();
+        if (roomRequestDTO.getType().equals(RoomType.SINGLE.name())) {
+            RoomResponseDto savedRoom = RoomResponseDto.builder()
+                    .name(room.getName())
+                    .category(room.getCategory().name())
+                    .reward(room.getReward())
+                    .type(room.getType().name())
+                    .status(room.getStatus().name())
+                    .passCount(room.getPassCount())
+                    .totalDays(room.getPeriod().getTotalDays())
+                    .startDate(room.getPeriod().getStartDate())
+                    .endDate(room.getPeriod().getEndDate())
+                    .reward(room.getReward())
+                    .build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+        }
+        if (roomRequestDTO.getType().equals(RoomType.GROUP.name())) {
+            RoomResponseDto savedRoom = RoomResponseDto.builder()
+                    .name(room.getName())
+                    .category(room.getCategory().name())
+                    .reward(room.getReward())
+                    .type(room.getType().name())
+                    .status(room.getStatus().name())
+                    .passCount(room.getPassCount())
+                    .totalDays(room.getPeriod().getTotalDays())
+                    .startDate(room.getPeriod().getStartDate())
+                    .endDate(room.getPeriod().getEndDate())
+                    .reward(room.getReward())
+                    .groupMembers(roomRequestDTO.getGroupMembers())
+                    .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+        }
+        return null;
     }
 
     //챌린지 삭제
@@ -59,7 +81,7 @@ public class RoomController {
     }
 
     //마이페이지 - 완료챌린지 전체 조회
-    @GetMapping("/user/endChallenge")
+    @GetMapping("/user/finishedChallenges")
     public ResponseEntity<?> findFinishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
         List<Room> findRooms = roomService.findFinishedRooms(memberAdapter.getMember());
@@ -80,15 +102,6 @@ public class RoomController {
             finishedRooms.add(finishedRoom);
         }
         return ResponseEntity.status(HttpStatus.OK).body(finishedRooms);
-    }
-
-    //
-    @GetMapping("/user/finished-challenges")
-    public ResponseEntity<?> viewFinishedChallenges(@AuthenticationPrincipal MemberAdapter memberAdapter) {
-        Member member = memberAdapter.getMember();
-
-
-        return ResponseEntity.ok(null);
     }
 
 }
