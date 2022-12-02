@@ -18,31 +18,23 @@ public class EmotionController { //감정 스티커 등록
 
     private final EmotionService emotionService;
 
-    @PostMapping("/feed/emotion") //감정 스티커 등록
+    //감정 스티커 등록 (프론트 unselected 시)
+    @PostMapping("/feed/emotion")
     public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
-        Emotion emotion = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
+        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
 
-        EmotionResponseDto savedEmotion = new EmotionResponseDto(emotionRequestDto.getDajimNumber(),
-                                                                    emotion.getMember().getNickname(),
-                                                                    emotion.getStickers().toString());
-
-        return ResponseEntity.ok().body(savedEmotion);
+        return ResponseEntity.ok().body(emotionResponseDto);
     }
 
+    //감정 스티커 변경/null (프론트 selected 시)
     @PutMapping("/feed/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
 
-        Emotion emotion = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
+        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
 
-        EmotionResponseDto updatedEmotion = EmotionResponseDto.builder()
-                .dajimNumber(emotion.getDajim().getNumber())
-                .memberNickname(emotion.getMember().getNickname())
-                .stickers(emotion.getStickers().toString())
-                .build();
-
-        return ResponseEntity.ok().body(updatedEmotion);
+        return ResponseEntity.ok().body(emotionResponseDto);
     }
 
 }
