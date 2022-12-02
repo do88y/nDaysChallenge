@@ -43,38 +43,30 @@ public class RelationshipController {
 
     //요청 리스트 //
     @PostMapping("/friends/request")
-    public ResponseEntity<?> viewRequestFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                                                     @RequestBody RelationshipRequestDTO relationshipRequestDTO) {
 
         Member user = memberAdapter.getMember();
         String friendId = relationshipRequestDTO.getId();
         Member friend = memberRepository.findById(friendId).orElse(null);
         //relationship생성한걸 받은부분//
-        Relationship relationship = relationshipService.addRelationship(user,friend,relationshipRequestDTO);
-        RelationshipResponseDTO savedFriendsList = RelationshipResponseDTO
-                .builder()
-                .id(relationship.getFriend().getId())
-                .nickname(relationship.getFriend().getNickname())
-                .image(relationship.getFriend().getImage())
-                .requestedDate(relationship.getRequestedDate())
-                .acceptedDate(relationship.getAcceptedDate())
-                .relationshipStatus(String.valueOf(RelationshipStatus.REQUEST))
-                .build();
 
-        return ResponseEntity.ok().body(savedFriendsList);
+
+        RelationshipResponseDTO responseDTO = relationshipService.updateFriendStatus(user,friend, relationshipRequestDTO);
+
+        return ResponseEntity.ok().body(responseDTO);
     }
 
 
     //친구 수락 리스트//
-    @PostMapping("/friend/accept")
+    @PostMapping("/friends/accept")
     public ResponseEntity<?> acceptFriendStatus(@RequestBody RelationshipRequestDTO relationshipRequestDTO) {
 
         AcceptDTO savedAcceptFriendsList = AcceptDTO.builder()
                 .id(relationshipRequestDTO.getId())
                 .nickname(relationshipRequestDTO.getNickname())
                 .image(relationshipRequestDTO.getImage())
-                .requestedDate(relationshipRequestDTO.getRequestedDate())
-                .acceptedDate(relationshipRequestDTO.getAcceptedDate())
+                .acceptedDate(LocalDateTime.now())
                 .relationshipStatus(relationshipRequestDTO.getRelationshipStatus())
                 .build();
 
@@ -89,8 +81,6 @@ public class RelationshipController {
                 .id(relationshipRequestDTO.getId())
                 .nickname(relationshipRequestDTO.getNickname())
                 .image(relationshipRequestDTO.getImage())
-                .requestedDate(relationshipRequestDTO.getRequestedDate())
-                .acceptedDate(relationshipRequestDTO.getAcceptedDate())
                 .relationshipStatus(relationshipRequestDTO.getRelationshipStatus())
                 .build();
 
