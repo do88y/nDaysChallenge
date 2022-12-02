@@ -11,7 +11,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
 
     private final long MAX_AGE_SECS = 3600;
 
-    //React 와의 SOP 문제 해결//
+    //React 와의 SOP 문제 해결
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
