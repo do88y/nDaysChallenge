@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.controller;
+package challenge.nDaysChallenge.Room;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;

@@ -84,7 +84,7 @@ public class RoomService {
     public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Member> selectedMember) {
 
         //챌린지 생성
-        GroupRoom newRoom = new GroupRoom(name, new Period(period.getTotalDays()), category, RoomType.GROUP, passCount, reward);
+        GroupRoom newRoom = new GroupRoom(name, new Period(period.getTotalDays()), category, passCount, reward);
 
 
         //챌린지 저장

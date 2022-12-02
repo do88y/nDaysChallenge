@@ -46,7 +46,7 @@ public class SingleRoom extends Room {
         return this;
     }
 
-    //==빌더패턴 생성자==//
+    //==생성자==//
     public SingleRoom(String name, Period period, Category category, int passCount, String reward) {
         this.name = name;
         this.period = period;

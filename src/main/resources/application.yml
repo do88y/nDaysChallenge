@@ -3,3 +3,4 @@ spring:
     include: oauth, mysql
   main:
     allow-bean-definition-overriding: true
+

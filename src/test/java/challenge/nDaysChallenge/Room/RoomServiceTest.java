@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.service;
+package challenge.nDaysChallenge.Room;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
+import challenge.nDaysChallenge.service.RoomService;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -45,7 +46,8 @@ public class RoomServiceTest {
 
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
-    @Autowired RoomService roomService;
+    @Autowired
+    RoomService roomService;
 
     @Test
     public void 개인_챌린지_builder() throws Exception {

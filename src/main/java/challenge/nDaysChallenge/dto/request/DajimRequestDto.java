@@ -3,9 +3,10 @@ package challenge.nDaysChallenge.dto.request;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class DajimRequestDto {
 
     private Long dajimNumber;
@@ -14,4 +15,9 @@ public class DajimRequestDto {
 
     private String open;
 
+    public DajimRequestDto(Long dajimNumber, String content, String open) {
+        this.dajimNumber = dajimNumber;
+        this.content = content;
+        this.open = open;
+    }
 }
