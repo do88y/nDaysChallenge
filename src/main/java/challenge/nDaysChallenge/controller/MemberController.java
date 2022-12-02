@@ -37,7 +37,7 @@ public class MemberController { //마이페이지 전용
     }
 
     //회원 탈퇴
-    @PostMapping("/withdrawal")
+    @PostMapping("/user/withdrawal")
     public ResponseEntity<?> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         String nickname = memberService.deleteMember(memberAdapter.getMember());
 
