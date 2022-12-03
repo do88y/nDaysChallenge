@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.controller;
 
 
 import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberInfoResponseDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

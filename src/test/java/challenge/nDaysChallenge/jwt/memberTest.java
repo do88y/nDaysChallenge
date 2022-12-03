@@ -113,25 +113,13 @@ public class memberTest {
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸
-        Room room1 = SingleRoom.builder()
-                .name("SingleRoom")
-                .period(new Period(10L))
-                .category(Category.ROUTINE)
-                .type(RoomType.SINGLE)
-                .passCount(2)
-                .build();
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
         roomRepository.save(room1);
-        SingleRoom singleRoom1 = SingleRoom.addRoom(room1, member1);
+        SingleRoom singleRoom1 = room1.addRoom(room1, member1);
         roomRepository.save(singleRoom1);
 
         //그룹룸
-        Room room2 = GroupRoom.builder()
-                .name("GroupRoom")
-                .period(new Period(100L))
-                .category(Category.ETC)
-                .type(RoomType.GROUP)
-                .passCount(3)
-                .build();
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
         roomRepository.save(room2);
         RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
         roomMemberRepository.save(roomMember1);

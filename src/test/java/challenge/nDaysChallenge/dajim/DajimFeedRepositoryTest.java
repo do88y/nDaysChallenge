@@ -90,16 +90,10 @@ public class DajimFeedRepositoryTest {
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
-        Room room1 = SingleRoom.builder()
-                .name("SingleRoom")
-                .period(new Period(10L))
-                .category(Category.ROUTINE)
-                .type(RoomType.SINGLE)
-                .passCount(2)
-                .build();
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
         roomRepository.save(room1);
 
-        SingleRoom singleRoom1 = SingleRoom.addRoom(room1, member1);
+        SingleRoom singleRoom1 = room1.addRoom(room1, member1);
         roomRepository.save(singleRoom1);
 
         //싱글룸 다짐
@@ -111,13 +105,7 @@ public class DajimFeedRepositoryTest {
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
-        Room room2 = GroupRoom.builder()
-                .name("GroupRoom")
-                .period(new Period(100L))
-                .category(Category.ETC)
-                .type(RoomType.GROUP)
-                .passCount(3)
-                .build();
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
         roomRepository.save(room2);
         RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
         RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2);
@@ -163,7 +151,7 @@ public class DajimFeedRepositoryTest {
 
         //when
         //멤버2 싱글룸 불러오기
-        List<Room> singleRooms = member1.getSingleRooms();
+        List<SingleRoom> singleRooms = member1.getSingleRooms();
         List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());
@@ -202,12 +190,9 @@ public class DajimFeedRepositoryTest {
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
-        Room room1 = Room.builder()
-                .name("newRoom")
-                .period(new Period(100L))
-                .category(Category.ROUTINE)
-                .passCount(5)
-                .build();
+
+        SingleRoom room1 = new SingleRoom("newRoom", new Period(10L), Category.ROUTINE, 2, "");
+
         Dajim dajim = dajimRepository.save(Dajim.builder()
             .room(room1)
             .member(member1)
@@ -245,12 +230,7 @@ public class DajimFeedRepositoryTest {
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
-        Room room1 = Room.builder()
-                .name("newRoom")
-                .period(new Period(100L))
-                .category(Category.ROUTINE)
-                .passCount(5)
-                .build();
+        SingleRoom room1 = new SingleRoom("newRoom", new Period(100L), Category.ROUTINE, 5, "");
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
                 .member(member1)
