@@ -44,22 +44,4 @@ public class Room {
     private int usedPassCount;
     private int successCount;
 
-
-
-
-/*
-    //==빌더패턴 생성자==//
-    @Builder
-    public Room(String name, Period period, Category category, RoomType type, int passCount, String reward) {
-        this.name = name;
-        this.period = period;
-        this.category = category;
-        this.type = type;
-        this.status = RoomStatus.CONTINUE;
-        this.passCount = passCount;
-        this.reward = reward;
-    }
-*/
-
-
 }

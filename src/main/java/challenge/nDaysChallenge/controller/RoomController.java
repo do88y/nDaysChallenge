@@ -46,7 +46,6 @@ public class RoomController {
                     .totalDays(room.getPeriod().getTotalDays())
                     .startDate(room.getPeriod().getStartDate())
                     .endDate(room.getPeriod().getEndDate())
-                    .reward(room.getReward())
                     .build();
             return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
         }
@@ -61,7 +60,6 @@ public class RoomController {
                     .totalDays(room.getPeriod().getTotalDays())
                     .startDate(room.getPeriod().getStartDate())
                     .endDate(room.getPeriod().getEndDate())
-                    .reward(room.getReward())
                     .groupMembers(roomRequestDTO.getGroupMembers())
                     .build();
 

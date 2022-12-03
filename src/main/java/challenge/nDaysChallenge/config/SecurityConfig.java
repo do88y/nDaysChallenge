@@ -50,13 +50,12 @@ public class SecurityConfig {
             .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 에러 핸들링
             .accessDeniedHandler(customAccessDeniedHandler) //인가 에러 핸들링
 
-
-//            .and()
-//            .formLogin()
-//            .loginPage("/auth/login")
-//            .usernameParameter("id") ////로그인 아이디의 name 속성값
-//            .passwordParameter("pw")
-//            .defaultSuccessUrl("/")
+                .and()
+            .formLogin()
+            .loginPage("/auth/login")
+            .usernameParameter("id") ////로그인 아이디의 name 속성값
+            .passwordParameter("pw")
+            .defaultSuccessUrl("/")
 
             .and()
             .headers()
