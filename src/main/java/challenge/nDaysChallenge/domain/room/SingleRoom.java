@@ -28,11 +28,11 @@ public class SingleRoom extends Room {
     }
 
     //setter
-    public static void addMember(Member member) {
-        SingleRoom.member = member;
+    public void addMember(Member member) {
+        this.member = member;
     }
 
-    //==연관관계 메서드==//  SingleRoom의 member에 memberNumber 넣으면서 singleRooms에도 memberNumber 세팅
+    //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅
     public void joinRoom(Room room) {
         this.room = room;
         member.getSingleRooms().add(this);

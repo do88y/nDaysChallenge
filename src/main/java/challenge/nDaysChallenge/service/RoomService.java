@@ -9,7 +9,6 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,7 @@ import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor  //final 붙은 필드로만 생성자를 만들어 줌
+@RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -27,32 +26,21 @@ public class RoomService {
     private final SingleRoomRepository singleRoomRepository;
 
 
-    //단체 챌린지 조회
-    public List<GroupRoom> findAllGroupRoomUsingFetchJoin() {
-        return groupRoomRepository.findAllWithRoomMemberUsingFetchJoin();
-    }
-
-    //특정 챌린지 조회
-    public Optional<Room> findById(Long number) {
-        return roomRepository.findById(number);
-    }
-
-
+    //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
-        System.out.println("dto.getType() = " + dto.getType());
-
         if (dto.getType().equals("SINGLE")) {
-            Room singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
+            SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
+
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
-            Set<Member> groupMembers = new HashSet<>();
+            Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
             for (Long groupMemberNum : groupMemberNums) {
                 groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
+            GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
 
-            Room groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), "", groupMembers);
             return groupRoom;
         }
         return null;
@@ -72,7 +60,6 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         newRoom.addRoom(newRoom, member);
-        memberRepository.save(member);
 
         return newRoom;
     }
@@ -172,18 +159,21 @@ public class RoomService {
 
         List<Room> finishedRoom = new ArrayList<>();
 
-        List<RoomMember> roomMemberList = member.getRoomMemberList();
-        for (RoomMember roomMember : roomMemberList) {
-            Room groupRoom = roomMember.getRoom();
-            if (groupRoom.getStatus() == RoomStatus.END) {
-                finishedRoom.add(groupRoom);
+        if (member.getRoomMemberList() != null) {
+            List<RoomMember> roomMemberList = member.getRoomMemberList();
+            for (RoomMember roomMember : roomMemberList) {
+                Room groupRoom = roomMember.getRoom();
+                if (groupRoom.getStatus() == RoomStatus.END) {
+                    finishedRoom.add(groupRoom);
+                }
             }
         }
-
-        List<SingleRoom> singleRooms = member.getSingleRooms();
-        for (Room singleRoom : singleRooms) {
-            if (singleRoom.getStatus() == RoomStatus.END) {
-                finishedRoom.add(singleRoom);
+        if (member.getSingleRooms() != null) {
+            List<SingleRoom> singleRooms = member.getSingleRooms();
+            for (Room singleRoom : singleRooms) {
+                if (singleRoom.getStatus() == RoomStatus.END) {
+                    finishedRoom.add(singleRoom);
+                }
             }
         }
 
