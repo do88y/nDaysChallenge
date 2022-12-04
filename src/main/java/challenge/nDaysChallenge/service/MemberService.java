@@ -25,11 +25,6 @@ public class MemberService {
 
     //회원정보 수정
     public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
-        //추후에 따로 빼기
-        if (memberRepository.existsByNickname(memberEditRequestDto.getNickname())) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
-        }
-
         Member updatedMember = member.update(memberEditRequestDto.getNickname(),
                 memberEditRequestDto.getPw(),
                 memberEditRequestDto.getImage());

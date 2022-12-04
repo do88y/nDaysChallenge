@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -48,11 +49,10 @@ public class memberTest {
     @Autowired
     EmotionRepository emotionRepository;
 
-    @DisplayName("멤버 회원가입")
-    @Test
+    @BeforeTransaction
     @Transactional
     @Rollback(value = false)
-    void 회원가입(){
+    public void 회원가입(){
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
@@ -63,11 +63,6 @@ public class memberTest {
     @Transactional
     @Rollback(value = false)
     void 닉네임_중복확인(){
-        //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        memberRepository.save(member);
-
         //닉네임 중복 확인
         boolean exists = memberRepository.existsByNickname("aaa");
         boolean exists2 = memberRepository.existsByNickname("new");
@@ -82,12 +77,10 @@ public class memberTest {
     @Rollback(value = false)
     void 닉네임_변경(){
         //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        memberRepository.save(member);
+        Optional<Member> member = memberRepository.findById("abc@naver.com");
 
         //닉네임 변경
-        Member updatedMember = member.update("새 닉네임","123",1);
+        Member updatedMember = member.get().update("새 닉네임","123",1);
 
         assertThat(updatedMember.getNickname()).isEqualTo("새 닉네임");
         assertThat(updatedMember.getPw()).isEqualTo("123");

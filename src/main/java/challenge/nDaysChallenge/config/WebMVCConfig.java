@@ -19,7 +19,8 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .allowedMethods("OPTIONS", "GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(false) //쿠키 받을지
-                .maxAge(MAX_AGE_SECS);
+                .maxAge(MAX_AGE_SECS)
+                .exposedHeaders("userToken");
     }
 
 }

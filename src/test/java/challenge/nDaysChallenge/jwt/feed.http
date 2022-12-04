@@ -1,2 +1,5 @@
 GET http://localhost:8080/feed
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmNAbmF2ZXIuY29tIiwiYXV0aCI6IlVTRVIiLCJleHAiOjE2Njk5ODEzMTR9.OKIBAVFs3PlxYalrD5zjIlfaJ7rVfxrBzIw3YeZfZIg
+Content-Type: application/json
+
+{}

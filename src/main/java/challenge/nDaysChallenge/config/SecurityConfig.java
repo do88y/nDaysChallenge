@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -50,13 +50,16 @@ public class SecurityConfig {
             .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 에러 핸들링
             .accessDeniedHandler(customAccessDeniedHandler) //인가 에러 핸들링
 
-
 //            .and()
 //            .formLogin()
 //            .loginPage("/auth/login")
 //            .usernameParameter("id") ////로그인 아이디의 name 속성값
 //            .passwordParameter("pw")
 //            .defaultSuccessUrl("/")
+
+            .and()
+            .logout()
+            .logoutSuccessUrl("/")
 
             .and()
             .headers()
@@ -78,7 +81,7 @@ public class SecurityConfig {
 
     }
 
-//    CORS 허용
+////    CORS 허용
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource(){
 //        CorsConfiguration configuration = new CorsConfiguration();

@@ -27,7 +27,7 @@ public class MemberController { //마이페이지 전용
     }
 
     //회원정보 수정
-    @PutMapping("/edit")
+    @PutMapping("/user/edit")
     public ResponseEntity<?> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
                                             @AuthenticationPrincipal MemberAdapter memberAdapter) {
         MemberInfoResponseDto memberInfoResponseDto =
