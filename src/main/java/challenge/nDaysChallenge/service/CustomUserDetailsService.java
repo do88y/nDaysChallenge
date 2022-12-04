@@ -20,7 +20,7 @@ import java.util.Collections;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    
+
     private final MemberRepository memberRepository;
 
     //db 통해 찾은 User - Authentication 간 비밀번호 비교, 검증

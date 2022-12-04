@@ -4,10 +4,7 @@ import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
-import challenge.nDaysChallenge.domain.room.Category;
-import challenge.nDaysChallenge.domain.room.Period;
-import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.RoomType;
+import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +26,7 @@ class DajimRepositoryTest {
     @Test
     void saveDajim(){
         //given
-        Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4,"보상");
+        GroupRoom room = new GroupRoom("newRoom",new Period(100L), Category.ROUTINE,4,"보상");
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
@@ -52,7 +49,7 @@ class DajimRepositoryTest {
     @Test
     void modifyDajim(){
         //given
-        Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4,"보상");
+        GroupRoom room = new GroupRoom("newRoom",new Period(100L), Category.ROUTINE,4,"보상");
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
@@ -78,7 +75,7 @@ class DajimRepositoryTest {
         //given
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
         Member member2 = new Member("user2@naver.com","12345","userN2",1,4, Authority.ROLE_USER);
-        Room room = new Room("newRoom",new Period(100L), Category.ROUTINE, RoomType.GROUP,4, "");
+        GroupRoom room = new GroupRoom("newRoom",new Period(100L), Category.ROUTINE,4, "");
 
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
 

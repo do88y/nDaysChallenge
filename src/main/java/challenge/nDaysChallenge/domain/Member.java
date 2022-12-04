@@ -41,7 +41,7 @@ public class Member {
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "number")
-    private final List<Room> singleRooms = new ArrayList<>();
+    private final List<SingleRoom> singleRooms = new ArrayList<>();
 
     @Builder
     public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {

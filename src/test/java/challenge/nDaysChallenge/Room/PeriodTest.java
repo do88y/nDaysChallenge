@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.Room;
 
 import challenge.nDaysChallenge.domain.room.Period;
 import org.junit.Test;

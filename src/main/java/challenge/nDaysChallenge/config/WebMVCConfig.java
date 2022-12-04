@@ -21,6 +21,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .allowCredentials(false) //쿠키 받을지
                 .maxAge(MAX_AGE_SECS)
                 .exposedHeaders("userToken");
+
     }
 
 }
