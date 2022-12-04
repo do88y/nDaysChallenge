@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomResponseDto {
 
     private Long number;
@@ -50,6 +50,7 @@ public class RoomResponseDto {
         this.category = category;
         this.reward = reward;
         this.type = type;
+        this.status = status;
         this.passCount = passCount;
         this.totalDays = totalDays;
         this.startDate = startDate;

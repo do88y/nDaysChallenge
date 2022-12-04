@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -48,11 +49,10 @@ public class memberTest {
     @Autowired
     EmotionRepository emotionRepository;
 
-    @DisplayName("멤버 회원가입")
-    @Test
+    @BeforeTransaction
     @Transactional
     @Rollback(value = false)
-    void 회원가입(){
+    public void 회원가입(){
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
@@ -63,11 +63,6 @@ public class memberTest {
     @Transactional
     @Rollback(value = false)
     void 닉네임_중복확인(){
-        //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        memberRepository.save(member);
-
         //닉네임 중복 확인
         boolean exists = memberRepository.existsByNickname("aaa");
         boolean exists2 = memberRepository.existsByNickname("new");
@@ -82,12 +77,10 @@ public class memberTest {
     @Rollback(value = false)
     void 닉네임_변경(){
         //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        memberRepository.save(member);
+        Optional<Member> member = memberRepository.findById("abc@naver.com");
 
         //닉네임 변경
-        Member updatedMember = member.update("새 닉네임","123",1);
+        Member updatedMember = member.get().update("새 닉네임","123",1);
 
         assertThat(updatedMember.getNickname()).isEqualTo("새 닉네임");
         assertThat(updatedMember.getPw()).isEqualTo("123");
@@ -113,25 +106,13 @@ public class memberTest {
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸
-        Room room1 = SingleRoom.builder()
-                .name("SingleRoom")
-                .period(new Period(10L))
-                .category(Category.ROUTINE)
-                .type(RoomType.SINGLE)
-                .passCount(2)
-                .build();
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
         roomRepository.save(room1);
-        SingleRoom singleRoom1 = SingleRoom.addRoom(room1, member1);
+        SingleRoom singleRoom1 = room1.addRoom(room1, member1);
         roomRepository.save(singleRoom1);
 
         //그룹룸
-        Room room2 = GroupRoom.builder()
-                .name("GroupRoom")
-                .period(new Period(100L))
-                .category(Category.ETC)
-                .type(RoomType.GROUP)
-                .passCount(3)
-                .build();
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
         roomRepository.save(room2);
         RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
         roomMemberRepository.save(roomMember1);

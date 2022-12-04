@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 public class TokenDto {
 
-    private String type; //bearer
+    private String type; //Bearer
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpireTime;
