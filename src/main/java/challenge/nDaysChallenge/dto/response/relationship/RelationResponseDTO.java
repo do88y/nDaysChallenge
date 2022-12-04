@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class AcceptResponseDTO {
+public class RelationResponseDTO {
     private String id;                   //친구아이디
     private String nickname;     //친구 닉네임
 
@@ -26,7 +26,7 @@ public class AcceptResponseDTO {
 
 
     @Builder
-    public AcceptResponseDTO(String id, String nickname, int image, LocalDateTime acceptedDate, String relationshipStatus, List<String >friendsList){
+    public RelationResponseDTO(String id, String nickname, int image, LocalDateTime acceptedDate, String relationshipStatus, List<String >friendsList){
         this.id=id;
         this.nickname=nickname;
         this.image=image;

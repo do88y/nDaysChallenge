@@ -37,10 +37,6 @@ public  class Relationship {
     private LocalDateTime acceptedDate;
 
 
-
-
-
-
     //연관관계//
     public void addUser(Member user){
         this.user=user;
@@ -52,8 +48,6 @@ public  class Relationship {
 
 
 
-
-
     //상태 업뎃 메서드//
     public Relationship updateStatus(RelationshipStatus status) {
         this.status=status;
@@ -61,9 +55,7 @@ public  class Relationship {
     }
 
 
-
-
-    //relationship 에 user 와 friend 의
+    //relationship 에 user 와 friend 의 기본 베이스 정보//
     public static Relationship readyCreateRelation( Member user, Member friend){
         Relationship relationship = new Relationship();
         relationship.addUser(user);

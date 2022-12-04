@@ -4,7 +4,8 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
-import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AfterDeleteResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.RelationResponseDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +25,28 @@ public class RelationshipService {
     private final MemberRepository memberRepository;
 
 
-    //친구관계 저장 + 서로의 친구리스트에 들어가게//
-    public AcceptResponseDTO saveAcceptRelation (Member user, Member friend, ApplyRequestDTO applyDTO){
-        //상태가 REQUEST 에서 ACCEPT 가 되면 서로의 친구리스트에 들어가게//
-            //서로를 일단 찾아//
-        Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);
+    //relationship 생성//
+    public void saveRelationship(Member user,Member friend){
+
+        Relationship userRelationship =Relationship.readyCreateRelation(user,friend);
+        Relationship friendRelationship =Relationship.readyCreateRelation(friend,user);
+        relationshipRepository.save(userRelationship);
+        relationshipRepository.save(friendRelationship);
+    }
+
+
+
+    public RelationResponseDTO acceptRelationship (Member user, Member friend, ApplyRequestDTO applyDTO){
+    //수락 버튼을 눌렀을 때 시행되는 메서드//
+        Relationship findUser =relationshipRepository.findByUserAndFriend(user,friend);//유저 조회
         Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
+        findUser.updateStatus(RelationshipStatus.ACCEPT);
+        findFriend.updateStatus(RelationshipStatus.ACCEPT);
+        user.addFriendList(findFriend);//친구 수락되면 일단 나도 수락상태가 되니까 친구리스트로 들어감
+        friend.addFriendList(findUser);
 
-        if(findFriend==findUser){
-            user.addFriendList(findFriend);
-            friend.addFriendList(findUser);
-        }
-
-          //AcceptResponse dto 로 보내줄 값(친구의 정보) 들의 생성자//
-        AcceptResponseDTO acceptFollowingDTO = AcceptResponseDTO.builder()
+        //response dto로 보내줄 값 생성자//
+        RelationResponseDTO acceptFollowerDTO = RelationResponseDTO.builder()
                 .id(friend.getId())
                 .nickname(friend.getNickname())
                 .image(friend.getImage())
@@ -45,14 +55,33 @@ public class RelationshipService {
                 .friendsList(applyDTO.getFriendsList())
                 .build();
 
-        //친구관계 맺고 relationshipRepository 에 save 하기//
-        Relationship userRelationship = Relationship.readyCreateRelation(user, friend);
-        Relationship friendRelationship = Relationship.readyCreateRelation(friend,user);
-        relationshipRepository.save(userRelationship);
-        relationshipRepository.save(friendRelationship);
+        return acceptFollowerDTO;
+//리턴값이 뷰에 전해져야하니까 responseDTO의 빌더로 값이 가서 친구의 정보로 들어가게
+}
 
-        return acceptFollowingDTO;
-    }
+public AfterDeleteResponseDTO deleteEachRelation (Member user, Member friend){
+        //거절을 눌렀을 때 시행되는 메서드//
+    Relationship findUser =relationshipRepository.findByUserAndFriend(user,friend);
+    Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
+    //서로를 찾기//
+
+    relationshipRepository.delete(findUser);
+    relationshipRepository.delete(findFriend);
+
+    //user의 현재 친구리스트(요청,수락) 찾기//
+    List<Relationship> byUser = relationshipRepository.findByUser(user);
+
+    //생성//
+    AfterDeleteResponseDTO afterDeleteResponseDTO = new AfterDeleteResponseDTO(byUser);
+
+
+    return afterDeleteResponseDTO;
+
+
+
+
+}
+
 
 
 

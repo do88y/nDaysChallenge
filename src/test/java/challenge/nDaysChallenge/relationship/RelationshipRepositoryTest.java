@@ -4,18 +4,14 @@ import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
-import challenge.nDaysChallenge.dto.request.relationship.AcceptRequestDTO;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
-import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
-import challenge.nDaysChallenge.dto.response.relationship.DeleteResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.RelationResponseDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
@@ -43,7 +39,7 @@ class RelationshipRepositoryTest {
     PasswordEncoder passwordEncoder;
 
 
-    @DisplayName("관계 저장, 친구 관계 설정")
+    @DisplayName("관계 저장, 친구 관계 저장")
     @Test
     @Transactional
     @Rollback(value = false)
@@ -54,26 +50,37 @@ class RelationshipRepositoryTest {
         Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER);
         List <String> friendList = new ArrayList<>();
 
+
         //중복이니까 나중에 수정해야해//
         ApplyRequestDTO dto1 =new ApplyRequestDTO("dbf@naver.com","친구1",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
         ApplyRequestDTO dto2 =new ApplyRequestDTO("ery@naver.com","친구2",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
-        memberRepository.save(user);  //나
+        memberRepository.save(user);         //나
         memberRepository.save(friend);      //친구1
-        memberRepository.save(friend2);   //친구2
+        memberRepository.save(friend2);    //친구2
 
 
-        relationshipService.saveAcceptRelation(user, friend, dto1);
+        relationshipService.saveRelationship(user, friend);
+        relationshipService.saveRelationship(user,friend2);
+
+        //when
+
+        //친구 신청 수락 //담아==단축키(옵+커+v)//
+        RelationResponseDTO friendInfo = relationshipService.acceptRelationship (user, friend,dto1);
 
 
-            //when
-        //수락 //담아==단축키(옵+커+v)//
-        AcceptResponseDTO friendInfo = relationshipService.saveAcceptRelation(user, friend,dto1);
+        //confirmFriendList 불러오기//
+        List<Relationship> confirmedFriendsList = user.getConfirmedFriendsList();
+        //향상된 for 문 each for 문//
+        for (Relationship confirmList : confirmedFriendsList) {
+            System.out.println("confirmedFriendsList. = " + confirmList.getUser().getNickname());
+        }
+
+
 
         //then (넣고 들어온 정보가 같은지 확인을 해줘야해)
         assertThat(friendInfo.getId()).isEqualTo(dto1.getId());
-
-
-
+        List<Relationship> relationshipByUserAndStatus = relationshipRepository.findRelationshipByUserAndStatus(user, RelationshipStatus.ACCEPT);
+        assertThat(user.getConfirmedFriendsList().size()).isEqualTo(relationshipByUserAndStatus.size());
 
     }
 }

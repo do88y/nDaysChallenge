@@ -37,7 +37,7 @@ public class Member {
 
     //내가 수락한 친구들만 리스트에 들어가게//
     @OneToMany(mappedBy = "number")
-    private  List<Relationship> friendsList = new ArrayList<>();
+    private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
 
 
@@ -68,9 +68,15 @@ public class Member {
     }
 
 
+    //친구 리스트에 추가 메서드//
     public void addFriendList (Relationship member){
-        this.friendsList.add(member);
+        this.confirmedFriendsList.add(member);
     }
+
+
+
+
+
 
 
 
