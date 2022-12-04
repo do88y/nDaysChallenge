@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,29 +22,54 @@ public class SingleRoom extends Room {
     private static Member member;
 
 
-    //setter
-    public static void addMember(Member member) {
-        SingleRoom.member = member;
-    }
-
     //getter
     public static Member giveMember() {
         return member;
     }
 
+    //setter
+    public static void addMember(Member member) {
+        SingleRoom.member = member;
+    }
+
     //==연관관계 메서드==//  SingleRoom의 member에 memberNumber 넣으면서 singleRooms에도 memberNumber 세팅
-    public void joinRoom(Room roomNumber) {
+    public void joinRoom(Room room) {
         this.room = room;
         member.getSingleRooms().add(this);
     }
 
     //==생성 메서드==//
-    public static SingleRoom addRoom(Room room, Member member) {
-        SingleRoom singleRoom = new SingleRoom();
-        singleRoom.addMember(member);
-        singleRoom.joinRoom(room);
+    public SingleRoom addRoom(Room room, Member member) {
+        this.addMember(member);
+        this.joinRoom(room);
 
-        return singleRoom;
+        return this;
+    }
+
+    //==생성자==//
+    public SingleRoom(String name, Period period, Category category, int passCount, String reward) {
+        this.name = name;
+        this.period = period;
+        this.category = category;
+        this.type = RoomType.SINGLE;
+        this.status = RoomStatus.CONTINUE;
+        this.passCount = passCount;
+        this.reward = reward;
+    }
+
+
+    //==생성 메서드==// 챌린지 상태 테스트용
+    public static SingleRoom createRoom(String name, Period period, Category category, RoomType type, RoomStatus status, int passCount, String reward) {
+        SingleRoom room = new SingleRoom();
+        room.name = name;
+        room.period = period;
+        room.category = category;
+        room.type = type;
+        room.status = status;
+        room.passCount = passCount;
+        room.reward = reward;
+
+        return room;
     }
 
 }
