@@ -22,37 +22,21 @@ public class RelationshipService {
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
-<<<<<<< HEAD
 
-    //relationship 엔티티에 값을 넣는 메서드//
-//    public static void friendRequest(Member user, Member friend){
-//        //빌더를 통해 생성자를 만들기//
-//        Relationship member = Relationship.builder()
-//                .userNumber(user)
-//                .friendNumber(friend)
-//                .build();
-//
-//    }
+    //친구관계 저장 + 서로의 친구리스트에 들어가게//
+    public AcceptResponseDTO saveAcceptRelation (Member user, Member friend, ApplyRequestDTO applyDTO){
+        //상태가 REQUEST 에서 ACCEPT 가 되면 서로의 친구리스트에 들어가게//
+            //서로를 일단 찾아//
+        Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);
+        Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
 
-    //클라이언트로 받은 값으로 상태를 업데이트 후 프렌드 리스트로 들어가는 메서드(요청 수락하는 메서드)//
-    public AcceptResponseDTO updateFriendStatus(Member member, Member friend, ApplyRequestDTO applyDTO) {
-=======
-    //클라이언트로 받은 값으로 상태를 업데이트 후 프렌드 리스트로 들어가는 메서드(요청 받은거 수락하는 메서드)//
-    public RelationshipResponseDTO updateFriendStatus(Member member, Member friend, RelationshipRequestDTO requestDTO) {
->>>>>>> 89647d2fde1556f1d430afdecafb86b90450eeb3
-        //나의 status = member//
+        if(findFriend==findUser){
+            user.addFriendList(findFriend);
+            friend.addFriendList(findUser);
+        }
 
-        //상태가 REQUEST에서 ACCEPT가 되면 서로의 친구리스트에 들어가게 하는 메서드//
-        Relationship user =relationshipRepository.findByUser(member);      //유저 조회
-        Relationship userUpdate = user.update(RelationshipStatus.ACCEPT);
-        userUpdate.addFriendList(friend);      //친구 수락되면 일단 나도 수락상태가 되니까 친구리스트로 들어감
-
-        Relationship myFriend = relationshipRepository.findByUser(friend);  //친구 조회
-        Relationship friendUpdate = myFriend.update(RelationshipStatus.ACCEPT);
-        friendUpdate.addFriendList(member);   //친구도 수락상태면 친구리스트에 들어가게
-
-        //response dto로 보내줄 값 생성자//
-        AcceptResponseDTO acceptFollowerDTO = AcceptResponseDTO.builder()
+          //AcceptResponse dto 로 보내줄 값(친구의 정보) 들의 생성자//
+        AcceptResponseDTO acceptFollowingDTO = AcceptResponseDTO.builder()
                 .id(friend.getId())
                 .nickname(friend.getNickname())
                 .image(friend.getImage())
@@ -61,18 +45,14 @@ public class RelationshipService {
                 .friendsList(applyDTO.getFriendsList())
                 .build();
 
+        //친구관계 맺고 relationshipRepository 에 save 하기//
+        Relationship userRelationship = Relationship.readyCreateRelation(user, friend);
+        Relationship friendRelationship = Relationship.readyCreateRelation(friend,user);
+        relationshipRepository.save(userRelationship);
+        relationshipRepository.save(friendRelationship);
 
-        return acceptFollowerDTO;
-        //리턴값이 뷰에 전해져야하니까 responseDTO 의 빌더로 값이 가서 친구의 정보로 들어가게
+        return acceptFollowingDTO;
     }
-
-
-
-
-
-
-
-
 
 
 

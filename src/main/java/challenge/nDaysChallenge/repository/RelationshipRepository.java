@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RelationshipRepository extends JpaRepository<Relationship, String > {
+public interface RelationshipRepository extends JpaRepository<Relationship, Long > {
 
 
-    Relationship findByUser(Member member);
+    Relationship findByUserAndFriend(Member user, Member friend);
 
 
 
