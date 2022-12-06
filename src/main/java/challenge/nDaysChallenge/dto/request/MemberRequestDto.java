@@ -22,6 +22,7 @@ public class MemberRequestDto {
     private String pw;
 
     private String nickname;
+
     private int image;
 
     private int roomLimit;

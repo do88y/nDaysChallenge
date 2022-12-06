@@ -4,7 +4,7 @@ spring:
     url: jdbc:mysql://localhost:3306/challenge?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
 
-    password: 'yomi6031!'
+    password: '0000'
 
 
     hikari:
@@ -14,7 +14,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create  #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
+      ddl-auto: update  #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       use-new-id-generator-mappings: false

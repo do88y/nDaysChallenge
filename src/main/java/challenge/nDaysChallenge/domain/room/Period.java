@@ -19,8 +19,8 @@ public class Period {
 
 
     //==생성 메서드==//
-    public Period(Long totalDays) {
-        this.startDate = LocalDate.now();
+    public Period(LocalDate startDate, Long totalDays) {
+        this.startDate = startDate;
         this.endDate = startDate.plusDays(totalDays-1);
         this.totalDays = totalDays;
     }

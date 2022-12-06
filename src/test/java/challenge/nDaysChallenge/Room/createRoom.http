@@ -1,0 +1,12 @@
+POST http://localhost:8080/challenge/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmNAbmF2ZXIuY29tIiwiYXV0aCI6IlVTRVIiLCJleHAiOjE2Njk4MTAwNjB9.O8LK8H8tHKGRbnUlJHA2ugDZRfN5VDeK9ZurUOyOyig
+
+{
+  "name": "기상",
+  "category": "ROUTINE",
+  "reward": "",
+  "passCount": 3,
+  "totalDays": 15,
+  "memberNumber": 7
+}

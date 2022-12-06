@@ -1,11 +1,15 @@
 package challenge.nDaysChallenge.security;
 
+import challenge.nDaysChallenge.config.SecurityConfig;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.transaction.BeforeTransaction;
@@ -25,9 +29,9 @@ public class WithUserDetailsTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    MockMvc mockMvc;
+//    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+//    @Autowired
+//    MockMvc mockMvc;
 
     @BeforeTransaction
     public void 회원가입(){
@@ -40,6 +44,11 @@ public class WithUserDetailsTest {
     @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 시큐리티컨텍스트_유저_꺼내기(){
         String currentMemberId = SecurityUtil.getCurrentMemberId(); //시큐리티 컨텍스트에 저장된 id
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        System.out.println(user.getUsername());
 
         assertThat(currentMemberId).isEqualTo("abc@naver.com");
     }
