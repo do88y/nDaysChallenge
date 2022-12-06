@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +24,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     //회원정보 조회 (수정 전)
-    public MemberInfoResponseDto findMemberInfo(Member member) {
+    public MemberInfoResponseDto findMemberInfo(String id) {
+        Optional<Member> member1 = memberRepository.findById(id);
+        Member member = member1.get();
+
         MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(member);
 
         return memberInfoResponseDto;
@@ -31,11 +35,6 @@ public class MemberService {
 
     //회원정보 수정
     public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
-        //추후에 따로 빼기
-        if (memberRepository.existsByNickname(memberEditRequestDto.getNickname())) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
-        }
-
         Member updatedMember = member.update(memberEditRequestDto.getNickname(),
                 memberEditRequestDto.getPw(),
                 memberEditRequestDto.getImage());

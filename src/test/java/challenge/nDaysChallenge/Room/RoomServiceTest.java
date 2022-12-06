@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,15 @@ public class RoomServiceTest {
     @Autowired MemberRepository memberRepository;
     @Autowired
     RoomService roomService;
+
+    @Test
+    public void 챌린지_갯수() throws Exception {
+        //given
+
+        //when
+
+        //then
+    }
 
     @Test
     public void 개인_챌린지_builder() throws Exception {
@@ -146,7 +156,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void 완료_챌린지_리스트() throws Exception {
         //given
         SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");
@@ -181,6 +191,6 @@ public class RoomServiceTest {
         assertThat(finishedRooms.size()).isEqualTo(3);
     }
 
-    Period period = new Period(30L);
+    Period period = new Period(LocalDate.now(),30L);
 
 }

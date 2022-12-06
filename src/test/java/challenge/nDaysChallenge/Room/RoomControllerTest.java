@@ -29,6 +29,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -49,8 +51,8 @@ class RoomControllerTest {
     protected MockHttpServletRequest request;
 
     Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-    RoomRequestDTO dto = new RoomRequestDTO("안녕", Category.ROUTINE.name(), 5, 30L, RoomType.SINGLE.name(), 1L);
-    SingleRoom room = new SingleRoom(dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), "잠");
+    RoomRequestDTO dto = new RoomRequestDTO("안녕", Category.ROUTINE.name(), 5, LocalDate.now(), 30L, RoomType.SINGLE.name(), 1L);
+    SingleRoom room = new SingleRoom(dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), "잠");
 
     @Mock
     private User user;

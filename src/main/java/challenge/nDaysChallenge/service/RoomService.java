@@ -30,7 +30,7 @@ public class RoomService {
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
         if (dto.getType().equals("SINGLE")) {
-            SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
+            SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
 
             return singleRoom;
         } else if (dto.getType().equals("GROUP")) {
@@ -39,7 +39,7 @@ public class RoomService {
             for (Long groupMemberNum : groupMemberNums) {
                 groupMembers.add(memberRepository.findByNumber(groupMemberNum));
             }
-            GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
+            GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
 
             return groupRoom;
         }
@@ -53,7 +53,7 @@ public class RoomService {
     public SingleRoom singleRoom(Member member, String name, Period period, Category category, int passCount, String reward) {
 
         //챌린지 생성
-        SingleRoom newRoom = new SingleRoom(name, new Period(period.getTotalDays()), category, passCount, reward);
+        SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
 
         //챌린지 저장
         singleRoomRepository.save(newRoom);
@@ -71,7 +71,7 @@ public class RoomService {
     public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Member> selectedMember) {
 
         //챌린지 생성
-        GroupRoom newRoom = new GroupRoom(name, new Period(period.getTotalDays()), category, passCount, reward);
+        GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
 
 
         //챌린지 저장
