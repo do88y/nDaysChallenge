@@ -1,8 +1,5 @@
 package challenge.nDaysChallenge.domain;
 
-import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
-import challenge.nDaysChallenge.dto.request.RelationshipRequestDTO;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,11 +37,6 @@ public  class Relationship {
     private LocalDateTime acceptedDate;
 
 
-    //내가 수락한 친구들만 리스트에 들어가게//
-    @OneToMany(mappedBy = "number")
-    private  List<Member> friendsList = new ArrayList<>();
-
-
     //연관관계//
     public void addUser(Member user){
         this.user=user;
@@ -55,28 +47,20 @@ public  class Relationship {
     }
 
 
-    public void addFriendList (Member user){
-        this.friendsList.add(user);
-    }
-
-
-
 
     //상태 업뎃 메서드//
-    public Relationship update(RelationshipStatus status) {
+    public Relationship updateStatus(RelationshipStatus status) {
         this.status=status;
         return this;
     }
 
 
-
-
-    public static Relationship createRelationship( Member user, Member friend, LocalDateTime requestedDate, LocalDateTime acceptedDate){
+    //relationship 에 user 와 friend 의 기본 베이스 정보//
+    public static Relationship readyCreateRelation( Member user, Member friend){
         Relationship relationship = new Relationship();
         relationship.addUser(user);
         relationship.addFriend(friend);
-        relationship.acceptedDate=acceptedDate;
-        relationship.requestedDate=requestedDate;
+        relationship.requestedDate=LocalDateTime.now();
         relationship.status=RelationshipStatus.REQUEST; //대기가 기본값이게//
         return relationship;
     }

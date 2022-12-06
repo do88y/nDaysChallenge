@@ -69,14 +69,7 @@ public class DajimFeedRepositoryTest2{
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
-        Room room1 = SingleRoom.builder()
-                .name("SingleRoom")
-                .period(new Period(10L))
-                .category(Category.ROUTINE)
-                .type(RoomType.SINGLE)
-                .passCount(2)
-                .build();
-        roomRepository.save(room1);
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
 
         //싱글룸 다짐
         Dajim dajim = dajimRepository.save(Dajim.builder()
@@ -87,13 +80,7 @@ public class DajimFeedRepositoryTest2{
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
-        Room room2 = GroupRoom.builder()
-                .name("GroupRoom")
-                .period(new Period(100L))
-                .category(Category.ETC)
-                .type(RoomType.GROUP)
-                .passCount(3)
-                .build();
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
         roomRepository.save(room2);
         RoomMember roomMember = RoomMember.createRoomMember(member, room2);
         roomMemberRepository.save(roomMember);
