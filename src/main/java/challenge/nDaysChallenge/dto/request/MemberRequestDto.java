@@ -13,16 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class MemberRequestDto {
 
-    @NotBlank(message = "아이디를 입력해주세요.")
     private String id;
 
-    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String pw;
 
     private String nickname;
+
     private int image;
 
     private int roomLimit;

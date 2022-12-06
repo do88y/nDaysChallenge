@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
@@ -11,6 +12,7 @@ import challenge.nDaysChallenge.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +24,27 @@ public class MemberController { //마이페이지 전용
     private final MemberService memberService;
 
     //회원정보 조회
-    @GetMapping("/user/edit")
-    public ResponseEntity<?> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
-        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(memberAdapter.getMember());
+    @GetMapping("/user/details")
+    public ResponseEntity<?> viewMemberInfo(
+            @AuthenticationPrincipal
+            UserDetails userDetails) {
+//(expression = this == 'anonymousUser' ? null : member")
+        if (userDetails==null){
+            throw new RuntimeException("MemberAdapter 사용자를 불러올 수 없습니다.");
+        }
+        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(userDetails.getUsername());
 
-        return ResponseEntity.ok(memberInfoResponseDto);
+        return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원정보 수정
-    @PutMapping("/edit")
+    @PutMapping("/user/edit")
     public ResponseEntity<?> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
                                             @AuthenticationPrincipal MemberAdapter memberAdapter) {
         MemberInfoResponseDto memberInfoResponseDto =
                 memberService.editMemberInfo(memberAdapter.getMember(), memberEditRequestDto);
 
-        return ResponseEntity.ok(memberInfoResponseDto);
+        return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원 탈퇴
@@ -44,7 +52,7 @@ public class MemberController { //마이페이지 전용
     public ResponseEntity<?> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         String nickname = memberService.deleteMember(memberAdapter.getMember());
 
-        return ResponseEntity.ok(nickname); //탈퇴한 회원 닉네임 리턴
+        return ResponseEntity.ok().body(nickname); //탈퇴한 회원 닉네임 리턴
     }
 
 }
