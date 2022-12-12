@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
-//    @Query(value = "select r from Room r where r.")
-//    public List<SingleRoom> findByMember();
+    @Query(value = "select r from Room r where r.status = :status")
+    public List<SingleRoom> findByMember();
 }

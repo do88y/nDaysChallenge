@@ -68,19 +68,20 @@ public class RoomServiceTest {
         em.persist(room);
 
         //when
-        Optional<Room> findRoom = roomRepository.findById(room.getNumber());
+        Room findRoom = roomRepository.findById(room.getNumber()).orElseThrow(() ->
+                new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
 
 
         //then
-        assertThat(room.getNumber()).isEqualTo(findRoom.get().getNumber());
-        assertThat(room.getReward()).isEqualTo(findRoom.get().getReward());
-        assertThat(room.getPeriod()).isEqualTo(findRoom.get().getPeriod());
+        assertThat(room.getNumber()).isEqualTo(findRoom.getNumber());
+        assertThat(room.getReward()).isEqualTo(findRoom.getReward());
+        assertThat(room.getPeriod()).isEqualTo(findRoom.getPeriod());
     }
 
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
         Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
@@ -93,8 +94,9 @@ public class RoomServiceTest {
         em.clear();
 
         //then
-        Optional<SingleRoom> findSingleRoom = singleRoomRepository.findById(room.getNumber());
-        assertThat(findSingleRoom.get().getNumber()).isEqualTo(room.getNumber());
+        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getNumber()).orElseThrow(() ->
+                new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
+        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getNumber());
 
 
         //멤버에서 singleRooms 조회
@@ -107,7 +109,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Member> selectedMembers = new HashSet<>();

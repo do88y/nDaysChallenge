@@ -29,11 +29,15 @@ public class RoomService {
     //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
-        if (dto.getType().equals("SINGLE")) {
+        //null 체크를 위해서 추가했지만, null일 가능성이 있을지 좀 더 고민 필요
+        Optional<String> getRoomType = Optional.ofNullable(dto.getType());
+        String roomType = getRoomType.orElseThrow(() -> new NoSuchElementException("챌린지 타입이 없습니다."));
+
+        if (roomType.equals("SINGLE")) {
             SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
 
             return singleRoom;
-        } else if (dto.getType().equals("GROUP")) {
+        } else if (roomType.equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
             Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
             for (Long groupMemberNum : groupMemberNums) {
