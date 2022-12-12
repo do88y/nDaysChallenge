@@ -3,6 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
+import challenge.nDaysChallenge.dto.request.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
@@ -54,9 +55,9 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
 
     //로그인
-    public TokenDto login(MemberRequestDto memberRequestDto) {
+    public TokenDto login(LoginRequestDto loginRequestDto) {
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
 
         //사용자 비밀번호 검증
         //CustomUserDetailsService의 loadUserByUsername 메소드 실행됨

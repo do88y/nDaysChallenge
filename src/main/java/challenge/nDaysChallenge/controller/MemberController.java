@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
@@ -11,6 +12,7 @@ import challenge.nDaysChallenge.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,10 +23,17 @@ public class MemberController { //마이페이지 전용
 
     private final MemberService memberService;
 
-    //회원정보 조회 (로그인 + 회원정보 수정 폼)
+
+    //회원정보 조회
     @GetMapping("/user/details")
-    public ResponseEntity<MemberInfoResponseDto> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
-        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(memberAdapter.getMember());
+    public ResponseEntity<?> viewMemberInfo(
+            @AuthenticationPrincipal
+            UserDetails userDetails) {
+//(expression = this == 'anonymousUser' ? null : member")
+        if (userDetails==null){
+            throw new RuntimeException("MemberAdapter 사용자를 불러올 수 없습니다.");
+        }
+        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(userDetails.getUsername());
 
         return ResponseEntity.ok().body(memberInfoResponseDto);
     }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +24,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     //회원정보 조회 (수정 전)
-    public MemberInfoResponseDto findMemberInfo(Member member) {
+    public MemberInfoResponseDto findMemberInfo(String id) {
+        Optional<Member> member1 = memberRepository.findById(id);
+        Member member = member1.get();
+
         MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(member);
 
         return memberInfoResponseDto;

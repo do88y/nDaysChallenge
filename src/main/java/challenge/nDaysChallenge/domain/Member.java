@@ -30,9 +30,16 @@ public class Member {
 
     private String nickname;
 
+
     private int image;
 
     private int roomLimit;  //챌린지 5개 제한
+
+    //내가 수락한 친구들만 리스트에 들어가게//
+    @OneToMany(mappedBy = "number")
+    private  List<Relationship> confirmedFriendsList = new ArrayList<>();
+
+
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -44,7 +51,7 @@ public class Member {
     private final List<SingleRoom> singleRooms = new ArrayList<>();
 
     @Builder
-    public Member(String id, String pw, String nickname, int image, int roomLimit, Authority authority) {
+    public Member(String id, String pw ,String nickname, int image, int roomLimit, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
@@ -59,6 +66,18 @@ public class Member {
         this.image = image;
         return this;
     }
+
+
+    //친구 리스트에 추가 메서드//
+    public void addFriendList (Relationship member){
+        this.confirmedFriendsList.add(member);
+    }
+
+
+
+
+
+
 
 
 /*    //챌린지 갯수 조회

@@ -3,10 +3,10 @@ package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
+import challenge.nDaysChallenge.dto.request.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.service.AuthService;
-import challenge.nDaysChallenge.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,10 +40,10 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //로그인
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login (@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<TokenDto> login (@RequestBody LoginRequestDto loginRequestDto){
         //파라미터 객체 안에 id, pw 있음
-        TokenDto tokenDto = authService.login(memberRequestDto);
-        return ResponseEntity.ok(tokenDto);
+        TokenDto tokenDto = authService.login(loginRequestDto);
+        return ResponseEntity.ok().body(tokenDto);
     }
 
     //로그아웃

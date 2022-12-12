@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.security;
 
+import challenge.nDaysChallenge.config.SecurityConfig;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
@@ -21,7 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
@@ -31,6 +34,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -81,14 +86,11 @@ public class WithUserDetailsTest {
     public void 시큐리티컨텍스트_유저_꺼내기() throws Exception {
         String currentMemberId = SecurityUtil.getCurrentMemberId(); //시큐리티 컨텍스트에 저장된 id
 
-        mockMvc.perform(get("/user/edit"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print());
-//                .andExpect(MockMvcResultMatchers.model().attribute("image",1))
-//                .andExpect(MockMvcResultMatchers.model().attribute("id",currentMemberId))
-//                .andExpect(MockMvcResultMatchers.model().attribute("pw","123"))
-//                .andExpect(MockMvcResultMatchers.model().attribute("nickname","aaa"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        System.out.println(user.getUsername());
 
         assertThat(currentMemberId).isEqualTo("abc@naver.com");
     }
@@ -101,7 +103,7 @@ public class WithUserDetailsTest {
         Member currentMember = member.get();
 
         //룸 객체 연결
-        SingleRoom singleRoom = new SingleRoom("roomName", new Period(100L), Category.ROUTINE, 2, "reward");
+        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
         singleRoomRepository.save(singleRoom);
         singleRoom.addRoom(singleRoom, currentMember);
 
