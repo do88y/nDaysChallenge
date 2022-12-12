@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MemberAdapter extends User implements UserDetails {
+@Getter
+public class MemberAdapter extends User implements UserDetails{
 
     private Member member;
 

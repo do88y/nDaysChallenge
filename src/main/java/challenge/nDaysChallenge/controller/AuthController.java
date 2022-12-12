@@ -40,7 +40,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //로그인
     @PostMapping("/auth/login")
-    public ResponseEntity<TokenDto> login (@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<?> login (@RequestBody MemberRequestDto memberRequestDto){
         //파라미터 객체 안에 id, pw 있음
         TokenDto tokenDto = authService.login(memberRequestDto);
         return ResponseEntity.ok(tokenDto);

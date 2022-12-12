@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -45,6 +47,8 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     //닉네임 중복 검사
     public boolean nicknameCheck(String nickname){
         boolean exists = memberRepository.existsById(nickname);
+
+        //닉네임 정보 조회 시
 
         return exists;
     }

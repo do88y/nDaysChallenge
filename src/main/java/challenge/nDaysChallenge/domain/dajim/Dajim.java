@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@DynamicUpdate
 public class Dajim extends BaseEntity implements Persistable<Long> {
 
     @Id

@@ -72,7 +72,6 @@ public class RoomService {
 
         //멤버에 챌린지 저장
         newRoom.addRoom(newRoom, member);
-        memberRepository.save(member);
 
         return newRoom;
     }

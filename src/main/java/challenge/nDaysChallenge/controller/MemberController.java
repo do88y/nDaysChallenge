@@ -21,30 +21,30 @@ public class MemberController { //마이페이지 전용
 
     private final MemberService memberService;
 
-    //회원정보 조회
-    @GetMapping("/user/edit")
-    public ResponseEntity<?> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    //회원정보 조회 (로그인 + 회원정보 수정 폼)
+    @GetMapping("/user/details")
+    public ResponseEntity<MemberInfoResponseDto> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(memberAdapter.getMember());
 
-        return ResponseEntity.ok(memberInfoResponseDto);
+        return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원정보 수정
     @PutMapping("/user/edit")
-    public ResponseEntity<?> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
+    public ResponseEntity<MemberInfoResponseDto> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
                                             @AuthenticationPrincipal MemberAdapter memberAdapter) {
         MemberInfoResponseDto memberInfoResponseDto =
                 memberService.editMemberInfo(memberAdapter.getMember(), memberEditRequestDto);
 
-        return ResponseEntity.ok(memberInfoResponseDto);
+        return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원 탈퇴
     @PostMapping("/user/withdrawal")
-    public ResponseEntity<?> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<String> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         String nickname = memberService.deleteMember(memberAdapter.getMember());
 
-        return ResponseEntity.ok(nickname); //탈퇴한 회원 닉네임 리턴
+        return ResponseEntity.ok().body(nickname); //탈퇴한 회원 닉네임 리턴
     }
 
 }

@@ -27,7 +27,7 @@ public class RelationshipService {
         //나의 status = member//
 
         //상태가 REQUEST에서 ACCEPT가 되면 서로의 친구리스트에 들어가게 하는 메서드//
-        Relationship user =relationshipRepository.findByUser(member);      //유저 조회
+        Relationship user = relationshipRepository.findByUser(member);      //유저 조회
         Relationship userUpdate = user.update(RelationshipStatus.ACCEPT);
         userUpdate.addFriendList(friend);      //친구 수락되면 일단 나도 수락상태가 되니까 친구리스트로 들어감
 
@@ -45,12 +45,9 @@ public class RelationshipService {
                 .friendsList(requestDTO.getFriendsList())
                 .build();
 
-
         return responseDto;
         //리턴값이 뷰에 전해져야하니까 responseDTO 의 빌더로 값이 가서 친구의 정보로 들어가게
     }
-
-
 
     //리포지토리에서 친구 검색하는 메서드(리스트조회)//
     public Member findFriends (String id, String nickname){
