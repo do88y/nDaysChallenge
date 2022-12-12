@@ -29,6 +29,7 @@ public class RoomService {
     //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
+        //null 체크를 위해서 추가했지만, null일 가능성이 있을지 좀 더 고민 필요
         Optional<String> getRoomType = Optional.ofNullable(dto.getType());
         String roomType = getRoomType.orElseThrow(() -> new NoSuchElementException("챌린지 타입이 없습니다."));
 
