@@ -67,6 +67,7 @@ public class AuthenticationPrincipalTest {
                 .build();
     }
 
+/*
     @Test
     @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 회원정보_수정() throws Exception {
@@ -86,5 +87,6 @@ public class AuthenticationPrincipalTest {
         result.andExpect(status().isOk());
 
     }
+*/
 
 }

@@ -72,7 +72,7 @@ public class memberTest {
         assertThat(exists2).isEqualTo(false);
     }
 
-    @DisplayName("멤버 닉네임 변경")
+/*    @DisplayName("멤버 닉네임 변경")
     @Test
     @Transactional
     @Rollback(value = false)
@@ -87,7 +87,7 @@ public class memberTest {
         assertThat(updatedMember.getPw()).isEqualTo("123");
         assertThat(updatedMember.getImage()).isEqualTo(1);
         assertThat(member).isEqualTo(updatedMember);
-    }
+    }*/
 
     @DisplayName("멤버 삭제(탈퇴) 시 룸/다짐/이모션 존재 여부 확인")
     @Test

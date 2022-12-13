@@ -81,7 +81,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
         Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);

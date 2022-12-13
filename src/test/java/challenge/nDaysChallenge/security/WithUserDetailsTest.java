@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+@Rollback(value = true)
 public class WithUserDetailsTest {
 
     @Autowired
@@ -40,6 +40,7 @@ public class WithUserDetailsTest {
         memberRepository.save(member);
     }
 
+/*
     @Test
     @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 시큐리티컨텍스트_유저_꺼내기(){
@@ -52,5 +53,6 @@ public class WithUserDetailsTest {
 
         assertThat(currentMemberId).isEqualTo("abc@naver.com");
     }
+*/
 
 }
