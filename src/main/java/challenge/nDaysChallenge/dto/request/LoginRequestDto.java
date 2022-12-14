@@ -9,6 +9,8 @@ import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +21,7 @@ public class LoginRequestDto {
     private String pw;
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(id, pw);
+        return new UsernamePasswordAuthenticationToken(id, pw, Collections.singletonList(Authority.ROLE_USER));
     }
 
 }

@@ -6,6 +6,7 @@ import challenge.nDaysChallenge.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -94,7 +95,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("http://localhost:3000"); ////
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");

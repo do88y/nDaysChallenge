@@ -8,7 +8,6 @@ import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.dto.response.RoomResponseDto;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.security.SecurityUtil;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

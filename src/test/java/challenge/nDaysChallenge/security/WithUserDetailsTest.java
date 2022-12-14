@@ -8,12 +8,17 @@ import challenge.nDaysChallenge.domain.room.Category;
 import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
+import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.DajimResponseDto;
 import challenge.nDaysChallenge.dto.response.MemberInfoResponseDto;
+import challenge.nDaysChallenge.jwt.RefreshToken;
+import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.RefreshTokenRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -22,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -74,23 +81,39 @@ public class WithUserDetailsTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @Autowired
+    TokenProvider tokenProvider;
+
+    @Autowired
+    RefreshTokenRepository refreshTokenRepository;
+
     @BeforeTransaction
     public void 회원가입() {
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com", "123", "aaa", 1, 2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com", "12345", "aaa", 1, 2);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
     }
 
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
-    public void 시큐리티컨텍스트_유저_꺼내기() throws Exception {
-        String currentMemberId = SecurityUtil.getCurrentMemberId(); //시큐리티 컨텍스트에 저장된 id
+    public void 로그인() throws Exception {
+        LoginRequestDto loginRequestDto = new LoginRequestDto();
+        loginRequestDto.setId("abc@naver.com");
+        loginRequestDto.setPw("12345");
+//        loginRequestDto.setPw(passwordEncoder.encode("12345"));
 
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
+        //사용자 비밀번호 검증
+        //CustomUserDetailsService의 loadUserByUsername 메소드 실행됨
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        System.out.println(user.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String currentMemberId = SecurityContextHolder.getContext().getAuthentication().getName(); //시큐리티 컨텍스트에 저장된 id
 
         assertThat(currentMemberId).isEqualTo("abc@naver.com");
     }
@@ -99,7 +122,7 @@ public class WithUserDetailsTest {
     @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 다짐_작성_후_룸_조회() {
         //멤버 객체 가져오기
-        Optional<Member> member = memberRepository.findById(SecurityUtil.getCurrentMemberId());
+        Optional<Member> member = memberRepository.findById(SecurityContextHolder.getContext().getAuthentication().getName());
         Member currentMember = member.get();
 
         //룸 객체 연결
@@ -153,7 +176,7 @@ public class WithUserDetailsTest {
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 회원_정보_조회() {
-        String currentMemberId = SecurityUtil.getCurrentMemberId();
+        String currentMemberId = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Member> member = memberRepository.findById(currentMemberId);
         Member member1 = member.get();
 
