@@ -37,6 +37,11 @@ public class MemberController { //마이페이지 전용
         if (memberAdapter==null){
             throw new RuntimeException("@AuthenticationPrincipal 어노테이션 객체가 비었습니다");
         }
+
+        log.info(memberAdapter.getMember().getId());
+        log.info(memberAdapter.getMember().getNickname());
+        log.info(memberAdapter.getMember().getPw());
+
         MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(memberAdapter.getMember().getId());
 
         return ResponseEntity.ok().body(memberInfoResponseDto);
