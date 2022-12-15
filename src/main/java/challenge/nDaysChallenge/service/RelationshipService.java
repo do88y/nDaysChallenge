@@ -24,7 +24,6 @@ public class RelationshipService {
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
-
     //relationship 생성//
     public void saveRelationship(Member user,Member friend){
 
@@ -33,8 +32,6 @@ public class RelationshipService {
         relationshipRepository.save(userRelationship);
         relationshipRepository.save(friendRelationship);
     }
-
-
 
     public RelationResponseDTO acceptRelationship (Member user, Member friend, ApplyRequestDTO applyDTO){
     //수락 버튼을 눌렀을 때 시행되는 메서드//
@@ -74,16 +71,9 @@ public AfterDeleteResponseDTO deleteEachRelation (Member user, Member friend){
     //생성//
     AfterDeleteResponseDTO afterDeleteResponseDTO = new AfterDeleteResponseDTO(byUser);
 
-
     return afterDeleteResponseDTO;
 
-
-
-
 }
-
-
-
 
     //리포지토리에서 친구 검색하는 메서드//
     public Member findFriends (String id, String nickname){

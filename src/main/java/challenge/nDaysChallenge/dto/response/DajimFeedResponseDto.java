@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DajimFeedResponseDto {
 
-    private Long dajimNumber;
+    private long dajimNumber;
 
     private String nickname;
 
@@ -25,7 +25,7 @@ public class DajimFeedResponseDto {
     @JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss")
     private LocalDateTime updatedDate;
 
-    public DajimFeedResponseDto(Long dajimNumber, String nickname, String content, List<String> stickersList, LocalDateTime updatedDate) {
+    public DajimFeedResponseDto(long dajimNumber, String nickname, String content, List<String> stickersList, LocalDateTime updatedDate) {
         this.dajimNumber = dajimNumber;
         this.nickname = nickname;
         this.content = content;

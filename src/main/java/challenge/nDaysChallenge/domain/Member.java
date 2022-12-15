@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -38,8 +39,6 @@ public class Member {
     //내가 수락한 친구들만 리스트에 들어가게//
     @OneToMany(mappedBy = "number")
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
-
-
 
     @Enumerated(EnumType.STRING)
     private Authority authority;

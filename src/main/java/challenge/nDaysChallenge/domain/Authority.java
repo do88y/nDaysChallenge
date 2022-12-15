@@ -1,7 +1,13 @@
 package challenge.nDaysChallenge.domain;
 
-public enum Authority {
+import org.springframework.security.core.GrantedAuthority;
 
-    ROLE_USER, ROLE_ADMIN
+public enum Authority implements GrantedAuthority {
 
+    ROLE_USER, ROLE_ADMIN;
+
+    @Override
+    public String getAuthority() {
+        return null;
+    }
 }

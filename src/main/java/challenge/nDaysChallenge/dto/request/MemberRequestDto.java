@@ -47,8 +47,4 @@ public class MemberRequestDto {
                 .build();
     }
 
-    public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(id, pw);
-    }
-
 }
