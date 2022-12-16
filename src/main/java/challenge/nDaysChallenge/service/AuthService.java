@@ -11,16 +11,21 @@ import challenge.nDaysChallenge.jwt.RefreshToken;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -46,6 +51,8 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     //닉네임 중복 검사
     public boolean nicknameCheck(String nickname){
         boolean exists = memberRepository.existsById(nickname);
+
+        //닉네임 정보 조회 시
 
         return exists;
     }
@@ -80,7 +87,9 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         RefreshToken refreshToken = refreshTokenRepository.findByKey(id)
                 .orElseThrow(() -> new RuntimeException("사용자의 리프레시 토큰을 찾을 수 없습니다."));
 
-        refreshTokenRepository.delete(refreshToken);
+        refreshTokenRepository.delete(refreshToken); //리프레쉬 토큰 삭제
+
+        SecurityContextHolder.clearContext(); // 시큐리티 컨텍스트에서 인증 정보 삭제
     }
 
     //토큰 재발급

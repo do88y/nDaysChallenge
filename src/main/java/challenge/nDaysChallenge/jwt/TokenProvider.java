@@ -1,9 +1,11 @@
 package challenge.nDaysChallenge.jwt;
 
 import challenge.nDaysChallenge.dto.TokenDto;
+import challenge.nDaysChallenge.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통해 유저 정보 가져옴
 
+    private final CustomUserDetailsService customUserDetailsService;
+
     private static final String AUTHORITY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
@@ -32,7 +36,8 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
     private final Key key;
 
     //키값 세팅
-    public TokenProvider(@Value("${jwt.secret}") String secretKey){
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService customUserDetailsService){
+        this.customUserDetailsService = customUserDetailsService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -50,7 +55,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
         Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName()) //페이로드 "sub":"이름"
-                .claim(AUTHORITY,authorities) //페이로드 "auth":"ROLE_USER"
+                .claim(AUTHORITY, authorities) //페이로드 "auth":"ROLE_USER"
                 .setExpiration(accessTokenExpireTime) //페이로드 "exp":만료시간
                 .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
                 .compact();
@@ -86,11 +91,21 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        //클레임 정보로 User 객체 생성
-        UserDetails principal = new User(claims.getSubject(),"", authorities);
+//        //클레임 정보로 User 객체 생성
+//        UserDetails principal = new User(claims.getSubject(),"", authorities);
+//
+//        //username, password 형태 인증 위한 객체 생성, 리턴
+//        return new UsernamePasswordAuthenticationToken(principal,"", authorities);
 
-        //username, password 형태 인증 위한 객체 생성, 리턴
-        return new UsernamePasswordAuthenticationToken(principal,"", authorities);
+        String id = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
+
+        UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(id);
+
+        return new UsernamePasswordAuthenticationToken(memberAdapter,"",authorities);
+
     }
 
     //토큰 읽고 검증하기

@@ -7,7 +7,6 @@ import challenge.nDaysChallenge.dto.request.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.service.AuthService;
-import challenge.nDaysChallenge.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,20 +22,20 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
     @PostMapping("/auth/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto){
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
-        return ResponseEntity.ok(memberResponseDto);
+        return ResponseEntity.ok().body(memberResponseDto);
     }
 
     //아이디 중복 검사
     @GetMapping("/auth/id-check")
     public ResponseEntity<Boolean> idCheck (@RequestBody String id){
-        return ResponseEntity.ok(authService.idCheck(id));
+        return ResponseEntity.ok().body(authService.idCheck(id));
     }
 
 
     //닉네임 중복 검사
     @GetMapping("/auth/nickname-check")
     public ResponseEntity<Boolean> nicknameCheck (@RequestBody String nickname){
-        return ResponseEntity.ok(authService.nicknameCheck(nickname));
+        return ResponseEntity.ok().body(authService.nicknameCheck(nickname));
     }
 
     //로그인
@@ -59,7 +58,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
     public ResponseEntity<TokenDto> reissue (@RequestBody JwtRequestDto jwtRequestDto){
         //파라미터 객체 안에 access, refresh 토큰 있음
         TokenDto tokenDto = authService.reissue(jwtRequestDto);
-        return ResponseEntity.ok(tokenDto);
+        return ResponseEntity.ok().body(tokenDto);
     }
 
 }

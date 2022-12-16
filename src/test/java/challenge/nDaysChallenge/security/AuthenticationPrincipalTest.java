@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.security;
 
+import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -54,7 +56,7 @@ public class AuthenticationPrincipalTest {
 
     @BeforeTransaction
     public void 회원가입(){
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("vvv@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
     }
@@ -69,10 +71,10 @@ public class AuthenticationPrincipalTest {
 
 /*
     @Test
-    @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
+    @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "vvv@naver.com")
     public void 회원정보_수정() throws Exception {
 
-        Optional<Member> member = memberRepository.findById("abc@naver.com");
+        Optional<Member> member = memberRepository.findById("vvv@naver.com");
         Member member1 = member.get();
 
         MemberEditRequestDto memberEditRequestDto = new MemberEditRequestDto("2222", "aaa", 2);
@@ -80,7 +82,7 @@ public class AuthenticationPrincipalTest {
         ResultActions result = mockMvc.perform(put("/user/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(member1, null))
+                .principal(new UsernamePasswordAuthenticationToken(member1, null, Collections.singleton(Authority.ROLE_USER)))
                 .content((objectMapper.writeValueAsString(memberEditRequestDto)))
         );
 
