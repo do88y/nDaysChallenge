@@ -108,7 +108,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Member> selectedMembers = new HashSet<>();
