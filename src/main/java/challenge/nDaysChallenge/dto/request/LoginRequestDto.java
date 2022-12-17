@@ -21,7 +21,7 @@ public class LoginRequestDto {
     private String pw;
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(id, pw, Collections.singletonList(Authority.ROLE_USER));
+        return new UsernamePasswordAuthenticationToken(id, pw);
     }
 
 }

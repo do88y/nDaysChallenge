@@ -22,8 +22,6 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
-    private final MemberRepository memberRepository;
-
     //이모션 등록
     public EmotionResponseDto uploadEmotion(EmotionRequestDto emotionRequestDto, Member member) { //스티커 등록/변경/삭제
         Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())

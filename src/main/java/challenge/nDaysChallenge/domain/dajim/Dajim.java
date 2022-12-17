@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Dajim extends BaseEntity implements Persistable<Long> {
+public class Dajim extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -48,16 +48,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         this.member = member;
         this.content = content;
         this.open = open;
-    }
-
-    @Override
-    public Long getId() {
-        return number;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getCreatedDate() == null;
     }
 
     public Dajim update(Open open, String content) {

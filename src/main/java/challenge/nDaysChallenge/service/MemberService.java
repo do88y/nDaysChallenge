@@ -24,7 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     //회원정보 조회 (수정 전)
-    @Transactional
+    @Transactional(readOnly = true)
     public MemberInfoResponseDto findMemberInfo(String id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));

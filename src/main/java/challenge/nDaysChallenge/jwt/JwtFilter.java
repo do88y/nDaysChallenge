@@ -34,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거�
             Authentication authentication = tokenProvider.getAuthentication(token); //해당 토큰의 사용자 정보 객체 가져옴
 
             if (authentication==null){
-                log.info("authentication 객체를 찾을 수 없습니다.");
                 throw new RuntimeException("authentication 객체를 찾을 수 없습니다.");
             }
 
