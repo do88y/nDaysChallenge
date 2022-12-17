@@ -14,10 +14,11 @@ import java.util.Optional;
 @Repository
 public interface EmotionRepository extends JpaRepository<Emotion, Long> {
 
-    //다짐넘버로 다짐 가져오기
+    //다짐 불러오기
     @Query("select d from Dajim d where d.number = :dajimNumber")
     Optional<Dajim> findByDajimNumberForEmotion(@Param("dajimNumber") Long dajimNumber);
 
+    //수정/삭제할 이모션 불러오기
     @Query("select e from Emotion e " +
             "where e.dajim.number = :dajimNumber " +
             "and e.member.number = :memberNumber")

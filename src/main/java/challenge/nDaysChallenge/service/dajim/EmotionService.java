@@ -53,18 +53,22 @@ public class EmotionService {
         Emotion emotion = emotionRepository.findByEmotionNumber(requestDto.getDajimNumber(), member.getNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 불러오는 데 실패했습니다."));
 
-        //스티커 변경 - 타 이모티콘 클릭 시 기존 이모션 삭제
+        //다짐 엔티티 내 emotionlist에 변경사항 반영 위해 다짐 불러오기
         Long dajimNumber = requestDto.getDajimNumber();
-        Optional<Dajim> dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber);
-        dajim.get().getEmotions().remove(emotion);
+        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber)
+                .orElseThrow(()->new RuntimeException("이모션이 소속된 다짐을 찾을 수 없습니다."));
+
+        //새 이모션 세팅 위해 해당 다짐 내 emotionlist에서 기존 이모션 삭제
+        dajim.deleteEmotions(emotion);
 
         Emotion updatedEmotion;
 
+        //뷰에서 null or 다른 스티커 등록 시
         if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
-            dajim.get().getEmotions().add(updatedEmotion);
+            dajim.addEmotions(updatedEmotion); //다짐 내 emotionlist에 스티커 추가
         }
 
         EmotionResponseDto emotionResponseDto = EmotionResponseDto.builder()
