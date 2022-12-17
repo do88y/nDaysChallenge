@@ -25,7 +25,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //중복 닉네임 방지
     boolean existsByNickname(String nickname);
 
-    Member findByNumber(Long memberNumber);
+    Optional<Member> findByNumber(Long memberNumber);
 
 
 }

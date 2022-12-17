@@ -41,7 +41,8 @@ public class RoomService {
             Set<Long> groupMemberNums = dto.getGroupMembers();
             Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
             for (Long groupMemberNum : groupMemberNums) {
-                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum)
+                        .orElseThrow(()->new RuntimeException("그룹멤버를 찾을 수 없습니다.")));
             }
             GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
 

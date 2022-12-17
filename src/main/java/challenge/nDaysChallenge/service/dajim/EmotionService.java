@@ -7,6 +7,7 @@ import challenge.nDaysChallenge.domain.dajim.Stickers;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -22,9 +23,11 @@ public class EmotionService {
 
     private final EmotionRepository emotionRepository;
 
+    private final DajimRepository dajimRepository;
+
     //이모션 등록
     public EmotionResponseDto uploadEmotion(EmotionRequestDto emotionRequestDto, Member member) { //스티커 등록/변경/삭제
-        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(emotionRequestDto.getDajimNumber())
+        Dajim dajim = dajimRepository.findByDajimNumber(emotionRequestDto.getDajimNumber())
                 .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
 
         Stickers sticker = Stickers.valueOf(emotionRequestDto.getSticker());
@@ -55,7 +58,7 @@ public class EmotionService {
 
         //다짐 엔티티 내 emotionlist에 변경사항 반영 위해 다짐 불러오기
         Long dajimNumber = requestDto.getDajimNumber();
-        Dajim dajim = emotionRepository.findByDajimNumberForEmotion(dajimNumber)
+        Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber)
                 .orElseThrow(()->new RuntimeException("이모션이 소속된 다짐을 찾을 수 없습니다."));
 
         //새 이모션 세팅 위해 해당 다짐 내 emotionlist에서 기존 이모션 삭제
