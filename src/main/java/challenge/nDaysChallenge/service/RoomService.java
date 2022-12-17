@@ -9,12 +9,14 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RoomService {
 
@@ -23,14 +25,6 @@ public class RoomService {
     private final RoomMemberRepository roomMemberRepository;
     private final GroupRoomRepository groupRoomRepository;
     private final SingleRoomRepository singleRoomRepository;
-
-    public RoomService(RoomRepository roomRepository, MemberRepository memberRepository, RoomMemberRepository roomMemberRepository, GroupRoomRepository groupRoomRepository, SingleRoomRepository singleRoomRepository) {
-        this.roomRepository = roomRepository;
-        this.memberRepository = memberRepository;
-        this.roomMemberRepository = roomMemberRepository;
-        this.groupRoomRepository = groupRoomRepository;
-        this.singleRoomRepository = singleRoomRepository;
-    }
 
 
     //개인과 그룹 챌린지 구분
@@ -168,10 +162,11 @@ public class RoomService {
      */
     public List<Room> findFinishedRooms(Member member) {
 
+        Member findMember = memberRepository.findByNumber(member.getNumber());
         List<Room> finishedRoom = new ArrayList<>();
 
-        if (member.getRoomMemberList() != null) {
-            List<RoomMember> roomMemberList = member.getRoomMemberList();
+        if (findMember.getRoomMemberList() != null) {
+            List<RoomMember> roomMemberList = findMember.getRoomMemberList();
             for (RoomMember roomMember : roomMemberList) {
                 Room groupRoom = roomMember.getRoom();
                 if (groupRoom.getStatus() == RoomStatus.END) {
@@ -179,8 +174,8 @@ public class RoomService {
                 }
             }
         }
-        if (member.getSingleRooms() != null) {
-            List<SingleRoom> singleRooms = member.getSingleRooms();
+        if (findMember.getSingleRooms() != null) {
+            List<SingleRoom> singleRooms = findMember.getSingleRooms();
             for (Room singleRoom : singleRooms) {
                 if (singleRoom.getStatus() == RoomStatus.END) {
                     finishedRoom.add(singleRoom);

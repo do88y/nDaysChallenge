@@ -43,7 +43,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "number")
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "number")

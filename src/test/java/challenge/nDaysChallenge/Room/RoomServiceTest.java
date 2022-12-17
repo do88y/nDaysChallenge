@@ -47,8 +47,7 @@ public class RoomServiceTest {
 
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
-    @Autowired
-    RoomService roomService;
+    @Autowired RoomService roomService;
 
     @Test
     public void 챌린지_갯수() throws Exception {
@@ -158,7 +157,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void 완료_챌린지_리스트() throws Exception {
         //given
         SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");
