@@ -158,6 +158,13 @@ public class RoomService {
     }
 
     /**
+     * 챌린지 조회(메인)
+     */
+    public List<SingleRoom> findSingleRooms(Long member) {
+        return singleRoomRepository.findSingleRooms(member);
+    }
+
+    /**
      * 전체 완료 챌린지 조회
      */
     public List<Room> findFinishedRooms(Member member) {

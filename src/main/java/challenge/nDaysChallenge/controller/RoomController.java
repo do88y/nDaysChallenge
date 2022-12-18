@@ -26,8 +26,14 @@ public class RoomController {
 
     private final RoomService roomService;
 
-//    @GetMapping("/")
-//    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter)
+    //챌린지 리스트(메인)
+    @GetMapping("/challenge/list")
+    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+
+        List<RoomResponseDto> roomList = new ArrayList<>();
+
+        return ResponseEntity.status(HttpStatus.OK).body(roomList);
+    }
 
 
 
