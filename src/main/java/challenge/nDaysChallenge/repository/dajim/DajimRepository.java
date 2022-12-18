@@ -14,6 +14,9 @@ import java.util.Optional;
 @Repository
 public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
+    @Override
+    <S extends Dajim> S save(S entity);
+
     //룸멤버 (1~4명) 다짐 상세 조회
     @Query("SELECT d FROM Dajim d JOIN d.room r" +
             " WHERE r.number = :roomNumber" +
@@ -26,7 +29,5 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
     @Query("SELECT d FROM Dajim d WHERE d.number = :dajimNumber")
     Optional<Dajim> findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
-
-
 
 }

@@ -18,7 +18,7 @@ spring:
       use-new-id-generator-mappings: false
       #show-sql: true  #설정시 JPA 쿼리문 확인 가능
     properties:
-      hibernate.format_sql: true  #Hibernate가 동작하면서 발생한 SQL의 가독성을 높여 줌
+      hibernate.format_sql: false  #Hibernate가 동작하면서 발생한 SQL의 가독성을 높여 줌 ############
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect  #DB 바꿀 시 이 설정만 바꿔주면 각 DB에 맞는 SQL 문법으로 바꿔 줌
 
 #로그 레벨 설정

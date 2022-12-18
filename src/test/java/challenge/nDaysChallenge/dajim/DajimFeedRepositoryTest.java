@@ -206,7 +206,7 @@ public class DajimFeedRepositoryTest {
             .build());
 
         //when
-        Dajim savedDajim = emotionRepository.findByDajimNumberForEmotion(dajim.getNumber())
+        Dajim savedDajim = dajimRepository.findByDajimNumber(dajim.getNumber())
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
         Stickers sticker = Stickers.valueOf("SURPRISE");

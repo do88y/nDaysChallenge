@@ -5,6 +5,7 @@ import challenge.nDaysChallenge.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 
@@ -22,6 +23,7 @@ public class Dajim extends BaseEntity {
     @Column(name = "dajim_number")
     private Long number;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Emotion> emotions = new ArrayList<>();
 
