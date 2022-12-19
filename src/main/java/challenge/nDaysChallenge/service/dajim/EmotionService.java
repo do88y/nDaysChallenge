@@ -61,9 +61,6 @@ public class EmotionService {
         Dajim dajim = dajimRepository.findByDajimNumber(dajimNumber)
                 .orElseThrow(()->new RuntimeException("이모션이 소속된 다짐을 찾을 수 없습니다."));
 
-        //새 이모션 세팅 위해 해당 다짐 내 emotionlist에서 기존 이모션 삭제
-        dajim.deleteEmotions(emotion);
-
         Emotion updatedEmotion;
 
         //뷰에서 null or 다른 스티커 등록 시
@@ -71,7 +68,6 @@ public class EmotionService {
             updatedEmotion = emotion.update(null);
         } else {
             updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
-            dajim.addEmotions(updatedEmotion); //다짐 내 emotionlist에 스티커 추가
         }
 
         EmotionResponseDto emotionResponseDto = EmotionResponseDto.builder()

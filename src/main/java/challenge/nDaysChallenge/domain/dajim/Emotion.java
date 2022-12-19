@@ -18,11 +18,11 @@ public class Emotion extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Stickers stickers; //감정스티커
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "dajim_number")
     private Dajim dajim;
 

@@ -20,6 +20,7 @@ import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -218,13 +219,18 @@ public class DajimFeedRepositoryTest {
                 .build();
 
         Emotion savedEmotion = emotionRepository.save(emotion);
+        dajim.addEmotions(savedEmotion);
+
 
         //then
         assertThat(savedEmotion.getStickers().toString()).isEqualTo("SURPRISE");
+        System.out.println(dajim.getEmotions().get(0).getStickers().toString());
     }
 
     @DisplayName("이모션 변경 및 삭제")
     @Test
+    @Transactional
+    @Rollback(value = false)
     void updateEmotion(){
         //given
         Member member1 = Member.builder()
@@ -248,10 +254,11 @@ public class DajimFeedRepositoryTest {
                 .stickers(Stickers.valueOf("CHEER"))
                 .build();
         emotionRepository.save(emotion);
-
-        EmotionRequestDto requestDto = new EmotionRequestDto(1L,"SURPRISE");
+        dajim.addEmotions(emotion);
 
         //when
+        EmotionRequestDto requestDto = new EmotionRequestDto(1L,"TOUCHED");
+
         Emotion updatedEmotion;
 
         if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
@@ -266,7 +273,8 @@ public class DajimFeedRepositoryTest {
                         .stickers(updatedEmotion.getStickers().toString()).build();
 
         //then
-        assertThat(newEmotion.getStickers()).isEqualTo("SURPRISE");
+        assertThat(newEmotion.getStickers()).isEqualTo("TOUCHED");
+        assertThat(dajim.getEmotions().get(0).getStickers()).isEqualTo(Stickers.TOUCHED);
     }
 
 }
