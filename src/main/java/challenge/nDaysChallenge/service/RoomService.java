@@ -128,7 +128,7 @@ public class RoomService {
         SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).get();
 
         //개인 챌린지 멤버 조회
-        Member member = SingleRoom.giveMember();
+        Member member = singleRoom.giveMember();
         int usedPassCount = singleRoom.getUsedPassCount();
         int passCount = singleRoom.getPassCount();
 
