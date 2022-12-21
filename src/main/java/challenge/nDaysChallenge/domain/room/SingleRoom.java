@@ -34,7 +34,7 @@ public class SingleRoom extends Room {
     //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅
     public void joinRoom(Room room) {
         this.room = room;
-        member.getSingleRooms().add(this);
+        this.member.addSingleRooms(this);
     }
 
     //==생성 메서드==//

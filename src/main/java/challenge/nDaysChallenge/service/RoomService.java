@@ -61,7 +61,7 @@ public class RoomService {
         singleRoomRepository.save(newRoom);
 
         //멤버에 챌린지 저장
-//        newRoom.addRoom(newRoom, member);
+        member.addSingleRooms(newRoom);
 
         return newRoom;
     }

@@ -102,7 +102,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         SecurityContextHolder.clearContext(); // 시큐리티 컨텍스트에서 인증 정보 삭제
     }
 
-    //토큰 재발급
+    //액세스토큰 재발급
     public TokenDto reissue(JwtRequestDto tokenRequestDto) {
 
         //refresh 토큰 유효성(만료 여부) 검증
@@ -123,11 +123,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-        TokenDto tokenDto = tokenProvider.generateToken(authentication);
+        TokenDto tokenDto = tokenProvider.reissueToken(authentication, refreshToken);
 
         //저장소에 새 리프레시 토큰 저장
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
+//        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+//        refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
         return tokenDto;
