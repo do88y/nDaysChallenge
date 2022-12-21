@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/challenge?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: '12345678'
+    password: '1234'
 
     hikari:
       initialization-fail-timeout: 0 #커넥션 초기화 실패 시 유효성 검사 시도
