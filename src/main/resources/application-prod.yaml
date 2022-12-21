@@ -1,7 +1,5 @@
 server:
   port : 5000
-  tomcat:
-    connection-timeout: 18000
 spring:
   jpa:
     database: MYSQL
