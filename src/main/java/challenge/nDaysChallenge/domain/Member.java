@@ -42,7 +42,6 @@ public class Member {
     @OneToMany(mappedBy = "number")
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "member")
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
@@ -69,6 +68,10 @@ public class Member {
     //친구 리스트에 추가 메서드//
     public void addFriendList (Relationship member){
         this.confirmedFriendsList.add(member);
+    }
+
+    public void addSingleRooms (SingleRoom singleRoom){
+        this.singleRooms.add(singleRoom);
     }
 
 }
