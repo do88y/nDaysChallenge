@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -97,12 +98,14 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 //        //username, password 형태 인증 위한 객체 생성, 리턴
 //        return new UsernamePasswordAuthenticationToken(principal,"", authorities);
 
-        String id = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
+//        String id = Jwts.parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
 
-        UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(id);
+        log.info("아이디 : " + claims.getSubject());
+
+        UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(memberAdapter,"",authorities);
 

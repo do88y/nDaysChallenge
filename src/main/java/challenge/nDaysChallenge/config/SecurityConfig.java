@@ -33,14 +33,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //하단 패턴 리소스 Spring Security 미적용 => 테스트 시 자유롭게 접근 가능
+    //Spring Security 미적용 => 테스트 시 자유롭게 접근 가능
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
     }
 
-    //WebSecurity 외 리소스에 Spring Security 설정
+    //Spring Security 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
@@ -88,7 +88,7 @@ public class SecurityConfig {
 
     }
 
-////    CORS 허용
+//    CORS 허용
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();

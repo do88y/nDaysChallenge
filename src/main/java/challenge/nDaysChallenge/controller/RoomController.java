@@ -26,12 +26,6 @@ public class RoomController {
 
     private final RoomService roomService;
 
-//    @GetMapping("/")
-//    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter)
-
-
-
-
     //챌린지 생성
     @PostMapping("/challenge/create")
     public ResponseEntity<?> createRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,

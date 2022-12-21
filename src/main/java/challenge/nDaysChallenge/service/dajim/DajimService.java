@@ -23,8 +23,6 @@ public class DajimService {
 
     private final DajimRepository dajimRepository;
 
-    private final MemberRepository memberRepository;
-
     //다짐 등록 및 수정
     public DajimResponseDto uploadDajim(Long roomNumber, DajimRequestDto requestDto, Member member) {
         Dajim savedDajim;
@@ -74,6 +72,7 @@ public class DajimService {
     }
 
     //다짐 조회
+    @Transactional(readOnly = true)
     public List<DajimResponseDto> viewDajimInRoom(Long roomNumber){
         List<Dajim> dajims = null;
 
