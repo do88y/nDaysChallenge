@@ -4,9 +4,11 @@ import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.security.CustomAccessDeniedHandler;
 import challenge.nDaysChallenge.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -95,7 +97,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
-        configuration.addAllowedOrigin("http://localhost:3000"); ////
+        configuration.addAllowedOrigin("http://43.201.59.236:3000"); ////
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");
@@ -105,6 +107,17 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    //AuthenticationPrincipal 멤버객체 컨트롤러단에서부터 영속화
+    @Bean
+    public FilterRegistrationBean<OpenEntityManagerInViewFilter> openEntityManagerInViewFilter() {
+
+        FilterRegistrationBean<OpenEntityManagerInViewFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
+        filterFilterRegistrationBean.setFilter(new OpenEntityManagerInViewFilter());
+        filterFilterRegistrationBean.setOrder(Integer.MIN_VALUE);
+        return filterFilterRegistrationBean;
+
     }
 
 }

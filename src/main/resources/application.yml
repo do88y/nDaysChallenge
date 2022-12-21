@@ -1,6 +1,9 @@
 spring:
   profiles:
-    include: oauth, mysql
+    include: mysql
   main:
     allow-bean-definition-overriding: true
 
+#jwt 토큰
+jwt:
+  secret: d9jfAaD3FJDsIFSiof38r2S8iik9fds8FE3G734y1VN9B4Pjh4Unre42OlwHkTfKD0df3Diu9mlC0eSPkw1qGEd3QtdAH4V0b32ssYew #512비트(64바이트) 이상
