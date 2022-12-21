@@ -56,7 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Rollback(value = false)
+@Rollback(value = true)
 public class WithUserDetailsTest {
 
     @Autowired
@@ -97,6 +97,7 @@ public class WithUserDetailsTest {
         memberRepository.save(member);
     }
 
+/*
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")
     public void 로그인() throws Exception {
@@ -117,6 +118,7 @@ public class WithUserDetailsTest {
 
         assertThat(currentMemberId).isEqualTo("abc@naver.com");
     }
+*/
 
     @Test
     @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "abc@naver.com")

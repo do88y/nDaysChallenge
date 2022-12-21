@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoom extends Room {
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "room")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     //==생성자==//

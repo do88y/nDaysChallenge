@@ -15,9 +15,6 @@ public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
     public RoomMember findByMemberAndRoom(Member member, Room room);
 
-    public Set<RoomMember> findByRoomNumber(Long room);
-
-    //멤버로 그룹챌린지 갯수 조회
-    public int countByMember(Member member);
+    public Set<RoomMember> findByRoom(Room room);
 
 }
