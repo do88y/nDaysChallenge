@@ -47,8 +47,7 @@ public class RoomServiceTest {
 
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
-    @Autowired
-    RoomService roomService;
+    @Autowired RoomService roomService;
 
     @Test
     public void 챌린지_갯수() throws Exception {
@@ -81,7 +80,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
         Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
@@ -109,7 +108,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback(value = true)
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Member> selectedMembers = new HashSet<>();
@@ -129,7 +128,7 @@ public class RoomServiceTest {
 
         //then
         RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom);
-        System.out.println("findRoomByMember = " + findRoomByMember);
+        System.out.println("findRoomByMember = " + findRoomByMember.getMember().getNickname());
         assertThat(groupRoom.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
 
         //멤버에서 roomMemberList 조회
@@ -154,6 +153,43 @@ public class RoomServiceTest {
         //then
         long count = roomRepository.count();
         assertThat(count).isEqualTo(0);
+    }
+
+    @Test
+    public void 진행_챌린지_조회() throws Exception {
+        //given
+        SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");
+        SingleRoom singleRoom2 = SingleRoom.createRoom("공부", period, Category.ETC, RoomType.SINGLE, RoomStatus.END, 0, "");
+        SingleRoom singleRoom3 = SingleRoom.createRoom("청소", period, Category.EXERCISE, RoomType.SINGLE, RoomStatus.CONTINUE, 10, "꿀잠");
+        GroupRoom groupRoom = GroupRoom.createRoom("명상", period, Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행");
+        singleRoomRepository.save(singleRoom1);
+        singleRoomRepository.save(singleRoom2);
+        singleRoomRepository.save(singleRoom3);
+        groupRoomRepository.save(groupRoom);
+
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        memberRepository.save(member);
+
+        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
+        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member);
+        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member);
+        singleRoomRepository.save(createSingleRoom1);
+        singleRoomRepository.save(createSingleRoom2);
+        singleRoomRepository.save(createSingleRoom3);
+
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom);
+        roomMemberRepository.save(roomMember);
+
+        em.flush();
+        em.clear();
+
+        //when
+        List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
+        List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
+
+        //then
+        assertThat(singleRooms.size()).isEqualTo(singleRoomRepository.count());
+        assertThat(groupRooms.size()).isEqualTo(groupRoomRepository.count());
     }
 
     @Test

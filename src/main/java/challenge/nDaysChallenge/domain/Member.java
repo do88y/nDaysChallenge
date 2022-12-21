@@ -42,6 +42,7 @@ public class Member {
     @OneToMany(mappedBy = "number")
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "member")
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
