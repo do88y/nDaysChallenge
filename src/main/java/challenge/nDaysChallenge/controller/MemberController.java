@@ -21,6 +21,7 @@ public class MemberController { //마이페이지 전용
 
     private final MemberService memberService;
 
+    //회원정보 조회 (수정 전)
     @GetMapping("/user/details")
     public ResponseEntity<?> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         if (memberAdapter==null){

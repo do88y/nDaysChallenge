@@ -79,16 +79,22 @@ public class memberTest {
     @Rollback(value = false)
     void 닉네임_변경(){
         //회원가입
-        Optional<Member> member = memberRepository.findById("abc@naver.com");
+        Member member = memberRepository.findById("abc@naver.com")
+                .orElseThrow(()->new RuntimeException("멤버를 찾을 수 없습니다."));
 
         //닉네임 변경
-        Member updatedMember = member.get().update("새 닉네임","123",1);
+        Member updatedMember = member.update("새 닉네임","123",2);
 
         assertThat(updatedMember.getNickname()).isEqualTo("새 닉네임");
         assertThat(updatedMember.getPw()).isEqualTo("123");
+<<<<<<< HEAD
+        assertThat(updatedMember.getImage()).isEqualTo(2);
+    }
+=======
         assertThat(updatedMember.getImage()).isEqualTo(1);
         assertThat(member).isEqualTo(updatedMember);
     }*/
+>>>>>>> cc05eb81cee1fc6543fdb9c075684d89f3438174
 
     @DisplayName("멤버 삭제(탈퇴) 시 룸/다짐/이모션 존재 여부 확인")
     @Test

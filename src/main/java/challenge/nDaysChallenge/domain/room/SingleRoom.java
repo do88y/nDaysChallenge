@@ -21,7 +21,6 @@ public class SingleRoom extends Room {
     @JoinColumn(name = "member_number")
     private Member member;
 
-
     //getter
     public Member giveMember() {
         return member;
