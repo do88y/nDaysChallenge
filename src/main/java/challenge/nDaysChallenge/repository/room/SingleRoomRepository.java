@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
-    @Query(value = "select * from SingleRoom where member = :member", nativeQuery = true)
-    List<SingleRoom> findSingleRooms(@Param("member") Long member);
+    //멤버의 개인 챌린지 찾는 메서드
+    @Query(value = "select s from SingleRoom s where s.member = :member")
+    List<SingleRoom> findSingleRooms(@Param("member") Member member);
 }

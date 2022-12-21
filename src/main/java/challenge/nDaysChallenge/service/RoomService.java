@@ -30,19 +30,16 @@ public class RoomService {
     //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
-        //null 체크를 위해서 추가했지만, null일 가능성이 있을지 좀 더 고민 필요
-        Optional<String> getRoomType = Optional.ofNullable(dto.getType());
-        String roomType = getRoomType.orElseThrow(() -> new NoSuchElementException("챌린지 타입이 없습니다."));
-
-        if (roomType.equals("SINGLE")) {
+        if (dto.getType().equals("SINGLE")) {
             SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
 
             return singleRoom;
-        } else if (roomType.equals("GROUP")) {
+        } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
             Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
             for (Long groupMemberNum : groupMemberNums) {
-                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum)
+                        .orElseThrow(()->new RuntimeException("그룹멤버를 찾을 수 없습니다.")));
             }
             GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
 
@@ -99,21 +96,22 @@ public class RoomService {
     @Transactional
     public void deleteRoom(Member member, Long roomNumber) {
         //엔티티 조회
-        SingleRoom room = singleRoomRepository.findById(roomNumber).get();
-        Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
+        Optional<Room> findRoom = roomRepository.findById(roomNumber);
+        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
             roomRepository.delete(room);
 
-            //roomCount -1, RoomMember 삭제
+            //RoomMember 삭제
+            Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             for (RoomMember roomMember : roomMembers) {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
         } else if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
-            singleRoomRepository.delete(room);
+            roomRepository.delete(room);
             member.getSingleRooms().remove(room);
         }
 
@@ -160,8 +158,11 @@ public class RoomService {
     /**
      * 챌린지 조회(메인)
      */
-    public List<SingleRoom> findSingleRooms(Long member) {
+    public List<SingleRoom> findSingleRooms(Member member) {
         return singleRoomRepository.findSingleRooms(member);
+    }
+    public List<GroupRoom> findGroupRooms(Member member) {
+        return groupRoomRepository.findByMember(member);
     }
 
     /**
@@ -169,11 +170,10 @@ public class RoomService {
      */
     public List<Room> findFinishedRooms(Member member) {
 
-        Member findMember = memberRepository.findByNumber(member.getNumber());
         List<Room> finishedRoom = new ArrayList<>();
 
-        if (findMember.getRoomMemberList() != null) {
-            List<RoomMember> roomMemberList = findMember.getRoomMemberList();
+        if (member.getRoomMemberList() != null) {
+            List<RoomMember> roomMemberList = member.getRoomMemberList();
             for (RoomMember roomMember : roomMemberList) {
                 Room groupRoom = roomMember.getRoom();
                 if (groupRoom.getStatus() == RoomStatus.END) {
@@ -181,8 +181,8 @@ public class RoomService {
                 }
             }
         }
-        if (findMember.getSingleRooms() != null) {
-            List<SingleRoom> singleRooms = findMember.getSingleRooms();
+        if (member.getSingleRooms() != null) {
+            List<SingleRoom> singleRooms = member.getSingleRooms();
             for (Room singleRoom : singleRooms) {
                 if (singleRoom.getStatus() == RoomStatus.END) {
                     finishedRoom.add(singleRoom);

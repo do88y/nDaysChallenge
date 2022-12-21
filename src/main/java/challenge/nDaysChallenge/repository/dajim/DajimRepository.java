@@ -30,6 +30,4 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
     @Query("SELECT d FROM Dajim d WHERE d.number = :dajimNumber")
     Optional<Dajim> findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
 
-
-
 }

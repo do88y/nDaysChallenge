@@ -25,11 +25,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //중복 닉네임 방지
     boolean existsByNickname(String nickname);
 
-//    //fetch join
-//    @Query("select m from Member m join fetch m.singleRooms")
-//    public List<SingleRoom> findAllWithSingleRoomsFetchJoin();
-
-    Member findByNumber(Long memberNumber);
+    Optional<Member> findByNumber(Long memberNumber);
 
 
 }
