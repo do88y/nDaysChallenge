@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: mysql
+    include: prod
   main:
     allow-bean-definition-overriding: true
 
