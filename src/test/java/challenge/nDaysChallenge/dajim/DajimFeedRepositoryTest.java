@@ -177,11 +177,11 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-//        assertThat(singleRooms.size()).isEqualTo(1); //싱글룸 0개
-//        assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
-//        assertThat(dajims.size()).isEqualTo(4); //해당 그룹룸에 다짐 3개
-//        assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
-//        assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
+        assertThat(singleRooms.size()).isEqualTo(0); //싱글룸 0개
+        assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
+        assertThat(dajims.size()).isEqualTo(3); //해당 그룹룸에 다짐 3개
+        assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
+        assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }
 
     @DisplayName("이모션 등록")

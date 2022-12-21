@@ -28,7 +28,7 @@ public class EmotionController { //감정 스티커 등록
     }
 
     //감정 스티커 변경 or null 등록 (프론트 selected된 상태에서 다른 스티커 select 시 or 두번 똑같은 스티커 클릭 시)
-    @PutMapping("/feed/emotion")
+    @PatchMapping("/feed/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
 
