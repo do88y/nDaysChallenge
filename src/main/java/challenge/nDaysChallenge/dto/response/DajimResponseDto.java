@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DajimResponseDto {
 
-    private Long dajimNumber;
+    private long dajimNumber;
 
     private int image;
 
@@ -34,7 +34,7 @@ public class DajimResponseDto {
 
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보
     @Builder
-    public DajimResponseDto(Long dajimNumber, String nickname, int image, String content, String open, LocalDateTime updatedDate){
+    public DajimResponseDto(long dajimNumber, String nickname, int image, String content, String open, LocalDateTime updatedDate){
         this.dajimNumber=dajimNumber;
         this.nickname=nickname;
         this.image=image;

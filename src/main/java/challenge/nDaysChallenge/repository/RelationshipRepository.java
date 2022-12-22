@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,7 +13,11 @@ import java.util.List;
 public interface RelationshipRepository extends JpaRepository<Relationship, Long > {
 
 
+
+
     Relationship findByUserAndFriend(Member user, Member friend);
+
+
 
     List<Relationship>  findByUser (Member user);
 

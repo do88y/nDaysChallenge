@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +24,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     //회원정보 조회 (수정 전)
-    public MemberInfoResponseDto findMemberInfo(Member member) {
+    @Transactional
+    public MemberInfoResponseDto findMemberInfo(String id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
         MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(member);
 
         return memberInfoResponseDto;

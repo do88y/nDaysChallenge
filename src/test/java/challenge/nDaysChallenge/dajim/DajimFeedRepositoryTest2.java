@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,8 @@ public class DajimFeedRepositoryTest2{
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
-        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
+
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
 
         //싱글룸 다짐
         Dajim dajim = dajimRepository.save(Dajim.builder()
@@ -80,7 +82,9 @@ public class DajimFeedRepositoryTest2{
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
-        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
+
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(), 100L), Category.ETC, 3, "");
+
         roomRepository.save(room2);
         RoomMember roomMember = RoomMember.createRoomMember(member, room2);
         roomMemberRepository.save(roomMember);

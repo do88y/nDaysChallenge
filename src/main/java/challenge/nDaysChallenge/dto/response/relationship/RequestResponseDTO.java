@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class RelationResponseDTO {
+public class RequestResponseDTO {
     private String id;                   //친구아이디
     private String nickname;     //친구 닉네임
 
@@ -18,7 +18,7 @@ public class RelationResponseDTO {
 
 
     @JsonFormat(pattern ="yyyy.mm.dd HH:mm:ss")
-    private LocalDateTime acceptedDate;     //수락날짜시간
+    private LocalDateTime requestDate;     //수락날짜시간
 
     //view에 넘겨야하는건 string이어야 하니까 dto에서는 string으로
     private String relationshipStatus;
@@ -26,11 +26,11 @@ public class RelationResponseDTO {
 
 
     @Builder
-    public RelationResponseDTO(String id, String nickname, int image, LocalDateTime acceptedDate, String relationshipStatus, List<String >friendsList){
+    public RequestResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus, List<String >friendsList){
         this.id=id;
         this.nickname=nickname;
         this.image=image;
-        this.acceptedDate=acceptedDate;
+        this.requestDate=requestDate;
         this.relationshipStatus=relationshipStatus;
         this.friendsList=friendsList;
     }

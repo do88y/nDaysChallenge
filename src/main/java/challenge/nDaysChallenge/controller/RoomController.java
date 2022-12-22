@@ -8,7 +8,6 @@ import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.dto.response.RoomResponseDto;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.security.SecurityUtil;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,11 @@ import java.util.Optional;
 public class RoomController {
 
     private final RoomService roomService;
+
+//    @GetMapping("/")
+//    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter)
+
+
 
 
     //챌린지 생성
@@ -68,7 +72,7 @@ public class RoomController {
         return null;
     }
 
-    //챌린지 삭제
+    //챌린지 삭제&실패
     @DeleteMapping("/challenge/{challengeId}")
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @PathVariable("challengeId") Long roomNumber) {

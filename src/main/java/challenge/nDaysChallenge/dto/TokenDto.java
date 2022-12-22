@@ -9,10 +9,10 @@ public class TokenDto {
     private String type; //Bearer
     private String accessToken;
     private String refreshToken;
-    private Long accessTokenExpireTime;
+    private long accessTokenExpireTime;
 
     @Builder
-    public TokenDto(String type, String accessToken, String refreshToken, Long accessTokenExpireTime) {
+    public TokenDto(String type, String accessToken, String refreshToken, long accessTokenExpireTime) {
         this.type = type;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

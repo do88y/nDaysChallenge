@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거치도록 제한된 Filter 구현체
 
@@ -25,12 +26,21 @@ public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거�
     //JWT 토큰의 인증 정보를 현재 쓰레드의 SecurityContext에 저장
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = resolveToken(request); //요청헤더에서 토큰 꺼냄
+        String token = resolveToken(request); //요청헤더에서 토큰 꺼냄
 
         //토큰 유효성 검사 -> Authentication 객체 가져와 SecurityContext애 저장
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)){ //토큰 검증
-            Authentication authentication = tokenProvider.getAuthentication(jwt); //해당 토큰의 사용자 정보 객체 가져옴
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)){ //토큰 검증
+
+            Authentication authentication = tokenProvider.getAuthentication(token); //해당 토큰의 사용자 정보 객체 가져옴
+
+            if (authentication==null){
+                log.info("authentication 객체를 찾을 수 없습니다.");
+                throw new RuntimeException("authentication 객체를 찾을 수 없습니다.");
+            }
+
             SecurityContextHolder.getContext().setAuthentication(authentication); //시큐리티컨텍스트에 세팅
+            log.info("시큐리티 컨텍스트에 인증 객체 저장 성공");
+
         }
 
         filterChain.doFilter(request,response); //다음 필터로 이동

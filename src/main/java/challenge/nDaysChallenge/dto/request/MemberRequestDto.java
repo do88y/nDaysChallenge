@@ -22,6 +22,7 @@ public class MemberRequestDto {
     private String pw;
 
     private String nickname;
+
     private int image;
 
     private int roomLimit;
@@ -44,10 +45,6 @@ public class MemberRequestDto {
                 .image(image)
                 .roomLimit(roomLimit)
                 .build();
-    }
-
-    public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(id, pw);
     }
 
 }

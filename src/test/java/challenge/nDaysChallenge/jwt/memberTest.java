@@ -15,6 +15,7 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,13 +108,13 @@ public class memberTest {
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸
-        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(10L), Category.ROUTINE, 2, "");
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "");
         roomRepository.save(room1);
         SingleRoom singleRoom1 = room1.addRoom(room1, member1);
         roomRepository.save(singleRoom1);
 
         //그룹룸
-        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(100L), Category.ETC, 3, "");
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "");
         roomRepository.save(room2);
         RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
         roomMemberRepository.save(roomMember1);

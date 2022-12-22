@@ -19,7 +19,6 @@ public class ApplyRequestDTO {
 
   private String relationshipStatus;
 
-
   @DateTimeFormat(pattern = "yyyy.mm.dd HH:mm:ss")
   private LocalDateTime requestedDate;    //요청날짜시간
 

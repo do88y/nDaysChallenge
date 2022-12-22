@@ -3,9 +3,11 @@ package challenge.nDaysChallenge.dto.response;
 import challenge.nDaysChallenge.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class MemberInfoResponseDto {
 
     private String id;
