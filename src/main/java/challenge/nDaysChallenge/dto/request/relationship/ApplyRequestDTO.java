@@ -23,17 +23,13 @@ public class ApplyRequestDTO {
   private LocalDateTime requestedDate;    //요청날짜시간
 
 
-  //view에 넘겨야하는건 string이어야 하니까 dto에서는 string으로
-  public List<String> friendsList = ApplyRequestDTO.builder().friendsList;
 
-
-@Builder
-  public ApplyRequestDTO(String id, String nickname, int image, LocalDateTime requestedDate, String relationshipStatus, List<String >friendsList){
+  @Builder
+  public ApplyRequestDTO(String id, String nickname, int image, LocalDateTime requestedDate, String relationshipStatus){
     this.id=id;
     this.nickname=nickname;
     this.image=image;
     this.requestedDate=requestedDate;
     this.relationshipStatus=relationshipStatus;
-    this.friendsList=friendsList;
   }
 }

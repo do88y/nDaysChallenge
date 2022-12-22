@@ -26,13 +26,12 @@ public class RequestResponseDTO {
 
 
     @Builder
-    public RequestResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus, List<String >friendsList){
+    public RequestResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus){
         this.id=id;
         this.nickname=nickname;
         this.image=image;
         this.requestDate=requestDate;
         this.relationshipStatus=relationshipStatus;
-        this.friendsList=friendsList;
     }
 
 }

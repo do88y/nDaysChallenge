@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
@@ -9,6 +10,7 @@ import challenge.nDaysChallenge.dto.response.relationship.AfterDeleteResponseDTO
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -24,11 +26,13 @@ public class RelationshipService {
     private final MemberRepository memberRepository;
 
 
-    //relationship 생성//
-    public void saveRelationship(Member user,Member friend){
 
-        Relationship userRelationship =Relationship.readyCreateRelation(user,friend);
-        Relationship friendRelationship =Relationship.readyCreateRelation(friend,user);
+    //relationship 생성//
+
+    public void saveRelationship(@AuthenticationPrincipal MemberAdapter user, Member friend){
+
+        Relationship userRelationship =Relationship.readyCreateRelation(user.getMember(),friend);
+        Relationship friendRelationship =Relationship.readyCreateRelation(friend, user.getMember());
         relationshipRepository.save(userRelationship);
         relationshipRepository.save(friendRelationship);
     }
