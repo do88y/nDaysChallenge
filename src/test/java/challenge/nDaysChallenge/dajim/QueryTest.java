@@ -181,7 +181,7 @@ public class QueryTest { //N+1 테스트
         groupRooms.add(2L);
 
         //when
-        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRooms, null);
+        List<Dajim> dajims = dajimFeedRepository.findAllByOpen();
 
         //then
         Assertions.assertThat(dajims.size()).isEqualTo(3);

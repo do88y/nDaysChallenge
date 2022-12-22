@@ -97,7 +97,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
-        configuration.addAllowedOrigin("https://ndayschallenge.com"); ////
+        configuration.addAllowedOrigin("http://ndayschallenge.com"); ////
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");
