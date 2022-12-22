@@ -3,8 +3,9 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AfterDeleteResponseDTO;
-import challenge.nDaysChallenge.dto.response.relationship.RelationResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
 import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
@@ -43,18 +44,12 @@ public class RelationshipController {
     public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                @RequestBody ApplyRequestDTO applyDTO) {
 
-        //relationship생성한걸 받은부분//
-        Member user = memberAdapter.getMember();
-        String friendId = applyDTO.getId();
-        Member friend = memberRepository.findById(friendId).orElse(null);
-        relationshipService.saveRelationship(user,friend);
-
         //request 에서 받은값을 response 에 보내줘야하니까//
-        RelationResponseDTO savedRequestFriendsList = RelationResponseDTO.builder()
+        RequestResponseDTO savedRequestFriendsList = RequestResponseDTO.builder()
                 .id(applyDTO.getId())
                 .nickname(applyDTO.getNickname())
                 .image(applyDTO.getImage())
-                .acceptedDate(LocalDateTime.now())
+                .requestDate(LocalDateTime.now())
                 .relationshipStatus(applyDTO.getRelationshipStatus())
                 .build();
 
@@ -66,7 +61,7 @@ public class RelationshipController {
     @PostMapping("/friends/accept")
     public ResponseEntity<?> acceptFriendStatus(@RequestBody ApplyRequestDTO applyDTO) {
 
-        RelationResponseDTO savedAcceptFriendsList = RelationResponseDTO.builder()
+        AcceptResponseDTO savedAcceptFriendsList = AcceptResponseDTO.builder()
                 .id(applyDTO.getId())
                 .nickname(applyDTO.getNickname())
                 .image(applyDTO.getImage())
@@ -81,7 +76,7 @@ public class RelationshipController {
     //요청거절 relationship 객채 삭제//
     @DeleteMapping("/friends/request")
     public ResponseEntity<?> deleteFriendStatus(    @AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                                               @RequestBody ApplyRequestDTO applyDTO ) {
+                                                    @RequestBody ApplyRequestDTO applyDTO ) {
 
         Member user = memberAdapter.getMember();
         Member friend = memberRepository.findById(applyDTO.getId()).orElse(null);
