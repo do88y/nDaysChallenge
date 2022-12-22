@@ -44,12 +44,6 @@ public class RelationshipController {
     public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                @RequestBody ApplyRequestDTO applyDTO) {
 
-        //relationship생성한걸 받은부분//
-        Member user = memberAdapter.getMember();
-        String friendId = applyDTO.getId();
-        Member friend = memberRepository.findById(friendId).orElse(null);
-        relationshipService.saveRelationship(user,friend);
-
         //request 에서 받은값을 response 에 보내줘야하니까//
         RequestResponseDTO savedRequestFriendsList = RequestResponseDTO.builder()
                 .id(applyDTO.getId())
@@ -82,7 +76,7 @@ public class RelationshipController {
     //요청거절 relationship 객채 삭제//
     @DeleteMapping("/friends/request")
     public ResponseEntity<?> deleteFriendStatus(    @AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                                               @RequestBody ApplyRequestDTO applyDTO ) {
+                                                    @RequestBody ApplyRequestDTO applyDTO ) {
 
         Member user = memberAdapter.getMember();
         Member friend = memberRepository.findById(applyDTO.getId()).orElse(null);
