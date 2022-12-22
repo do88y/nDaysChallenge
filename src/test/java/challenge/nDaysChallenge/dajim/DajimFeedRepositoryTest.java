@@ -99,6 +99,7 @@ public class DajimFeedRepositoryTest {
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
+        member1.addSingleRooms(room1);
         roomRepository.save(room1);
 
         //싱글룸 다짐
@@ -156,13 +157,13 @@ public class DajimFeedRepositoryTest {
                 .collect(Collectors.toList());
 
         //when
-        //멤버2 싱글룸 불러오기
+        //멤버1 싱글룸 불러오기
         List<SingleRoom> singleRooms = member1.getSingleRooms();
         List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
                         singleRoom.getNumber())
                 .collect(Collectors.toList());
 
-        //멤버2 그룹룸 불러오기
+        //멤버1 그룹룸 불러오기
         List<RoomMember> roomMemberList = member1.getRoomMemberList();
         List<Long> groupRoomNumbers = roomMemberList.stream().map(roomMember ->
                         roomMember.getRoom().getNumber())
@@ -177,9 +178,9 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-        assertThat(singleRooms.size()).isEqualTo(0); //싱글룸 0개
+        assertThat(singleRooms.size()).isEqualTo(1); //싱글룸 1개
         assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
-        assertThat(dajims.size()).isEqualTo(3); //해당 그룹룸에 다짐 3개
+        assertThat(dajims.size()).isEqualTo(4); //다짐 4개
         assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
         assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }
