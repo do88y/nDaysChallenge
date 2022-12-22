@@ -19,7 +19,7 @@ import java.util.List;
 public class Dajim extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "dajim_number")
     private Long number;
 
