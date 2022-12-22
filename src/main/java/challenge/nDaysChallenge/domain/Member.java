@@ -38,9 +38,6 @@ public class Member {
     @OneToMany(mappedBy = "number")
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
-
     @OneToMany(mappedBy = "member")
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
