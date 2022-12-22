@@ -4,14 +4,13 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AfterDeleteResponseDTO;
-import challenge.nDaysChallenge.dto.response.relationship.RelationResponseDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class RelationshipService {
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
+
     //relationship 생성//
     public void saveRelationship(Member user,Member friend){
 
@@ -33,8 +33,10 @@ public class RelationshipService {
         relationshipRepository.save(friendRelationship);
     }
 
-    public RelationResponseDTO acceptRelationship (Member user, Member friend, ApplyRequestDTO applyDTO){
-    //수락 버튼을 눌렀을 때 시행되는 메서드//
+
+
+    public AcceptResponseDTO acceptRelationship (Member user, Member friend, ApplyRequestDTO applyDTO){
+        //수락 버튼을 눌렀을 때 시행되는 메서드//
         Relationship findUser =relationshipRepository.findByUserAndFriend(user,friend);//유저 조회
         Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
         findUser.updateStatus(RelationshipStatus.ACCEPT);
@@ -43,37 +45,43 @@ public class RelationshipService {
         friend.addFriendList(findUser);
 
         //response dto로 보내줄 값 생성자//
-        RelationResponseDTO acceptFollowerDTO = RelationResponseDTO.builder()
+        AcceptResponseDTO acceptFollowerDTO = AcceptResponseDTO.builder()
                 .id(friend.getId())
                 .nickname(friend.getNickname())
                 .image(friend.getImage())
                 .acceptedDate(LocalDateTime.now())
                 .relationshipStatus(applyDTO.getRelationshipStatus())
-                .friendsList(applyDTO.getFriendsList())
                 .build();
 
         return acceptFollowerDTO;
 //리턴값이 뷰에 전해져야하니까 responseDTO의 빌더로 값이 가서 친구의 정보로 들어가게
-}
+    }
 
-public AfterDeleteResponseDTO deleteEachRelation (Member user, Member friend){
+    public AfterDeleteResponseDTO deleteEachRelation (Member user, Member friend){
         //거절을 눌렀을 때 시행되는 메서드//
-    Relationship findUser =relationshipRepository.findByUserAndFriend(user,friend);
-    Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
-    //서로를 찾기//
+        Relationship findUser =relationshipRepository.findByUserAndFriend(user,friend);
+        Relationship findFriend = relationshipRepository.findByUserAndFriend(friend,user);
+        //서로를 찾기//
 
-    relationshipRepository.delete(findUser);
-    relationshipRepository.delete(findFriend);
+        relationshipRepository.delete(findUser);
+        relationshipRepository.delete(findFriend);
 
-    //user의 현재 친구리스트(요청,수락) 찾기//
-    List<Relationship> byUser = relationshipRepository.findByUser(user);
+        //user의 현재 친구리스트(요청,수락) 찾기//
+        List<Relationship> byUser = relationshipRepository.findByUser(user);
 
-    //생성//
-    AfterDeleteResponseDTO afterDeleteResponseDTO = new AfterDeleteResponseDTO(byUser);
+        //생성//
+        AfterDeleteResponseDTO afterDeleteResponseDTO = new AfterDeleteResponseDTO(byUser);
 
-    return afterDeleteResponseDTO;
 
-}
+        return afterDeleteResponseDTO;
+
+
+
+
+    }
+
+
+
 
     //리포지토리에서 친구 검색하는 메서드//
     public Member findFriends (String id, String nickname){
