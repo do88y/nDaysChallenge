@@ -27,6 +27,16 @@ public class RoomService {
     private final SingleRoomRepository singleRoomRepository;
 
 
+    /**
+     * 챌린지 조회(메인)
+     */
+    public List<SingleRoom> findSingleRooms(Member member) {
+        return singleRoomRepository.findSingleRooms(member);
+    }
+    public List<GroupRoom> findGroupRooms(Member member) {
+        return groupRoomRepository.findByMember(member);
+    }
+
     //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
@@ -61,7 +71,7 @@ public class RoomService {
         singleRoomRepository.save(newRoom);
 
         //멤버에 챌린지 저장
-        member.addSingleRooms(newRoom);
+        newRoom.addRoom(newRoom, member);
 
         return newRoom;
     }
@@ -153,16 +163,6 @@ public class RoomService {
                 roomRepository.deleteById(roomMember.getNumber());
             }
         }
-    }
-
-    /**
-     * 챌린지 조회(메인)
-     */
-    public List<SingleRoom> findSingleRooms(Member member) {
-        return singleRoomRepository.findSingleRooms(member);
-    }
-    public List<GroupRoom> findGroupRooms(Member member) {
-        return groupRoomRepository.findByMember(member);
     }
 
     /**

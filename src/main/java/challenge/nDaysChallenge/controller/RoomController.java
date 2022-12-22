@@ -40,7 +40,13 @@ public class RoomController {
                 RoomResponseDto singleRoomResponseDto = RoomResponseDto.builder()
                         .name(singleRoom.getName())
                         .category(singleRoom.getCategory().name())
+                        .reward(singleRoom.getReward())
                         .type(singleRoom.getType().name())
+                        .status(singleRoom.getStatus().name())
+                        .passCount(singleRoom.getPassCount())
+                        .totalDays(singleRoom.getPeriod().getTotalDays())
+                        .startDate(singleRoom.getPeriod().getStartDate())
+                        .endDate(singleRoom.getPeriod().getEndDate())
                         .build();
                 roomList.add(singleRoomResponseDto);
             }
@@ -54,7 +60,13 @@ public class RoomController {
                 RoomResponseDto groupRoomResponseDto = RoomResponseDto.builder()
                         .name(groupRoom.getName())
                         .category(groupRoom.getCategory().name())
+                        .reward(groupRoom.getReward())
                         .type(groupRoom.getType().name())
+                        .status(groupRoom.getStatus().name())
+                        .passCount(groupRoom.getPassCount())
+                        .totalDays(groupRoom.getPeriod().getTotalDays())
+                        .startDate(groupRoom.getPeriod().getStartDate())
+                        .endDate(groupRoom.getPeriod().getEndDate())
                         .build();
                 roomList.add(groupRoomResponseDto);
             }
