@@ -95,7 +95,7 @@ public class DajimFeedRepositoryTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
@@ -165,7 +165,7 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-        assertThat(dajims.size()).isEqualTo(4); //다짐 4개
+        assertThat(dajims.size()).isEqualTo(3); //다짐 4개
         assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
         assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }
