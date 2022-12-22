@@ -1,9 +1,6 @@
 package challenge.nDaysChallenge.relationship;
 
-import challenge.nDaysChallenge.domain.Authority;
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.Relationship;
-import challenge.nDaysChallenge.domain.RelationshipStatus;
+import challenge.nDaysChallenge.domain.*;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
@@ -45,7 +42,7 @@ class RelationshipRepositoryTest {
     @Transactional
     @Rollback(value = false)
     void makeRelationship (){
-            //given
+        //given
         Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER);
         Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER);
         Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER);
@@ -67,55 +64,55 @@ class RelationshipRepositoryTest {
 
 
         //중복이니까 나중에 수정해야해//
-        ApplyRequestDTO dto1 =new ApplyRequestDTO("dbf@naver.com","친구1",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto1 =new ApplyRequestDTO("dbf@naver.com","친구1",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(user);         //나
         memberRepository.save(friend);      //친구1
-        ApplyRequestDTO dto2 =new ApplyRequestDTO("ery@naver.com","친구2",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto2 =new ApplyRequestDTO("ery@naver.com","친구2",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend2);    //친구2
-        ApplyRequestDTO dto3 =new ApplyRequestDTO("tjd@naver.com","친구3",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto3 =new ApplyRequestDTO("tjd@naver.com","친구3",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend3);
-        ApplyRequestDTO dto4 =new ApplyRequestDTO("rud@naver.com","친구4",5,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto4 =new ApplyRequestDTO("rud@naver.com","친구4",5,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend4);
-        ApplyRequestDTO dto5 =new ApplyRequestDTO("tmf@naver.com","친구5",6,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto5 =new ApplyRequestDTO("tmf@naver.com","친구5",6,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend5);
-        ApplyRequestDTO dto6 =new ApplyRequestDTO("gml@naver.com","친구6",1,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto6 =new ApplyRequestDTO("gml@naver.com","친구6",1,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend6);
-        ApplyRequestDTO dto7 =new ApplyRequestDTO("dnjs@naver.com","친구7",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto7 =new ApplyRequestDTO("dnjs@naver.com","친구7",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend7);
-        ApplyRequestDTO dto8 =new ApplyRequestDTO("dh@naver.com","친구8",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto8 =new ApplyRequestDTO("dh@naver.com","친구8",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend8);
-        ApplyRequestDTO dto9 =new ApplyRequestDTO("rl@naver.com","친구9",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto9 =new ApplyRequestDTO("rl@naver.com","친구9",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend9);
-        ApplyRequestDTO dto10 =new ApplyRequestDTO("dP@naver.com","친구10",5,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto10 =new ApplyRequestDTO("dP@naver.com","친구10",5,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend10);
-        ApplyRequestDTO dto11 =new ApplyRequestDTO("dms@naver.com","친구11",6,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto11 =new ApplyRequestDTO("dms@naver.com","친구11",6,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend11);
-        ApplyRequestDTO dto12=new ApplyRequestDTO("chl@naver.com","친구12",1,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto12=new ApplyRequestDTO("chl@naver.com","친구12",1,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend12);
-        ApplyRequestDTO dto13 =new ApplyRequestDTO("dus@naver.com","친구13",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto13 =new ApplyRequestDTO("dus@naver.com","친구13",2,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend13);
-        ApplyRequestDTO dto14=new ApplyRequestDTO("tj@naver.com","친구14",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto14=new ApplyRequestDTO("tj@naver.com","친구14",3,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend14);
-        ApplyRequestDTO dto15=new ApplyRequestDTO("gh@naver.com","친구15",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name(),friendList);
+        ApplyRequestDTO dto15=new ApplyRequestDTO("gh@naver.com","친구15",4,LocalDateTime.now(),RelationshipStatus.REQUEST.name());
         memberRepository.save(friend15);
 
 
 
-        relationshipService.saveRelationship(user, friend);
-        relationshipService.saveRelationship(user,friend2);
-        relationshipService.saveRelationship(user,friend3);
-        relationshipService.saveRelationship(user,friend4);
-        relationshipService.saveRelationship(user,friend5);
-        relationshipService.saveRelationship(user,friend6);
-        relationshipService.saveRelationship(user,friend7);
-        relationshipService.saveRelationship(user,friend8);
-        relationshipService.saveRelationship(user,friend9);
-        relationshipService.saveRelationship(user,friend10);
-        relationshipService.saveRelationship(user,friend11);
-        relationshipService.saveRelationship(user,friend12);
-        relationshipService.saveRelationship(user,friend13);
-        relationshipService.saveRelationship(user,friend14);
-        relationshipService.saveRelationship(user,friend15);
+        relationshipService.saveRelationship(new MemberAdapter(user), friend);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend2);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend3);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend4);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend5);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend6);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend7);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend8);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend9);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend10);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend11);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend12);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend13);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend14);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend15);
 
 
 
@@ -173,6 +170,5 @@ class RelationshipRepositoryTest {
 
     }
 }
-
 
 
