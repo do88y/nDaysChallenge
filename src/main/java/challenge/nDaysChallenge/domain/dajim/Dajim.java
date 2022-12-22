@@ -5,6 +5,7 @@ import challenge.nDaysChallenge.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 
@@ -15,13 +16,14 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Dajim extends BaseEntity implements Persistable<Long> {
+public class Dajim extends BaseEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "dajim_number")
     private Long number;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Emotion> emotions = new ArrayList<>();
 
@@ -50,16 +52,6 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
         this.open = open;
     }
 
-    @Override
-    public Long getId() {
-        return number;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getCreatedDate() == null;
-    }
-
     public Dajim update(Open open, String content) {
         this.open = open;
         this.content = content;
@@ -68,6 +60,10 @@ public class Dajim extends BaseEntity implements Persistable<Long> {
 
     public void addEmotions(Emotion emotion){
         this.emotions.add(emotion);
+    }
+
+    public void deleteEmotions(Emotion emotion){
+        this.emotions.remove(emotion.getNumber());
     }
 
 }

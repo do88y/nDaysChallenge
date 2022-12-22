@@ -42,6 +42,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
 
     //아이디 중복 검사
+    @Transactional(readOnly = true)
     public boolean idCheck(String id){
         boolean exists = memberRepository.existsById(id);
 
@@ -49,6 +50,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
 
     //닉네임 중복 검사
+    @Transactional(readOnly = true)
     public boolean nicknameCheck(String nickname){
         boolean exists = memberRepository.existsById(nickname);
 
@@ -59,6 +61,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     //로그인
     public TokenDto login(LoginRequestDto loginRequestDto) {
+        //id, pw 검증
+        Member member = memberRepository.findById(loginRequestDto.getId())
+                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일입니다."));
+
+        if (!passwordEncoder.matches(loginRequestDto.getPw(),member.getPw())){
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
         UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
 
@@ -92,7 +102,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         SecurityContextHolder.clearContext(); // 시큐리티 컨텍스트에서 인증 정보 삭제
     }
 
-    //토큰 재발급
+    //액세스토큰 재발급
     public TokenDto reissue(JwtRequestDto tokenRequestDto) {
 
         //refresh 토큰 유효성(만료 여부) 검증
@@ -113,11 +123,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-        TokenDto tokenDto = tokenProvider.generateToken(authentication);
+        TokenDto tokenDto = tokenProvider.reissueToken(authentication, refreshToken);
 
         //저장소에 새 리프레시 토큰 저장
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
-        refreshTokenRepository.save(newRefreshToken);
+//        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+//        refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
         return tokenDto;

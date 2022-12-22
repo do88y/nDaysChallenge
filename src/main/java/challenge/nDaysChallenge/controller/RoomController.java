@@ -2,8 +2,10 @@ package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.room.GroupRoom;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.room.RoomType;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.dto.response.RoomResponseDto;
@@ -26,11 +28,54 @@ public class RoomController {
 
     private final RoomService roomService;
 
-//    @GetMapping("/")
-//    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter)
+    //챌린지 리스트(메인)
+    @GetMapping("/challenge/list")
+    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
+        List<RoomResponseDto> roomList = new ArrayList<>();
 
+        try {
+            List<SingleRoom> singleRooms = roomService.findSingleRooms(memberAdapter.getMember());
+            for (SingleRoom singleRoom : singleRooms) {
+                RoomResponseDto singleRoomResponseDto = RoomResponseDto.builder()
+                        .name(singleRoom.getName())
+                        .category(singleRoom.getCategory().name())
+                        .reward(singleRoom.getReward())
+                        .type(singleRoom.getType().name())
+                        .status(singleRoom.getStatus().name())
+                        .passCount(singleRoom.getPassCount())
+                        .totalDays(singleRoom.getPeriod().getTotalDays())
+                        .startDate(singleRoom.getPeriod().getStartDate())
+                        .endDate(singleRoom.getPeriod().getEndDate())
+                        .build();
+                roomList.add(singleRoomResponseDto);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("생상한 개인 챌린지가 없습니다.");
+        }
 
+        try {
+            List<GroupRoom> groupRooms = roomService.findGroupRooms(memberAdapter.getMember());
+            for (GroupRoom groupRoom : groupRooms) {
+                RoomResponseDto groupRoomResponseDto = RoomResponseDto.builder()
+                        .name(groupRoom.getName())
+                        .category(groupRoom.getCategory().name())
+                        .reward(groupRoom.getReward())
+                        .type(groupRoom.getType().name())
+                        .status(groupRoom.getStatus().name())
+                        .passCount(groupRoom.getPassCount())
+                        .totalDays(groupRoom.getPeriod().getTotalDays())
+                        .startDate(groupRoom.getPeriod().getStartDate())
+                        .endDate(groupRoom.getPeriod().getEndDate())
+                        .build();
+                roomList.add(groupRoomResponseDto);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("생성한 단체 챌린지가 없습니다.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(roomList);
+    }
 
     //챌린지 생성
     @PostMapping("/challenge/create")

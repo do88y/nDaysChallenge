@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -75,6 +76,33 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 
     }
 
+    public TokenDto reissueToken(Authentication authentication, RefreshToken refreshToken) {
+        //권한들 가져오기 (문자열 변환)
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Long now = (new Date()).getTime();
+
+        //access token 생성
+        Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName()) //페이로드 "sub":"이름"
+                .claim(AUTHORITY, authorities) //페이로드 "auth":"ROLE_USER"
+                .setExpiration(accessTokenExpireTime) //페이로드 "exp":만료시간
+                .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
+                .compact();
+
+        String refreshTokenValue = refreshToken.getValue();
+
+        return TokenDto.builder()
+                .type(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpireTime(accessTokenExpireTime.getTime())
+                .refreshToken(refreshTokenValue)
+                .build();
+    }
+
     //토큰 내 데이터(클레임) 가져오기
     public Authentication getAuthentication(String accessToken){
         //토큰 복호화(읽기)
@@ -97,12 +125,14 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 //        //username, password 형태 인증 위한 객체 생성, 리턴
 //        return new UsernamePasswordAuthenticationToken(principal,"", authorities);
 
-        String id = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
+//        String id = Jwts.parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
 
-        UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(id);
+        log.info("아이디 : " + claims.getSubject());
+
+        UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(memberAdapter,"",authorities);
 

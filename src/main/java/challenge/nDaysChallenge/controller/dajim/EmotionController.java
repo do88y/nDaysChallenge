@@ -18,7 +18,7 @@ public class EmotionController { //감정 스티커 등록
 
     private final EmotionService emotionService;
 
-    //감정 스티커 등록 (프론트 unselected 시)
+    //감정 스티커 new 등록 (프론트 unselected된 상태에서)
     @PostMapping("/feed/emotion")
     public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
@@ -27,8 +27,8 @@ public class EmotionController { //감정 스티커 등록
         return ResponseEntity.ok().body(emotionResponseDto);
     }
 
-    //감정 스티커 변경/null (프론트 selected 시)
-    @PutMapping("/feed/emotion")
+    //감정 스티커 변경 or null 등록 (프론트 selected된 상태에서 다른 스티커 select 시 or 두번 똑같은 스티커 클릭 시)
+    @PatchMapping("/feed/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
 

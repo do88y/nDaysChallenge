@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Emotion extends BaseEntity implements Persistable<Long> {
+public class Emotion extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "emotion_number")
@@ -31,16 +31,6 @@ public class Emotion extends BaseEntity implements Persistable<Long> {
         this.member = member;
         this.dajim = dajim;
         this.stickers = stickers;
-    }
-
-    @Override
-    public Long getId() {
-        return number;
-    }
-
-    @Override
-    public boolean isNew() {
-        return getCreatedDate()==null;
     }
 
     public Emotion update(Stickers stickers) {

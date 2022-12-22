@@ -32,10 +32,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.as;
@@ -43,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DajimFeedRepositoryTest {
+public class QueryTest { //N+1 테스트
 
     @Autowired
     DajimRepository dajimRepository;
@@ -63,11 +67,10 @@ public class DajimFeedRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @DisplayName("피드 조회 - 다짐, 이모션")
     @Test
-    @Transactional
-    @Rollback(value = false)
-    void viewFeed(){
+    @DisplayName("멤버, 다짐, 이모션 등록")
+    @BeforeEach
+    public void 객체_세팅(){
         //given
         //멤버3 룸2
         Member member1 = Member.builder()
@@ -99,7 +102,6 @@ public class DajimFeedRepositoryTest {
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
-        member1.addSingleRooms(room1);
         roomRepository.save(room1);
 
         //싱글룸 다짐
@@ -150,132 +152,61 @@ public class DajimFeedRepositoryTest {
         Emotion savedEmotion = emotionRepository.save(emotion);
         dajim3.addEmotions(savedEmotion);
 
-        //이모션 불러오기ㅜ
-        List<Emotion> emotions = dajim3.getEmotions();
-        List<String> stickersList = emotions.stream().map(emotion1 ->
-                        emotion1.getStickers().toString())
-                .collect(Collectors.toList());
-
-        //when
-        //멤버1 싱글룸 불러오기
-        List<SingleRoom> singleRooms = member1.getSingleRooms();
-        List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
-                        singleRoom.getNumber())
-                .collect(Collectors.toList());
-
-        //멤버1 그룹룸 불러오기
-        List<RoomMember> roomMemberList = member1.getRoomMemberList();
-        List<Long> groupRoomNumbers = roomMemberList.stream().map(roomMember ->
-                        roomMember.getRoom().getNumber())
-                .collect(Collectors.toList());
-
-        //해당 룸넘버들의 다짐 불러오기
-        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRoomNumbers, singleRoomNumbers);
-
-        //then
-        for (Dajim c : dajims){
-            System.out.println("다짐 넘버 리스트 : "+c.getNumber());
-        }
-
-        //멤버2
-        assertThat(singleRooms.size()).isEqualTo(1); //싱글룸 1개
-        assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
-        assertThat(dajims.size()).isEqualTo(4); //다짐 4개
-        assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
-        assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }
 
-    @DisplayName("이모션 등록")
     @Test
-    void clickEmotion(){
-        //given
-        Member member1 = Member.builder()
-                .id("user@naver.com")
-                .pw("12345")
-                .nickname("userN")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
+    @DisplayName("다짐 내 이모션 조회")
+    public void 다짐_내_이모션_조회(){
+        Emotion emotionFound = emotionRepository.findByEmotionNumber(3L, 2L)
+                .orElseThrow(()->new RuntimeException("이모션 객체를 찾을 수 없습니다."));
 
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "");
+        Stickers stickers = emotionFound.getStickers();
 
-        Dajim dajim = dajimRepository.save(Dajim.builder()
-            .room(room1)
-            .member(member1)
-            .content("content")
-            .open(Open.PUBLIC)
-            .build());
-
-        //when
-        Dajim savedDajim = dajimRepository.findByDajimNumber(dajim.getNumber())
-                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
-
-        Stickers sticker = Stickers.valueOf("SURPRISE");
-
-        Emotion emotion = Emotion.builder()
-                .member(member1)
-                .dajim(savedDajim)
-                .stickers(sticker)
-                .build();
-
-        Emotion savedEmotion = emotionRepository.save(emotion);
-        dajim.addEmotions(savedEmotion);
-
-
-        //then
-        assertThat(savedEmotion.getStickers().toString()).isEqualTo("SURPRISE");
-        System.out.println(dajim.getEmotions().get(0).getStickers().toString());
+        System.out.println(stickers.toString());
     }
 
-    @DisplayName("이모션 변경 및 삭제")
     @Test
-    @Transactional
-    @Rollback(value = false)
-    void updateEmotion(){
+    @DisplayName("그룹 챌린지 내 다짐들 조회")
+    public void 그룹_챌린지_다짐들_전체_조회(){
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L);
+
+        assertThat(dajims.size()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("전체 피드 조회")
+    public void 전체_피드_조회(){
         //given
-        Member member1 = Member.builder()
-                .id("user@naver.com")
-                .pw("12345")
-                .nickname("userN")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),100L), Category.ROUTINE, 5, "");
-        Dajim dajim = dajimRepository.save(Dajim.builder()
-                .room(room1)
-                .member(member1)
-                .content("content")
-                .open(Open.PUBLIC)
-                .build());
-        Emotion emotion = Emotion.builder()
-                .member(member1)
-                .dajim(dajim)
-                .stickers(Stickers.valueOf("CHEER"))
-                .build();
-        emotionRepository.save(emotion);
-        dajim.addEmotions(emotion);
+        List<Long> groupRooms = new ArrayList<>();
+        groupRooms.add(2L);
 
         //when
-        EmotionRequestDto requestDto = new EmotionRequestDto(1L,"TOUCHED");
-
-        Emotion updatedEmotion;
-
-        if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
-            updatedEmotion = emotion.update(null);
-        } else {
-            updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
-        }
-
-        EmotionResponseDto newEmotion = EmotionResponseDto.builder()
-                        .dajimNumber(updatedEmotion.getDajim().getNumber())
-                        .memberNickname(updatedEmotion.getMember().getNickname())
-                        .stickers(updatedEmotion.getStickers().toString()).build();
+        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRooms, null);
 
         //then
-        assertThat(newEmotion.getStickers()).isEqualTo("TOUCHED");
-        assertThat(dajim.getEmotions().get(0).getStickers()).isEqualTo(Stickers.TOUCHED);
+        Assertions.assertThat(dajims.size()).isEqualTo(3);
+        System.out.println(dajims.get(0).getNumber());
+        System.out.println(dajims.get(1).getNumber());
+        System.out.println(dajims.get(2).getNumber());
+
+    }
+
+    @Test
+    @DisplayName("특정 멤버 조회")
+    public void 멤버_조회(){
+        Member member = memberRepository.findById("user@naver.com")
+                .orElseThrow(()->new RuntimeException("회원을 찾을 수 없습니다."));
+
+        assertThat(member.getNickname()).isEqualTo("userN");
+    }
+
+    @DisplayName("특정 룸넘버에 해당하는 룸 찾기")
+    @Test
+    void findByRoomNumber(){
+        Room room = dajimRepository.findByRoomNumber(1L)
+                .orElseThrow(()->new RuntimeException("룸을 찾을 수 없습니다."));
+
+        assertThat(room.getName()).isEqualTo("SingleRoom");
     }
 
 }

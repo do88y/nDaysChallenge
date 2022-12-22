@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.dto.response.MemberInfoResponseDto;
 import challenge.nDaysChallenge.dto.response.MemberResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,12 @@ import java.util.Optional;
 @Transactional
 public class MemberService {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final MemberRepository memberRepository;
 
     //회원정보 조회 (수정 전)
-    @Transactional
+    @Transactional(readOnly = true)
     public MemberInfoResponseDto findMemberInfo(String id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
@@ -37,7 +40,7 @@ public class MemberService {
     //회원정보 수정
     public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
         Member updatedMember = member.update(memberEditRequestDto.getNickname(),
-                memberEditRequestDto.getPw(),
+                passwordEncoder.encode(memberEditRequestDto.getPw()),
                 memberEditRequestDto.getImage());
 
         MemberInfoResponseDto updatedMemberInfoDto = MemberInfoResponseDto.of(updatedMember);
@@ -47,8 +50,9 @@ public class MemberService {
 
     //회원 삭제
     public String deleteMember(Member member) {
+        String nickname = member.getNickname();
         memberRepository.delete(member);
-        return member.getNickname();
+        return nickname;
     }
 
 }

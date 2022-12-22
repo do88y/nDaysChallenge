@@ -22,11 +22,12 @@ public class DajimFeedController { //피드 내 다짐
 
     @GetMapping("/feed")
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
-    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal MemberAdapter memberAdapter){
+    public ResponseEntity<?> viewDajimOnFeed(){
 
-        List<DajimFeedResponseDto> dajimFeedDto = dajimFeedService.viewDajimOnFeed(memberAdapter.getMember());
+        List<DajimFeedResponseDto> dajimFeedDto = dajimFeedService.viewDajimOnFeed();
 
         return ResponseEntity.ok().body(dajimFeedDto);
+
     }
 
 }

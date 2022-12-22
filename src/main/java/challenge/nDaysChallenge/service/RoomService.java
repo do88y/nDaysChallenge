@@ -1,12 +1,13 @@
 package challenge.nDaysChallenge.service;
 
-import challenge.nDaysChallenge.domain.*;
+import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
-import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomService {
 
     private final RoomRepository roomRepository;
@@ -26,22 +27,29 @@ public class RoomService {
     private final SingleRoomRepository singleRoomRepository;
 
 
+    /**
+     * 챌린지 조회(메인)
+     */
+    public List<SingleRoom> findSingleRooms(Member member) {
+        return singleRoomRepository.findSingleRooms(member);
+    }
+    public List<GroupRoom> findGroupRooms(Member member) {
+        return groupRoomRepository.findByMember(member);
+    }
+
     //개인과 그룹 챌린지 구분
     public Room createRoom(Member member, RoomRequestDTO dto) {
 
-        //null 체크를 위해서 추가했지만, null일 가능성이 있을지 좀 더 고민 필요
-        Optional<String> getRoomType = Optional.ofNullable(dto.getType());
-        String roomType = getRoomType.orElseThrow(() -> new NoSuchElementException("챌린지 타입이 없습니다."));
-
-        if (roomType.equals("SINGLE")) {
+        if (dto.getType().equals("SINGLE")) {
             SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
 
             return singleRoom;
-        } else if (roomType.equals("GROUP")) {
+        } else if (dto.getType().equals("GROUP")) {
             Set<Long> groupMemberNums = dto.getGroupMembers();
             Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
             for (Long groupMemberNum : groupMemberNums) {
-                groupMembers.add(memberRepository.findByNumber(groupMemberNum));
+                groupMembers.add(memberRepository.findByNumber(groupMemberNum)
+                        .orElseThrow(()->new RuntimeException("그룹멤버를 찾을 수 없습니다.")));
             }
             GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
 
@@ -98,21 +106,22 @@ public class RoomService {
     @Transactional
     public void deleteRoom(Member member, Long roomNumber) {
         //엔티티 조회
-        SingleRoom room = singleRoomRepository.findById(roomNumber).get();
-        Set<RoomMember> roomMembers = roomMemberRepository.findByRoomNumber(roomNumber);
+        Optional<Room> findRoom = roomRepository.findById(roomNumber);
+        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제
             roomRepository.delete(room);
 
-            //roomCount -1, RoomMember 삭제
+            //RoomMember 삭제
+            Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             for (RoomMember roomMember : roomMembers) {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
 
         } else if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
-            singleRoomRepository.delete(room);
+            roomRepository.delete(room);
             member.getSingleRooms().remove(room);
         }
 
@@ -127,7 +136,7 @@ public class RoomService {
         SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).get();
 
         //개인 챌린지 멤버 조회
-        Member member = SingleRoom.giveMember();
+        Member member = singleRoom.giveMember();
         int usedPassCount = singleRoom.getUsedPassCount();
         int passCount = singleRoom.getPassCount();
 

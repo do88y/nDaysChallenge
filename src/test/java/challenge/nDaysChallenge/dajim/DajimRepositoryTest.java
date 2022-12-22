@@ -42,10 +42,17 @@ class DajimRepositoryTest {
                 .build();
         Dajim savedDajim = dajimRepository.save(newDajim);
 
+        checkDajimRoomUser(newDajim, room, member);
+
         //then
         assertThat(newDajim.getMember().getId()).isEqualTo(savedDajim.getMember().getId());
     }
 
+    private static void checkDajimRoomUser(Dajim dajim, Room room, Member member){
+        if (dajim.getRoom()!=room || dajim.getMember()!=member){
+            throw new RuntimeException("다짐에 대한 권한이 없습니다.");
+        }
+    }
 
     @DisplayName("다짐 수정")
     @Test
