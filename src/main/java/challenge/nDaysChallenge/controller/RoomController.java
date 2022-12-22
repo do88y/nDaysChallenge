@@ -77,7 +77,6 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.OK).body(roomList);
     }
 
-
     //챌린지 생성
     @PostMapping("/challenge/create")
     public ResponseEntity<?> createRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
