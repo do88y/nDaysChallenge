@@ -87,6 +87,7 @@ public class RoomController {
 
         if (roomRequestDTO.getType().equals(RoomType.SINGLE.name())) {
             RoomResponseDto savedRoom = RoomResponseDto.builder()
+                    .number(room.getNumber())
                     .name(room.getName())
                     .category(room.getCategory().name())
                     .reward(room.getReward())
@@ -101,6 +102,7 @@ public class RoomController {
         }
         if (roomRequestDTO.getType().equals(RoomType.GROUP.name())) {
             RoomResponseDto savedRoom = RoomResponseDto.builder()
+                    .number(room.getNumber())
                     .name(room.getName())
                     .category(room.getCategory().name())
                     .reward(room.getReward())

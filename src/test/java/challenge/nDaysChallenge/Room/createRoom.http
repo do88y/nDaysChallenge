@@ -1,12 +1,14 @@
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmNAbmF2ZXIuY29tIiwiYXV0aCI6IlVTRVIiLCJleHAiOjE2Njk4MTAwNjB9.O8LK8H8tHKGRbnUlJHA2ugDZRfN5VDeK9ZurUOyOyig
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNjkxMDE5fQ.FuG1Q1Qux1E_QJuTZl4dzWUStDCZ5aJfiaVFiq_7HOg
 
 {
-  "name": "기상",
-  "category": "ROUTINE",
-  "reward": "",
-  "passCount": 3,
-  "totalDays": 15,
-  "memberNumber": 7
+  "name": "명상",
+  "category": "MINDFULNESS",
+  "reward": "여행",
+  "passCount": 10,
+  "startDate": "2022-12-01",
+  "totalDays": 10,
+  "type": "SINGLE",
+  "memberNumber": 2
 }

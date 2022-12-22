@@ -157,7 +157,7 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback(value = false)
     public void 진행_챌린지_조회() throws Exception {
         //given
         SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");

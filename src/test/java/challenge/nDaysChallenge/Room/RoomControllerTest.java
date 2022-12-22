@@ -111,6 +111,7 @@ class RoomControllerTest {
 
         //then
         assertThat(newRoom.getName()).isEqualTo(room.getName());
+        System.out.println("newRoom = " + newRoom.getName());
     }
 
 

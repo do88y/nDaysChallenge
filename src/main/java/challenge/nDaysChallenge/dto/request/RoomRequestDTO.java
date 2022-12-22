@@ -35,13 +35,14 @@ public class RoomRequestDTO {
     }
 
     @Builder
-    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, Long memberNumber, Set<Long> groupMembers) {
+    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, Long memberNumber, Set<Long> groupMembers) {
         this.name = name;
         this.category = category;
         this.reward = reward;
         this.passCount = passCount;
         this.startDate = startDate;
         this.totalDays = totalDays;
+        this.type = type;
         this.memberNumber = memberNumber;
         for (Long groupMember : groupMembers) {
             this.groupMembers.add(groupMember);
