@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Emotion extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "emotion_number")
     private Long number;
 

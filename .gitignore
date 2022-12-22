@@ -7,7 +7,7 @@ build/
 NDaysChallengeFrontend/
 .elasticbeanstalk/
 build/
-src/main/resources/
+src/main/resources/*
 
 ### STS ###
 .apt_generated
