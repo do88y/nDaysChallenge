@@ -72,6 +72,7 @@ public class DajimFeedRepositoryTest2{
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
 
+
         //싱글룸 다짐
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
@@ -82,6 +83,7 @@ public class DajimFeedRepositoryTest2{
 
         //그룹룸 (룸2-멤버1,2,3)
         GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(), 100L), Category.ETC, 3, "", 0, 0);
+
         roomRepository.save(room2);
         RoomMember roomMember = RoomMember.createRoomMember(member, room2);
         roomMemberRepository.save(roomMember);

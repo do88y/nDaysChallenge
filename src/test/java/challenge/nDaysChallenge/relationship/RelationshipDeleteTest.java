@@ -4,6 +4,7 @@ package challenge.nDaysChallenge.relationship;
 import challenge.nDaysChallenge.controller.RelationshipController;
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
@@ -54,8 +55,8 @@ public class RelationshipDeleteTest {
         memberRepository.save(friend2);    //친구2
 
         //relationship 생성//
-        relationshipService.saveRelationship(user, friend);
-        relationshipService.saveRelationship(user,friend2);
+        relationshipService.saveRelationship(new MemberAdapter(user), friend);
+        relationshipService.saveRelationship(new MemberAdapter(user),friend2);
 
         
         //when

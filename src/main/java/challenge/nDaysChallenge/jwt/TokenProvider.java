@@ -93,11 +93,13 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                 .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
                 .compact();
 
+        String refreshTokenValue = refreshToken.getValue();
+
         return TokenDto.builder()
                 .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime.getTime())
-                .refreshToken(refreshToken.toString())
+                .refreshToken(refreshTokenValue)
                 .build();
     }
 
