@@ -7,7 +7,11 @@ build/
 NDaysChallengeFrontend/
 .elasticbeanstalk/
 build/
-src/main/resources/
+src/main/resources/application.yml
+src/main/resources/application-dev.yml
+src/main/resources/application-mysql.yml
+src/main/resources/application-oauth.yml
+src/main/resources/application-prod.yml
 
 ### STS ###
 .apt_generated

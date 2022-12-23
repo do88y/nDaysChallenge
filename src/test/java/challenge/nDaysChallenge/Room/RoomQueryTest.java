@@ -97,7 +97,7 @@ public class RoomQueryTest {
     List<SingleRoom> makeSingleRooms() {
         List<SingleRoom> singleRooms = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            SingleRoom singleRoom = SingleRoom.createRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "");
+            SingleRoom singleRoom = SingleRoom.createRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "", 0, 0);
             singleRooms.add(singleRoom);
         }
         singleRoomRepository.saveAll(singleRooms);
@@ -108,7 +108,7 @@ public class RoomQueryTest {
     List<GroupRoom> makeGroupRooms() {
         List<GroupRoom> groupRooms = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            GroupRoom groupRoom = GroupRoom.createRoom("명상", new Period(LocalDate.now(), 30L), Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행");
+            GroupRoom groupRoom = GroupRoom.createRoom("명상", new Period(LocalDate.now(), 30L), Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행", 0, 0);
             groupRooms.add(groupRoom);
         }
         groupRoomRepository.saveAll(groupRooms);

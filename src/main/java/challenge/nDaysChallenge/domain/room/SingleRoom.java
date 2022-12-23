@@ -1,16 +1,14 @@
 package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SingleRoom extends Room {
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -33,7 +31,6 @@ public class SingleRoom extends Room {
 
     //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅
     public void joinRoom(Room room) {
-        this.room = room;
         this.member.addSingleRooms(this);
     }
 
@@ -46,7 +43,7 @@ public class SingleRoom extends Room {
     }
 
     //==생성자==//
-    public SingleRoom(String name, Period period, Category category, int passCount, String reward) {
+    public SingleRoom(String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
         this.name = name;
         this.period = period;
         this.category = category;
@@ -54,11 +51,13 @@ public class SingleRoom extends Room {
         this.status = RoomStatus.CONTINUE;
         this.passCount = passCount;
         this.reward = reward;
+        this.usedPassCount = usedPassCount;
+        this.successCount = successCount;
     }
 
 
     //==생성 메서드==// 챌린지 상태 테스트용
-    public static SingleRoom createRoom(String name, Period period, Category category, RoomType type, RoomStatus status, int passCount, String reward) {
+    public static SingleRoom createRoom(String name, Period period, Category category, RoomType type, RoomStatus status, int passCount, String reward, int usedPassCount, int successCount) {
         SingleRoom room = new SingleRoom();
         room.name = name;
         room.period = period;
@@ -67,6 +66,8 @@ public class SingleRoom extends Room {
         room.status = status;
         room.passCount = passCount;
         room.reward = reward;
+        room.usedPassCount = usedPassCount;
+        room.successCount = successCount;
 
         return room;
     }

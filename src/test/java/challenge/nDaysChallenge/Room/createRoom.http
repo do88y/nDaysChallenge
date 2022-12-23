@@ -1,6 +1,6 @@
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNjkxMDE5fQ.FuG1Q1Qux1E_QJuTZl4dzWUStDCZ5aJfiaVFiq_7HOg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc0MTE4fQ.ADYzZFufr8-b_OguL2a-pUX-QfhOUx4bsLW5Vl5bRLU
 
 {
   "name": "명상",
@@ -10,5 +10,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1d
   "startDate": "2022-12-01",
   "totalDays": 10,
   "type": "SINGLE",
-  "memberNumber": 2
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "memberNumber": 1
 }
+
+### 진행 챌린지
+GET http://localhost:8080/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc2MDU1fQ.hxOUCLw6qpTViWI0sHQ9XXEn2fsGtLuOgERv0--ENVs
+
+### 완료 챌린지
+GET http://localhost:8080/user/finishedChallenges
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc2MDU1fQ.hxOUCLw6qpTViWI0sHQ9XXEn2fsGtLuOgERv0--ENVs
