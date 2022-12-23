@@ -98,7 +98,7 @@ public class DajimFeedRepositoryTest {
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
 
         //싱글룸 (룸1-멤버1)
-        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
+        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
         member1.addSingleRooms(room1);
         roomRepository.save(room1);
 
@@ -111,7 +111,7 @@ public class DajimFeedRepositoryTest {
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
-        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "");
+        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
         roomRepository.save(room2);
         RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
         RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2);
@@ -183,7 +183,7 @@ public class DajimFeedRepositoryTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "");
+        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
 
         Dajim dajim = dajimRepository.save(Dajim.builder()
             .room(room1)
@@ -227,7 +227,7 @@ public class DajimFeedRepositoryTest {
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),100L), Category.ROUTINE, 5, "");
+        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),100L), Category.ROUTINE, 5, "", 0, 0);
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
                 .member(member1)

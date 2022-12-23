@@ -1,12 +1,26 @@
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmNAbmF2ZXIuY29tIiwiYXV0aCI6IlVTRVIiLCJleHAiOjE2Njk4MTAwNjB9.O8LK8H8tHKGRbnUlJHA2ugDZRfN5VDeK9ZurUOyOyig
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc0MTE4fQ.ADYzZFufr8-b_OguL2a-pUX-QfhOUx4bsLW5Vl5bRLU
 
 {
-  "name": "기상",
-  "category": "ROUTINE",
-  "reward": "",
-  "passCount": 3,
-  "totalDays": 15,
-  "memberNumber": 7
+  "name": "명상",
+  "category": "MINDFULNESS",
+  "reward": "여행",
+  "passCount": 10,
+  "startDate": "2022-12-01",
+  "totalDays": 10,
+  "type": "SINGLE",
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "memberNumber": 1
 }
+
+### 진행 챌린지
+GET http://localhost:8080/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc2MDU1fQ.hxOUCLw6qpTViWI0sHQ9XXEn2fsGtLuOgERv0--ENVs
+
+### 완료 챌린지
+GET http://localhost:8080/user/finishedChallenges
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc2MDU1fQ.hxOUCLw6qpTViWI0sHQ9XXEn2fsGtLuOgERv0--ENVs

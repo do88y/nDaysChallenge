@@ -41,7 +41,7 @@ public class Room {
     protected RoomStatus status;  //챌린지 상태 [CONTINUE, END]
 
     protected int passCount;
-    private int usedPassCount;
-    private int successCount;
+    protected int usedPassCount;
+    protected int successCount;
 
 }

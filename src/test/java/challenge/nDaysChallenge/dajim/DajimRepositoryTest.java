@@ -28,7 +28,7 @@ class DajimRepositoryTest {
     @Test
     void saveDajim(){
         //given
-        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상");
+        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상", 0, 0);
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
@@ -58,7 +58,7 @@ class DajimRepositoryTest {
     @Test
     void modifyDajim(){
         //given
-        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상");
+        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상", 0, 0);
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
@@ -84,7 +84,7 @@ class DajimRepositoryTest {
         //given
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
         Member member2 = new Member("user2@naver.com","12345","userN2",1,4, Authority.ROLE_USER);
-        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4, "");
+        GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4, "", 0, 0);
 
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
 

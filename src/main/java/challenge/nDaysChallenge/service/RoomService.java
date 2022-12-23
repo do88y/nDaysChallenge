@@ -3,7 +3,6 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.RoomRequestDTO;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
@@ -31,41 +30,28 @@ public class RoomService {
      * 챌린지 조회(메인)
      */
     public List<SingleRoom> findSingleRooms(Member member) {
-        return singleRoomRepository.findSingleRooms(member);
+        try {
+            return singleRoomRepository.findSingleRooms(member);
+        } catch (Exception e) {
+            throw new RuntimeException("진행중인 개인 챌린지가 없습니다.");
+        }
     }
     public List<GroupRoom> findGroupRooms(Member member) {
-        return groupRoomRepository.findByMember(member);
-    }
-
-    //개인과 그룹 챌린지 구분
-    public Room createRoom(Member member, RoomRequestDTO dto) {
-
-        if (dto.getType().equals("SINGLE")) {
-            SingleRoom singleRoom = singleRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
-
-            return singleRoom;
-        } else if (dto.getType().equals("GROUP")) {
-            Set<Long> groupMemberNums = dto.getGroupMembers();
-            Set<Member> groupMembers = new HashSet<>();  //멤버 타입의 새로운 HashSet
-            for (Long groupMemberNum : groupMemberNums) {
-                groupMembers.add(memberRepository.findByNumber(groupMemberNum)
-                        .orElseThrow(()->new RuntimeException("그룹멤버를 찾을 수 없습니다.")));
-            }
-            GroupRoom groupRoom = groupRoom(member, dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), groupMembers);
-
-            return groupRoom;
+        try {
+            return groupRoomRepository.findGroupRooms(member);
+        } catch (Exception e) {
+            throw new RuntimeException("진행중인 단체 챌린지가 없습니다.");
         }
-        return null;
     }
 
     /**
      * 개인 챌린지 생성
      */
     @Transactional
-    public SingleRoom singleRoom(Member member, String name, Period period, Category category, int passCount, String reward) {
+    public SingleRoom singleRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
 
         //챌린지 생성
-        SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
+        SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
         //챌린지 저장
         singleRoomRepository.save(newRoom);
@@ -80,10 +66,17 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Member> selectedMember) {
+    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount, Set<Long> selectedMember) {
+
+        //엔티티 조회
+        Set<Member> memberList = new HashSet<>();
+        for (Long memberNumber : selectedMember) {
+            Optional<Member> findMember = memberRepository.findByNumber(memberNumber);
+            memberList.add(findMember.orElseThrow(() -> new RuntimeException("해당 멤버가 존재하지 않습니다.")));
+        }
 
         //챌린지 생성
-        GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
+        GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
 
         //챌린지 저장
@@ -92,7 +85,7 @@ public class RoomService {
         //챌린지 멤버 생성&저장
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
         roomMemberRepository.save(roomMember);
-        for (Member members : selectedMember) {  //그 외 멤버
+        for (Member members : memberList) {  //그 외 멤버
             RoomMember result = RoomMember.createRoomMember(members, newRoom);
             roomMemberRepository.save(result);
         }
@@ -168,29 +161,19 @@ public class RoomService {
     /**
      * 전체 완료 챌린지 조회
      */
-    public List<Room> findFinishedRooms(Member member) {
-
-        List<Room> finishedRoom = new ArrayList<>();
-
-        if (member.getRoomMemberList() != null) {
-            List<RoomMember> roomMemberList = member.getRoomMemberList();
-            for (RoomMember roomMember : roomMemberList) {
-                Room groupRoom = roomMember.getRoom();
-                if (groupRoom.getStatus() == RoomStatus.END) {
-                    finishedRoom.add(groupRoom);
-                }
-            }
+    public List<SingleRoom> findFinishedSingleRooms(Member member) {
+        try {
+            return singleRoomRepository.finishedSingleRooms(member);
+        } catch (Exception e) {
+            throw new RuntimeException("완료된 개인 챌린지가 없습니다.");
         }
-        if (member.getSingleRooms() != null) {
-            List<SingleRoom> singleRooms = member.getSingleRooms();
-            for (Room singleRoom : singleRooms) {
-                if (singleRoom.getStatus() == RoomStatus.END) {
-                    finishedRoom.add(singleRoom);
-                }
-            }
+    }
+    public List<GroupRoom> findFinishedGroupRooms(Member member) {
+        try {
+            return groupRoomRepository.finishedGroupRoom(member);
+        } catch (Exception e) {
+            throw new RuntimeException("완료된 단체 챌린지가 없습니다.");
         }
-
-        return finishedRoom;
     }
 
 }

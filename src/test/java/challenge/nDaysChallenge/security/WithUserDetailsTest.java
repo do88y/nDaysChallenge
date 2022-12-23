@@ -128,7 +128,7 @@ public class WithUserDetailsTest {
         Member currentMember = member.get();
 
         //룸 객체 연결
-        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
+        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward", 0, 0);
         singleRoomRepository.save(singleRoom);
         singleRoom.addRoom(singleRoom, currentMember);
 

@@ -18,7 +18,7 @@ public class GroupRoom extends Room {
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     //==생성자==//
-    public GroupRoom(String name, Period period, Category category, int passCount, String reward) {
+    public GroupRoom(String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
         this.name = name;
         this.period = period;
         this.category = category;
@@ -26,11 +26,13 @@ public class GroupRoom extends Room {
         this.status = RoomStatus.CONTINUE;
         this.passCount = passCount;
         this.reward = reward;
+        this.usedPassCount = usedPassCount;
+        this.successCount = successCount;
     }
 
 
     //==생성 메서드==// 챌린지 상태 테스트용
-    public static GroupRoom createRoom(String name, Period period, Category category, RoomType type, RoomStatus status, int passCount, String reward) {
+    public static GroupRoom createRoom(String name, Period period, Category category, RoomType type, RoomStatus status, int passCount, String reward, int usedPassCount, int successCount) {
         GroupRoom room = new GroupRoom();
         room.name = name;
         room.period = period;
@@ -39,6 +41,8 @@ public class GroupRoom extends Room {
         room.status = status;
         room.passCount = passCount;
         room.reward = reward;
+        room.usedPassCount = usedPassCount;
+        room.successCount = successCount;
 
         return room;
     }
