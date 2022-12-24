@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,10 @@ public interface EmotionRepository extends JpaRepository<Emotion, Long> {
     @Query("select e from Emotion e " +
             "where e.dajim.number = :dajimNumber " +
             "and e.member.number = :memberNumber")
-    Optional<Emotion> findByEmotionNumber(@Param("dajimNumber")Long dajimNumber, @Param("memberNumber")Long memberNumber);
+    Optional<Emotion> findByDajimAndMember(@Param("dajimNumber")Long dajimNumber, @Param("memberNumber")Long memberNumber);
+
+    @Modifying
+    @Query("delete from Emotion e where e.number = :emotionNumber")
+    void delete(@Param("emotionNumber") Long emotionNumber);
 
 }

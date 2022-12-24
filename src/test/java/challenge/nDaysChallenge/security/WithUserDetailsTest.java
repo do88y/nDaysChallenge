@@ -167,7 +167,7 @@ public class WithUserDetailsTest {
                         d.getMember().getNickname(),
                         d.getContent(),
                         d.getEmotions().stream().map(emotion ->
-                                        emotion.getStickers().toString())
+                                        emotion.getSticker().toString())
                                 .collect(Collectors.toList()),
                         d.getUpdatedDate()
                 )).collect(Collectors.toList());

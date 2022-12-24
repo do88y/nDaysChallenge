@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.dto.response;
 
 import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

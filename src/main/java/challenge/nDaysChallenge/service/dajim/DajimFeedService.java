@@ -36,7 +36,7 @@ public class DajimFeedService {
                         dajim.getMember().getNickname(),
                         dajim.getContent(),
                         dajim.getEmotions().stream().map(emotion ->
-                                        emotion.getStickers().toString())
+                                        emotion.getSticker().toString())
                                 .collect(Collectors.toList()),
                         dajim.getUpdatedDate()
                 )).collect(Collectors.toList());
