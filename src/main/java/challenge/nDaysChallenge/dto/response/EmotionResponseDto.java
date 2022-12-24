@@ -12,7 +12,7 @@ import javax.validation.constraints.Null;
 @NoArgsConstructor
 public class EmotionResponseDto {
 
-    private Long dajimNumber; //좋아요 등록한 다짐 넘버
+    private long dajimNumber; //좋아요 등록한 다짐 넘버
 
     private String memberNickname;//좋아요 등록한 멤버 닉네임
 
@@ -26,7 +26,7 @@ public class EmotionResponseDto {
 
     //삭제할 이모션객체 다짐넘버 null로 수정
     public void updateNull(){
-        this.dajimNumber = null;
+        this.sticker = null;
     }
 
 }
