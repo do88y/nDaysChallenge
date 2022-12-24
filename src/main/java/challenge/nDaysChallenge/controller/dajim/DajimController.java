@@ -33,7 +33,7 @@ public class DajimController {
         return ResponseEntity.ok().body(dajimResponseDto);
     }
 
-    //전체 다짐 조회
+    //다짐 조회 (챌린지룸 내)
     @GetMapping("/challenge/{challengeId}")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){

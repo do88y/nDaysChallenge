@@ -125,9 +125,6 @@ public class EmotionRepositoryTest {
         //when
         Emotion updatedEmotion = emotionFound.update(Sticker.CHEER); //수정
 
-        dajim.deleteEmotions(emotionFound);
-        dajim.addEmotions(updatedEmotion);
-
         //then
         assertThat(updatedEmotion.getSticker().toString()).isEqualTo("CHEER");
         assertThat(dajim.getEmotions().get(0)).isEqualTo(updatedEmotion);
@@ -144,14 +141,17 @@ public class EmotionRepositoryTest {
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다"));
 
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(1L, 1L);
+
         Emotion emotionFound = emotion.get();
+        Sticker stickerBeforeUpdate = emotionFound.getSticker(); //업데이트 전 스티커
         LocalDateTime beforeUpdate = emotionFound.getUpdatedDate(); //업데이트 전 시간
 
         //when
         Emotion updatedEmotion = emotionFound.update(Sticker.SURPRISE); //똑같은 스티커 클릭 시
 
         LocalDateTime afterUpdate = updatedEmotion.getUpdatedDate(); //업데이트 후 시간
-        if (beforeUpdate==afterUpdate){ //수정 전후 시간 같으면 (=똑같은 스티커 클릭) 삭제
+        if (beforeUpdate.isEqual(afterUpdate) && //업데이트 X & 똑같은 스티커 클릭 시
+                stickerBeforeUpdate.toString().equals(updatedEmotion.getSticker().toString())){
             emotionRepository.delete(updatedEmotion);
             dajim.deleteEmotions(updatedEmotion);
         }

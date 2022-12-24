@@ -39,7 +39,8 @@ public class EmotionService {
         EmotionResponseDto emotionResponseDto = new EmotionResponseDto(
                 emotionRequestDto.getDajimNumber(),
                 member.getNickname(),
-                emotionRequestDto.getSticker());
+                emotionRequestDto.getSticker()
+        );
 
         //이모션 객체 등록 (레포지토리에서 객체 못 찾았을 때)
         if (!emotion.isPresent()){
@@ -49,17 +50,20 @@ public class EmotionService {
 
         //스티커 수정 (다른 스티커 클릭 시)
         Emotion emotionForUpdate = emotion.get();
+        Sticker stickerBeforeUpdate = emotionForUpdate.getSticker();
         LocalDateTime beforeUpdate = emotionForUpdate.getUpdatedDate(); //수정 전 마지막 업데이트 시간 저장해두기
 
-        Emotion updatedEmotion = emotionForUpdate.update(emotion.get().getSticker()); //수정 반영
+        Emotion updatedEmotion = emotionForUpdate.update(Sticker.valueOf(emotionRequestDto.getSticker())); //수정 반영
 
         //이모션 객체 삭제 (동일 스티커 클릭해서 업데이트 안 됐을 때)
         LocalDateTime afterUpdate = updatedEmotion.getUpdatedDate();
-        if (beforeUpdate==afterUpdate){ //수정 전 시간 = 수정 후 시간
+        if (beforeUpdate.isEqual(afterUpdate) && //업데이트 X & 똑같은 스티커 클릭 시
+                stickerBeforeUpdate.toString().equals(emotionRequestDto.getSticker())){
+
             emotionRepository.delete(updatedEmotion);
             dajim.deleteEmotions(updatedEmotion);
 
-            emotionResponseDto.builder().sticker(null);
+            emotionResponseDto.updateNull();
         }
 
         return emotionResponseDto;
