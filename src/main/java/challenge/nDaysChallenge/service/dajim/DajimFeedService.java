@@ -23,8 +23,6 @@ public class DajimFeedService {
 
     private final DajimFeedRepository dajimFeedRepository;
 
-    private final MemberRepository memberRepository;
-
     //피드 전체 조회
     public List<DajimFeedResponseDto> viewDajimOnFeed() {
 
