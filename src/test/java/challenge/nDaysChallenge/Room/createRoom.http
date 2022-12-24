@@ -1,6 +1,15 @@
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "id": "aaaa@naver.com",
+  "pw": "aaaa1234!"
+}
+
+###
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc0MTE4fQ.ADYzZFufr8-b_OguL2a-pUX-QfhOUx4bsLW5Vl5bRLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3MjEyfQ.bywJUo8UORHnE-qrJybP0R3oOWCaHdL54UQImprC53o
 
 {
   "name": "명상",
@@ -24,3 +33,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1d
 GET http://localhost:8080/user/finishedChallenges
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzc2MDU1fQ.hxOUCLw6qpTViWI0sHQ9XXEn2fsGtLuOgERv0--ENVs
+
+### 챌린지 삭제
+DELETE http://localhost:8080//challenge/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxODU2MTMyfQ.zz518r_YXIdDrgTE6GwB36_eqOJuQD90O9iVYrs5ZAo

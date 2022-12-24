@@ -114,7 +114,7 @@ public class RoomService {
 
         } else if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
-            roomRepository.delete(room);
+            singleRoomRepository.deleteByNumber(room.getNumber());
             member.getSingleRooms().remove(room);
         }
 

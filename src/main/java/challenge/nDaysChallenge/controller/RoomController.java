@@ -117,7 +117,7 @@ public class RoomController {
 
         roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
     }
 
     //마이페이지 - 완료 챌린지 조회

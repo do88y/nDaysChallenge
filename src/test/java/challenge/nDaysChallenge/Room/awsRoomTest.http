@@ -1,0 +1,59 @@
+POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/auth/login
+Content-Type: application/json
+
+{
+  "id": "aaaa@naver.com",
+  "pw": "aaaa1234!"
+}
+
+###
+POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3ODI5fQ.JGQlP_g3rdUhrmwY3xpjfHbFU9Id0p4J6JeoYDlWYpc
+
+{
+  "name": "명상",
+  "category": "MINDFULNESS",
+  "reward": "여행",
+  "passCount": 10,
+  "startDate": "2022-12-01",
+  "totalDays": 10,
+  "type": "SINGLE",
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "memberNumber": 1
+}
+
+###
+POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/createGroup
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3ODI5fQ.JGQlP_g3rdUhrmwY3xpjfHbFU9Id0p4J6JeoYDlWYpc
+
+{
+  "name": "공부",
+  "category": "MINDFULNESS",
+  "reward": "암거나",
+  "passCount": 10,
+  "startDate": "2022-12-01",
+  "totalDays": 10,
+  "type": "GROUP",
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "memberNumber": 4,
+  "groupMembers": [1, 2, 3]
+}
+
+### 진행 챌린지
+GET http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BuYXZlci5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3MTgwMDk4Mn0.MsMnoQH409UeGrtwgHwEAEHMsEAZuRr5QSmQpzeLxVs
+
+### 완료 챌린지
+GET prod-ndc-api-service.us-west-2.elasticbeanstalk.com/user/finishedChallenges
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjY2NjQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxODAyMzgyfQ.a37jUUdbvsd8OS7yetYdyVPwL0OpuGXCJ444y9I1PZk
+
+### 챌린지 삭제
+DELETE prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/8
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxODQ5NTE4fQ.ShbQk6X3iZ3g7f06fOvPeUvUdQkUu_ybX4bLVUrzKsI
