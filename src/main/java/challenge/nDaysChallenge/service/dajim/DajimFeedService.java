@@ -23,8 +23,6 @@ public class DajimFeedService {
 
     private final DajimFeedRepository dajimFeedRepository;
 
-    private final MemberRepository memberRepository;
-
     //피드 전체 조회
     public List<DajimFeedResponseDto> viewDajimOnFeed() {
 
@@ -38,7 +36,7 @@ public class DajimFeedService {
                         dajim.getMember().getNickname(),
                         dajim.getContent(),
                         dajim.getEmotions().stream().map(emotion ->
-                                        emotion.getStickers().toString())
+                                        emotion.getSticker().toString())
                                 .collect(Collectors.toList()),
                         dajim.getUpdatedDate()
                 )).collect(Collectors.toList());

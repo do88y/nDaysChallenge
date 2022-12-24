@@ -63,7 +63,7 @@ public class Dajim extends BaseEntity {
     }
 
     public void deleteEmotions(Emotion emotion){
-        this.emotions.remove(emotion.getNumber());
+        this.emotions.remove(emotion);
     }
 
 }

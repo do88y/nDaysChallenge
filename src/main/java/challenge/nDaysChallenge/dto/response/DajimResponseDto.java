@@ -29,7 +29,7 @@ public class DajimResponseDto {
 
     private String open;
 
-    @JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
 
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보

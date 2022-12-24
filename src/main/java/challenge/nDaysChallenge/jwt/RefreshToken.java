@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-public class RefreshToken extends BaseEntity { //리프레시 토큰은 db에 저장
+public class RefreshToken { //db에 저장
 
     @Id
     @Column(name = "rt_key")

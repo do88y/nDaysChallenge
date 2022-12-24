@@ -6,7 +6,7 @@ import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.MemberRequestDto;
@@ -139,13 +139,13 @@ public class memberTest {
         Emotion emotion = Emotion.builder()
                 .member(member1)
                 .dajim(dajim1)
-                .stickers(Stickers.valueOf("TOUCHED"))
+                .sticker(Sticker.valueOf("TOUCHED"))
                 .build();
 
         Emotion emotion2 = Emotion.builder()
                 .member(member1)
                 .dajim(dajim2)
-                .stickers(Stickers.valueOf("SURPRISE"))
+                .sticker(Sticker.valueOf("SURPRISE"))
                 .build();
 
         Emotion savedEmotion = emotionRepository.save(emotion);
