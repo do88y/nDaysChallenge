@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoomResponseDto {
 
-    private Long number;
+    private Long roomNumber;
     private String name;
     private String category;
     private String reward;
@@ -29,8 +29,8 @@ public class GroupRoomResponseDto {
     private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomResponseDto(Long number, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
-        this.number = number;
+    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
+        this.roomNumber = roomNumber;
         this.name = name;
         this.category = category;
         this.reward = reward;

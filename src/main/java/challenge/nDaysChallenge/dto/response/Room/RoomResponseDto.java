@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomResponseDto {
 
-    private Long number;
+    private Long roomNumber;
     private String name;
     private String category;
     private String reward;
@@ -23,10 +23,12 @@ public class RoomResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private Long totalDays;
+    private int successCount;
+    private int usedPassCount;
 
     @Builder
-    public RoomResponseDto(Long number, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays) {
-        this.number = number;
+    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, int successCount, int usedPassCount) {
+        this.roomNumber = roomNumber;
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -36,6 +38,8 @@ public class RoomResponseDto {
         this.totalDays = totalDays;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.successCount = successCount;
+        this.usedPassCount = usedPassCount;
     }
 
 }

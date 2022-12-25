@@ -23,10 +23,9 @@ public class RoomRequestDTO {
     private int successCount;
     private int usedPassCount;
 
-    private Long memberNumber;
 
     @Builder
-    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Long memberNumber) {
+    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount) {
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -36,6 +35,5 @@ public class RoomRequestDTO {
         this.type = type;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
-        this.memberNumber = memberNumber;
     }
 }

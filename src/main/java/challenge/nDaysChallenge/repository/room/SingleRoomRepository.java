@@ -23,7 +23,4 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
                     " and s.status = 'END'")
     List<SingleRoom> finishedSingleRooms(@Param("member") Member member);
 
-
-    @Query(value = "delete from SingleRoom s where s.number = :number")
-    SingleRoom deleteByNumber(@Param("number") Long number);
 }
