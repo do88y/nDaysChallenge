@@ -21,8 +21,4 @@ public interface EmotionRepository extends JpaRepository<Emotion, Long> {
             "and e.member.number = :memberNumber")
     Optional<Emotion> findByDajimAndMember(@Param("dajimNumber")Long dajimNumber, @Param("memberNumber")Long memberNumber);
 
-    @Modifying
-    @Query("delete from Emotion e where e.number = :emotionNumber")
-    void delete(@Param("emotionNumber") Long emotionNumber);
-
 }

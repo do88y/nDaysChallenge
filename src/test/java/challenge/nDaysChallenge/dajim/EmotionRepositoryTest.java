@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,6 +95,8 @@ public class EmotionRepositoryTest {
         //then
         assertThat(emotion).isEmpty();
         assertThat(uploadedEmotion.getSticker().toString()).isEqualTo("SURPRISE");
+        assertThat(dajim.getEmotions().get(0).getSticker().toString()).isEqualTo("SURPRISE");
+        assertThat(dajim.getEmotions().size()).isEqualTo(1);
     }
 
     private Emotion uploadEmotion(Member member, Dajim dajim, Sticker sticker){ //이모션 등록
@@ -119,11 +122,25 @@ public class EmotionRepositoryTest {
         Dajim dajim = dajimRepository.findByDajimNumber(1L)
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다"));
 
+        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
+        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
+                dajim.getEmotions()
+                        .stream().map(emotion -> emotion.getSticker().toString())
+                        .collect(Collectors.toList())
+        );
+
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(1L, 1L);
         Emotion emotionFound = emotion.get();
 
         //when
         Emotion updatedEmotion = emotionFound.update(Sticker.CHEER); //수정
+
+        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
+        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
+                dajim.getEmotions()
+                        .stream().map(e -> e.getSticker().toString())
+                        .collect(Collectors.toList())
+        );
 
         //then
         assertThat(updatedEmotion.getSticker().toString()).isEqualTo("CHEER");
@@ -140,6 +157,13 @@ public class EmotionRepositoryTest {
         Dajim dajim = dajimRepository.findByDajimNumber(1L)
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다"));
 
+        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
+        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
+                dajim.getEmotions()
+                        .stream().map(e -> e.getSticker().toString())
+                        .collect(Collectors.toList())
+        );
+
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(1L, 1L);
 
         Emotion emotionFound = emotion.get();
@@ -155,6 +179,13 @@ public class EmotionRepositoryTest {
             emotionRepository.delete(updatedEmotion);
             dajim.deleteEmotions(updatedEmotion);
         }
+
+        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
+        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
+                dajim.getEmotions()
+                        .stream().map(e -> e.getSticker().toString())
+                        .collect(Collectors.toList())
+        );
 
         //then
         assertThat(dajim.getEmotions()).isEmpty();
