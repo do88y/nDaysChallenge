@@ -171,7 +171,7 @@ public class EmotionRepositoryTest {
         LocalDateTime beforeUpdate = emotionFound.getUpdatedDate(); //업데이트 전 시간
 
         //when
-        Emotion updatedEmotion = emotionFound.update(Sticker.SURPRISE); //똑같은 스티커 클릭 시
+        Emotion updatedEmotion = emotionFound.update(Sticker.SURPRISE); //똑같은 스티커 클릭
 
         LocalDateTime afterUpdate = updatedEmotion.getUpdatedDate(); //업데이트 후 시간
         if (beforeUpdate.isEqual(afterUpdate) && //업데이트 X & 똑같은 스티커 클릭 시
