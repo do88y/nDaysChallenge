@@ -8,6 +8,7 @@ NDaysChallengeFrontend/
 .elasticbeanstalk/
 build/
 src/main/resources/*
+src/main/resources/application-mysql.yml
 
 ### STS ###
 .apt_generated
