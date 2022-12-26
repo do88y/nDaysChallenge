@@ -26,11 +26,10 @@ public class GroupRoomRequestDTO {
     private int successCount;
     private int usedPassCount;
 
-    private Long memberNumber;
     private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Long memberNumber, Set<Long> groupMembers) {
+    public GroupRoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -40,7 +39,6 @@ public class GroupRoomRequestDTO {
         this.type = type;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
-        this.memberNumber = memberNumber;
         for (Long members : groupMembers) {
             this.groupMembers.add(members);
         }

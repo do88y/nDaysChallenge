@@ -101,6 +101,7 @@ public class RoomService {
         //엔티티 조회
         Optional<Room> findRoom = roomRepository.findById(roomNumber);
         Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        //memberRepository.findByNumber(member.getNumber());
 
         if (room.getType() == RoomType.GROUP) {
             //단체 챌린지 삭제

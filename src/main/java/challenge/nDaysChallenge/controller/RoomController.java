@@ -31,7 +31,7 @@ public class RoomController {
         List<SingleRoom> singleRooms = roomService.findSingleRooms(memberAdapter.getMember());
         for (SingleRoom singleRoom : singleRooms) {
             RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .number(singleRoom.getNumber())
+                    .roomNumber(singleRoom.getNumber())
                     .name(singleRoom.getName())
                     .category(singleRoom.getCategory().name())
                     .reward(singleRoom.getReward())
@@ -48,7 +48,7 @@ public class RoomController {
         List<GroupRoom> groupRooms = roomService.findGroupRooms(memberAdapter.getMember());
         for (GroupRoom groupRoom : groupRooms) {
             RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .number(groupRoom.getNumber())
+                    .roomNumber(groupRoom.getNumber())
                     .name(groupRoom.getName())
                     .category(groupRoom.getCategory().name())
                     .reward(groupRoom.getReward())
@@ -73,7 +73,7 @@ public class RoomController {
         Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
 
         RoomResponseDto savedRoom = RoomResponseDto.builder()
-                .number(room.getNumber())
+                .roomNumber(room.getNumber())
                 .name(room.getName())
                 .category(room.getCategory().name())
                 .reward(room.getReward())
@@ -95,7 +95,7 @@ public class RoomController {
         Room room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
 
         GroupRoomResponseDto savedRoom = GroupRoomResponseDto.builder()
-                .number(room.getNumber())
+                .roomNumber(room.getNumber())
                 .name(room.getName())
                 .category(room.getCategory().name())
                 .reward(room.getReward())
@@ -117,7 +117,7 @@ public class RoomController {
 
         roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(null);
     }
 
     //마이페이지 - 완료 챌린지 조회
@@ -129,7 +129,7 @@ public class RoomController {
         List<SingleRoom> findSingleRooms = roomService.findFinishedSingleRooms(memberAdapter.getMember());
         for (Room room : findSingleRooms) {
             RoomResponseDto finishedRoom = RoomResponseDto.builder()
-                    .number(room.getNumber())
+                    .roomNumber(room.getNumber())
                     .name(room.getName())
                     .category(room.getCategory().name())
                     .reward(room.getReward())
@@ -146,7 +146,7 @@ public class RoomController {
         List<GroupRoom> findGroupRooms = roomService.findFinishedGroupRooms(memberAdapter.getMember());
         for (Room room : findGroupRooms) {
             RoomResponseDto finishedRoom = RoomResponseDto.builder()
-                    .number(room.getNumber())
+                    .roomNumber(room.getNumber())
                     .name(room.getName())
                     .category(room.getCategory().name())
                     .reward(room.getReward())

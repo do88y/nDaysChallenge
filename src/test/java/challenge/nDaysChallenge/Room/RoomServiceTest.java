@@ -69,7 +69,6 @@ public class RoomServiceTest {
 
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
@@ -97,7 +96,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
@@ -129,20 +127,22 @@ public class RoomServiceTest {
     }
 
     @Test
+    @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
-        SingleRoom room = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
+        em.persist(member);
 
-        em.persist(room);
+        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+
         em.flush();
         em.clear();
 
         //when
-        roomRepository.deleteById(room.getNumber());
+        roomService.deleteRoom(member, room.getNumber());
 
         //then
-        long count = roomRepository.count();
-        assertThat(count).isEqualTo(0);
+        assertThat(roomRepository.count()).isEqualTo(0);
     }
 
     @Test
