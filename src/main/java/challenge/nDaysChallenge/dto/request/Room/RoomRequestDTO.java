@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.dto.request.Room;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,17 +16,16 @@ public class RoomRequestDTO {
     private String reward;
     private int passCount;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private Long totalDays;
     private String type;
     private int successCount;
     private int usedPassCount;
 
-    private Long memberNumber;
 
     @Builder
-    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Long memberNumber) {
+    public RoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount) {
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -35,6 +35,5 @@ public class RoomRequestDTO {
         this.type = type;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
-        this.memberNumber = memberNumber;
     }
 }
