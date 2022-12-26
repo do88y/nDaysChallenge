@@ -16,25 +16,25 @@ public class Emotion extends BaseEntity {
     private Long number;
 
     @Enumerated(EnumType.STRING)
-    private Stickers stickers; //감정스티커
+    private Sticker sticker; //감정스티커
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dajim_number")
     private Dajim dajim;
 
     @Builder
-    public Emotion(Member member, Dajim dajim, Stickers stickers) {
+    public Emotion(Member member, Dajim dajim, Sticker sticker) {
         this.member = member;
         this.dajim = dajim;
-        this.stickers = stickers;
+        this.sticker = sticker;
     }
 
-    public Emotion update(Stickers stickers) {
-        this.stickers=stickers;
+    public Emotion update(Sticker sticker) {
+        this.sticker=sticker;
         return this;
     }
 

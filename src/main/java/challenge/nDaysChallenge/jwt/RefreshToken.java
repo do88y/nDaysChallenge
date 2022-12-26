@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class RefreshToken extends BaseEntity { //리프레시 토큰은 db에 저장
+public class RefreshToken { //db에 저장
 
     @Id
     @Column(name = "rt_key")
@@ -21,15 +22,14 @@ public class RefreshToken extends BaseEntity { //리프레시 토큰은 db에 �
     @Column(name = "rt_value")
     private String value;
 
+    @Column
+    private LocalDateTime createdDate;
+
     @Builder
     public RefreshToken(String key, String value){
         this.key=key;
         this.value=value;
-    }
-
-    public RefreshToken updateValue(String token){
-        this.value=token;
-        return this;
+        this.createdDate=LocalDateTime.now();
     }
 
 }

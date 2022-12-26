@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.domain.dajim;
 
-public enum Stickers {
+public enum Sticker {
 
     LIKE, CHEER, TOUCHED, WATCH, SURPRISE
 

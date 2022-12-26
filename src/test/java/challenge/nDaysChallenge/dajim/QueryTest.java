@@ -6,7 +6,7 @@ import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
@@ -146,7 +146,7 @@ public class QueryTest { //N+1 테스트
         Emotion emotion = Emotion.builder()
                 .member(member2)
                 .dajim(dajim3)
-                .stickers(Stickers.valueOf("TOUCHED"))
+                .sticker(Sticker.valueOf("TOUCHED"))
                 .build();
 
         Emotion savedEmotion = emotionRepository.save(emotion);
@@ -157,10 +157,10 @@ public class QueryTest { //N+1 테스트
     @Test
     @DisplayName("다짐 내 이모션 조회")
     public void 다짐_내_이모션_조회(){
-        Emotion emotionFound = emotionRepository.findByEmotionNumber(3L, 2L)
+        Emotion emotionFound = emotionRepository.findByDajimAndMember(3L, 2L)
                 .orElseThrow(()->new RuntimeException("이모션 객체를 찾을 수 없습니다."));
 
-        Stickers stickers = emotionFound.getStickers();
+        Sticker stickers = emotionFound.getSticker();
 
         System.out.println(stickers.toString());
     }
@@ -181,7 +181,7 @@ public class QueryTest { //N+1 테스트
         groupRooms.add(2L);
 
         //when
-        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRooms, null);
+        List<Dajim> dajims = dajimFeedRepository.findAllByOpen();
 
         //then
         Assertions.assertThat(dajims.size()).isEqualTo(3);

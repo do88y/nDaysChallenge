@@ -159,7 +159,7 @@ public class WithUserDetailsTest {
         assertThat(dajimsList.get(0).getContent()).isEqualTo(savedDajim.getContent());
 
         //피드에서 다짐 조회
-        List<Dajim> dajimFeed = dajimFeedRepository.findAllByMemberAndOpen(null, Collections.singletonList(1L));
+        List<Dajim> dajimFeed = dajimFeedRepository.findAllByOpen();
 
         List<DajimFeedResponseDto> dajimFeedList = dajimFeed.stream().map(d ->
                 new DajimFeedResponseDto(
@@ -167,7 +167,7 @@ public class WithUserDetailsTest {
                         d.getMember().getNickname(),
                         d.getContent(),
                         d.getEmotions().stream().map(emotion ->
-                                        emotion.getStickers().toString())
+                                        emotion.getSticker().toString())
                                 .collect(Collectors.toList()),
                         d.getUpdatedDate()
                 )).collect(Collectors.toList());

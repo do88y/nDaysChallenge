@@ -6,7 +6,7 @@ import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
-import challenge.nDaysChallenge.domain.dajim.Stickers;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.DajimRequestDto;
 import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.as;
@@ -95,10 +96,11 @@ public class DajimFeedRepositoryTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
+        member1.addSingleRooms(room1);
         roomRepository.save(room1);
 
         //싱글룸 다짐
@@ -143,7 +145,7 @@ public class DajimFeedRepositoryTest {
         Emotion emotion = Emotion.builder()
                 .member(member2)
                 .dajim(dajim3)
-                .stickers(Stickers.valueOf("TOUCHED"))
+                .sticker(Sticker.valueOf("TOUCHED"))
                 .build();
 
         Emotion savedEmotion = emotionRepository.save(emotion);
@@ -152,24 +154,11 @@ public class DajimFeedRepositoryTest {
         //이모션 불러오기ㅜ
         List<Emotion> emotions = dajim3.getEmotions();
         List<String> stickersList = emotions.stream().map(emotion1 ->
-                        emotion1.getStickers().toString())
-                .collect(Collectors.toList());
-
-        //when
-        //멤버2 싱글룸 불러오기
-        List<SingleRoom> singleRooms = member1.getSingleRooms();
-        List<Long> singleRoomNumbers = singleRooms.stream().map(singleRoom ->
-                        singleRoom.getNumber())
-                .collect(Collectors.toList());
-
-        //멤버2 그룹룸 불러오기
-        List<RoomMember> roomMemberList = member1.getRoomMemberList();
-        List<Long> groupRoomNumbers = roomMemberList.stream().map(roomMember ->
-                        roomMember.getRoom().getNumber())
+                        emotion1.getSticker().toString())
                 .collect(Collectors.toList());
 
         //해당 룸넘버들의 다짐 불러오기
-        List<Dajim> dajims = dajimFeedRepository.findAllByMemberAndOpen(groupRoomNumbers, singleRoomNumbers);
+        List<Dajim> dajims = dajimFeedRepository.findAllByOpen();
 
         //then
         for (Dajim c : dajims){
@@ -177,104 +166,9 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-        assertThat(singleRooms.size()).isEqualTo(0); //싱글룸 0개
-        assertThat(roomMemberList.size()).isEqualTo(1); //그룹룸 1개
-        assertThat(dajims.size()).isEqualTo(3); //해당 그룹룸에 다짐 3개
-        assertThat(dajim3.getEmotions().get(0).getStickers().toString()).isEqualTo("TOUCHED");
+        assertThat(dajims.size()).isEqualTo(3); //다짐 4개
+        assertThat(dajim3.getEmotions().get(0).getSticker().toString()).isEqualTo("TOUCHED");
         assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
-    }
-
-    @DisplayName("이모션 등록")
-    @Test
-    void clickEmotion(){
-        //given
-        Member member1 = Member.builder()
-                .id("user@naver.com")
-                .pw("12345")
-                .nickname("userN")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
-
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
-
-        Dajim dajim = dajimRepository.save(Dajim.builder()
-            .room(room1)
-            .member(member1)
-            .content("content")
-            .open(Open.PUBLIC)
-            .build());
-
-        //when
-        Dajim savedDajim = dajimRepository.findByDajimNumber(dajim.getNumber())
-                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
-
-        Stickers sticker = Stickers.valueOf("SURPRISE");
-
-        Emotion emotion = Emotion.builder()
-                .member(member1)
-                .dajim(savedDajim)
-                .stickers(sticker)
-                .build();
-
-        Emotion savedEmotion = emotionRepository.save(emotion);
-        dajim.addEmotions(savedEmotion);
-
-
-        //then
-        assertThat(savedEmotion.getStickers().toString()).isEqualTo("SURPRISE");
-        System.out.println(dajim.getEmotions().get(0).getStickers().toString());
-    }
-
-    @DisplayName("이모션 변경 및 삭제")
-    @Test
-    @Transactional
-    @Rollback(value = false)
-    void updateEmotion(){
-        //given
-        Member member1 = Member.builder()
-                .id("user@naver.com")
-                .pw("12345")
-                .nickname("userN")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(),100L), Category.ROUTINE, 5, "", 0, 0);
-        Dajim dajim = dajimRepository.save(Dajim.builder()
-                .room(room1)
-                .member(member1)
-                .content("content")
-                .open(Open.PUBLIC)
-                .build());
-        Emotion emotion = Emotion.builder()
-                .member(member1)
-                .dajim(dajim)
-                .stickers(Stickers.valueOf("CHEER"))
-                .build();
-        emotionRepository.save(emotion);
-        dajim.addEmotions(emotion);
-
-        //when
-        EmotionRequestDto requestDto = new EmotionRequestDto(1L,"TOUCHED");
-
-        Emotion updatedEmotion;
-
-        if (requestDto.getSticker()==null||requestDto.getSticker().equals("")){
-            updatedEmotion = emotion.update(null);
-        } else {
-            updatedEmotion = emotion.update(Stickers.valueOf(requestDto.getSticker()));
-        }
-
-        EmotionResponseDto newEmotion = EmotionResponseDto.builder()
-                        .dajimNumber(updatedEmotion.getDajim().getNumber())
-                        .memberNickname(updatedEmotion.getMember().getNickname())
-                        .stickers(updatedEmotion.getStickers().toString()).build();
-
-        //then
-        assertThat(newEmotion.getStickers()).isEqualTo("TOUCHED");
-        assertThat(dajim.getEmotions().get(0).getStickers()).isEqualTo(Stickers.TOUCHED);
     }
 
 }
