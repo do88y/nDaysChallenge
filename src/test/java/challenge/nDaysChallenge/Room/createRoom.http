@@ -9,7 +9,7 @@ Content-Type: application/json
 ###
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDI5ODQxfQ.r_eMeBHj0sNIUjM7fXU5VgvVd2by7Vt9KspBJROVDaM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
 
 {
   "name": "테스트",
@@ -26,14 +26,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1d
 ### 진행 챌린지
 GET http://localhost:8080/challenge/list
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxOTc0OTM5fQ.jIIi0bAr6PQF0voItd7uA7MRB38lKkp-MhK6d9e1VWs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
 
 ### 완료 챌린지
 GET http://localhost:8080/user/finishedChallenges
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxOTc0OTM5fQ.jIIi0bAr6PQF0voItd7uA7MRB38lKkp-MhK6d9e1VWs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
 
 ### 챌린지 삭제
-DELETE http://localhost:8080/challenge/5
+DELETE http://localhost:8080/challenge/44
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDMzNzQ5fQ.LCknhBXuPfeLt7RpLxHM67k52C2lorXc4Kl-nLD1Vcg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+
+### 챌린지 상태 변경
+POST http://localhost:8080/challenge/44/success
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4

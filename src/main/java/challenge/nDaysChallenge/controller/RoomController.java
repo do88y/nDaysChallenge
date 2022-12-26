@@ -2,8 +2,8 @@ package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDTO;
-import challenge.nDaysChallenge.dto.request.Room.RoomRequestDTO;
+import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;
+import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
 import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.service.RoomService;
@@ -68,7 +68,7 @@ public class RoomController {
     //개인 챌린지 생성
     @PostMapping("/challenge/create")
     public ResponseEntity<?> createSingleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                        @RequestBody RoomRequestDTO dto) {
+                                        @RequestBody RoomRequestDto dto) {
 
         Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
 
@@ -90,7 +90,7 @@ public class RoomController {
     //그룹 챌린지 생성
     @PostMapping("/challenge/createGroup")
     public ResponseEntity<?> createGroupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                             @RequestBody GroupRoomRequestDTO dto) {
+                                             @RequestBody GroupRoomRequestDto dto) {
 
         Room room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
 
