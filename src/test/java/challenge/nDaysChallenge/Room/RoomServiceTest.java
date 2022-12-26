@@ -25,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -126,7 +123,7 @@ public class RoomServiceTest {
         }
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
@@ -139,10 +136,11 @@ public class RoomServiceTest {
         em.clear();
 
         //when
+        Long roomNumber = room.getNumber();
         roomService.deleteRoom(member, room.getNumber());
 
         //then
-        assertThat(roomRepository.count()).isEqualTo(0);
+        assertThat(roomRepository.findById(roomNumber).get());
     }
 
     @Test
@@ -150,10 +148,10 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 진행_챌린지_조회() throws Exception {
         //given
-        SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "", 0, 0);
-        SingleRoom singleRoom2 = SingleRoom.createRoom("공부", period, Category.ETC, RoomType.SINGLE, RoomStatus.CONTINUE, 0, "", 0, 0);
-        SingleRoom singleRoom3 = SingleRoom.createRoom("청소", period, Category.EXERCISE, RoomType.SINGLE, RoomStatus.CONTINUE, 10, "꿀잠", 0, 0);
-        GroupRoom groupRoom = GroupRoom.createRoom("명상", period, Category.MINDFULNESS, RoomType.GROUP, RoomStatus.CONTINUE, 20, "여행", 0, 0);
+        SingleRoom singleRoom1 = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom singleRoom2 = new SingleRoom("공부", period, Category.ETC, 0, "", 0, 0);
+        SingleRoom singleRoom3 = new SingleRoom("청소", period, Category.EXERCISE, 10, "꿀잠", 0, 0);
+        GroupRoom groupRoom = new GroupRoom("명상", period, Category.MINDFULNESS, 20, "여행", 0, 0);
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
@@ -176,6 +174,8 @@ public class RoomServiceTest {
         em.clear();
 
         //when
+        roomService.changeStatus(singleRoom1.getNumber());
+
         List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
         List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
 
@@ -192,9 +192,9 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
-        SingleRoom singleRoom1 = SingleRoom.createRoom("기상", period, Category.ROUTINE, RoomType.SINGLE, RoomStatus.END, 2, "", 0, 0);
-        SingleRoom singleRoom2 = SingleRoom.createRoom("공부", period, Category.ETC, RoomType.SINGLE, RoomStatus.END, 0, "", 0, 0);
-        SingleRoom singleRoom3 = SingleRoom.createRoom("청소", period, Category.EXERCISE, RoomType.SINGLE, RoomStatus.CONTINUE, 10, "꿀잠", 0, 0);
+        SingleRoom singleRoom1 = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom singleRoom2 = new SingleRoom("공부", period, Category.ETC, 0, "", 0, 0);
+        SingleRoom singleRoom3 = new SingleRoom("청소", period, Category.EXERCISE, 10, "꿀잠", 0, 0);
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
@@ -213,6 +213,8 @@ public class RoomServiceTest {
         em.clear();
 
         //when
+        roomService.changeStatus(singleRoom1.getNumber());
+        roomService.changeStatus(singleRoom2.getNumber());
         List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member);
 
         //then
@@ -224,7 +226,7 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
-        GroupRoom groupRoom = GroupRoom.createRoom("명상", period, Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행", 0, 0);
+        GroupRoom groupRoom = new GroupRoom("명상", period, Category.MINDFULNESS, 20, "여행", 0, 0);
         groupRoomRepository.save(groupRoom);
 
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
@@ -237,6 +239,7 @@ public class RoomServiceTest {
         em.clear();
 
         //when
+        roomService.changeStatus(groupRoom.getNumber());
         List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member);
 
         //then

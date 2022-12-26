@@ -1,35 +1,29 @@
 package challenge.nDaysChallenge.dto.request.Room;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupRoomRequestDTO {
+public class RoomRequestDto {
 
     private String name;
     private String category;
     private String reward;
     private int passCount;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private Long totalDays;
     private String type;
     private int successCount;
     private int usedPassCount;
 
-    private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomRequestDTO(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
+    public RoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount) {
         this.name = name;
         this.category = category;
         this.reward = reward;
@@ -39,8 +33,5 @@ public class GroupRoomRequestDTO {
         this.type = type;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
-        for (Long members : groupMembers) {
-            this.groupMembers.add(members);
-        }
     }
 }

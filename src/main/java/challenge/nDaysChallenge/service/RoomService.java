@@ -78,7 +78,6 @@ public class RoomService {
         //챌린지 생성
         GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
-
         //챌린지 저장
         groupRoomRepository.save(newRoom);
 
@@ -98,27 +97,22 @@ public class RoomService {
      */
     @Transactional
     public void deleteRoom(Member member, Long roomNumber) {
+
         //엔티티 조회
         Optional<Room> findRoom = roomRepository.findById(roomNumber);
         Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
-        //memberRepository.findByNumber(member.getNumber());
 
-        if (room.getType() == RoomType.GROUP) {
-            //단체 챌린지 삭제
+        if (room.getType() == RoomType.SINGLE) {
+            //개인 챌린지 삭제
             roomRepository.delete(room);
 
-            //RoomMember 삭제
+        } else if (room.getType() == RoomType.GROUP) {
+            //RoomMember 삭제 - room 같이 삭제 됨
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             for (RoomMember roomMember : roomMembers) {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
-
-        } else if (room.getType() == RoomType.SINGLE) {
-            //개인 챌린지 삭제
-            roomRepository.delete(room);
-            member.getSingleRooms().remove(room);
         }
-
     }
 
     /**
@@ -127,7 +121,8 @@ public class RoomService {
     @Transactional
     public void failSingleRoom(Long roomNumber) {
         //엔티티 조회
-        SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).get();
+        Optional<SingleRoom> findRoom = singleRoomRepository.findById(roomNumber);
+        SingleRoom singleRoom = findRoom.orElseThrow(() -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
 
         //개인 챌린지 멤버 조회
         Member member = singleRoom.giveMember();
@@ -135,7 +130,7 @@ public class RoomService {
         int passCount = singleRoom.getPassCount();
 
         if (usedPassCount > passCount) {
-            roomRepository.deleteById(member.getNumber());
+            roomRepository.deleteById(roomNumber);
         }
     }
 
@@ -145,18 +140,30 @@ public class RoomService {
     @Transactional
     public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        Optional<GroupRoom> groupRoom = groupRoomRepository.findById(roomNumber);
+        Optional<GroupRoom> findRoom = groupRoomRepository.findById(roomNumber);
+        GroupRoom groupRoom = findRoom.orElseThrow(() -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
 
         //그룹 챌린지 멤버 조회
-        List<RoomMember> roomMembers = groupRoom.get().getRoomMemberList();
-        int usedPassCount = groupRoom.get().getUsedPassCount();
-        int passCount = groupRoom.get().getPassCount();
+        List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
+        int usedPassCount = groupRoom.getUsedPassCount();
+        int passCount = groupRoom.getPassCount();
 
         if (usedPassCount > passCount) {
             for (RoomMember roomMember : roomMembers) {
                 roomRepository.deleteById(roomMember.getNumber());
             }
         }
+    }
+
+    /**
+     * 상태 완료로 변경
+     */
+    @Transactional
+    public void changeStatus(Long roomNumber) {
+        Optional<Room> findRoom = roomRepository.findById(roomNumber);
+        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+
+        room.end();
     }
 
     /**
