@@ -44,4 +44,8 @@ public class Room {
     protected int usedPassCount;
     protected int successCount;
 
+    public void end() {
+        this.status = RoomStatus.END;
+    }
+
 }

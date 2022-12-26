@@ -16,7 +16,7 @@ public class RoomMember {
     @Column(name = "room_member_number")
     private Long number;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
 
