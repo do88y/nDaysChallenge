@@ -43,22 +43,22 @@ class RelationshipRepositoryTest {
     @Rollback(value = false)
     void makeRelationship (){
         //given
-        Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER);
-        Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER);
-        Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER);
-        Member friend3 = new Member("tjd@naver.com","123","친구3",4,4, Authority.ROLE_USER);
-        Member friend4 = new Member("rud@naver.com","123","친구4",5,3, Authority.ROLE_USER);
-        Member friend5 = new Member("tmf@naver.com","123","친구5",6,2, Authority.ROLE_USER);
-        Member friend6 = new Member("gml@naver.com","123","친구6",1,2, Authority.ROLE_USER);
-        Member friend7 = new Member("dnjs@naver.com","123","친구7",2,2, Authority.ROLE_USER);
-        Member friend8 = new Member("dh@naver.com","123","친구8",3,2, Authority.ROLE_USER);
-        Member friend9 = new Member("rl@naver.com","123","친구9",4,2, Authority.ROLE_USER);
-        Member friend10 = new Member("dP@naver.com","123","친구10",5,2, Authority.ROLE_USER);
-        Member friend11 = new Member("dms@naver.com","123","친구11",6,2, Authority.ROLE_USER);
-        Member friend12 = new Member("chl@naver.com","123","친구12",1,2, Authority.ROLE_USER);
-        Member friend13 = new Member("dus@naver.com","123","친구13",2,2, Authority.ROLE_USER);
-        Member friend14 = new Member("tj@naver.com","123","친구14",3,2, Authority.ROLE_USER);
-        Member friend15 = new Member("gh@naver.com","123","친구15",4,2, Authority.ROLE_USER);
+        Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER, true);
+        Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER, true);
+        Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER, true);
+        Member friend3 = new Member("tjd@naver.com","123","친구3",4,4, Authority.ROLE_USER, true);
+        Member friend4 = new Member("rud@naver.com","123","친구4",5,3, Authority.ROLE_USER, true);
+        Member friend5 = new Member("tmf@naver.com","123","친구5",6,2, Authority.ROLE_USER, true);
+        Member friend6 = new Member("gml@naver.com","123","친구6",1,2, Authority.ROLE_USER, true);
+        Member friend7 = new Member("dnjs@naver.com","123","친구7",2,2, Authority.ROLE_USER, true);
+        Member friend8 = new Member("dh@naver.com","123","친구8",3,2, Authority.ROLE_USER, true);
+        Member friend9 = new Member("rl@naver.com","123","친구9",4,2, Authority.ROLE_USER, true);
+        Member friend10 = new Member("dP@naver.com","123","친구10",5,2, Authority.ROLE_USER, true);
+        Member friend11 = new Member("dms@naver.com","123","친구11",6,2, Authority.ROLE_USER, true);
+        Member friend12 = new Member("chl@naver.com","123","친구12",1,2, Authority.ROLE_USER, true);
+        Member friend13 = new Member("dus@naver.com","123","친구13",2,2, Authority.ROLE_USER, true);
+        Member friend14 = new Member("tj@naver.com","123","친구14",3,2, Authority.ROLE_USER, true);
+        Member friend15 = new Member("gh@naver.com","123","친구15",4,2, Authority.ROLE_USER, true);
 
         List <String> friendList = new ArrayList<>();
 

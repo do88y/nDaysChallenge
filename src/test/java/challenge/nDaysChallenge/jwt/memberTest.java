@@ -104,6 +104,7 @@ public class memberTest {
                 .image(1)
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
+                .firstLogin(true)
                 .build();
 
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");

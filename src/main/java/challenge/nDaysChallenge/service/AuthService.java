@@ -79,17 +79,26 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         //인증 정보 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.generateToken(authentication);
 
-        //refresh 토큰 저장
+        //첫 로그인 시 리프레쉬 토큰 db 저장
+        if (member.isFirstLogin()){
+            saveRefreshToken(authentication, tokenDto);
+        }
+
+        member.loggedIn(); // firstLogin 필드 false로 변경
+
+        //토큰 발급
+        return tokenDto;
+
+    }
+
+    //리프레쉬 토큰 db 저장
+    private void saveRefreshToken(Authentication authentication, TokenDto tokenDto){
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
                 .value(tokenDto.getRefreshToken())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
-
-        //토큰 발급
-        return tokenDto;
-
     }
 
     //로그아웃

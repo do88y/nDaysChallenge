@@ -72,7 +72,7 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER,true);
 
         em.persist(member);
 
@@ -100,9 +100,9 @@ public class RoomServiceTest {
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Long> selectedMembers = new HashSet<>();
-        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
-        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER);
-        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, 4, Authority.ROLE_USER);
+        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER,true);
+        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER,true);
+        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, 4, Authority.ROLE_USER,true);
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
@@ -130,7 +130,7 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER,true);
         em.persist(member);
 
         SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
@@ -159,7 +159,7 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom3);
         groupRoomRepository.save(groupRoom);
 
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER,true);
         memberRepository.save(member);
 
         SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
@@ -199,7 +199,7 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER,true);
         memberRepository.save(member);
 
         SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
@@ -227,7 +227,7 @@ public class RoomServiceTest {
         GroupRoom groupRoom = GroupRoom.createRoom("명상", period, Category.MINDFULNESS, RoomType.GROUP, RoomStatus.END, 20, "여행", 0, 0);
         groupRoomRepository.save(groupRoom);
 
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER,true);
         memberRepository.save(member);
 
         RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom);

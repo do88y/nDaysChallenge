@@ -1,0 +1,11 @@
+# Request
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "id": "abc@naver.com",
+  "pw": "123",
+  "nickname": "nick",
+  "image": 2,
+  "roomLimit": 3
+}
