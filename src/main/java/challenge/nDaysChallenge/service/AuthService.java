@@ -37,8 +37,9 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     //회원가입
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
         Member member = memberRequestDto.toMember(passwordEncoder);
+        memberRepository.save(member);
 
-        return MemberResponseDto.of(memberRepository.save(member)); //아이디, 닉네임 리턴
+        return MemberResponseDto.of(member); //아이디, 닉네임 리턴
     }
 
     //아이디 중복 검사
@@ -53,8 +54,6 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     @Transactional(readOnly = true)
     public boolean nicknameCheck(String nickname){
         boolean exists = memberRepository.existsById(nickname);
-
-        //닉네임 정보 조회 시
 
         return exists;
     }
@@ -123,7 +122,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-        TokenDto tokenDto = tokenProvider.reissueToken(authentication, refreshToken);
+        TokenDto tokenDto = tokenProvider.reissueToken(authentication, tokenRequestDto.getRefreshToken());
 
         //저장소에 새 리프레시 토큰 저장
 //        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
