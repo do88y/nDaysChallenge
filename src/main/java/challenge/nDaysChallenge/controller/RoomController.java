@@ -24,7 +24,7 @@ public class RoomController {
 
     //챌린지 리스트(메인)
     @GetMapping("/challenge/list")
-    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<?> list(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
         List<RoomResponseDto> roomList = new ArrayList<>();
         
@@ -67,7 +67,7 @@ public class RoomController {
 
     //개인 챌린지 생성
     @PostMapping("/challenge/create")
-    public ResponseEntity<?> createSingleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> singleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @RequestBody RoomRequestDto dto) {
 
         Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
@@ -89,7 +89,7 @@ public class RoomController {
 
     //그룹 챌린지 생성
     @PostMapping("/challenge/createGroup")
-    public ResponseEntity<?> createGroupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> groupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                              @RequestBody GroupRoomRequestDto dto) {
 
         Room room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
@@ -112,10 +112,9 @@ public class RoomController {
 
     //챌린지 삭제&실패
     @DeleteMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                        @PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> delete(@PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
+        roomService.deleteRoom(roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
@@ -130,7 +129,7 @@ public class RoomController {
 
     //마이페이지 - 완료 챌린지 조회
     @GetMapping("/user/finishedChallenges")
-    public ResponseEntity<?> findFinishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<?> finishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
         List<RoomResponseDto> finishedRooms = new ArrayList<>();
 
@@ -170,5 +169,18 @@ public class RoomController {
 
         return ResponseEntity.status(HttpStatus.OK).body(finishedRooms);
     }
+
+
+    /**
+     * 관리자 페이지
+     */
+    //챌린지 전체 조회 - 닉네임, 상태 별
+
+
+    //챌린지 수정 - 챌린지 수정 필요한지? 보류
+
+
+    //챌린지 삭제 - 여러개 동시에
+
 
 }

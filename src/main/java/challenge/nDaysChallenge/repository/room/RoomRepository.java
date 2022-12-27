@@ -16,10 +16,7 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Override
-    Optional<Room> findById(Long roomNumber);
+    public Optional<Room> findById(Long roomNumber);
 
-
-    @Query(value = "delete from Room r where r.number = :number")
-    Room deleteByNumber(@Param("number") Long number);
 }
 

@@ -9,7 +9,7 @@ Content-Type: application/json
 ###
 POST http://localhost:8080/challenge/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMTEzOTk2fQ.h0-teapwK_5YWnNiq22KboNTrXMRxIm8g8jSBzA-Drs
 
 {
   "name": "테스트",
@@ -34,9 +34,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
 
 ### 챌린지 삭제
-DELETE http://localhost:8080/challenge/44
+DELETE http://localhost:8080/challenge/58
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMTEzOTk2fQ.h0-teapwK_5YWnNiq22KboNTrXMRxIm8g8jSBzA-Drs
 
 ### 챌린지 상태 변경
 POST http://localhost:8080/challenge/44/success
