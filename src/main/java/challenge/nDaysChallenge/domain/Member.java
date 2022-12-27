@@ -34,6 +34,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    private boolean firstLogin;
+
     //내가 수락한 친구들만 리스트에 들어가게//
     @OneToMany(mappedBy = "number")
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
@@ -45,13 +47,14 @@ public class Member {
     private final List<SingleRoom> singleRooms = new ArrayList<>();
 
     @Builder
-    public Member(String id, String pw ,String nickname, int image, int roomLimit, Authority authority) {
+    public Member(String id, String pw ,String nickname, int image, int roomLimit, Authority authority, boolean firstLogin) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
         this.image = image;
         this.roomLimit=roomLimit;
         this.authority = authority;
+        this.firstLogin = true;
     }
 
     public Member update (String nickname, String pw, int image){
@@ -59,6 +62,11 @@ public class Member {
         this.pw = pw;
         this.image = image;
         return this;
+    }
+
+    //리프레쉬 토큰 발급 위해 첫 로그인 여부 확인
+    public void loggedIn(){
+        this.firstLogin = false;
     }
 
     //친구 리스트에 추가 메서드//

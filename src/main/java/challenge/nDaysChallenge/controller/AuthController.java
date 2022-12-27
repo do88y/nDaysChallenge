@@ -55,9 +55,9 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //토큰 재발급
     @PostMapping("/auth/reissue")
-    public ResponseEntity<TokenDto> reissue (@RequestBody JwtRequestDto jwtRequestDto, @AuthenticationPrincipal MemberAdapter memberAdapter){
+    public ResponseEntity<TokenDto> reissue (@RequestBody JwtRequestDto jwtRequestDto){
         //파라미터 객체 안에 access, refresh 토큰 있음
-        TokenDto tokenDto = authService.reissue(jwtRequestDto, memberAdapter);
+        TokenDto tokenDto = authService.reissue(jwtRequestDto);
         return ResponseEntity.ok().body(tokenDto);
     }
 
