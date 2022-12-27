@@ -71,7 +71,6 @@ public class EmotionRepositoryTest {
                 .image(1)
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
-                .firstLogin(true)
                 .build();
 
         SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);

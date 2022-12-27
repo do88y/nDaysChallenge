@@ -32,4 +32,9 @@ public class RefreshToken { //db에 저장
         this.createdDate=LocalDateTime.now();
     }
 
+//    public RefreshToken updateValue(String refreshToken){
+//        this.value=refreshToken;
+//        return this;
+//    }
+
 }

@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.TokenDto;
 import challenge.nDaysChallenge.dto.request.JwtRequestDto;
 import challenge.nDaysChallenge.dto.request.LoginRequestDto;
@@ -79,12 +80,8 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         //인증 정보 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.generateToken(authentication);
 
-        //첫 로그인 시 리프레쉬 토큰 db 저장
-        if (member.isFirstLogin()){
-            saveRefreshToken(authentication, tokenDto);
-        }
-
-        member.loggedIn(); // firstLogin 필드 false로 변경
+        //리프레쉬 토큰 저장
+        saveRefreshToken(authentication, tokenDto);
 
         //토큰 발급
         return tokenDto;
@@ -111,23 +108,28 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         SecurityContextHolder.clearContext(); // 시큐리티 컨텍스트에서 인증 정보 삭제
     }
 
-    //액세스토큰 재발급
-    public TokenDto reissue(JwtRequestDto tokenRequestDto) {
+    //액세스 토큰 재발급 (30분마다 만료되므로)
+    public TokenDto reissue(JwtRequestDto jwtRequestDto, MemberAdapter memberAdapter) {
 
-        //refresh 토큰 유효성(만료 여부) 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())){
-            throw new RuntimeException("리프레시 토큰이 유효하지 않습니다");
+        //refresh 토큰 유효성 검증
+        if (!tokenProvider.validateToken(jwtRequestDto.getRefreshToken())){ //유효하지 않을 때
+
+            if (tokenProvider.checkTokenExpiration(jwtRequestDto.getRefreshToken())){ //만료가 원인이면
+                logout(memberAdapter.getMember().getId()); //강제 로그아웃
+            }
+
+            throw new RuntimeException("리프레시 토큰이 유효하지 않습니다.");
         }
 
         //access 토큰에서 id 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(jwtRequestDto.getAccessToken());
 
         //id 기반으로 저장소에서 refresh 토큰 값 가져오기
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("로그아웃된 사용자입니다"));
 
         //refresh 토큰 일치(저장소 - 파라미터) 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
+        if (!refreshToken.getValue().equals(jwtRequestDto.getRefreshToken())){
             throw new RuntimeException("토큰의 사용자 정보가 일치하지 않습니다");
         }
 

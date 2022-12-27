@@ -1,22 +1,20 @@
 package challenge.nDaysChallenge.jwt;
 
 import challenge.nDaysChallenge.dto.TokenDto;
+import challenge.nDaysChallenge.service.AuthService;
 import challenge.nDaysChallenge.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +30,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
     private static final String AUTHORITY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7 ; // 7일
 
     private final Key key;
 
@@ -138,7 +136,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 
     }
 
-    //토큰 읽고 검증하기
+    //토큰 검증
     public boolean validateToken(String token){
         try {
             Jwts.parserBuilder()  //JwtParserBuilder 객체 생성
@@ -157,6 +155,21 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
         }
 
         return false;
+    }
+
+    //토큰 만료 시 강제 로그아웃
+    public boolean checkTokenExpiration(String token){
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return false;
+        } catch (ExpiredJwtException e) {
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 
     private Claims parseClaims(String accessToken) {
