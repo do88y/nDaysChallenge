@@ -44,7 +44,6 @@ public class MemberRequestDto {
                 .nickname(nickname)
                 .image(image)
                 .roomLimit(roomLimit)
-                .firstLogin(true)
                 .build();
     }
 

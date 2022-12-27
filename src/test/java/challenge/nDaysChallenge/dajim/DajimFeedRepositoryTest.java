@@ -78,7 +78,6 @@ public class DajimFeedRepositoryTest {
                 .image(1)
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
-                .firstLogin(true)
                 .build();
         Member member2 = Member.builder()
                 .id("user2@naver.com")
@@ -87,7 +86,6 @@ public class DajimFeedRepositoryTest {
                 .image(1)
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
-                .firstLogin(true)
                 .build();
         Member member3 = Member.builder()
                 .id("user3@naver.com")
@@ -96,7 +94,6 @@ public class DajimFeedRepositoryTest {
                 .image(1)
                 .roomLimit(4)
                 .authority(Authority.ROLE_USER)
-                .firstLogin(true)
                 .build();
 
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
@@ -169,7 +166,7 @@ public class DajimFeedRepositoryTest {
         }
 
         //멤버2
-        assertThat(dajims.size()).isEqualTo(4); //다짐 4개
+        assertThat(dajims.size()).isEqualTo(3); //다짐 4개
         assertThat(dajim3.getEmotions().get(0).getSticker().toString()).isEqualTo("TOUCHED");
         assertThat(stickersList.get(0)).isEqualTo("TOUCHED");
     }

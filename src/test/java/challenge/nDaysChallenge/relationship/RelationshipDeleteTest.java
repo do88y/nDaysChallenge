@@ -46,9 +46,9 @@ public class RelationshipDeleteTest {
     void deleteRelationDB (){
         //given
         //일단 회원가입//
-        Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER, true);
-        Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER, true);
-        Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER, true);
+        Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER);
+        Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER);
+        Member friend2 = new Member("ery@naver.com","123","친구2",2,2, Authority.ROLE_USER);
 
         memberRepository.save(user);         //나
         memberRepository.save(friend);      //친구1
