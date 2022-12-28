@@ -100,7 +100,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
         SecurityContextHolder.clearContext(); // 시큐리티 컨텍스트에서 인증 정보 삭제
     }
-
+    
     //액세스토큰 재발급
     public TokenDto reissue(JwtRequestDto tokenRequestDto, String id) {
 
