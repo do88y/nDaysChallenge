@@ -76,7 +76,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 
     }
 
-    public TokenDto reissueToken(Authentication authentication, RefreshToken refreshToken) {
+    public TokenDto reissueToken(Authentication authentication, String refreshToken) {
         //권한들 가져오기 (문자열 변환)
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -93,13 +93,11 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                 .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
                 .compact();
 
-        String refreshTokenValue = refreshToken.getValue();
-
         return TokenDto.builder()
                 .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime.getTime())
-                .refreshToken(refreshTokenValue)
+                .refreshToken(refreshToken)
                 .build();
     }
 
