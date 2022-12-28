@@ -102,10 +102,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
 
     //액세스토큰 재발급
-    public TokenDto reissue(JwtRequestDto tokenRequestDto) {
+    public TokenDto reissue(JwtRequestDto tokenRequestDto, String id) {
 
         //refresh 토큰 유효성(만료 여부) 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())){
+        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken()).equals("true")){
+            if (tokenProvider.validateToken(tokenRequestDto.getRefreshToken()).equals("expired")){
+                logout(id);
+                throw new RuntimeException("리프레시 토큰이 만료되었습니다");
+            }
             throw new RuntimeException("리프레시 토큰이 유효하지 않습니다");
         }
 
