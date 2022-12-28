@@ -23,5 +23,4 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
                     " and s.status = 'END'")
     public List<SingleRoom> finishedSingleRooms(@Param("member") Member member);
 
-
 }
