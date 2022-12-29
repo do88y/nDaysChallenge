@@ -119,6 +119,7 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
+    //완료 챌린지 상태 변경
     @PostMapping("/challenge/{challengeId}/success")
     public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
 
@@ -169,18 +170,5 @@ public class RoomController {
 
         return ResponseEntity.status(HttpStatus.OK).body(finishedRooms);
     }
-
-
-    /**
-     * 관리자 페이지
-     */
-    //챌린지 전체 조회 - 닉네임, 상태 별
-
-
-    //챌린지 수정 - 챌린지 수정 필요한지? 보류
-
-
-    //챌린지 삭제 - 여러개 동시에
-
 
 }

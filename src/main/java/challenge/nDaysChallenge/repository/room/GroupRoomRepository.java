@@ -10,9 +10,6 @@ import java.util.List;
 
 public interface GroupRoomRepository extends JpaRepository<GroupRoom, Long> {
 
-    @Query(value = "select g from GroupRoom g join fetch g.roomMemberList")
-    public List<GroupRoom> findAllWithRoomMemberUsingFetchJoin();
-
     //진행중인 그룹 챌린지
     @Query(value = "select g from GroupRoom g" +
             " left join RoomMember rm" +

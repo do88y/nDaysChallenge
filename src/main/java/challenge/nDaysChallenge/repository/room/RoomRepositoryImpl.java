@@ -1,8 +1,7 @@
 package challenge.nDaysChallenge.repository.room;
 
-import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.SingleRoom;
+import challenge.nDaysChallenge.domain.room.RoomStatus;
 import lombok.RequiredArgsConstructor;
 import reactor.util.StringUtils;
 
@@ -15,13 +14,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final EntityManager em;
     @Override
-    public List<SingleRoom> findSingleRoomAdmin(Member member, Room room) {
+    public List<Room> findSingleRoomAdmin(RoomSearch roomSearch) {
 
         String jpql = "select s from SingleRoom s join s.member m";
         boolean isFirstCondition = true;
 
         //챌린지 상태 검색
-        if (room.getStatus() != null) {
+        if (StringUtils.hasText(roomSearch.getStatus())) {
             if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
@@ -32,7 +31,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         }
 
         //회원 ID 검색
-        if (StringUtils.hasText(member.getId())) {
+        if (StringUtils.hasText(roomSearch.getId())) {
             if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
@@ -41,9 +40,16 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
             }
             jpql += " m.id like :id";
         }
-        TypedQuery<SingleRoom> query = em.createQuery(jpql, SingleRoom.class)
+        TypedQuery<Room> query = em.createQuery(jpql, Room.class)
                 .setMaxResults(1000);  //최대 1000건
 
+        //파라미터 바인딩
+        if (StringUtils.hasText(roomSearch.getStatus())) {
+            query.setParameter("status", RoomStatus.valueOf(roomSearch.getStatus()));
+        }
+        if (StringUtils.hasText(roomSearch.getId())) {
+            query.setParameter("id", roomSearch.getId());
+        }
 
         return query.getResultList();
     }
