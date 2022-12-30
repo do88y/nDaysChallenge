@@ -6,14 +6,14 @@ import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Category;
 import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
-import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
-import challenge.nDaysChallenge.repository.MemberRepository;
-import challenge.nDaysChallenge.repository.RefreshTokenRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
+import challenge.nDaysChallenge.repository.jwt.RefreshTokenRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -119,17 +119,17 @@ public class WithUserDetailsTest {
         singleRoom.addRoom(singleRoom, currentMember);
 
         //다짐 작성
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
         Dajim newDajim = Dajim.builder()
                 .room(singleRoom)
                 .member(currentMember)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
         Dajim savedDajim = dajimRepository.save(newDajim);
 
         //룸에서 다짐 조회
-        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(1L);
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(1L).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
 
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
                         new DajimResponseDto(
@@ -151,6 +151,7 @@ public class WithUserDetailsTest {
                 new DajimFeedResponseDto(
                         d.getNumber(),
                         d.getMember().getNickname(),
+                        d.getMember().getImage(),
                         d.getContent(),
                         d.getEmotions().stream().map(emotion ->
                                         emotion.getSticker().toString())

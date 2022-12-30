@@ -2,7 +2,8 @@ package challenge.nDaysChallenge.controller.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,25 @@ public class DajimController {
 
     private final DajimService dajimService;
 
-    //다짐 업로드 (등록 & 수정)
+    //다짐 등록
     @PostMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
-                                         @RequestBody DajimRequestDto dajimRequestDto,
+                                         @RequestBody DajimUploadRequestDto dajimUploadRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimRequestDto, memberAdapter.getMember());
+        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimUploadRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(dajimResponseDto);
+    }
+
+    //다짐 수정
+    @PatchMapping("/challenge/{challengeId}/dajim")
+    public ResponseEntity<?> updateDajim(@RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
+                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        DajimResponseDto dajimResponseDto = dajimService.updateDajim(dajimUpdateRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(dajimResponseDto);
     }
@@ -36,7 +48,7 @@ public class DajimController {
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber, memberAdapter.getMember());
+        List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber);
 
         return ResponseEntity.ok().body(dajimResponseDtoList);
     }

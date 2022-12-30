@@ -2,7 +2,7 @@ package challenge.nDaysChallenge.security;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

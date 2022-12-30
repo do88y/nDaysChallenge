@@ -8,8 +8,8 @@ import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
@@ -82,7 +82,7 @@ public class QueryTest { //N+1 테스트
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
@@ -92,8 +92,8 @@ public class QueryTest { //N+1 테스트
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
@@ -110,19 +110,19 @@ public class QueryTest { //N+1 테스트
         Dajim dajim2 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
         Dajim dajim3 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member2)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
         Dajim dajim4 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member3)
-                .content(dajimRequestDto.getContent())
+                .content(dajimUploadRequestDto.getContent())
                 .open(Open.valueOf("PRIVATE"))
                 .build());
 
@@ -152,7 +152,7 @@ public class QueryTest { //N+1 테스트
     @Test
     @DisplayName("그룹 챌린지 내 다짐들 조회")
     public void 그룹_챌린지_다짐들_전체_조회(){
-        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L);
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
 
         assertThat(dajims.size()).isEqualTo(3);
     }

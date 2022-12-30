@@ -3,7 +3,8 @@ package challenge.nDaysChallenge.service.dajim;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,58 +22,45 @@ public class DajimService {
 
     private final DajimRepository dajimRepository;
 
-    //다짐 등록 및 수정
-    public DajimResponseDto uploadDajim(Long roomNumber, DajimRequestDto dajimRequestDto, Member member) {
-        Dajim savedDajim;
-
+    //다짐 등록
+    public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
         Room room = dajimRepository.findByRoomNumber(roomNumber)
                 .orElseThrow(()
-                        -> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
+                        -> new RuntimeException("챌린지룸을 찾을 수 없습니다."));
 
-        if (dajimRequestDto.getDajimNumber()==null){ //requestDto에 다짐번호가 없으면 새로 등록
+            Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto);
 
-            Dajim newDajim = dajimRequestDto.toDajim(room, member, dajimRequestDto);
-
-            savedDajim = dajimRepository.save(newDajim);
-
-        } else { //requestDto에서 다짐번호 전달받으면 업데이트
-
-            Dajim dajim = dajimRepository.findByDajimNumber(dajimRequestDto.getDajimNumber())
-                    .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
-
-            savedDajim = dajim.update(Open.valueOf(dajimRequestDto.getOpen()), dajimRequestDto.getContent());
-
-            checkDajimMember(savedDajim, member);
-
-        }
-
+            Dajim savedDajim = dajimRepository.save(newDajim);
 
         if (savedDajim==null){
             throw new RuntimeException("다짐 작성에 실패했습니다.");
         }
 
-        DajimResponseDto dajimResponseDto = DajimResponseDto.of(savedDajim);
-
-        return dajimResponseDto;
+        return DajimResponseDto.of(savedDajim);
 
     }
 
-    //다짐 조회
+    //다짐 수정
+    public DajimResponseDto updateDajim(DajimUpdateRequestDto dajimUpdateRequestDto, Member member) {
+        Dajim dajim = dajimRepository.findByDajimNumber(dajimUpdateRequestDto.getDajimNumber())
+                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
+
+        checkDajimMember(dajim, member);
+
+        Dajim updatedDajim = dajim.update(Open.valueOf(dajimUpdateRequestDto.getOpen()), dajimUpdateRequestDto.getContent());
+
+        return DajimResponseDto.of(updatedDajim);
+    }
+
+    //다짐 조회 (룸에 소속된 멤버 확인은 챌린지 상세 조회 메소드에서)
     @Transactional(readOnly = true)
-    public List<DajimResponseDto> viewDajimInRoom(Long roomNumber, Member member){
-        List<Dajim> dajims = null;
+    public List<DajimResponseDto> viewDajimInRoom(Long roomNumber){
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(roomNumber)
+                    .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
-        Room room = dajimRepository.findByRoomNumber(roomNumber)
-                .orElseThrow(() -> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
-
-        try {
-            dajims = dajimRepository.findAllByRoomNumber(roomNumber);
-        } catch (Exception e) {
-            throw new RuntimeException("다짐을 확인할 수 없습니다.");
-        }
-
-        List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
-                        DajimResponseDto.of(dajim))
+        List<DajimResponseDto> dajimsList = dajims
+                .stream()
+                .map(dajim -> DajimResponseDto.of(dajim))
                 .collect(Collectors.toList());
 
         return dajimsList;
@@ -81,7 +68,7 @@ public class DajimService {
 
     //다짐 수정 시 작성자 체크
     private void checkDajimMember(Dajim dajim, Member member){
-        if (dajim.getMember()!=member){
+        if (dajim.getMember()!=member ){
             throw new RuntimeException("접근 권한이 없습니다.");
         }
     }

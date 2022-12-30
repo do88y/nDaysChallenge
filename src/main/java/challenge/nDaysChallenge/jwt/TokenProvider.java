@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.jwt;
 
 import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
-import challenge.nDaysChallenge.service.CustomUserDetailsService;
+import challenge.nDaysChallenge.service.jwt.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

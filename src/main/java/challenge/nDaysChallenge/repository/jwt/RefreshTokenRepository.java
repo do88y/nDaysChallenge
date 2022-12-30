@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.repository;
+package challenge.nDaysChallenge.repository.jwt;
 
 import challenge.nDaysChallenge.jwt.RefreshToken;
 import org.springframework.data.domain.Example;

@@ -6,7 +6,7 @@ import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
-import challenge.nDaysChallenge.service.AuthService;
+import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -5,7 +5,7 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,12 @@ class DajimRepositoryTest {
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
         //when
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
         Dajim savedDajim = dajimRepository.save(newDajim);
 
@@ -60,12 +60,12 @@ class DajimRepositoryTest {
         GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상", 0, 0);
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
         Dajim dajim = Dajim.builder()
                 .room(room)
                 .member(member)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
         dajimRepository.save(dajim);
 
@@ -85,26 +85,26 @@ class DajimRepositoryTest {
         Member member2 = new Member("user2@naver.com","12345","userN2",1,4, Authority.ROLE_USER);
         GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4, "", 0, 0);
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
 
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
         dajimRepository.save(newDajim);
 
         Dajim newDajim2 = Dajim.builder()
                 .room(room)
                 .member(member2)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
         dajimRepository.save(newDajim2);
 
         //when
-        List<Dajim> dajimList = dajimRepository.findAllByRoomNumber(room.getNumber());
+        List<Dajim> dajimList = dajimRepository.findAllByRoomNumber(room.getNumber()).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
 
         //then
         assertThat(dajimList.size()).isEqualTo(2);

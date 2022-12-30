@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.service;
+package challenge.nDaysChallenge.service.jwt;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
@@ -8,8 +8,8 @@ import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
-import challenge.nDaysChallenge.repository.MemberRepository;
-import challenge.nDaysChallenge.repository.RefreshTokenRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
+import challenge.nDaysChallenge.repository.jwt.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

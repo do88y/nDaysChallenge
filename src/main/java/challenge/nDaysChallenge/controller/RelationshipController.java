@@ -7,7 +7,7 @@ import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AfterDeleteResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
 import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

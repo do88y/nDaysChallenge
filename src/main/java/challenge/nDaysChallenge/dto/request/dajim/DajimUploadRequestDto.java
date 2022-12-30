@@ -4,7 +4,6 @@ import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,26 +11,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DajimRequestDto {
+public class DajimUploadRequestDto {
 
-    private Long dajimNumber;
+    private String nickname;
 
     private String content;
 
     private String open;
 
-    public DajimRequestDto(Long dajimNumber, String content, String open) {
-        this.dajimNumber = dajimNumber;
+    public DajimUploadRequestDto(Long dajimNumber, String content, String open) {
+        this.nickname = nickname;
         this.content = content;
         this.open = open;
     }
 
-    public Dajim toDajim(Room room, Member member, DajimRequestDto dajimRequestDto) {
+    public static Dajim toDajim(Room room, Member member, DajimUploadRequestDto dajimUploadRequestDto) {
         return Dajim.builder()
                 .room(room)
                 .member(member)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build();
     }
 

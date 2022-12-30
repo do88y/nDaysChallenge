@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.repository;
+package challenge.nDaysChallenge.repository.member;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;

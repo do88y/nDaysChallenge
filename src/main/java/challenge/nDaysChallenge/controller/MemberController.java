@@ -4,7 +4,7 @@ package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
-import challenge.nDaysChallenge.service.MemberService;
+import challenge.nDaysChallenge.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

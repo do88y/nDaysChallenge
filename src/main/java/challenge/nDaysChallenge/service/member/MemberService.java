@@ -1,9 +1,9 @@
-package challenge.nDaysChallenge.service;
+package challenge.nDaysChallenge.service.member;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
