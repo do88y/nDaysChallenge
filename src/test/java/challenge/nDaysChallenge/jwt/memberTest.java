@@ -103,7 +103,7 @@ public class memberTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PRIVATE");
 
         //싱글룸
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);

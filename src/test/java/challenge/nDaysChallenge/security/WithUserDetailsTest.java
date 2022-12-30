@@ -119,7 +119,7 @@ public class WithUserDetailsTest {
         singleRoom.addRoom(singleRoom, currentMember);
 
         //다짐 작성
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");
         Dajim newDajim = Dajim.builder()
                 .room(singleRoom)
                 .member(currentMember)

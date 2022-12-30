@@ -83,7 +83,7 @@ public class DajimFeedRepositoryTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);

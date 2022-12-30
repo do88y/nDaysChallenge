@@ -82,7 +82,7 @@ public class QueryTest { //N+1 테스트
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
@@ -152,7 +152,8 @@ public class QueryTest { //N+1 테스트
     @Test
     @DisplayName("그룹 챌린지 내 다짐들 조회")
     public void 그룹_챌린지_다짐들_전체_조회(){
-        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L)
+                .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
         assertThat(dajims.size()).isEqualTo(3);
     }

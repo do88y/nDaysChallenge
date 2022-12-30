@@ -13,14 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DajimUploadRequestDto {
 
-    private String nickname;
-
     private String content;
 
     private String open;
 
-    public DajimUploadRequestDto(Long dajimNumber, String content, String open) {
-        this.nickname = nickname;
+    public DajimUploadRequestDto(String content, String open) {
         this.content = content;
         this.open = open;
     }

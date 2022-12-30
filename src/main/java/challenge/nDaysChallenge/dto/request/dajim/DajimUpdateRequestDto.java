@@ -15,17 +15,8 @@ public class DajimUpdateRequestDto {
 
     private Long dajimNumber;
 
-    private String nickname;
-
     private String content;
 
     private String open;
-
-    public DajimUpdateRequestDto(Long dajimNumber, String content, String open) {
-        this.dajimNumber = dajimNumber;
-        this.nickname = getNickname();
-        this.content = content;
-        this.open = open;
-    }
 
 }

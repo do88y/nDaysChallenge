@@ -32,7 +32,7 @@ class DajimRepositoryTest {
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
 
         //when
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
@@ -60,7 +60,7 @@ class DajimRepositoryTest {
         GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4,"보상", 0, 0);
 
         Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");
         Dajim dajim = Dajim.builder()
                 .room(room)
                 .member(member)
@@ -85,7 +85,7 @@ class DajimRepositoryTest {
         Member member2 = new Member("user2@naver.com","12345","userN2",1,4, Authority.ROLE_USER);
         GroupRoom room = new GroupRoom("newRoom",new Period(LocalDate.now(),100L), Category.ROUTINE,4, "", 0, 0);
 
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto(null,"다짐 내용", "PUBLIC");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");
 
         Dajim newDajim = Dajim.builder()
                 .room(room)
