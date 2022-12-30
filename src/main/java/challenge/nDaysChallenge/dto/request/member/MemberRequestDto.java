@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dto.request;
+package challenge.nDaysChallenge.dto.request.member;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
@@ -35,7 +35,6 @@ public class MemberRequestDto {
         this.roomLimit = roomLimit;
     }
 
-    @Builder
     public Member toMember(PasswordEncoder passwordEncoder){
         return Member.builder()
                 .id(id)

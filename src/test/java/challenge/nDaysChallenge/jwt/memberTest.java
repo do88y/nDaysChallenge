@@ -8,15 +8,13 @@ import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
+import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -106,7 +103,7 @@ public class memberTest {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PRIVATE");
 
         //싱글룸
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
@@ -124,15 +121,15 @@ public class memberTest {
         Dajim dajim1 = dajimRepository.save(Dajim.builder()
                 .room(room1)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
 
         Dajim dajim2 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
 
         //감정 1, 2

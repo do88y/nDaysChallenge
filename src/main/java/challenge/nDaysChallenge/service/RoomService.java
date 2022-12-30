@@ -3,7 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;

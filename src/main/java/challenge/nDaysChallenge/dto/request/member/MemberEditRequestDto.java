@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dto.request;
+package challenge.nDaysChallenge.dto.request.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,19 +1,13 @@
 package challenge.nDaysChallenge.dajim;
 
-import challenge.nDaysChallenge.config.SecurityConfig;
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
-import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
@@ -87,8 +81,8 @@ public class EmotionRepositoryTest {
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(dajim.getNumber(), member1.getNumber()).empty();
 
         //when
-        Emotion uploadedEmotion = new Emotion();
-        if (!emotion.isPresent()){
+        Emotion uploadedEmotion=null;
+        if (emotion.isEmpty()){
             uploadedEmotion = uploadEmotion(member1, dajim, sticker);
         }
 

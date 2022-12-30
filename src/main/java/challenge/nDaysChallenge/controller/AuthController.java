@@ -1,12 +1,12 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.dto.TokenDto;
-import challenge.nDaysChallenge.dto.request.JwtRequestDto;
-import challenge.nDaysChallenge.dto.request.LoginRequestDto;
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
-import challenge.nDaysChallenge.dto.response.MemberResponseDto;
-import challenge.nDaysChallenge.service.AuthService;
+import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
+import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
+import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
+import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
+import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
+import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,25 +40,24 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //로그인
     @PostMapping("/auth/login")
-    public ResponseEntity<TokenDto> login (@RequestBody LoginRequestDto loginRequestDto){
-        //파라미터 객체 안에 id, pw 있음
-        TokenDto tokenDto = authService.login(loginRequestDto);
-        return ResponseEntity.ok().body(tokenDto);
+    public ResponseEntity<TokenResponseDto> login (@RequestBody LoginRequestDto loginRequestDto){
+        TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
+        return ResponseEntity.ok().body(tokenResponseDto);
     }
 
     //로그아웃
     @PostMapping("/auth/logout")
-    public void logout (@AuthenticationPrincipal MemberAdapter memberAdapter){
+    public ResponseEntity<String> logout (@AuthenticationPrincipal MemberAdapter memberAdapter){
         String id = memberAdapter.getMember().getId();
         authService.logout(id);
+        return ResponseEntity.ok().body(id + " 로그아웃 완료");
     }
 
     //토큰 재발급
     @PostMapping("/auth/reissue")
-    public ResponseEntity<TokenDto> reissue (@RequestBody JwtRequestDto jwtRequestDto){
-        //파라미터 객체 안에 access, refresh 토큰 있음
-        TokenDto tokenDto = authService.reissue(jwtRequestDto);
-        return ResponseEntity.ok().body(tokenDto);
+    public ResponseEntity<TokenResponseDto> reissue (@RequestBody TokenRequestDto tokenRequestDto, @AuthenticationPrincipal MemberAdapter memberAdapter){
+        TokenResponseDto tokenResponseDto = authService.reissue(tokenRequestDto, memberAdapter.getMember().getId());
+        return ResponseEntity.ok().body(tokenResponseDto);
     }
 
 }

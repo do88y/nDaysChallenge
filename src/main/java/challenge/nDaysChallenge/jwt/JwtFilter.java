@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter { //요청당 한번만 거�
         String token = resolveToken(request); //요청헤더에서 토큰 꺼냄
 
         //토큰 유효성 검사 -> Authentication 객체 가져와 SecurityContext애 저장
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)){ //토큰 검증
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token).equals("true")){ //토큰 검증
 
             Authentication authentication = tokenProvider.getAuthentication(token); //해당 토큰의 사용자 정보 객체 가져옴
 

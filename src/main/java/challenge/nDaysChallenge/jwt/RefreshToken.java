@@ -25,7 +25,6 @@ public class RefreshToken { //db에 저장
     @Column
     private LocalDateTime createdDate;
 
-    @Builder
     public RefreshToken(String key, String value){
         this.key=key;
         this.value=value;

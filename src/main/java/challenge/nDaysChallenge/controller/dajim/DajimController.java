@@ -2,18 +2,16 @@ package challenge.nDaysChallenge.controller.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.response.DajimResponseDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
+import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,20 +19,32 @@ public class DajimController {
 
     private final DajimService dajimService;
 
-    //다짐 업로드 (등록 & 수정)
-    @PostMapping("/challenge/{challengeId}")
+    //다짐 등록
+    @PostMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
-                                         @RequestBody DajimRequestDto dajimRequestDto,
+                                         @RequestBody DajimUploadRequestDto dajimUploadRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimRequestDto, memberAdapter.getMember());
+        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimUploadRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(dajimResponseDto);
     }
 
-    //다짐 조회 (챌린지룸 내)
-    @GetMapping("/challenge/{challengeId}")
+    //다짐 수정
+    @PatchMapping("/challenge/{challengeId}/dajim")
+    public ResponseEntity<?> updateDajim(@PathVariable("challengeId") Long roomNumber,
+                                        @RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
+                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        DajimResponseDto dajimResponseDto = dajimService.updateDajim(roomNumber, dajimUpdateRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(dajimResponseDto);
+    }
+
+    //챌린지룸에 다짐 불러오기
+    @GetMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());

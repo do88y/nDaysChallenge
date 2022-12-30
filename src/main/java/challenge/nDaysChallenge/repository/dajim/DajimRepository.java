@@ -21,7 +21,7 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
     @Query("SELECT d FROM Dajim d JOIN d.room r" +
             " WHERE r.number = :roomNumber" +
             " ORDER BY d.updatedDate")
-    List<Dajim> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
+    Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
     //룸 넘버로 룸 객체 찾기
     @Query("SELECT r FROM Room r WHERE r.number = :roomNumber")
