@@ -86,13 +86,5 @@ public class DajimService {
         }
     }
 
-//    //챌린지 룸에서 다짐들 조회시 로그인한 멤버가 속한 룸인지 체크
-//    private void checkDajimRoom(List<Dajim> dajims, Room room, Member member){
-//        if(!member.getSingleRooms().contains(room) ||
-//                member.getRoomMemberList().contains(room)){
-//            throw new RuntimeException("접근 권한이 없습니다.");
-//        }
-//    }
-
 }
 

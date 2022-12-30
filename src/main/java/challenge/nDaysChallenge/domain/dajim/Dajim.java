@@ -3,6 +3,7 @@ package challenge.nDaysChallenge.domain.dajim;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dajim extends BaseEntity {
 
     @Id
