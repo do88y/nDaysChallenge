@@ -8,6 +8,7 @@ import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import org.junit.Test;
@@ -137,7 +138,7 @@ public class RoomServiceTest {
 
         //when
         Long roomNumber = room.getNumber();
-        roomService.deleteRoom(member, room.getNumber());
+        roomService.deleteRoom(room.getNumber());
 
         //then
         assertThat(roomRepository.findById(roomNumber).get());
@@ -188,7 +189,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
@@ -222,7 +222,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
@@ -244,6 +243,20 @@ public class RoomServiceTest {
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void 관리자_SingleRoom_status_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch("END", null);
+        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
+        System.out.println("singleRoomAdmin.size() = " + singleRoomAdmin.size());
+    }
+    @Test
+    public void 관리자_SingleRoom_member_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
+        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
     }
 
     Period period = new Period(LocalDate.now(),30L);
