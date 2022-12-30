@@ -96,7 +96,7 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Member member, Long roomNumber) {
+    public void deleteRoom(Long roomNumber) {
 
         //엔티티 조회
         Optional<Room> findRoom = roomRepository.findById(roomNumber);

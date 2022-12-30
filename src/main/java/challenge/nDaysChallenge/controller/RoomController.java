@@ -6,6 +6,7 @@ import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;
 import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
 import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,16 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class RoomController {
 
+    private final RoomRepository roomRepository;
     private final RoomService roomService;
 
     //챌린지 리스트(메인)
     @GetMapping("/challenge/list")
-    public ResponseEntity<?> roomList(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<?> list(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
         List<RoomResponseDto> roomList = new ArrayList<>();
         
@@ -65,9 +69,32 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.OK).body(roomList);
     }
 
+    //챌린지 상세
+    @GetMapping("/challenge/{challengeId}")
+    public ResponseEntity<?> detail(@PathVariable("challengeId") Long roomNumber) {
+
+        Optional<Room> findRoom = roomRepository.findById(roomNumber);
+        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 없습니다"));
+
+        RoomResponseDto roomDetail = RoomResponseDto.builder()
+                .roomNumber(room.getNumber())
+                .name(room.getName())
+                .category(room.getCategory().name())
+                .reward(room.getReward())
+                .type(room.getType().name())
+                .status(room.getStatus().name())
+                .passCount(room.getPassCount())
+                .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
+    }
+
     //개인 챌린지 생성
     @PostMapping("/challenge/create")
-    public ResponseEntity<?> createSingleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> singleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @RequestBody RoomRequestDto dto) {
 
         Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
@@ -89,8 +116,8 @@ public class RoomController {
 
     //그룹 챌린지 생성
     @PostMapping("/challenge/createGroup")
-    public ResponseEntity<?> createGroupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                             @RequestBody GroupRoomRequestDto dto) {
+    public ResponseEntity<?> groupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                       @RequestBody GroupRoomRequestDto dto) {
 
         Room room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
 
@@ -112,14 +139,14 @@ public class RoomController {
 
     //챌린지 삭제&실패
     @DeleteMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                        @PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> delete(@PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
+        roomService.deleteRoom(roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
+    //완료 챌린지 상태 변경
     @PostMapping("/challenge/{challengeId}/success")
     public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
 
@@ -130,7 +157,7 @@ public class RoomController {
 
     //마이페이지 - 완료 챌린지 조회
     @GetMapping("/user/finishedChallenges")
-    public ResponseEntity<?> findFinishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<?> finishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
         List<RoomResponseDto> finishedRooms = new ArrayList<>();
 
