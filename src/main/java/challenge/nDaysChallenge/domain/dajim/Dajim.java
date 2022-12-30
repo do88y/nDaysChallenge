@@ -51,7 +51,6 @@ public class Dajim extends BaseEntity {
         this.open = open;
     }
 
-
     public Dajim update(Open open, String content) {
         this.open = open;
         this.content = content;

@@ -81,8 +81,8 @@ public class EmotionRepositoryTest {
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(dajim.getNumber(), member1.getNumber()).empty();
 
         //when
-        Emotion uploadedEmotion = new Emotion();
-        if (!emotion.isPresent()){
+        Emotion uploadedEmotion=null;
+        if (emotion.isEmpty()){
             uploadedEmotion = uploadEmotion(member1, dajim, sticker);
         }
 

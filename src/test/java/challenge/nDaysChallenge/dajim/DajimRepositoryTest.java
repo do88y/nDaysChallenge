@@ -104,7 +104,7 @@ class DajimRepositoryTest {
         dajimRepository.save(newDajim2);
 
         //when
-        List<Dajim> dajimList = dajimRepository.findAllByRoomNumber(room.getNumber()).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
+        List<Dajim> dajimList = dajimRepository.findAllByRoomNumber(room.getNumber()).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
         //then
         assertThat(dajimList.size()).isEqualTo(2);

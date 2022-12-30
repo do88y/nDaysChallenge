@@ -33,16 +33,17 @@ public class DajimController {
 
     //다짐 수정
     @PatchMapping("/challenge/{challengeId}/dajim")
-    public ResponseEntity<?> updateDajim(@RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
+    public ResponseEntity<?> updateDajim(@PathVariable("challengeId") Long roomNumber,
+                                        @RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        DajimResponseDto dajimResponseDto = dajimService.updateDajim(dajimUpdateRequestDto, memberAdapter.getMember());
+        DajimResponseDto dajimResponseDto = dajimService.updateDajim(roomNumber, dajimUpdateRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(dajimResponseDto);
     }
 
-    //다짐 조회 (챌린지룸 내)
+    //챌린지룸에 다짐 불러오기
     @GetMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){

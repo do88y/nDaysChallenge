@@ -129,7 +129,7 @@ public class WithUserDetailsTest {
         Dajim savedDajim = dajimRepository.save(newDajim);
 
         //룸에서 다짐 조회
-        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(1L).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."););
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(1L).orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
                         new DajimResponseDto(
