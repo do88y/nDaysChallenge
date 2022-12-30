@@ -3,13 +3,11 @@ package challenge.nDaysChallenge.service.dajim;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.dto.response.DajimResponseDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,21 +22,16 @@ public class DajimService {
     private final DajimRepository dajimRepository;
 
     //다짐 등록 및 수정
-    public DajimResponseDto uploadDajim(Long roomNumber, DajimRequestDto requestDto, Member member) {
+    public DajimResponseDto uploadDajim(Long roomNumber, DajimRequestDto dajimRequestDto, Member member) {
         Dajim savedDajim;
 
-        if (requestDto.getDajimNumber()==null){ //requestDto에 다짐번호가 없으면 새로 등록
+        if (dajimRequestDto.getDajimNumber()==null){ //requestDto에 다짐번호가 없으면 새로 등록
 
             Room room = dajimRepository.findByRoomNumber(roomNumber)
                     .orElseThrow(()
                             -> new RuntimeException("현재 챌린지룸 정보를 찾을 수 없습니다."));
 
-            Dajim newDajim = Dajim.builder()
-                    .room(room)
-                    .member(member)
-                    .content(requestDto.getContent())
-                    .open(Open.valueOf(requestDto.getOpen()))
-                    .build();
+            Dajim newDajim = dajimRequestDto.toDajim(room, member, dajimRequestDto);
 
             checkDajimRoomUser(newDajim, room, member);
 
@@ -46,12 +39,12 @@ public class DajimService {
 
         } else { //requestDto에서 다짐번호 전달받으면 업데이트
 
-            Dajim dajim = dajimRepository.findByDajimNumber(requestDto.getDajimNumber())
+            Dajim dajim = dajimRepository.findByDajimNumber(dajimRequestDto.getDajimNumber())
                     .orElseThrow(()->new RuntimeException("현재 다짐 정보를 찾을 수 없습니다."));
 
             checkDajimUser(dajim,member);
 
-            savedDajim = dajim.update(Open.valueOf(requestDto.getOpen()), requestDto.getContent());
+            savedDajim = dajim.update(Open.valueOf(dajimRequestDto.getOpen()), dajimRequestDto.getContent());
 
         }
 
@@ -59,13 +52,7 @@ public class DajimService {
             throw new RuntimeException("다짐 작성에 실패했습니다.");
         }
 
-        DajimResponseDto dajimResponseDto = new DajimResponseDto(
-                savedDajim.getNumber(),
-                savedDajim.getMember().getNickname(),
-                savedDajim.getMember().getImage(),
-                savedDajim.getContent(),
-                savedDajim.getOpen().toString(),
-                savedDajim.getUpdatedDate());
+        DajimResponseDto dajimResponseDto = DajimResponseDto.of(savedDajim);
 
         return dajimResponseDto;
 
@@ -83,13 +70,7 @@ public class DajimService {
         }
 
         List<DajimResponseDto> dajimsList = dajims.stream().map(dajim ->
-                        new DajimResponseDto(
-                                dajim.getNumber(),
-                                dajim.getMember().getNickname(),
-                                dajim.getMember().getImage(),
-                                dajim.getContent(),
-                                dajim.getOpen().toString(),
-                                dajim.getUpdatedDate()))
+                        DajimResponseDto.of(dajim))
                 .collect(Collectors.toList());
 
         return dajimsList;

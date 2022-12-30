@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dto.request;
+package challenge.nDaysChallenge.dto.request.jwt;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;

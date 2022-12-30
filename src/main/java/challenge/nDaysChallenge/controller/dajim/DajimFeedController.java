@@ -1,18 +1,13 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
+import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimFeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

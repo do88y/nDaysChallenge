@@ -1,9 +1,10 @@
-package challenge.nDaysChallenge.dto.response;
+package challenge.nDaysChallenge.dto.response.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
+import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,6 @@ public class DajimResponseDto {
     private LocalDateTime updatedDate;
 
     //피드 다짐 리스트, 상세 챌린지 다짐에 필요한 정보
-    @Builder
     public DajimResponseDto(long dajimNumber, String nickname, int image, String content, String open, LocalDateTime updatedDate){
         this.dajimNumber=dajimNumber;
         this.nickname=nickname;
@@ -41,6 +41,17 @@ public class DajimResponseDto {
         this.content=content;
         this.open=open;
         this.updatedDate=updatedDate;
+    }
+
+    public static DajimResponseDto of(Dajim dajim){
+        return new DajimResponseDto(
+                dajim.getNumber(),
+                dajim.getMember().getNickname(),
+                dajim.getMember().getImage(),
+                dajim.getContent(),
+                dajim.getOpen().toString(),
+                dajim.getUpdatedDate()
+        );
     }
 
 }

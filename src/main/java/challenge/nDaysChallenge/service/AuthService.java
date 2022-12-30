@@ -1,11 +1,11 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.dto.TokenDto;
-import challenge.nDaysChallenge.dto.request.JwtRequestDto;
-import challenge.nDaysChallenge.dto.request.LoginRequestDto;
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
-import challenge.nDaysChallenge.dto.response.MemberResponseDto;
+import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
+import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
+import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
+import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
+import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
 import challenge.nDaysChallenge.repository.MemberRepository;
@@ -19,8 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +57,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
 
     //로그인
-    public TokenDto login(LoginRequestDto loginRequestDto) {
+    public TokenResponseDto login(LoginRequestDto loginRequestDto) {
         //id, pw 검증
         Member member = memberRepository.findById(loginRequestDto.getId())
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일입니다."));
@@ -76,18 +74,20 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         //인증 정보 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateToken(authentication);
+        TokenResponseDto tokenResponseDto = tokenProvider.generateToken(authentication);
 
         //refresh 토큰 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
+        RefreshToken refreshToken = new RefreshToken(authentication.getName(), tokenResponseDto.getRefreshToken());
+
+//        RefreshToken refreshToken = RefreshToken.builder()
+//                .key(authentication.getName())
+//                .value(tokenDto.getRefreshToken())
+//                .build();
 
         refreshTokenRepository.save(refreshToken);
 
         //토큰 발급
-        return tokenDto;
+        return tokenResponseDto;
 
     }
 
@@ -102,7 +102,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     }
     
     //액세스토큰 재발급
-    public TokenDto reissue(JwtRequestDto tokenRequestDto, String id) {
+    public TokenResponseDto reissue(TokenRequestDto tokenRequestDto, String id) {
 
         //refresh 토큰 유효성(만료 여부) 검증
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken()).equals("true")){
@@ -126,14 +126,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         //토큰 생성
-        TokenDto tokenDto = tokenProvider.reissueToken(authentication, tokenRequestDto.getRefreshToken());
+        TokenResponseDto tokenResponseDto = tokenProvider.reissueToken(authentication, tokenRequestDto.getRefreshToken());
 
         //저장소에 새 리프레시 토큰 저장
 //        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
 //        refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
-        return tokenDto;
+        return tokenResponseDto;
 
     }
 }

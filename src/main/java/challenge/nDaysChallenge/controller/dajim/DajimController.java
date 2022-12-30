@@ -2,18 +2,15 @@ package challenge.nDaysChallenge.controller.dajim;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.response.DajimResponseDto;
+import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
+import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +19,7 @@ public class DajimController {
     private final DajimService dajimService;
 
     //다짐 업로드 (등록 & 수정)
-    @PostMapping("/challenge/{challengeId}")
+    @PostMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimRequestDto dajimRequestDto,
                                          @AuthenticationPrincipal MemberAdapter memberAdapter){
@@ -34,7 +31,7 @@ public class DajimController {
     }
 
     //다짐 조회 (챌린지룸 내)
-    @GetMapping("/challenge/{challengeId}")
+    @GetMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());

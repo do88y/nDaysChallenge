@@ -1,21 +1,13 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.RoomMember;
-import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.RoomStatus;
-import challenge.nDaysChallenge.dto.request.MemberEditRequestDto;
-import challenge.nDaysChallenge.dto.response.MemberInfoResponseDto;
-import challenge.nDaysChallenge.dto.response.MemberResponseDto;
+import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
+import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

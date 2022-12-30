@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.dto.request.dajim.DajimRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,7 @@ public class Dajim extends BaseEntity {
         this.content = content;
         this.open = open;
     }
+
 
     public Dajim update(Open open, String content) {
         this.open = open;

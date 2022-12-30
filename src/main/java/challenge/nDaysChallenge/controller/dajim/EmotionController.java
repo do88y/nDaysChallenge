@@ -1,15 +1,12 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
-import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
-import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
+import challenge.nDaysChallenge.dto.request.dajim.EmotionRequestDto;
+import challenge.nDaysChallenge.dto.response.dajim.EmotionResponseDto;
 import challenge.nDaysChallenge.service.dajim.EmotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
