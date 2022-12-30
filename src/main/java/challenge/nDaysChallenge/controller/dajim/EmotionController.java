@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller.dajim;
 
+import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.dajim.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.EmotionResponseDto;
@@ -19,9 +20,17 @@ public class EmotionController { //감정 스티커 등록
     @PostMapping("/feed/emotion")
     public ResponseEntity<?> manageEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
         EmotionResponseDto emotionResponseDto = emotionService.manageEmotion(emotionRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(emotionResponseDto);
+    }
+
+    private void checkLogin(Member member) {
+        if (member == null) {
+            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
+        }
     }
 
 //    //감정 스티커 new 등록 (프론트 unselected된 상태에서)

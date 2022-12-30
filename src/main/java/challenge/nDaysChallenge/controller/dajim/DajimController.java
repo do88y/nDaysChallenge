@@ -36,7 +36,7 @@ public class DajimController {
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber);
+        List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(dajimResponseDtoList);
     }
