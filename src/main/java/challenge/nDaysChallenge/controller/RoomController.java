@@ -71,7 +71,8 @@ public class RoomController {
 
     //챌린지 상세
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> detail(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> detail(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                    @PathVariable("challengeId") Long roomNumber) {
 
         Optional<Room> findRoom = roomRepository.findById(roomNumber);
         Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 없습니다"));
@@ -139,16 +140,18 @@ public class RoomController {
 
     //챌린지 삭제&실패
     @DeleteMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> delete(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> delete(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                    @PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(roomNumber);
+        roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     //완료 챌린지 상태 변경
     @PostMapping("/challenge/{challengeId}/success")
-    public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> end(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                 @PathVariable("challengeId") Long roomNumber) {
 
         roomService.changeStatus(roomNumber);
 

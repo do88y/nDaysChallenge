@@ -34,7 +34,7 @@ public class DajimController {
     }
 
     //다짐 조회 (챌린지룸 내)
-    @GetMapping("/challenge/{challengeId}")
+    @GetMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
                                                   @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());

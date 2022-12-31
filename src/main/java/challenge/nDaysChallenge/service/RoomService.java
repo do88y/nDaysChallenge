@@ -71,8 +71,9 @@ public class RoomService {
         //엔티티 조회
         Set<Member> memberList = new HashSet<>();
         for (Long memberNumber : selectedMember) {
-            Optional<Member> findMember = memberRepository.findByNumber(memberNumber);
-            memberList.add(findMember.orElseThrow(() -> new RuntimeException("해당 멤버가 존재하지 않습니다.")));
+            Member findMember = memberRepository.findByNumber(memberNumber).orElseThrow(
+                    () -> new RuntimeException("해당 멤버가 존재하지 않습니다."));
+            memberList.add(findMember);
         }
 
         //챌린지 생성
@@ -96,11 +97,11 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Long roomNumber) {
+    public void deleteRoom(Member member, Long roomNumber) {
 
         //엔티티 조회
-        Optional<Room> findRoom = roomRepository.findById(roomNumber);
-        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        Room room = roomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
@@ -121,8 +122,8 @@ public class RoomService {
     @Transactional
     public void failSingleRoom(Long roomNumber) {
         //엔티티 조회
-        Optional<SingleRoom> findRoom = singleRoomRepository.findById(roomNumber);
-        SingleRoom singleRoom = findRoom.orElseThrow(() -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
+        SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
 
         //개인 챌린지 멤버 조회
         Member member = singleRoom.giveMember();
@@ -140,8 +141,8 @@ public class RoomService {
     @Transactional
     public void failGroupRoom(Long roomNumber) {
         //엔티티 조회
-        Optional<GroupRoom> findRoom = groupRoomRepository.findById(roomNumber);
-        GroupRoom groupRoom = findRoom.orElseThrow(() -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
+        GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
 
         //그룹 챌린지 멤버 조회
         List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
@@ -160,8 +161,8 @@ public class RoomService {
      */
     @Transactional
     public void changeStatus(Long roomNumber) {
-        Optional<Room> findRoom = roomRepository.findById(roomNumber);
-        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        Room room = roomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         room.end();
     }
@@ -183,5 +184,12 @@ public class RoomService {
             throw new RuntimeException("완료된 단체 챌린지가 없습니다.");
         }
     }
+
+    //작성자가 맞는지 확인
+/*    private void userCheck(Member currentMember, Member writeMember) {
+        if (!currentMember.getNumber().equals(writeMember)) {
+            throw new RuntimeException("접근 권한이 없습니다.");
+        }
+    }*/
 
 }

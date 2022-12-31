@@ -138,7 +138,7 @@ public class RoomServiceTest {
 
         //when
         Long roomNumber = room.getNumber();
-        roomService.deleteRoom(room.getNumber());
+        roomService.deleteRoom(member, room.getNumber());
 
         //then
         assertThat(roomRepository.findById(roomNumber).get());
