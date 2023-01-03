@@ -10,7 +10,12 @@ import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,21 +25,25 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //회원가입
     @PostMapping("/auth/signup")
-    public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+           return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
+        }
+
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
         return ResponseEntity.ok().body(memberResponseDto);
     }
 
-    //아이디 중복 검사
+    //아이디 중복 검사 (ok = 중복 아님 / exists = 중복)
     @GetMapping("/auth/id-check")
-    public ResponseEntity<Boolean> idCheck (@RequestBody String id){
+    public ResponseEntity<String> idCheck (@RequestBody String id){
         return ResponseEntity.ok().body(authService.idCheck(id));
     }
 
 
     //닉네임 중복 검사
     @GetMapping("/auth/nickname-check")
-    public ResponseEntity<Boolean> nicknameCheck (@RequestBody String nickname){
+    public ResponseEntity<String> nicknameCheck (@RequestBody String nickname){
         return ResponseEntity.ok().body(authService.nicknameCheck(nickname));
     }
 
