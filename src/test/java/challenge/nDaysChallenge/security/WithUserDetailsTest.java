@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.security;
 
 import challenge.nDaysChallenge.config.SecurityConfig;
 import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Category;
@@ -130,7 +131,8 @@ public class WithUserDetailsTest {
         //룸 객체 연결
         SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward", 0, 0);
         singleRoomRepository.save(singleRoom);
-        singleRoom.addRoom(singleRoom, currentMember);
+        Stamp stamp = Stamp.createStamp(singleRoom);
+        singleRoom.addRoom(singleRoom, currentMember, stamp);
 
         //다짐 작성
         DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PUBLIC");

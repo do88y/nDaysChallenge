@@ -24,6 +24,10 @@ public class RoomMember {
     @JoinColumn(name = "room_number")
     private Room room;
 
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "stamp_number")
+    private Stamp stamp;
+
 
     //==연관관계 메서드==//  RoomMember의 room에 roomNumber값 넣으면서 roomMemberList에도 roomNumber 세팅되게
 
@@ -31,15 +35,20 @@ public class RoomMember {
         this.member = member;
         member.getRoomMemberList().add(this);
     }
+
+    public void addStamp(Stamp stamp) {
+        this.stamp = stamp;
+    }
     public void joinRoom(Room groupRoom) {
         this.room = groupRoom;
     }
 
     //==생성 메서드==//
-    public static RoomMember createRoomMember(Member member, Room room) {
+    public static RoomMember createRoomMember(Member member, Room room, Stamp stamp) {
         RoomMember roomMember = new RoomMember();
         roomMember.joinRoom(room);
         roomMember.setMember(member);
+        roomMember.addStamp(stamp);
 
         return roomMember;
     }

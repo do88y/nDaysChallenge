@@ -2,9 +2,12 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.StampDto;
 import challenge.nDaysChallenge.repository.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
@@ -24,6 +27,7 @@ public class RoomService {
     private final RoomMemberRepository roomMemberRepository;
     private final GroupRoomRepository groupRoomRepository;
     private final SingleRoomRepository singleRoomRepository;
+    private final StampRepository stampRepository;
 
 
     /**
@@ -53,11 +57,15 @@ public class RoomService {
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
-        //챌린지 저장
+        //스탬프 생성
+        Stamp stamp = Stamp.createStamp(newRoom);
+
+        //저장
         singleRoomRepository.save(newRoom);
+        stampRepository.save(stamp);
 
         //멤버에 챌린지 저장
-        newRoom.addRoom(newRoom, member);
+        newRoom.addRoom(newRoom, member, stamp);
 
         return newRoom;
     }
@@ -79,18 +87,43 @@ public class RoomService {
         //챌린지 생성
         GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
-        //챌린지 저장
+        //저장
         groupRoomRepository.save(newRoom);
 
         //챌린지 멤버 생성&저장
-        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom);  //방장
+        Stamp stamp = Stamp.createStamp(newRoom);
+        stampRepository.save(stamp);
+        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);  //방장
         roomMemberRepository.save(roomMember);
         for (Member members : memberList) {  //그 외 멤버
-            RoomMember result = RoomMember.createRoomMember(members, newRoom);
+            Stamp memberStamp = Stamp.createStamp(newRoom);
+            stampRepository.save(memberStamp);
+            RoomMember result = RoomMember.createRoomMember(members, newRoom, memberStamp);
             roomMemberRepository.save(result);
         }
 
         return newRoom;
+    }
+
+    /**
+     * 스탬프 찍기
+     */
+    @Transactional
+    public Stamp updateStamp(Member member, Long roomNumber, StampDto dto) {
+
+        //엔티티 조회
+        Stamp stamp = stampRepository.findById(dto.getStampNumber()).orElseThrow(
+                () -> new NoSuchElementException("해당 스탬프가 존재하지 않습니다."));
+        Room room = roomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+
+        Stamp updateStamp = stamp.updateStamp(room, dto.getDay1(), dto.getDay2(), dto.getDay3(), dto.getDay4(), dto.getDay5(), dto.getDay6(), dto.getDay7(), dto.getDay8(), dto.getDay9(), dto.getDay10(),
+                dto.getDay11(), dto.getDay12(), dto.getDay13(), dto.getDay14(), dto.getDay15(), dto.getDay16(), dto.getDay17(), dto.getDay18(), dto.getDay19(), dto.getDay20(),
+                dto.getDay21(), dto.getDay22(), dto.getDay23(), dto.getDay24(), dto.getDay25(), dto.getDay26(), dto.getDay27(), dto.getDay28(), dto.getDay29(), dto.getDay30());
+
+        stampRepository.save(updateStamp);
+
+        return updateStamp;
     }
 
     /**
