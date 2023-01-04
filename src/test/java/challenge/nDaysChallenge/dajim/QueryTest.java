@@ -9,41 +9,25 @@ import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
-import challenge.nDaysChallenge.dto.request.DajimRequestDto;
-import challenge.nDaysChallenge.dto.request.EmotionRequestDto;
-import challenge.nDaysChallenge.dto.request.MemberRequestDto;
-import challenge.nDaysChallenge.dto.response.EmotionResponseDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.service.RoomService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.transaction.BeforeTransaction;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -99,7 +83,7 @@ public class QueryTest { //N+1 테스트
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        DajimRequestDto dajimRequestDto = new DajimRequestDto(null,"다짐 내용", "PRIVATE");
+        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PRIVATE");
 
         //싱글룸 (룸1-멤버1)
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
@@ -109,8 +93,8 @@ public class QueryTest { //N+1 테스트
         Dajim dajim = dajimRepository.save(Dajim.builder()
                 .room(room1)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
 
         //그룹룸 (룸2-멤버1,2,3)
@@ -127,19 +111,19 @@ public class QueryTest { //N+1 테스트
         Dajim dajim2 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member1)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
         Dajim dajim3 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member2)
-                .content(dajimRequestDto.getContent())
-                .open(Open.valueOf(dajimRequestDto.getOpen()))
+                .content(dajimUploadRequestDto.getContent())
+                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
                 .build());
         Dajim dajim4 = dajimRepository.save(Dajim.builder()
                 .room(room2)
                 .member(member3)
-                .content(dajimRequestDto.getContent())
+                .content(dajimUploadRequestDto.getContent())
                 .open(Open.valueOf("PRIVATE"))
                 .build());
 
@@ -169,7 +153,8 @@ public class QueryTest { //N+1 테스트
     @Test
     @DisplayName("그룹 챌린지 내 다짐들 조회")
     public void 그룹_챌린지_다짐들_전체_조회(){
-        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L);
+        List<Dajim> dajims = dajimRepository.findAllByRoomNumber(2L)
+                .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
         assertThat(dajims.size()).isEqualTo(3);
     }

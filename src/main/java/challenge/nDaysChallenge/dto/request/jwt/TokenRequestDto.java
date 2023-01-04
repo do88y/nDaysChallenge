@@ -1,6 +1,5 @@
-package challenge.nDaysChallenge.dto.request;
+package challenge.nDaysChallenge.dto.request.jwt;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +7,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Setter
-public class JwtRequestDto {
+public class TokenRequestDto {
 
     private String accessToken;
     private String refreshToken;

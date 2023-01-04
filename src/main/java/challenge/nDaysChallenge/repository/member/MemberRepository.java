@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.repository;
+package challenge.nDaysChallenge.repository.member;
 
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.Relationship;
@@ -19,10 +19,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //닉네임으로 유저찾기
     Optional<Member> findByNickname(String nickname);
 
-    //중복 가입 방지
+    //아이디 중복 체크
     boolean existsById(String id);
 
-    //중복 닉네임 방지
+    //닉네임 중복 체크
     boolean existsByNickname(String nickname);
 
     Optional<Member> findByNumber(Long memberNumber);

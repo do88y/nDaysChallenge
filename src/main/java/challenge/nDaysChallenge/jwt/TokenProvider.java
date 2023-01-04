@@ -1,22 +1,19 @@
 package challenge.nDaysChallenge.jwt;
 
-import challenge.nDaysChallenge.dto.TokenDto;
-import challenge.nDaysChallenge.service.CustomUserDetailsService;
+import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
+import challenge.nDaysChallenge.service.jwt.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,7 +41,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
     }
 
     //토큰 생성
-    public TokenDto generateToken(Authentication authentication){
+    public TokenResponseDto generateToken(Authentication authentication){
         //권한들 가져오기 (문자열 변환)
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -67,7 +64,7 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return TokenDto.builder()
+        return TokenResponseDto.builder()
                 .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime.getTime())
@@ -76,7 +73,8 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 
     }
 
-    public TokenDto reissueToken(Authentication authentication, RefreshToken refreshToken) {
+    //액세스 토큰 재발급 (리프레쉬 토큰 유지)
+    public TokenResponseDto reissueToken(Authentication authentication, String refreshToken) {
         //권한들 가져오기 (문자열 변환)
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -93,13 +91,11 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                 .signWith(key, SignatureAlgorithm.HS256) //헤더 "alg":"HS512"
                 .compact();
 
-        String refreshTokenValue = refreshToken.getValue();
-
-        return TokenDto.builder()
+        return TokenResponseDto.builder()
                 .type(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpireTime(accessTokenExpireTime.getTime())
-                .refreshToken(refreshTokenValue)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -139,24 +135,25 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
     }
 
     //토큰 읽고 검증하기
-    public boolean validateToken(String token){
+    public String validateToken(String token){
         try {
             Jwts.parserBuilder()  //JwtParserBuilder 객체 생성
                     .setSigningKey(key) //서명 증명에 사용할 key
                     .build() //안전한 JwtParser 리턴 위함
                     .parseClaimsJws(token); //해당 토큰 클레임 읽음
-            return true;
+            return "true";
         } catch (io.jsonwebtoken.security.SecurityException| MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다");
+            return "expired";
         } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 JWT 토큰입니다");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰에 오류가 발생했습니다");
         }
 
-        return false;
+        return "false";
     }
 
     private Claims parseClaims(String accessToken) {

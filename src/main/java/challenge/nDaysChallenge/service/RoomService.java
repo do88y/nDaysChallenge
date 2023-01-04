@@ -5,7 +5,7 @@ import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;

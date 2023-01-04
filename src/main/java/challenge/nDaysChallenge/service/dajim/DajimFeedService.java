@@ -1,15 +1,9 @@
 package challenge.nDaysChallenge.service.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.RoomMember;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.room.SingleRoom;
-import challenge.nDaysChallenge.dto.response.DajimFeedResponseDto;
-import challenge.nDaysChallenge.repository.MemberRepository;
+import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,15 +25,8 @@ public class DajimFeedService {
 
         //도메인->dto
         List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                new DajimFeedResponseDto(
-                        dajim.getNumber(),
-                        dajim.getMember().getNickname(),
-                        dajim.getContent(),
-                        dajim.getEmotions().stream().map(emotion ->
-                                        emotion.getSticker().toString())
-                                .collect(Collectors.toList()),
-                        dajim.getUpdatedDate()
-                )).collect(Collectors.toList());
+                        DajimFeedResponseDto.of(dajim)
+                ).collect(Collectors.toList());
 
         return dajimFeedList;
     }

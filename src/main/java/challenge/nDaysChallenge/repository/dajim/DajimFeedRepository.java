@@ -15,6 +15,6 @@ import java.util.Map;
 @Repository
 public interface DajimFeedRepository extends JpaRepository<Dajim, Long> { //피드 다짐 조회
     //멤버가 속한 챌린지 내 다짐 or open=PUBLIC인 다짐
-    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC'")
+    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.number DESC")
     List<Dajim> findAllByOpen();
 }

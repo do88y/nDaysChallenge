@@ -2,12 +2,11 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.Member;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dajim extends BaseEntity {
 
     @Id
