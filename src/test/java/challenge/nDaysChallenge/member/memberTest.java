@@ -14,7 +14,9 @@ import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
+import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@Transactional
 public class memberTest {
 
     @Autowired
@@ -41,7 +44,10 @@ public class memberTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private RoomRepository roomRepository;
+    private GroupRoomRepository groupRoomRepository;
+
+    @Autowired
+    SingleRoomRepository singleRoomRepository;
 
     @Autowired
     private RoomMemberRepository roomMemberRepository;
@@ -53,7 +59,6 @@ public class memberTest {
     EmotionRepository emotionRepository;
 
     @BeforeTransaction
-    @Transactional
     public void 회원가입(){
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -62,7 +67,6 @@ public class memberTest {
 
     @DisplayName("중복 닉네임 가입")
     @Test
-    @Transactional
     void 중복_닉네임_가입_확인(){
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -72,8 +76,6 @@ public class memberTest {
 
     @DisplayName("닉네임 중복 확인")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void 닉네임_중복확인(){
         //닉네임 중복 확인
         boolean exists = memberRepository.existsByNickname("aaa");
@@ -85,8 +87,6 @@ public class memberTest {
 
     @DisplayName("아이디 중복 확인")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void 아이디_중복확인(){
         //닉네임 중복 확인
         boolean exists = memberRepository.existsById("abc@naver.com");
@@ -98,8 +98,6 @@ public class memberTest {
 
     @DisplayName("멤버 닉네임 변경")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void 닉네임_변경(){
         //회원가입
         Member member = memberRepository.findById("abc@naver.com")
@@ -116,12 +114,11 @@ public class memberTest {
 
     @DisplayName("멤버 삭제(탈퇴) 시 룸/다짐/이모션 존재 여부 확인")
     @Test
-    @Transactional
-    @Rollback(value = false)
     void 회원_탈퇴(){
+        //given
         //멤버
         Member member1 = Member.builder()
-                .id("user@naver.com")
+                .id("user1@naver.com")
                 .pw("12345")
                 .nickname("userN")
                 .image(1)
@@ -133,15 +130,13 @@ public class memberTest {
 
         //싱글룸
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
-        roomRepository.save(room1);
+        singleRoomRepository.save(room1);
         SingleRoom singleRoom1 = room1.addRoom(room1, member1);
-        roomRepository.save(singleRoom1);
+        singleRoomRepository.save(singleRoom1);
 
         //그룹룸
         GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
-        roomRepository.save(room2);
-        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
-        roomMemberRepository.save(roomMember1);
+        groupRoomRepository.save(room2);
 
         //다짐 1, 2
         Dajim dajim1 = dajimRepository.save(Dajim.builder()
@@ -178,12 +173,11 @@ public class memberTest {
         dajim1.addEmotions(savedEmotion);
         dajim2.addEmotions(savedEmotion2);
 
-        //삭제
+        //when
         memberRepository.delete(member1);
 
-        System.out.println(dajim1.getMember().getId());
-        System.out.println(emotion2.getMember().getId());
-        System.out.println(roomMember1.getMember().getId());
+        //then
+        assertThat(memberRepository.existsById("user1@naver.com")).isFalse();
     }
 
 }
