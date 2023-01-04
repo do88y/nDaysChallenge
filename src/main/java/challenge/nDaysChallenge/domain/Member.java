@@ -23,11 +23,12 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(name = "member_id")
+    @Column(name = "member_id", unique = true)
     private String id;
 
     private String pw;
 
+    @Column(unique = true)
     private String nickname;
 
     private int image;
