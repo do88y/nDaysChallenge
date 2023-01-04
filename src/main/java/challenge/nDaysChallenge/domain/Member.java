@@ -6,7 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,12 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(name = "member_id")
+    @Column(name = "member_id", unique = true)
     private String id;
 
     private String pw;
 
+    @Column(unique = true)
     private String nickname;
 
     private int image;

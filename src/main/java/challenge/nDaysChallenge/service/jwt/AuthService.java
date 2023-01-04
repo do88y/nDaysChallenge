@@ -19,6 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     private final RefreshTokenRepository refreshTokenRepository;
 
     //회원가입
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+    public MemberResponseDto signup(@Valid MemberRequestDto memberRequestDto) {
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
 
@@ -42,18 +45,26 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     //아이디 중복 검사
     @Transactional(readOnly = true)
-    public boolean idCheck(String id){
+    public String idCheck(String id){
         boolean exists = memberRepository.existsById(id);
 
-        return exists;
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
     }
 
     //닉네임 중복 검사
     @Transactional(readOnly = true)
-    public boolean nicknameCheck(String nickname){
-        boolean exists = memberRepository.existsById(nickname);
+    public String nicknameCheck(String nickname){
+        boolean exists = memberRepository.existsByNickname(nickname);
 
-        return exists;
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
     }
 
     //로그인
