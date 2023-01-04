@@ -48,22 +48,22 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     public String idCheck(String id){
         boolean exists = memberRepository.existsById(id);
 
-        if (exists==false){
-            return "ok";
-        } else {
+        if (exists){
             return "exists";
+        } else {
+            return "ok";
         }
     }
 
     //닉네임 중복 검사
     @Transactional(readOnly = true)
     public String nicknameCheck(String nickname){
-        boolean exists = memberRepository.existsById(nickname);
+        boolean exists = memberRepository.existsByNickname(nickname);
 
-        if (exists==false){
-            return "ok";
-        } else {
+        if (exists){
             return "exists";
+        } else {
+            return "ok";
         }
     }
 

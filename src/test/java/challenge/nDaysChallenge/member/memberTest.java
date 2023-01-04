@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.jwt;
+package challenge.nDaysChallenge.member;
 
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
@@ -65,6 +65,19 @@ public class memberTest {
         //닉네임 중복 확인
         boolean exists = memberRepository.existsByNickname("aaa");
         boolean exists2 = memberRepository.existsByNickname("new");
+
+        assertThat(exists).isEqualTo(true);
+        assertThat(exists2).isEqualTo(false);
+    }
+
+    @DisplayName("아이디 중복 확인")
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void 아이디_중복확인(){
+        //닉네임 중복 확인
+        boolean exists = memberRepository.existsById("abc@naver.com");
+        boolean exists2 = memberRepository.existsById("aaa@naver.com");
 
         assertThat(exists).isEqualTo(true);
         assertThat(exists2).isEqualTo(false);
