@@ -3,6 +3,7 @@ package challenge.nDaysChallenge.member;
 import challenge.nDaysChallenge.domain.Authority;
 import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
@@ -131,12 +132,15 @@ public class memberTest {
         //싱글룸
         SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
         singleRoomRepository.save(room1);
-        SingleRoom singleRoom1 = room1.addRoom(room1, member1);
+        Stamp stamp = Stamp.createStamp(room1);
+        SingleRoom singleRoom1 = room1.addRoom(room1, member1, stamp);
         singleRoomRepository.save(singleRoom1);
 
         //그룹룸
         GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
         groupRoomRepository.save(room2);
+        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2, Stamp.createStamp(room2));
+        roomMemberRepository.save(roomMember1);
 
         //다짐 1, 2
         Dajim dajim1 = dajimRepository.save(Dajim.builder()

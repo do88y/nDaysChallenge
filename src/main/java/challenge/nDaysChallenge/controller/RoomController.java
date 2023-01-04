@@ -1,9 +1,11 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;
 import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
+import challenge.nDaysChallenge.dto.request.StampDto;
 import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -71,7 +73,8 @@ public class RoomController {
 
     //챌린지 상세
     @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> detail(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> detail(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                    @PathVariable("challengeId") Long roomNumber) {
 
         Optional<Room> findRoom = roomRepository.findById(roomNumber);
         Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 없습니다"));
@@ -92,6 +95,19 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
     }
 
+    //스탬프 찍기
+    @PostMapping("/challenge/stamp")
+    public ResponseEntity<?> stamp(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                   @RequestBody StampDto dto) {
+
+        Stamp stamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
+        StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay1(), stamp.getDay2(), stamp.getDay3(), stamp.getDay4(), stamp.getDay5(), stamp.getDay6(), stamp.getDay7(), stamp.getDay8(), stamp.getDay9(), stamp.getDay10(),
+                                                            stamp.getDay11(), stamp.getDay12(), stamp.getDay13(), stamp.getDay14(), stamp.getDay15(), stamp.getDay16(), stamp.getDay17(), stamp.getDay18(), stamp.getDay19(), stamp.getDay20(),
+                                                            stamp.getDay21(), stamp.getDay22(), stamp.getDay23(), stamp.getDay24(), stamp.getDay25(), stamp.getDay26(), stamp.getDay27(), stamp.getDay28(), stamp.getDay29(), stamp.getDay30());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedStamp);
+    }
+
     //개인 챌린지 생성
     @PostMapping("/challenge/create")
     public ResponseEntity<?> singleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
@@ -107,6 +123,7 @@ public class RoomController {
                 .type(room.getType().name())
                 .status(room.getStatus().name())
                 .passCount(room.getPassCount())
+                .stamp(room.getStamp().getNumber())
                 .totalDays(room.getPeriod().getTotalDays())
                 .startDate(room.getPeriod().getStartDate())
                 .endDate(room.getPeriod().getEndDate())
@@ -129,6 +146,7 @@ public class RoomController {
                 .type(room.getType().name())
                 .status(room.getStatus().name())
                 .passCount(room.getPassCount())
+                .stamp(room.getStamp().getNumber())
                 .totalDays(room.getPeriod().getTotalDays())
                 .startDate(room.getPeriod().getStartDate())
                 .endDate(room.getPeriod().getEndDate())
@@ -139,16 +157,18 @@ public class RoomController {
 
     //챌린지 삭제&실패
     @DeleteMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> delete(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> delete(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                    @PathVariable("challengeId") Long roomNumber) {
 
-        roomService.deleteRoom(roomNumber);
+        roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     //완료 챌린지 상태 변경
     @PostMapping("/challenge/{challengeId}/success")
-    public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> end(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                 @PathVariable("challengeId") Long roomNumber) {
 
         roomService.changeStatus(roomNumber);
 

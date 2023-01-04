@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.domain.room;
 
 
+import challenge.nDaysChallenge.domain.Stamp;
 import lombok.*;
 import net.minidev.json.JSONUtil;
 
@@ -39,6 +40,10 @@ public class Room {
 
     @Enumerated(EnumType.STRING)
     protected RoomStatus status;  //챌린지 상태 [CONTINUE, END]
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "stamp_number")
+    protected Stamp stamp;
 
     protected int passCount;
     protected int usedPassCount;
