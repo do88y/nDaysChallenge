@@ -15,10 +15,13 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
+import org.hibernate.exception.ConstraintViolationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.transaction.BeforeTransaction;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class memberTest {
@@ -50,11 +54,20 @@ public class memberTest {
 
     @BeforeTransaction
     @Transactional
-    @Rollback(value = false)
     public void 회원가입(){
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
+    }
+
+    @DisplayName("중복 닉네임 가입")
+    @Test
+    @Transactional
+    void 중복_닉네임_가입_확인(){
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com","123","aaa",1,2);
+        Member member = memberRequestDto.toMember(passwordEncoder);
+
+        assertThrows(DataIntegrityViolationException.class, ()->memberRepository.save(member));
     }
 
     @DisplayName("닉네임 중복 확인")
