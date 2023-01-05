@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.controller;
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;

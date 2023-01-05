@@ -1,6 +1,9 @@
 package challenge.nDaysChallenge.relationship;
 
 import challenge.nDaysChallenge.domain.*;
+import challenge.nDaysChallenge.domain.member.Authority;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;

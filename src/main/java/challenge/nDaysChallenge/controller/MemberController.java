@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.controller;
 
 
-import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.service.member.MemberService;
@@ -35,7 +35,7 @@ public class MemberController { //마이페이지 전용
     }
 
     //회원정보 수정
-    @PutMapping("/user/edit")
+    @PatchMapping("/user/edit")
     public ResponseEntity<MemberInfoResponseDto> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
                                             @AuthenticationPrincipal MemberAdapter memberAdapter) {
         MemberInfoResponseDto memberInfoResponseDto =
@@ -45,11 +45,11 @@ public class MemberController { //마이페이지 전용
     }
 
     //회원 탈퇴
-    @PostMapping("/user/withdrawal")
+    @DeleteMapping("/user/withdrawal")
     public ResponseEntity<String> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
         String nickname = memberService.deleteMember(memberAdapter.getMember());
 
-        return ResponseEntity.ok().body(nickname); //탈퇴한 회원 닉네임 리턴
+        return ResponseEntity.ok().body(nickname+"님 탈퇴가 완료되었습니다."); //탈퇴한 회원 닉네임 리턴
     }
 
 }

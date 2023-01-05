@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/challenge?useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: '12345678'
+    password: '1234'
 
     hikari:
       initialization-fail-timeout: 0 #커넥션 초기화 실패 시 유효성 검사 시도
@@ -12,7 +12,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
+      ddl-auto: update #[create] [create-drop] [update] [validate] [none] 상황에 맞게 사용하기
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       use-new-id-generator-mappings: false

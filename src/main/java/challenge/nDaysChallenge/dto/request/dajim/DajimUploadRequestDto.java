@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.dto.request.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;

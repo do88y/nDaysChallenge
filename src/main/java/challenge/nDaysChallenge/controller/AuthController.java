@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
-import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
 import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

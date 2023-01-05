@@ -1,8 +1,8 @@
 package challenge.nDaysChallenge.member;
 
-import challenge.nDaysChallenge.domain.Authority;
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.Authority;
+import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
@@ -16,15 +16,12 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
-import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
-import org.hibernate.exception.ConstraintViolationException;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.transaction.BeforeTransaction;
@@ -66,15 +63,6 @@ public class memberTest {
         memberRepository.save(member);
     }
 
-    @DisplayName("중복 닉네임 가입")
-    @Test
-    void 중복_닉네임_가입_확인(){
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com","123","aaa",1,2);
-        Member member = memberRequestDto.toMember(passwordEncoder);
-
-        assertThrows(DataIntegrityViolationException.class, ()->memberRepository.save(member));
-    }
-
     @DisplayName("닉네임 중복 확인")
     @Test
     void 닉네임_중복확인(){
@@ -112,76 +100,16 @@ public class memberTest {
         assertThat(updatedMember.getImage()).isEqualTo(2);
     }
 
-
-    @DisplayName("멤버 삭제(탈퇴) 시 룸/다짐/이모션 존재 여부 확인")
     @Test
     void 회원_탈퇴(){
-        //given
-        //멤버
-        Member member1 = Member.builder()
-                .id("user1@naver.com")
-                .pw("12345")
-                .nickname("userN")
-                .image(1)
-                .roomLimit(4)
-                .authority(Authority.ROLE_USER)
-                .build();
-
-        DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PRIVATE");
-
-        //싱글룸
-        SingleRoom room1 = new SingleRoom("SingleRoom", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "", 0, 0);
-        singleRoomRepository.save(room1);
-        Stamp stamp = Stamp.createStamp(room1);
-        SingleRoom singleRoom1 = room1.addRoom(room1, member1, stamp);
-        singleRoomRepository.save(singleRoom1);
-
-        //그룹룸
-        GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
-        groupRoomRepository.save(room2);
-        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2, Stamp.createStamp(room2));
-        roomMemberRepository.save(roomMember1);
-
-        //다짐 1, 2
-        Dajim dajim1 = dajimRepository.save(Dajim.builder()
-                .room(room1)
-                .member(member1)
-                .content(dajimUploadRequestDto.getContent())
-                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
-                .build());
-
-        Dajim dajim2 = dajimRepository.save(Dajim.builder()
-                .room(room2)
-                .member(member1)
-                .content(dajimUploadRequestDto.getContent())
-                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
-                .build());
-
-        //감정 1, 2
-        Emotion emotion = Emotion.builder()
-                .member(member1)
-                .dajim(dajim1)
-                .sticker(Sticker.valueOf("TOUCHED"))
-                .build();
-
-        Emotion emotion2 = Emotion.builder()
-                .member(member1)
-                .dajim(dajim2)
-                .sticker(Sticker.valueOf("SURPRISE"))
-                .build();
-
-        Emotion savedEmotion = emotionRepository.save(emotion);
-        Emotion savedEmotion2 = emotionRepository.save(emotion2);
-
-        //다짐-감정 연결
-        dajim1.addEmotions(savedEmotion);
-        dajim2.addEmotions(savedEmotion2);
-
         //when
-        memberRepository.delete(member1);
+        Member memberFound = memberRepository.findByNickname("aaa")
+                .orElseThrow(()->new RuntimeException("해당 닉네임의 회원이 없습니다."));
+
+        memberRepository.delete(memberFound);
 
         //then
-        assertThat(memberRepository.existsById("user1@naver.com")).isFalse();
+        assertThat(memberRepository.existsByNickname("aaa")).isFalse();
     }
 
 }

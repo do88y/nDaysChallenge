@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,11 +29,11 @@ public class Dajim extends BaseEntity {
 //    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
 //    List<Report> reports = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_number")
     private Room room;
 

@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.domain.room;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Stamp;
 import lombok.*;
 

@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.member.Member;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 

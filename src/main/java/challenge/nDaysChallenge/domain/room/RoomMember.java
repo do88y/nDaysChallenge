@@ -1,6 +1,7 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.room;
 
-import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.Stamp;
+import challenge.nDaysChallenge.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class RoomMember {
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "room_number")
     private Room room;
 

@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
-import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;

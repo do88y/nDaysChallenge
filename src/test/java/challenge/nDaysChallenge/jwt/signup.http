@@ -3,9 +3,9 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "user4@naver.com",
+  "id": "abc123@gmail.com",
   "pw": "123",
-  "nickname": "nick",
+  "nickname": "모아나",
   "image": 3,
-  "roomLimit": 3
+  "roomLimit":3
 }

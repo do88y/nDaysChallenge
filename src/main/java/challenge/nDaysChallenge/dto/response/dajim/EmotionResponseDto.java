@@ -1,15 +1,8 @@
 package challenge.nDaysChallenge.dto.response.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.domain.dajim.Emotion;
-import challenge.nDaysChallenge.domain.dajim.Sticker;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.request.dajim.EmotionRequestDto;
-import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import lombok.*;
-import org.springframework.lang.Nullable;
-
-import javax.validation.constraints.Null;
 
 @Getter
 @NoArgsConstructor

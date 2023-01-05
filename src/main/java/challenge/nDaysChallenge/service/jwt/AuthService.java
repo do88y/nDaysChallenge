@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.service.jwt;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
 import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
@@ -19,7 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import javax.validation.Valid;
 
@@ -37,6 +38,12 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     //회원가입
     public MemberResponseDto signup(@Valid MemberRequestDto memberRequestDto) {
+        if (memberRepository.existsById(memberRequestDto.getId())){
+            throw new RuntimeException("이미 존재하는 아이디입니다.");
+        } else if (memberRepository.existsByNickname(memberRequestDto.getNickname())){
+            throw new RuntimeException("이미 존재하는 닉네임입니다.");
+        }
+
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
 

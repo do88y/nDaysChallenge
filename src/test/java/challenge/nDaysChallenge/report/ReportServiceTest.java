@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.report;
 
-import challenge.nDaysChallenge.domain.Authority;
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Authority;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
