@@ -1,10 +1,9 @@
 package challenge.nDaysChallenge.repository;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

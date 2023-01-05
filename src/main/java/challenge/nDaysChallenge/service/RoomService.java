@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.service;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.RoomMember;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;

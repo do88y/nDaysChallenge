@@ -1,15 +1,14 @@
-package challenge.nDaysChallenge.domain;
+package challenge.nDaysChallenge.domain.member;
 
-import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.Relationship;
+import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +37,13 @@ public class Member {
     private Authority authority;
 
     //내가 수락한 친구들만 리스트에 들어가게//
-    @OneToMany(mappedBy = "number")
+    @OneToMany(mappedBy = "number", cascade = CascadeType.ALL, orphanRemoval = true)
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<RoomMember> roomMemberList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "number")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<SingleRoom> singleRooms = new ArrayList<>();
 
     @Builder

@@ -1,13 +1,22 @@
 package challenge.nDaysChallenge.service.member;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
+import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
+import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +26,12 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
+
+    private final DajimRepository dajimRepository;
+
+    private final SingleRoomRepository singleRoomRepository;
+
+    private final RoomMemberRepository roomMemberRepository;
 
     //회원정보 조회 (수정 전)
     @Transactional(readOnly = true)
@@ -43,7 +58,22 @@ public class MemberService {
     //회원 삭제
     public String deleteMember(Member member) {
         String nickname = member.getNickname();
+
+        //constraintviolation 오류 해결 위해 fk 엔티티 삭제
+        Optional<List<Dajim>> dajims = dajimRepository.findAllByMemberNickname(nickname);
+        Optional<List<RoomMember>> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname);
+
+        if (dajims.isPresent()){
+            dajimRepository.deleteAll(dajims.get());
+        }
+
+        if (roomMembers.isPresent()){
+            roomMemberRepository.deleteAll(roomMembers.get()); //룸멤버에서 탈퇴 회원만 삭제 (룸 유지)
+        }
+
+        //멤버 삭제
         memberRepository.delete(member);
+
         return nickname;
     }
 

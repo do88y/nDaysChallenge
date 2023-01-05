@@ -1,8 +1,7 @@
 package challenge.nDaysChallenge.domain.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import lombok.*;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 

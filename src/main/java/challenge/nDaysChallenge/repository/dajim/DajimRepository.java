@@ -1,9 +1,7 @@
 package challenge.nDaysChallenge.repository.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.Room;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,5 +27,8 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
     @Query("SELECT d FROM Dajim d WHERE d.number = :dajimNumber")
     Optional<Dajim> findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
+
+    @Query("SELECt d FROM Dajim d WHERE d.member.nickname = :nickname")
+    Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);
 
 }

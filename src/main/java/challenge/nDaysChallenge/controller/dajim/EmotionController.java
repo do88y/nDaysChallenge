@@ -1,7 +1,7 @@
 package challenge.nDaysChallenge.controller.dajim;
 
-import challenge.nDaysChallenge.domain.Member;
-import challenge.nDaysChallenge.domain.MemberAdapter;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.dajim.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.EmotionResponseDto;
 import challenge.nDaysChallenge.service.dajim.EmotionService;

@@ -1,6 +1,6 @@
 package challenge.nDaysChallenge.security;
 
-import challenge.nDaysChallenge.domain.Member;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
