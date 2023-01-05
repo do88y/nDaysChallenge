@@ -19,6 +19,7 @@ public class GroupRoomResponseDto {
     private int passCount;
     private String type;
     private String status;
+    private Long stamp;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -29,13 +30,14 @@ public class GroupRoomResponseDto {
     private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
+    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, Long stamp, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
         this.roomNumber = roomNumber;
         this.name = name;
         this.category = category;
         this.reward = reward;
         this.type = type;
         this.status = status;
+        this.stamp = stamp;
         this.passCount = passCount;
         this.totalDays = totalDays;
         this.startDate = startDate;

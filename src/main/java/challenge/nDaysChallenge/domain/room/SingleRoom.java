@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.Stamp;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,10 +11,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SingleRoom extends Room {
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "room_number")
-    private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
@@ -29,14 +26,19 @@ public class SingleRoom extends Room {
         this.member = member;
     }
 
+    public void addStamp(Stamp stamp) {
+        this.stamp = stamp;
+    }
+
     //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅
     public void joinRoom(Room room) {
         this.member.addSingleRooms(this);
     }
 
     //==생성 메서드==//
-    public SingleRoom addRoom(Room room, Member member) {
+    public SingleRoom addRoom(Room room, Member member, Stamp stamp) {
         this.addMember(member);
+        this.addStamp(stamp);
         this.joinRoom(room);
 
         return this;

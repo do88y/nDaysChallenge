@@ -1,8 +1,8 @@
 POST http://localhost:8080/feed/emotion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMkBuYXZlci5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3MjkxNDg3Mn0.uiE03dWKNsNukizx2hqq_ek_ylt6QHcL55DwH6jLN-s
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI
 
 {
-  "dajimNumber": 6,
+  "dajimNumber": 7,
   "sticker": "WATCH"
 }

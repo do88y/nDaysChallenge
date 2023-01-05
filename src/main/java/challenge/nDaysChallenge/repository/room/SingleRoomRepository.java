@@ -23,7 +23,4 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
                     " and s.status = 'END'")
     public List<SingleRoom> finishedSingleRooms(@Param("member") Member member);
 
-    @Query("SELECT s FROM SingleRoom s WHERE s.member.nickname = :nickname")
-    Optional<List<SingleRoom>> findAllByMemberNickname(@Param("nickname") String nickname);
-
 }

@@ -3,9 +3,11 @@ package challenge.nDaysChallenge.Room;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.RoomMember;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
@@ -44,6 +46,7 @@ public class RoomServiceTest {
     @Autowired RoomMemberRepository roomMemberRepository;
     @Autowired MemberRepository memberRepository;
     @Autowired RoomService roomService;
+    @Autowired StampRepository stampRepository;
 
 
     @Test
@@ -136,7 +139,7 @@ public class RoomServiceTest {
 
         //when
         Long roomNumber = room.getNumber();
-        roomService.deleteRoom(room.getNumber());
+        roomService.deleteRoom(member, room.getNumber());
 
         //then
         assertThat(roomRepository.findById(roomNumber).get());
@@ -156,17 +159,22 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom3);
         groupRoomRepository.save(groupRoom);
 
+        Stamp stamp1 = Stamp.createStamp(singleRoom1);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3);
+        Stamp stamp4 = Stamp.createStamp(groupRoom);
+
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member);
+        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
+        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
+        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
         singleRoomRepository.save(createSingleRoom1);
         singleRoomRepository.save(createSingleRoom2);
         singleRoomRepository.save(createSingleRoom3);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom);
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
         roomMemberRepository.save(roomMember);
 
         em.flush();
@@ -197,12 +205,16 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
+        Stamp stamp1 = Stamp.createStamp(singleRoom1);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3);
+
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member);
+        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
+        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
+        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
         singleRoomRepository.save(createSingleRoom1);
         singleRoomRepository.save(createSingleRoom2);
         singleRoomRepository.save(createSingleRoom3);
@@ -229,7 +241,7 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom);
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
         roomMemberRepository.save(roomMember);
 
         em.flush();
@@ -241,6 +253,23 @@ public class RoomServiceTest {
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void update_stamp_쿼리() throws Exception {
+        //given
+        SingleRoom singleRoom = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
+        singleRoomRepository.save(singleRoom);
+        Stamp stamp = Stamp.createStamp(singleRoom);
+        stampRepository.save(stamp);
+
+        //when
+        Stamp updateStamp = stamp.updateStamp(singleRoom, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        em.flush();
+        em.clear();
+
+        //then
+        assertThat(updateStamp.getDay1()).isEqualTo(1);
     }
 
     @Test

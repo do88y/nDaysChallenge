@@ -29,8 +29,6 @@ public class MemberService {
 
     private final DajimRepository dajimRepository;
 
-    private final SingleRoomRepository singleRoomRepository;
-
     private final RoomMemberRepository roomMemberRepository;
 
     //회원정보 조회 (수정 전)

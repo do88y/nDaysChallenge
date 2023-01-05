@@ -3,6 +3,7 @@ package challenge.nDaysChallenge.dajim;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.RoomMember;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
@@ -99,9 +100,9 @@ public class QueryTest { //N+1 테스트
         //그룹룸 (룸2-멤버1,2,3)
         GroupRoom room2 = new GroupRoom("GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
         roomRepository.save(room2);
-        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2);
-        RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2);
-        RoomMember roomMember3 = RoomMember.createRoomMember(member3, room2);
+        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2, Stamp.createStamp(room2));
+        RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2, Stamp.createStamp(room2));
+        RoomMember roomMember3 = RoomMember.createRoomMember(member3, room2, Stamp.createStamp(room2));
         roomMemberRepository.save(roomMember1);
         roomMemberRepository.save(roomMember2);
         roomMemberRepository.save(roomMember3);
