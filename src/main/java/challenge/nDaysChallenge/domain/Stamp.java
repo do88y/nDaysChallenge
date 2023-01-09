@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
 import challenge.nDaysChallenge.domain.room.Room;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
