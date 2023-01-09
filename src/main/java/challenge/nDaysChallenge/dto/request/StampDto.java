@@ -1,11 +1,13 @@
 package challenge.nDaysChallenge.dto.request;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class StampDto {
 
     public Long roomNumber;
@@ -41,38 +43,4 @@ public class StampDto {
     public int day29;
     public int day30;
 
-    public StampDto(Long roomNumber, Long stampNumber, int day1, int day2, int day3, int day4, int day5, int day6, int day7, int day8, int day9, int day10, int day11, int day12, int day13, int day14, int day15, int day16, int day17, int day18, int day19, int day20, int day21, int day22, int day23, int day24, int day25, int day26, int day27, int day28, int day29, int day30) {
-        this.roomNumber = roomNumber;
-        this.stampNumber = stampNumber;
-        this.day1 = day1;
-        this.day2 = day2;
-        this.day3 = day3;
-        this.day4 = day4;
-        this.day5 = day5;
-        this.day6 = day6;
-        this.day7 = day7;
-        this.day8 = day8;
-        this.day9 = day9;
-        this.day10 = day10;
-        this.day11 = day11;
-        this.day12 = day12;
-        this.day13 = day13;
-        this.day14 = day14;
-        this.day15 = day15;
-        this.day16 = day16;
-        this.day17 = day17;
-        this.day18 = day18;
-        this.day19 = day19;
-        this.day20 = day20;
-        this.day21 = day21;
-        this.day22 = day22;
-        this.day23 = day23;
-        this.day24 = day24;
-        this.day25 = day25;
-        this.day26 = day26;
-        this.day27 = day27;
-        this.day28 = day28;
-        this.day29 = day29;
-        this.day30 = day30;
-    }
 }

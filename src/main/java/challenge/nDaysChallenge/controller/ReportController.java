@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 public class ReportController {
@@ -36,7 +38,9 @@ public class ReportController {
                 .dajim(report.getDajim().getNumber())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReport);
+        URI location = URI.create("/feed/report" + report.getNumber());
+
+        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedReport);
     }
 
     //로그인 검증

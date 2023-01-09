@@ -90,16 +90,26 @@ public class RoomService {
         //저장
         groupRoomRepository.save(newRoom);
 
-        //챌린지 멤버 생성&저장
+        //방장 생성&저장
         Stamp stamp = Stamp.createStamp(newRoom);
         stampRepository.save(stamp);
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);  //방장
         roomMemberRepository.save(roomMember);
-        for (Member members : memberList) {  //그 외 멤버
-            Stamp memberStamp = Stamp.createStamp(newRoom);
-            stampRepository.save(memberStamp);
-            RoomMember result = RoomMember.createRoomMember(members, newRoom, memberStamp);
+
+        Map<String, Long> stamps = newRoom.getStamps();
+        stamps.put(member.getId(), stamp.getNumber());
+
+        //그 외 멤버 생성&저장
+        for (Member members : memberList) {
+            Stamp newStamp = Stamp.createStamp(newRoom);
+            stampRepository.save(newStamp);
+            RoomMember result = RoomMember.createRoomMember(members, newRoom, newStamp);
             roomMemberRepository.save(result);
+
+            for (Long memberNumber : selectedMember) {
+                RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(memberRepository.findByNumber(memberNumber).get(), newRoom);
+                stamps.put(findRoomMember.getMember().getId(), newStamp.getNumber());
+            }
         }
 
         return newRoom;
