@@ -1,9 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
-<<<<<<< HEAD
-=======
 import challenge.nDaysChallenge.domain.member.Member;
->>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;

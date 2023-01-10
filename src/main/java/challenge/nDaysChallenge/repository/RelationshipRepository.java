@@ -4,11 +4,8 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-<<<<<<< HEAD
-=======
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
->>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

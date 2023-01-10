@@ -42,17 +42,10 @@ public class Member {
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-<<<<<<< HEAD
-    private final List<RoomMember> roomMemberList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<SingleRoom> singleRooms = new ArrayList<>();
-=======
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
->>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 
     @Builder
     public Member(String id, String pw ,String nickname, int image, int roomLimit, Authority authority) {

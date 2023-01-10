@@ -1,9 +1,7 @@
 package challenge.nDaysChallenge.domain.room;
 
-<<<<<<< HEAD
-=======
+
 import challenge.nDaysChallenge.domain.member.Member;
->>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
