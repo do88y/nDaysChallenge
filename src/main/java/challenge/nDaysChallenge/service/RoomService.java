@@ -85,21 +85,27 @@ public class RoomService {
         }
 
         //챌린지 생성
-        GroupRoom newRoom = new GroupRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
-
-        //저장
+        GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
         groupRoomRepository.save(newRoom);
 
-        //챌린지 멤버 생성&저장
+        //방장 - 스탬프, 룸멤버 생성
         Stamp stamp = Stamp.createStamp(newRoom);
         stampRepository.save(stamp);
-        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);  //방장
+        RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
         roomMemberRepository.save(roomMember);
-        for (Member members : memberList) {  //그 외 멤버
-            Stamp memberStamp = Stamp.createStamp(newRoom);
-            stampRepository.save(memberStamp);
-            RoomMember result = RoomMember.createRoomMember(members, newRoom, memberStamp);
+
+        Map<String, Long> stamps = newRoom.getStamps();
+        stamps.put(member.getId(), stamp.getNumber());
+
+        //그 외 멤버 - 스탬프, 룸멤버 생성
+        for (Member fidnMember : memberList) {
+            Stamp newStamp = Stamp.createStamp(newRoom);
+            stampRepository.save(newStamp);
+            RoomMember result = RoomMember.createRoomMember(fidnMember, newRoom, newStamp);
             roomMemberRepository.save(result);
+
+            RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(memberRepository.findByNumber(fidnMember.getNumber()).get(), newRoom);
+            stamps.put(findRoomMember.getMember().getId(), newStamp.getNumber());
         }
 
         return newRoom;
