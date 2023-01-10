@@ -4,6 +4,11 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+<<<<<<< HEAD
+=======
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+>>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,10 +23,7 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Long
 
 
 
-    List<Relationship>  findByUser (Member user);
-
-
-    //memberNumber로 수락상태인 관계, 챌린지 5개 이하만 검색-> 그룹 챌린지 멤버 후보에 뿌리기
-    public List<Relationship> findRelationshipByUserAndStatus(Member member, RelationshipStatus status);
+    @Query("select r from Relationship r where r.user=:user and r.status='ACCEPT'")
+    public List<Relationship> findRelationshipByUserAndStatus(@Param("user")Member member);
 
 }

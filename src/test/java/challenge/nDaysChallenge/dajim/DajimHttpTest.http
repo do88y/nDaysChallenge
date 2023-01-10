@@ -3,6 +3,7 @@ POST http://localhost:8080/challenge/11/dajim
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMzQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczMjQxNTQ4fQ.UPIB87wIzrm2BaKRPNXlwAjejsCsO6IdluWxeFHYBjw
 
+
 {
   "content": "다짐 등록2",
   "open": "PRIVATE"
@@ -11,12 +12,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMzQGdtYWlsLmNvbSIsImF1d
 ###
 
 # 다짐 수정
-PATCH http://localhost:8080/challenge/11/dajim
+PATCH http://localhost:8080/challenge/10/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMzQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczMjQxNTQ4fQ.UPIB87wIzrm2BaKRPNXlwAjejsCsO6IdluWxeFHYBjw
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI
 
 {
-  "dajimNumber": 8,
+  "dajimNumber": 7,
 "content": "다짐 수정1111",
 "open": "PUBLIC"
 }

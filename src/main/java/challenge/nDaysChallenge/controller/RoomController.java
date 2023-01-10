@@ -1,5 +1,9 @@
 package challenge.nDaysChallenge.controller;
 
+<<<<<<< HEAD
+=======
+import challenge.nDaysChallenge.domain.member.Member;
+>>>>>>> 7addbbfed2e85f17c84ba27c61adc10d6384d2bb
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
@@ -16,10 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,43 +38,11 @@ public class RoomController {
     @GetMapping("/challenge/list")
     public ResponseEntity<?> list(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
-        List<RoomResponseDto> roomList = new ArrayList<>();
-        
-        List<SingleRoom> singleRooms = roomService.findSingleRooms(memberAdapter.getMember());
-        for (SingleRoom singleRoom : singleRooms) {
-            RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .roomNumber(singleRoom.getNumber())
-                    .name(singleRoom.getName())
-                    .category(singleRoom.getCategory().name())
-                    .reward(singleRoom.getReward())
-                    .type(singleRoom.getType().name())
-                    .status(singleRoom.getStatus().name())
-                    .passCount(singleRoom.getPassCount())
-                    .totalDays(singleRoom.getPeriod().getTotalDays())
-                    .startDate(singleRoom.getPeriod().getStartDate())
-                    .endDate(singleRoom.getPeriod().getEndDate())
-                    .build();
-            roomList.add(roomResponseDto);
-        }
+        checkLogin(memberAdapter.getMember());
 
+        List<SingleRoom> singleRooms = roomService.findSingleRooms(memberAdapter.getMember());
         List<GroupRoom> groupRooms = roomService.findGroupRooms(memberAdapter.getMember());
-        for (GroupRoom groupRoom : groupRooms) {
-            RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .roomNumber(groupRoom.getNumber())
-                    .name(groupRoom.getName())
-                    .category(groupRoom.getCategory().name())
-                    .reward(groupRoom.getReward())
-                    .type(groupRoom.getType().name())
-                    .status(groupRoom.getStatus().name())
-                    .passCount(groupRoom.getPassCount())
-                    .totalDays(groupRoom.getPeriod().getTotalDays())
-                    .startDate(groupRoom.getPeriod().getStartDate())
-                    .endDate(groupRoom.getPeriod().getEndDate())
-                    .build();
-            roomList.add(roomResponseDto);
-        }
-        
-        return ResponseEntity.status(HttpStatus.OK).body(roomList);
+        return getResponseEntity(singleRooms, groupRooms);
     }
 
     //챌린지 상세
@@ -76,8 +50,9 @@ public class RoomController {
     public ResponseEntity<?> detail(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                     @PathVariable("challengeId") Long roomNumber) {
 
-        Optional<Room> findRoom = roomRepository.findById(roomNumber);
-        Room room = findRoom.orElseThrow(() -> new NoSuchElementException("해당 챌린지가 없습니다"));
+        checkLogin(memberAdapter.getMember());
+        Room room = roomRepository.findById(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 챌린지가 없습니다"));
 
         RoomResponseDto roomDetail = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -100,21 +75,24 @@ public class RoomController {
     public ResponseEntity<?> stamp(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                    @RequestBody StampDto dto) {
 
-        Stamp stamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
-        StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay1(), stamp.getDay2(), stamp.getDay3(), stamp.getDay4(), stamp.getDay5(), stamp.getDay6(), stamp.getDay7(), stamp.getDay8(), stamp.getDay9(), stamp.getDay10(),
-                                                            stamp.getDay11(), stamp.getDay12(), stamp.getDay13(), stamp.getDay14(), stamp.getDay15(), stamp.getDay16(), stamp.getDay17(), stamp.getDay18(), stamp.getDay19(), stamp.getDay20(),
-                                                            stamp.getDay21(), stamp.getDay22(), stamp.getDay23(), stamp.getDay24(), stamp.getDay25(), stamp.getDay26(), stamp.getDay27(), stamp.getDay28(), stamp.getDay29(), stamp.getDay30());
+        checkLogin(memberAdapter.getMember());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedStamp);
+        Stamp stamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
+        StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay());
+
+        URI location = URI.create("/challenge/" + stamp.getNumber());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).location(location).body(updatedStamp);
     }
 
     //개인 챌린지 생성
-    @PostMapping("/challenge/create")
+    @PostMapping("/challenge")
     public ResponseEntity<?> singleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                         @RequestBody RoomRequestDto dto) {
 
-        Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
+        checkLogin(memberAdapter.getMember());
 
+        Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
         RoomResponseDto savedRoom = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
                 .name(room.getName())
@@ -128,15 +106,19 @@ public class RoomController {
                 .startDate(room.getPeriod().getStartDate())
                 .endDate(room.getPeriod().getEndDate())
                 .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+
+        URI location = URI.create("/challenge/" + room.getNumber());
+        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
     }
 
     //그룹 챌린지 생성
-    @PostMapping("/challenge/createGroup")
+    @PostMapping("/challenge/group")
     public ResponseEntity<?> groupRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                        @RequestBody GroupRoomRequestDto dto) {
 
-        Room room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
+        checkLogin(memberAdapter.getMember());
+
+        GroupRoom room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
 
         GroupRoomResponseDto savedRoom = GroupRoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -146,13 +128,16 @@ public class RoomController {
                 .type(room.getType().name())
                 .status(room.getStatus().name())
                 .passCount(room.getPassCount())
-                .stamp(room.getStamp().getNumber())
                 .totalDays(room.getPeriod().getTotalDays())
                 .startDate(room.getPeriod().getStartDate())
                 .endDate(room.getPeriod().getEndDate())
                 .groupMembers(dto.getGroupMembers())
+                .memberStamps(room.getStamps())
                 .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+
+        Long challengeId = room.getNumber();
+        URI location = URI.create("/challenge/" + challengeId);
+        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
     }
 
     //챌린지 삭제&실패
@@ -160,15 +145,16 @@ public class RoomController {
     public ResponseEntity<?> delete(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                     @PathVariable("challengeId") Long roomNumber) {
 
+        checkLogin(memberAdapter.getMember());
+
         roomService.deleteRoom(memberAdapter.getMember(), roomNumber);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     //완료 챌린지 상태 변경
-    @PostMapping("/challenge/{challengeId}/success")
-    public ResponseEntity<?> end(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                 @PathVariable("challengeId") Long roomNumber) {
+    @PostMapping("/challenge/{challengeId}")
+    public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
 
         roomService.changeStatus(roomNumber);
 
@@ -176,31 +162,25 @@ public class RoomController {
     }
 
     //마이페이지 - 완료 챌린지 조회
-    @GetMapping("/user/finishedChallenges")
+    @GetMapping("/user/challenges")
     public ResponseEntity<?> finishedRooms(@AuthenticationPrincipal MemberAdapter memberAdapter) {
 
-        List<RoomResponseDto> finishedRooms = new ArrayList<>();
+        checkLogin(memberAdapter.getMember());
 
         List<SingleRoom> findSingleRooms = roomService.findFinishedSingleRooms(memberAdapter.getMember());
-        for (Room room : findSingleRooms) {
-            RoomResponseDto finishedRoom = RoomResponseDto.builder()
-                    .roomNumber(room.getNumber())
-                    .name(room.getName())
-                    .category(room.getCategory().name())
-                    .reward(room.getReward())
-                    .type(room.getType().name())
-                    .status(room.getStatus().name())
-                    .passCount(room.getPassCount())
-                    .totalDays(room.getPeriod().getTotalDays())
-                    .startDate(room.getPeriod().getStartDate())
-                    .endDate(room.getPeriod().getEndDate())
-                    .build();
-            finishedRooms.add(finishedRoom);
-        }
-
         List<GroupRoom> findGroupRooms = roomService.findFinishedGroupRooms(memberAdapter.getMember());
-        for (Room room : findGroupRooms) {
-            RoomResponseDto finishedRoom = RoomResponseDto.builder()
+        return getResponseEntity(findSingleRooms, findGroupRooms);
+    }
+
+
+    //개인, 그룹 챌린지 dto 변환
+    private ResponseEntity<?> getResponseEntity(List<SingleRoom> singleRooms, List<GroupRoom> groupRooms) {
+
+        List<Room> rooms = Stream.concat(singleRooms.stream(), groupRooms.stream()).collect(Collectors.toList());
+
+        List<RoomResponseDto> roomList = new ArrayList<>();
+        for (Room room : rooms) {
+            RoomResponseDto roomResponseDto = RoomResponseDto.builder()
                     .roomNumber(room.getNumber())
                     .name(room.getName())
                     .category(room.getCategory().name())
@@ -212,10 +192,17 @@ public class RoomController {
                     .startDate(room.getPeriod().getStartDate())
                     .endDate(room.getPeriod().getEndDate())
                     .build();
-            finishedRooms.add(finishedRoom);
+            roomList.add(roomResponseDto);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(finishedRooms);
+        return ResponseEntity.status(HttpStatus.OK).body(roomList);
+    }
+
+    //로그인 검증
+    private void checkLogin(Member member) {
+        if (member == null) {
+            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
+        }
     }
 
 }
