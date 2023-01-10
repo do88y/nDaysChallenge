@@ -1,7 +1,10 @@
 package challenge.nDaysChallenge.controller;
+import challenge.nDaysChallenge.domain.Relationship;
+import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
+import challenge.nDaysChallenge.dto.request.relationship.AcceptRequestDTO;
 import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
@@ -28,9 +31,9 @@ public class RelationshipController {
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
     public ResponseEntity<?> findFriends(@RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
-
-
+        String id;
         String nickname;
+
         try {
             nickname = findFriendsRequestDTO.getNickname();
 
@@ -38,15 +41,15 @@ public class RelationshipController {
             throw new NoSuchElementException("닉네임을 입력하지 않았습니다.");
         }
 
-        String id;
         try {
-            id = findFriendsRequestDTO.getId();
+           id = findFriendsRequestDTO.getId();
+
         } catch (Exception e) {
             throw new NoSuchElementException("아이디를 입력하지않았습니다.");
         }
 
-
         Member member = relationshipService.findFriends(id, nickname);
+
         FindFriendsResponseDTO foundFriend = new FindFriendsResponseDTO(
                 member.getId(),
                 member.getNickname());
@@ -60,40 +63,31 @@ public class RelationshipController {
     public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                @RequestBody ApplyRequestDTO applyDTO) {
         //서비스에 넘겨주기//
-        relationshipService.saveRelationship(memberAdapter.getMember(),applyDTO);
+        Member saveFriend = relationshipService.saveRelationship(memberAdapter.getMember(), applyDTO);
 
         RequestResponseDTO savedRequestFriendsList = RequestResponseDTO.builder()
-                .id(applyDTO.getId())
-                .nickname(applyDTO.getNickname())
-                .image(applyDTO.getImage())
+                .id(saveFriend.getId())
+                .nickname(saveFriend.getNickname())
+                .image(saveFriend.getImage())
                 .requestDate(LocalDateTime.now())
-                .relationshipStatus(applyDTO.getRelationshipStatus())
+                .relationshipStatus(RelationshipStatus.REQUEST.name())
                 .build();
 
         return ResponseEntity.ok().body(savedRequestFriendsList);
 
     }
 
-    //친구 수락 //
+    //친구 수락==친구목록 //
     @PostMapping("/friends/accept")
     public ResponseEntity<?> acceptFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                 @RequestBody ApplyRequestDTO applyDTO) {
 
-        AcceptResponseDTO acceptRelationship = relationshipService.acceptRelationship(memberAdapter.getMember(), applyDTO);
+        List<AcceptResponseDTO> acceptRelationship = relationshipService.acceptRelationship(memberAdapter.getMember(), applyDTO);
 
         return ResponseEntity.ok().body(acceptRelationship);
 
     }
 
-
-    //친구 리스트//
-//    @PostMapping("/friends/list")
-//    public ResponseEntity<?> viewFriendList(@AuthenticationPrincipal MemberAdapter memberAdapter,
-//                                                                   @RequestBody AcceptRequestDTO requestDTO){
-//
-//        AcceptResponseDTO friendList = relationshipService.viewFriends(memberAdapter.getMember(),requestDTO);
-//        return ResponseEntity.ok().body(friendList);
-//    }
 
 
     //요청거절 relationship 객채 삭제//

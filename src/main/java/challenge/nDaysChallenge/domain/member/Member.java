@@ -69,6 +69,7 @@ public class Member {
         this.confirmedFriendsList.add(member);
     }
 
+
     public void addSingleRooms (SingleRoom singleRoom){
         this.singleRooms.add(singleRoom);
     }

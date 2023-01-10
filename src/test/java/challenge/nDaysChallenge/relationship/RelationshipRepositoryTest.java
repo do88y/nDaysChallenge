@@ -1,6 +1,8 @@
 //package challenge.nDaysChallenge.relationship;
 //
 //import challenge.nDaysChallenge.domain.*;
+//import challenge.nDaysChallenge.domain.member.Authority;
+//import challenge.nDaysChallenge.domain.member.Member;
 //import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
 //import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 //import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
