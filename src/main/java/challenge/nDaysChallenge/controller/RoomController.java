@@ -75,9 +75,7 @@ public class RoomController {
         checkLogin(memberAdapter.getMember());
 
         Stamp stamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
-        StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay1(), stamp.getDay2(), stamp.getDay3(), stamp.getDay4(), stamp.getDay5(), stamp.getDay6(), stamp.getDay7(), stamp.getDay8(), stamp.getDay9(), stamp.getDay10(),
-                                                            stamp.getDay11(), stamp.getDay12(), stamp.getDay13(), stamp.getDay14(), stamp.getDay15(), stamp.getDay16(), stamp.getDay17(), stamp.getDay18(), stamp.getDay19(), stamp.getDay20(),
-                                                            stamp.getDay21(), stamp.getDay22(), stamp.getDay23(), stamp.getDay24(), stamp.getDay25(), stamp.getDay26(), stamp.getDay27(), stamp.getDay28(), stamp.getDay29(), stamp.getDay30());
+        StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay());
 
         URI location = URI.create("/challenge/" + stamp.getNumber());
 

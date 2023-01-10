@@ -123,9 +123,7 @@ public class RoomService {
         Room room = roomRepository.findById(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
-        Stamp updateStamp = stamp.updateStamp(room, dto.getDay1(), dto.getDay2(), dto.getDay3(), dto.getDay4(), dto.getDay5(), dto.getDay6(), dto.getDay7(), dto.getDay8(), dto.getDay9(), dto.getDay10(),
-                dto.getDay11(), dto.getDay12(), dto.getDay13(), dto.getDay14(), dto.getDay15(), dto.getDay16(), dto.getDay17(), dto.getDay18(), dto.getDay19(), dto.getDay20(),
-                dto.getDay21(), dto.getDay22(), dto.getDay23(), dto.getDay24(), dto.getDay25(), dto.getDay26(), dto.getDay27(), dto.getDay28(), dto.getDay29(), dto.getDay30());
+        Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
         stampRepository.save(updateStamp);
 
