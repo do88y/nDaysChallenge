@@ -3,8 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
-import challenge.nDaysChallenge.dto.request.relationship.AcceptRequestDTO;
-import challenge.nDaysChallenge.dto.request.relationship.ApplyRequestDTO;
+import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
@@ -29,7 +28,7 @@ public class RelationshipService {
 
     //relationship 생성//
     @Transactional
-    public Member saveRelationship(Member user, ApplyRequestDTO dto) {
+    public Member saveRelationship(Member user, RelationshipRequestDTO dto) {
 
         Optional<Member> findFriend = memberRepository.findById(dto.getId());
         Member friend = findFriend.orElseThrow(() -> new NoSuchElementException("해당 멤버가 존재하지않습니다."));
@@ -46,7 +45,7 @@ public class RelationshipService {
 
     @Transactional
     //수락 버튼을 눌렀을 때 시행되는 메서드//
-    public List<AcceptResponseDTO> acceptRelationship(Member user, ApplyRequestDTO applyDTO) {
+    public List<AcceptResponseDTO> acceptRelationship(Member user, RelationshipRequestDTO applyDTO) {
         Optional<Member> getFriendId = memberRepository.findById(applyDTO.getId());
         Member friend = getFriendId.orElseThrow(() -> new NoSuchElementException("해당 멤버가 없습니다."));
 
@@ -81,7 +80,7 @@ public class RelationshipService {
 
     //친구 요청 거절//
     @Transactional
-    public List<AcceptResponseDTO> deleteEachRelation(Member user, ApplyRequestDTO dto) {
+    public List<AcceptResponseDTO> deleteEachRelation(Member user, RelationshipRequestDTO dto) {
         Optional<Member> findId = memberRepository.findById(dto.getId());
         Member friend = findId.orElseThrow(() -> new NoSuchElementException("해당 id가 없습니다."));
 

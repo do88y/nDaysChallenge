@@ -1,13 +1,11 @@
 package challenge.nDaysChallenge.dto.response.relationship;
 
-import challenge.nDaysChallenge.dto.request.relationship.AcceptRequestDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,8 +18,8 @@ public class AcceptResponseDTO {
 
     private String relationshipStatus;
 
-    @DateTimeFormat(pattern = "yyyy.mm.dd HH:mm:ss")
-    private LocalDateTime acceptedDate;    //요청수락날짜시간
+    @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+    private LocalDateTime acceptedDate;    //수락날짜시간
 
 
 
