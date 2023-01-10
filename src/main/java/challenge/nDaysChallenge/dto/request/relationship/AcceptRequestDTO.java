@@ -13,11 +13,6 @@ import java.util.List;
 public class AcceptRequestDTO {
 
     private String  id;                   //친구아이디
-    private String nickname;       //친구 닉네임
-
-    private int image;                  //친구 프로필사진
-
-    private String relationshipStatus;
 
 
     @DateTimeFormat(pattern = "yyyy.mm.dd HH:mm:ss")
@@ -29,12 +24,11 @@ public class AcceptRequestDTO {
 
 
     @Builder
-    public AcceptRequestDTO(String id, String nickname, int image, String relationshipStatus, LocalDateTime acceptedDate, List<String >friendsList){
+    public AcceptRequestDTO( LocalDateTime acceptedDate, List<String >friendsList){
         this.id=id;
-        this.nickname=nickname;
-        this.image=image;
-        this.relationshipStatus=relationshipStatus;
         this.acceptedDate=acceptedDate;
-        this.friendsList=friendsList;
+        for (String friend: friendsList) {
+            this.friendsList.add(friend);
+        }
     }
 }
