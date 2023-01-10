@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class RequestResponseDTO {
+public class AskResponseDTO {
     private String id;                   //친구아이디
     private String nickname;     //친구 닉네임
 
@@ -18,7 +18,7 @@ public class RequestResponseDTO {
 
 
     @JsonFormat(pattern ="yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime requestDate;     //수락날짜시간
+    private LocalDateTime requestDate;     //요청날짜시간
 
     //view에 넘겨야하는건 string이어야 하니까 dto에서는 string으로
     private String relationshipStatus;
@@ -26,7 +26,7 @@ public class RequestResponseDTO {
 
 
     @Builder
-    public RequestResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus){
+    public AskResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus){
         this.id=id;
         this.nickname=nickname;
         this.image=image;
