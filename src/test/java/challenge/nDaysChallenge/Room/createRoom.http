@@ -1,0 +1,44 @@
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "id": "aaaa@naver.com",
+  "pw": "1234"
+}
+
+###
+POST http://localhost:8080/challenge/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI
+
+{
+  "name": "테스트",
+  "category": "MINDFULNESS",
+  "reward": "삭제",
+  "passCount": 10,
+  "startDate": "2022-12-30",
+  "totalDays": 10,
+  "type": "SINGLE",
+  "successCount": 0,
+  "usedPassCount" : 0
+}
+
+### 진행 챌린지
+GET http://localhost:8080/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+
+### 완료 챌린지
+GET http://localhost:8080/user/finishedChallenges
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+
+### 챌린지 삭제
+DELETE http://localhost:8080/challenge/58
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMTEzOTk2fQ.h0-teapwK_5YWnNiq22KboNTrXMRxIm8g8jSBzA-Drs
+
+### 챌린지 상태 변경
+POST http://localhost:8080/challenge/44/success
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4

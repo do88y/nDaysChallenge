@@ -1,0 +1,9 @@
+# Request
+POST http://localhost:8080/auth/reissue
+Authorization: Bearer
+Content-Type: application/json
+
+{
+  "accessToken": "",
+  "refreshToken": ""
+}
