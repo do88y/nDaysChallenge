@@ -79,7 +79,7 @@ public class RoomController {
 
         URI location = URI.create("/challenge/" + stamp.getNumber());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).location(location).body(updatedStamp);
+        return ResponseEntity.status(HttpStatus.OK).location(location).body(updatedStamp);
     }
 
     //개인 챌린지 생성
