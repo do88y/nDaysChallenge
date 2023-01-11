@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dajim;
+package challenge.nDaysChallenge.emotion;
 
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
@@ -63,7 +63,6 @@ public class EmotionRepositoryTest {
                 .pw("12345")
                 .nickname("nickname")
                 .image(1)
-                .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
 

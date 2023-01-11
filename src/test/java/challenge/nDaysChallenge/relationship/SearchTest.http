@@ -1,0 +1,7 @@
+GET http://localhost:8080/friends/find
+Content-Type: application/json
+Authorization: Bearer
+
+{
+"nickname":"내루미"
+}
