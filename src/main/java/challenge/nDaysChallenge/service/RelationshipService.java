@@ -119,7 +119,7 @@ public class RelationshipService {
 //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
         if ((id == null)) {
-            return memberRepository.findByNickname(nickname)
+            return  memberRepository.findByNickname(nickname)
                     .orElseThrow(() -> new RuntimeException("해당 닉네임이 검색되지 않습니다."));
         }
 

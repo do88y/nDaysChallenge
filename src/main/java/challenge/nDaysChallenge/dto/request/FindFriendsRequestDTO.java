@@ -12,5 +12,7 @@ public class FindFriendsRequestDTO {
 
     private String nickname;
 
+    private int image;
+
 
 }
