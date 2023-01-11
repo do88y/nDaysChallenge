@@ -12,4 +12,5 @@ public interface StampRepository extends JpaRepository<Stamp, Long> {
 
     @Query("select s from Stamp s where s.room = :room")
     public Stamp findByRoom(@Param("room") Room room);
+
 }

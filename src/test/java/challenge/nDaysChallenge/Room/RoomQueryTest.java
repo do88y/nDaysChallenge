@@ -40,7 +40,7 @@ public class RoomQueryTest {
     RoomService roomService;
 
 
-    Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
+    Member member = new Member("user@naver.com", "12345", "nick", 1, Authority.ROLE_USER);
 
 
     @Test

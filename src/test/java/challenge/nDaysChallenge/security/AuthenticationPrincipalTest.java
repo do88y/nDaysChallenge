@@ -40,7 +40,7 @@ public class AuthenticationPrincipalTest {
 
     @BeforeTransaction
     public void 회원가입(){
-        MemberRequestDto memberRequestDto = new MemberRequestDto("vvv@naver.com","123","aaa",1,2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("vvv@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
     }
@@ -53,26 +53,26 @@ public class AuthenticationPrincipalTest {
                 .build();
     }
 
-/*
-    @Test
-    @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "vvv@naver.com")
-    public void 회원정보_수정() throws Exception {
 
-        Optional<Member> member = memberRepository.findById("vvv@naver.com");
-        Member member1 = member.get();
+//    @Test
+//    @org.springframework.security.test.context.support.WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "vvv@naver.com")
+//    public void 회원정보_수정() throws Exception {
+//
+//        Optional<Member> member = memberRepository.findById("vvv@naver.com");
+//        Member member1 = member.get();
+//
+//        MemberEditRequestDto memberEditRequestDto = new MemberEditRequestDto("2222", "aaa", 2);
+//
+//        ResultActions result = mockMvc.perform(put("/user/edit")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .characterEncoding("UTF-8")
+//                .principal(new UsernamePasswordAuthenticationToken(member1, null, Collections.singleton(Authority.ROLE_USER)))
+//                .content((objectMapper.writeValueAsString(memberEditRequestDto)))
+//        );
+//
+//        result.andExpect(status().isOk());
+//
+//    }
 
-        MemberEditRequestDto memberEditRequestDto = new MemberEditRequestDto("2222", "aaa", 2);
-
-        ResultActions result = mockMvc.perform(put("/user/edit")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(member1, null, Collections.singleton(Authority.ROLE_USER)))
-                .content((objectMapper.writeValueAsString(memberEditRequestDto)))
-        );
-
-        result.andExpect(status().isOk());
-
-    }
-*/
 
 }

@@ -151,11 +151,13 @@ public class RoomService {
             roomRepository.delete(room);
 
         } else if (room.getType() == RoomType.GROUP) {
-            //RoomMember 삭제 - room 같이 삭제 됨
+            //RoomMember 삭제
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             for (RoomMember roomMember : roomMembers) {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
+            //그룹 챌린지 삭제
+            roomRepository.delete(room);
         }
     }
 

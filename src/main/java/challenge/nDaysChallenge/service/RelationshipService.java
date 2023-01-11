@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
@@ -118,12 +119,12 @@ public class RelationshipService {
 
 //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
-        if ((id == null)) {
-            return  memberRepository.findByNickname(nickname)
+        if (id == null || id.equals("") || id.equals("null")) {
+            return memberRepository.findByNickname(nickname)
                     .orElseThrow(() -> new RuntimeException("해당 닉네임이 검색되지 않습니다."));
         }
 
-        if ((nickname == null)) {
+        if (nickname == null || id.equals("")|| id.equals("null")) {
             return memberRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("해당 아이디가 검색되지 않습니다."));
         }
