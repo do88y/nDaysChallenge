@@ -47,7 +47,8 @@ public class RelationshipController {
 
         FindFriendsResponseDTO foundFriend = new FindFriendsResponseDTO(
                 member.getId(),
-                member.getNickname());
+                member.getNickname(),
+                member.getImage());
 
         return ResponseEntity.ok().body(foundFriend);
     }
