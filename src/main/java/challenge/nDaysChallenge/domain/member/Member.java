@@ -32,8 +32,6 @@ public class Member {
 
     private int image;
 
-    private int roomLimit;  //챌린지 5개 제한
-
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
@@ -48,12 +46,11 @@ public class Member {
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
     @Builder
-    public Member(String id, String pw ,String nickname, int image, int roomLimit, Authority authority) {
+    public Member(String id, String pw ,String nickname, int image, Authority authority) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
         this.image = image;
-        this.roomLimit=roomLimit;
         this.authority = authority;
     }
 

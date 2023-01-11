@@ -40,7 +40,7 @@ public class AuthenticationPrincipalTest {
 
     @BeforeTransaction
     public void 회원가입(){
-        MemberRequestDto memberRequestDto = new MemberRequestDto("vvv@naver.com","123","aaa",1,2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("vvv@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
     }

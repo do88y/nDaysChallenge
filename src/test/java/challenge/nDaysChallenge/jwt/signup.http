@@ -3,9 +3,8 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "abc123@gmail.com",
+  "id": "abc1234567@gmail.com",
   "pw": "123",
-  "nickname": "모아나",
-  "image": 3,
-  "roomLimit":3
+  "nickname": "aaaaaaaa",
+  "image": 3
 }

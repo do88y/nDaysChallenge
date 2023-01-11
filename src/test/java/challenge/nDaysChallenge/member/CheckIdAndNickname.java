@@ -34,7 +34,7 @@ public class CheckIdAndNickname {
     @Transactional
     public void 회원가입(){
         //given
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1,2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
         given(memberRepository.save(any())).willReturn(member);
     }

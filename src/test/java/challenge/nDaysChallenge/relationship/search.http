@@ -1,0 +1,7 @@
+GET http://localhost:8080/friends/find
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZEBuYXZlci5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3MzM2MjU2Mn0.mzs-WzV265uP4FyTKnbbO9y48CzKR3cXvJ9pKYQ-tTM
+
+{
+"nickname":"내루미"
+}

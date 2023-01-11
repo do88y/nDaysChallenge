@@ -63,7 +63,6 @@ public class EmotionRepositoryTest {
                 .pw("12345")
                 .nickname("nickname")
                 .image(1)
-                .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
 
