@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.dajim;
+package challenge.nDaysChallenge.emotion;
 
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
