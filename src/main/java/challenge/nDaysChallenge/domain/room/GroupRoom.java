@@ -1,6 +1,5 @@
 package challenge.nDaysChallenge.domain.room;
 
-
 import challenge.nDaysChallenge.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +27,6 @@ public class GroupRoom extends Room {
     @CollectionTable(joinColumns = @JoinColumn(name = "room_number"))
     @Column(name = "stamp_number")
     private Map<String, Long> stamps = new HashMap<>();
-
 
     //==생성자==//
     public GroupRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
