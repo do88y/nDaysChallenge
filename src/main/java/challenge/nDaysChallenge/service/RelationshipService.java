@@ -6,6 +6,7 @@ import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class RelationshipService {
 
     //relationship 생성//
     @Transactional
-    public Member saveRelationship(Member user, RelationshipRequestDTO dto) {
+    public  List<AskResponseDTO> saveRelationship(Member user, RelationshipRequestDTO dto) {
 
         Optional<Member> findFriend = memberRepository.findById(dto.getId());
         Member friend = findFriend.orElseThrow(() -> new NoSuchElementException("해당 멤버가 존재하지않습니다."));
@@ -39,9 +40,26 @@ public class RelationshipService {
         relationshipRepository.save(userRelationship);
         relationshipRepository.save(friendRelationship);
 
-        return friend;
+        //내 요청 리스트(내가 받은 요청 리스트) 보기//
+        List<Relationship> viewRequestList = relationshipRepository.findRelationshipByFriendAndStatus(user);
+        List<AskResponseDTO> askResponseDTOList = new ArrayList<>();
 
-    }
+        for (Relationship askRelation : viewRequestList) {
+            AskResponseDTO askResponseDTO = AskResponseDTO.builder()
+                    .id(askRelation.getFriend().getId())
+                    .nickname(askRelation.getFriend().getNickname())
+                    .image(askRelation.getFriend().getImage())
+                    .requestDate(LocalDateTime.now())
+                    .build();
+
+                    askResponseDTOList.add(askResponseDTO);
+        }
+            return askResponseDTOList;
+        }
+
+
+
+
 
 
     @Transactional

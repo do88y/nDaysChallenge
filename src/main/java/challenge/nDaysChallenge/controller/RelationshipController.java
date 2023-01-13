@@ -57,15 +57,9 @@ public class RelationshipController {
     public ResponseEntity<?> viewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                @RequestBody RelationshipRequestDTO applyDTO) {
         //서비스에 넘겨주기//
-        Member saveFriend = relationshipService.saveRelationship(memberAdapter.getMember(), applyDTO);
+//        Member saveFriend = relationshipService.saveRelationship(memberAdapter.getMember(), applyDTO);
 
-        AskResponseDTO savedRequestFriendsList = AskResponseDTO.builder()
-                .id(saveFriend.getId())
-                .nickname(saveFriend.getNickname())
-                .image(saveFriend.getImage())
-                .requestDate(LocalDateTime.now())
-                .relationshipStatus(RelationshipStatus.REQUEST.name())
-                .build();
+        List<AskResponseDTO> savedRequestFriendsList = relationshipService.saveRelationship(memberAdapter.getMember(),applyDTO);
 
         return ResponseEntity.ok().body(savedRequestFriendsList);
 

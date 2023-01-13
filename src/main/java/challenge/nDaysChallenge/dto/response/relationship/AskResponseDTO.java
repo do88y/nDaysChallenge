@@ -20,18 +20,14 @@ public class AskResponseDTO {
     @JsonFormat(pattern ="yyyy-mm-dd HH:mm:ss")
     private LocalDateTime requestDate;     //요청날짜시간
 
-    //view에 넘겨야하는건 string이어야 하니까 dto에서는 string으로
-    private String relationshipStatus;
-    public List<String> friendsList;
 
 
     @Builder
-    public AskResponseDTO(String id, String nickname, int image, LocalDateTime requestDate, String relationshipStatus){
+    public AskResponseDTO(String id, String nickname, int image, LocalDateTime requestDate){
         this.id=id;
         this.nickname=nickname;
         this.image=image;
         this.requestDate=requestDate;
-        this.relationshipStatus=relationshipStatus;
     }
 
 }
