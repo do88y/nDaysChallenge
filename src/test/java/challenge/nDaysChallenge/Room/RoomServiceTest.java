@@ -273,7 +273,7 @@ public class RoomServiceTest {
 
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
-//        assertThat(updateStamp.getDay()).isEqualTo(1);
+        assertThat(updateStamp.getDay()).isEqualTo("0");
     }
 
     @Test

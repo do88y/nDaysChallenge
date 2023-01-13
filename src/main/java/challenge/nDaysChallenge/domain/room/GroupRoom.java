@@ -1,6 +1,5 @@
 package challenge.nDaysChallenge.domain.room;
 
-
 import challenge.nDaysChallenge.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
