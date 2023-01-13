@@ -23,6 +23,7 @@ public class GroupRoom extends Room {
 
     @OneToMany(mappedBy = "room")
     private List<RoomMember> roomMemberList = new ArrayList<>();
+
     @ElementCollection
     @CollectionTable(joinColumns = @JoinColumn(name = "room_number"))
     @Column(name = "stamp_number")
