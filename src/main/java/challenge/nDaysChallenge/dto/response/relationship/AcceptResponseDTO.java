@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,6 +19,8 @@ public class AcceptResponseDTO {
 
     private String relationshipStatus;
 
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     private LocalDateTime acceptedDate;
 
 
