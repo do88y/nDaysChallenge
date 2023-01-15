@@ -19,12 +19,12 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Long
     Relationship findByUserAndFriend(Member user, Member friend);
 
 
-    //요청시 시행되는 쿼리//
+    //친구 요청시 시행되는 쿼리//
     @Query("select r from Relationship r where r.user=:user and r.status='REQUEST'")
     public List<Relationship>findRelationshipByFriendAndStatus(@Param("user")Member friend);
 
 
-    //수락시 시행되는 쿼리//
+    //친구 수락시 시행되는 쿼리//
     @Query("select r from Relationship r where r.user=:user and r.status='ACCEPT'")
     public List<Relationship> findRelationshipByUserAndStatus(@Param("user")Member member);
 

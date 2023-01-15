@@ -42,6 +42,13 @@ public class RelationshipService {
 
         //내 요청 리스트(내가 받은 요청 리스트) 보기//
         List<Relationship> viewRequestList = relationshipRepository.findRelationshipByFriendAndStatus(user);
+        List<AskResponseDTO> askResponseDTOList = createResponseDTO(viewRequestList);
+        return askResponseDTOList;
+    }
+
+
+    //request response 따로 메서드로 만듦//
+    public static List<AskResponseDTO> createResponseDTO(List<Relationship> viewRequestList) {
         List<AskResponseDTO> askResponseDTOList = new ArrayList<>();
 
         for (Relationship askRelation : viewRequestList) {
@@ -54,12 +61,8 @@ public class RelationshipService {
 
                     askResponseDTOList.add(askResponseDTO);
         }
-            return askResponseDTOList;
-        }
-
-
-
-
+        return askResponseDTOList;
+    }
 
 
     @Transactional
@@ -85,8 +88,8 @@ public class RelationshipService {
                     .id(friendInfo.getId())
                     .nickname(friendInfo.getNickname())
                     .image(friendInfo.getImage())
-                    .acceptedDate(LocalDateTime.now())
                     .relationshipStatus(relationship.getStatus().name())
+                    .acceptedDate(relationship.getAcceptedDate())
                     .build();
 
                     acceptResponseDTOList.add(acceptFollowerDTO);
@@ -103,19 +106,18 @@ public class RelationshipService {
         Optional<Member> findId = memberRepository.findById(dto.getId());
         Member friend = findId.orElseThrow(() -> new NoSuchElementException("해당 id가 없습니다."));
 
-        //거절을 눌렀을 때 시행되는 메서드//
+        //엔티티 찾기//
         Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);
         Relationship findFriend = relationshipRepository.findByUserAndFriend(friend, user);
-        //서로를 찾기//
+        //서로를 찾아 지움//
         relationshipRepository.delete(findUser);
         relationshipRepository.delete(findFriend);
 
-        //user의 현재 친구리스트(수락) 찾기//
+
+        //user 의 현재 친구리스트(수락한 친구들) 갱신/조회//
         List<Relationship> friendList = relationshipRepository.findRelationshipByUserAndStatus(user);
         List<AcceptResponseDTO> friendList2 = new ArrayList<>();
 
-
-        //친구 리스트 안에 있는 넘버로 멤버 리포지토리의 친구 id 발굴//
         for (Relationship relationship : friendList) {
             Member member = memberRepository.findByNumber(relationship.getFriend().getNumber()).orElseThrow(
                     () -> new NoSuchElementException("해당 회원이 없습니다.")
@@ -124,7 +126,7 @@ public class RelationshipService {
                     .id(member.getId())
                     .nickname(member.getNickname())
                     .image(member.getImage())
-                    .relationshipStatus(RelationshipStatus.ACCEPT.name())
+                    .relationshipStatus(relationship.getStatus().name())
                     .build();
 
             friendList2.add(friendInfo);
