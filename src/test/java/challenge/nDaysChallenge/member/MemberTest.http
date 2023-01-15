@@ -1,0 +1,20 @@
+### 회원정보 조회
+GET http://localhost:8080/user/details
+Authorization: Bearer
+
+
+### 회원정보 수정
+PATCH http://localhost:8080/user/edit
+Content-Type: application/json
+Authorization: Bearer
+
+{
+  "pw": "",
+  "nickname": "",
+  "image": 1
+}
+
+
+### 회원 탈퇴
+DELETE http://localhost:8080/user/withdrawal
+Authorization: Bearer

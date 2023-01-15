@@ -32,7 +32,7 @@ public class ReportServiceTest {
     @Test
     public void 신고_생성() throws Exception {
         //given
-        Member member = new Member("user@naver.com","12345","userN",1,4, Authority.ROLE_USER);
+        Member member = new Member("user@naver.com","12345","userN",1,Authority.ROLE_USER);
         SingleRoom room = new SingleRoom("기상", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
         Dajim newDajim = Dajim.builder()
                 .room(room)

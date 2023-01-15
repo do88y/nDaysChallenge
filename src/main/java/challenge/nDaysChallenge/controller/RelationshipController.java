@@ -1,4 +1,5 @@
 package challenge.nDaysChallenge.controller;
+
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.domain.member.Member;
@@ -26,7 +27,6 @@ public class RelationshipController {
     private final RelationshipService relationshipService;
     private final RelationshipRepository relationshipRepository;
 
-
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
     public ResponseEntity<?> findFriends(@RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
@@ -35,14 +35,12 @@ public class RelationshipController {
 
         try {
             nickname = findFriendsRequestDTO.getNickname();
-
         } catch (Exception e) {
             throw new NoSuchElementException("닉네임을 입력하지 않았습니다.");
         }
 
         try {
            id = findFriendsRequestDTO.getId();
-
         } catch (Exception e) {
             throw new NoSuchElementException("아이디를 입력하지않았습니다.");
         }

@@ -31,7 +31,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -98,6 +98,9 @@ public class SecurityConfig {
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
         configuration.addAllowedOrigin("http://ndayschallenge.com"); ////
+        configuration.addAllowedOrigin("https://ndayschallenge.com");
+        configuration.addAllowedOrigin("http://api.ndayschallenge.com");
+        configuration.addAllowedOrigin("https://api.ndayschallenge.com");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");
