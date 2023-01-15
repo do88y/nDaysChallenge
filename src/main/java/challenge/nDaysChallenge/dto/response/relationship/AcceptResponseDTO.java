@@ -18,8 +18,7 @@ public class AcceptResponseDTO {
 
     private String relationshipStatus;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    private LocalDateTime acceptedDate;    //수락날짜시간
+    private LocalDateTime acceptedDate;
 
 
 

@@ -20,11 +20,11 @@ public  class Relationship {
     @Column(name = "relationship_number")
     private Long number;
 
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.ALL )
+    @ManyToOne(fetch = FetchType.LAZY )
 //    @JoinColumn(name = "user_number")
     private Member user;   //멤버 엔티티가 다 들어있음//
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @ManyToOne(fetch = FetchType.LAZY )
 //    @JoinColumn(name = "friend_number")
     private Member friend;
 
@@ -54,6 +54,7 @@ public  class Relationship {
     //상태 업뎃 메서드//
     public Relationship updateStatus(RelationshipStatus status) {
         this.status=status;
+        this.acceptedDate=LocalDateTime.now();
         return this;
     }
 
