@@ -88,24 +88,29 @@ public class RoomService {
         GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
         groupRoomRepository.save(newRoom);
 
-        //방장 - 스탬프, 룸멤버 생성
+        //방장
+        //스탬프 생성
         Stamp stamp = Stamp.createStamp(newRoom);
         stampRepository.save(stamp);
+        //룸멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
         roomMemberRepository.save(roomMember);
 
         Map<String, Long> stamps = newRoom.getStamps();
         stamps.put(member.getId(), stamp.getNumber());
 
-        //그 외 멤버 - 스탬프, 룸멤버 생성
+        //그 외 멤버
         for (Member fidnMember : memberList) {
+            Member member1 = memberRepository.findByNumber(fidnMember.getNumber()).get();
+            //스탬프 생성
             Stamp newStamp = Stamp.createStamp(newRoom);
             stampRepository.save(newStamp);
+            //룸멤버 생성
             RoomMember result = RoomMember.createRoomMember(fidnMember, newRoom, newStamp);
             roomMemberRepository.save(result);
 
-            RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(memberRepository.findByNumber(fidnMember.getNumber()).get(), newRoom);
-            stamps.put(findRoomMember.getMember().getId(), newStamp.getNumber());
+            RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(member1, newRoom);
+            stamps.put(findRoomMember.getMember().getNickname(), newStamp.getNumber());
         }
 
         return newRoom;
@@ -123,9 +128,8 @@ public class RoomService {
         Room room = roomRepository.findById(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
-        Stamp updateStamp = stamp.updateStamp(room, dto.getDay1(), dto.getDay2(), dto.getDay3(), dto.getDay4(), dto.getDay5(), dto.getDay6(), dto.getDay7(), dto.getDay8(), dto.getDay9(), dto.getDay10(),
-                dto.getDay11(), dto.getDay12(), dto.getDay13(), dto.getDay14(), dto.getDay15(), dto.getDay16(), dto.getDay17(), dto.getDay18(), dto.getDay19(), dto.getDay20(),
-                dto.getDay21(), dto.getDay22(), dto.getDay23(), dto.getDay24(), dto.getDay25(), dto.getDay26(), dto.getDay27(), dto.getDay28(), dto.getDay29(), dto.getDay30());
+        //스탬프 엔티티 업데이트
+        Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
         stampRepository.save(updateStamp);
 
@@ -147,11 +151,13 @@ public class RoomService {
             roomRepository.delete(room);
 
         } else if (room.getType() == RoomType.GROUP) {
-            //RoomMember 삭제 - room 같이 삭제 됨
+            //RoomMember 삭제
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             for (RoomMember roomMember : roomMembers) {
                 roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
             }
+            //그룹 챌린지 삭제
+            roomRepository.delete(room);
         }
     }
 

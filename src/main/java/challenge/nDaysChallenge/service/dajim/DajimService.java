@@ -69,7 +69,7 @@ public class DajimService {
     //다짐 수정 시 작성자/룸 체크
     private void checkRoomAndMember(Dajim dajim, Member member, Long roomNumber){
         if (dajim.getMember()!=member || dajim.getRoom().getNumber()!=roomNumber){
-            throw new RuntimeException("접근 권한이 없습니다.");
+            throw new RuntimeException("해당 챌린지 룸에 대한 접근 권한이 없습니다.");
         }
     }
 

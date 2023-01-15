@@ -31,9 +31,9 @@ public class RelationshipControllerTest {
         @Test
         public void 친구수락쿼리테스트() throws Exception{
               //given
-            Member user = new Member("abc@naver.com","123","나",1,2, Authority.ROLE_USER);
+            Member user = new Member("abc@naver.com","123","나",1,Authority.ROLE_USER);
             memberRepository.save(user);
-            Member friend = new Member("dbf@naver.com","123","친구1",3,2, Authority.ROLE_USER);
+            Member friend = new Member("dbf@naver.com","123","친구1",3,Authority.ROLE_USER);
             memberRepository.save(friend);
 
             List<Relationship> relationshipByUserAndStatus = relationshipRepository.findRelationshipByUserAndStatus(user);

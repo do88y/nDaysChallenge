@@ -1,0 +1,31 @@
+###회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "id": "abc1234567@gmail.com",
+  "pw": "123",
+  "nickname": "aaaaaaaa",
+  "image": 3
+}
+
+
+###로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "id": "id@naver.com",
+  "pw": "123"
+}
+
+
+###액세스 토큰 재발급
+POST http://localhost:8080/auth/reissue
+Authorization: Bearer
+Content-Type: application/json
+
+{
+  "accessToken": "",
+  "refreshToken": ""
+}

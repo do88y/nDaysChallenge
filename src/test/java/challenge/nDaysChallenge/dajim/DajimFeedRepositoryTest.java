@@ -64,7 +64,6 @@ public class DajimFeedRepositoryTest {
                 .pw("12345")
                 .nickname("userN")
                 .image(1)
-                .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
         Member member2 = Member.builder()
@@ -72,7 +71,6 @@ public class DajimFeedRepositoryTest {
                 .pw("12345")
                 .nickname("userN2")
                 .image(1)
-                .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
         Member member3 = Member.builder()
@@ -80,7 +78,6 @@ public class DajimFeedRepositoryTest {
                 .pw("12345")
                 .nickname("userN3")
                 .image(1)
-                .roomLimit(4)
                 .authority(Authority.ROLE_USER)
                 .build();
 
