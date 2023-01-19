@@ -23,7 +23,7 @@ public class Stamp {
     @OneToOne(fetch = FetchType.LAZY)
     public Room room;
     public String day;
-    public LocalDate lastDate;
+    public LocalDate latestDate;
 
 
     //==생성 메서드==//
@@ -31,7 +31,7 @@ public class Stamp {
         Stamp stamp = new Stamp();
         stamp.room = room;
         stamp.day = "";
-        stamp.lastDate = LocalDate.now().minusDays(1L);
+        stamp.latestDate = LocalDate.now().minusDays(1L);
         return stamp;
     }
 
@@ -40,9 +40,9 @@ public class Stamp {
     //스탬프 찍기
     public Stamp updateStamp(Room room, String day) {
 
-        if (!this.lastDate.isEqual(LocalDate.now())) {
+        if (!this.latestDate.isEqual(LocalDate.now())) {
             this.room = room;
-            this.lastDate = LocalDate.now();
+            this.latestDate = LocalDate.now();
 
             if (this.day.equals("")) {  //첫 날
                 this.day = day;
@@ -54,5 +54,15 @@ public class Stamp {
         }
 
         return this;
+    }
+
+    //마지막 스탬프
+    public String getLatestStamp() {
+
+        if (this.day.length() > 1) {
+            String[] stampArr = this.day.split(",");
+            return stampArr[stampArr.length-1];
+        }
+        return this.day;
     }
 }

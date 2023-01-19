@@ -51,6 +51,17 @@ public class Room {
 
 
     //==비즈니스 로직==//
+    //성공 +1
+    public void addSuccess() {
+        successCount += 1;
+    }
+
+    //실패 +1
+    public void addPass() {
+        passCount += 1;
+        usedPassCount += 1;
+    }
+
     //챌린지 상태 변경
     public void end() {
         this.status = RoomStatus.END;

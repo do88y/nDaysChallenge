@@ -131,7 +131,14 @@ public class RoomService {
         //스탬프 엔티티 업데이트
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
-        stampRepository.save(updateStamp);
+        //count 업데이트
+        if (stamp.getLatestStamp().equals("o")) {
+            room.addSuccess();
+        } else if (stamp.getLatestStamp().equals("x")) {
+            room.addPass();
+        } else {
+            throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
+        }
 
         return updateStamp;
     }
