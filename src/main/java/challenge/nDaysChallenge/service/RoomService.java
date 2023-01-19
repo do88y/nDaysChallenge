@@ -97,7 +97,7 @@ public class RoomService {
         roomMemberRepository.save(roomMember);
 
         Map<String, Long> stamps = newRoom.getStamps();
-        stamps.put(member.getId(), stamp.getNumber());
+        stamps.put(member.getNickname(), stamp.getNumber());
 
         //그 외 멤버
         for (Member fidnMember : memberList) {
@@ -125,13 +125,20 @@ public class RoomService {
         //엔티티 조회
         Stamp stamp = stampRepository.findById(dto.getStampNumber()).orElseThrow(
                 () -> new NoSuchElementException("해당 스탬프가 존재하지 않습니다."));
-        Room room = roomRepository.findById(roomNumber).orElseThrow(
+        Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         //스탬프 엔티티 업데이트
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
-        stampRepository.save(updateStamp);
+        //count 업데이트
+        if (stamp.getLatestStamp().equals("o")) {
+            room.addSuccess();
+        } else if (stamp.getLatestStamp().equals("x")) {
+            room.addPass();
+        } else {
+            throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
+        }
 
         return updateStamp;
     }
@@ -143,7 +150,7 @@ public class RoomService {
     public void deleteRoom(Member member, Long roomNumber) {
 
         //엔티티 조회
-        Room room = roomRepository.findById(roomNumber).orElseThrow(
+        Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         if (room.getType() == RoomType.SINGLE) {
@@ -206,7 +213,7 @@ public class RoomService {
      */
     @Transactional
     public void changeStatus(Long roomNumber) {
-        Room room = roomRepository.findById(roomNumber).orElseThrow(
+        Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 
         room.end();

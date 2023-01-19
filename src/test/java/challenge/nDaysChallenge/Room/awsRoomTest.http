@@ -1,27 +1,26 @@
-POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/auth/login
+POST http://44.227.75.151/auth/login
 Content-Type: application/json
 
 {
-  "id": "aaaa@naver.com",
-  "pw": "aaaa1234!"
+  "id": "wonsy1006@gmail.com",
+  "pw": "!Jinwoo4318"
 }
 
-###
-POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/create
+### 챌린지 생성
+POST http://44.227.75.151/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3ODI5fQ.JGQlP_g3rdUhrmwY3xpjfHbFU9Id0p4J6JeoYDlWYpc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzQxMTA2MDJ9.Wkdvi9sDF_9THEV_9xlOVcWwBNVJ2fihCYT49nPC0rI
 
 {
   "name": "명상",
   "category": "MINDFULNESS",
-  "reward": "여행",
+  "reward": "",
   "passCount": 10,
-  "startDate": "2022-12-01",
+  "startDate": "2023-01-11",
   "totalDays": 10,
   "type": "SINGLE",
   "successCount": 0,
-  "usedPassCount" : 0,
-  "memberNumber": 1
+  "usedPassCount" : 0
 }
 
 ###
