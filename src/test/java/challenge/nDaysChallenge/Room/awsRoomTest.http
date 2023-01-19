@@ -1,4 +1,4 @@
-POST http://44.227.75.151/auth/login
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ### 챌린지 생성
-POST http://44.227.75.151/challenge
+POST http://localhost:8080/challenge
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzQxMTA2MDJ9.Wkdvi9sDF_9THEV_9xlOVcWwBNVJ2fihCYT49nPC0rI
 

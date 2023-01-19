@@ -1,5 +1,5 @@
 ###회원가입
-POST http://44.227.75.151/auth/signup
+POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
