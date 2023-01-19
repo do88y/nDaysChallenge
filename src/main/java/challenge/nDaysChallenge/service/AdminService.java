@@ -32,7 +32,7 @@ public class AdminService {
         List<Long> numbers = dto.getNumbers();
 
         for (Long number : numbers) {
-            Optional<Room> findRoom = roomRepository.findById(number);
+            Optional<Room> findRoom = roomRepository.findByNumber(number);
             Room room = findRoom.orElseThrow(() -> new NoSuchElementException("챌린지가 존재하지 않습니다."));
             roomRepository.delete(room);
         }

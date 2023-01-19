@@ -57,7 +57,7 @@ public class RoomServiceTest {
         em.persist(room);
 
         //when
-        Room findRoom = roomRepository.findById(room.getNumber()).orElseThrow(() ->
+        Room findRoom = roomRepository.findByNumber(room.getNumber()).orElseThrow(() ->
                 new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
 
         //then
@@ -142,7 +142,7 @@ public class RoomServiceTest {
         roomService.deleteRoom(member, room.getNumber());
 
         //then
-        assertThat(roomRepository.findById(roomNumber).get());
+        assertThat(roomRepository.findByNumber(roomNumber).get());
     }
 
     @Test

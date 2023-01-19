@@ -48,7 +48,7 @@ public class RoomController {
                                     @PathVariable("challengeId") Long roomNumber) {
 
         checkLogin(memberAdapter.getMember());
-        Room room = roomRepository.findById(roomNumber).orElseThrow(
+        Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 없습니다"));
 
         RoomResponseDto roomDetail = RoomResponseDto.builder()
