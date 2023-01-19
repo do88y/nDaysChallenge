@@ -97,10 +97,12 @@ public class SecurityConfig {
         configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
-        configuration.addAllowedOrigin("http://ndayschallenge.com"); ////
-        configuration.addAllowedOrigin("https://ndayschallenge.com");
-        configuration.addAllowedOrigin("http://api.ndayschallenge.com");
-        configuration.addAllowedOrigin("https://api.ndayschallenge.com");
+        configuration.setAllowedOrigins(
+                Arrays.asList("http://ndayschallenge.com",
+                        "https://ndayschallenge.com",
+                        "http://api.ndayschallenge.com",
+                        "https://api.ndayschallenge.com"
+                ));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");

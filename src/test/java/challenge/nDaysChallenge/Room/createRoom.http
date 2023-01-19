@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/challenge/create
+POST http://localhost:8080/challenge/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMzQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczMjQxNTQ4fQ.UPIB87wIzrm2BaKRPNXlwAjejsCsO6IdluWxeFHYBjw
 

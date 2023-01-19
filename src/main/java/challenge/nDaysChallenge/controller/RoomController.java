@@ -77,9 +77,9 @@ public class RoomController {
         Stamp stamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
         StampDto updatedStamp = new StampDto(dto.getRoomNumber(), stamp.getNumber(), stamp.getDay());
 
-        URI location = URI.create("/challenge/" + stamp.getNumber());
+//        URI location = URI.create("/challenge/" + stamp.getNumber());
 
-        return ResponseEntity.status(HttpStatus.OK).location(location).body(updatedStamp);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedStamp);
     }
 
     //개인 챌린지 생성
@@ -104,8 +104,8 @@ public class RoomController {
                 .endDate(room.getPeriod().getEndDate())
                 .build();
 
-        URI location = URI.create("/challenge/" + room.getNumber());
-        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
+//        URI location = URI.create("/challenge/" + room.getNumber());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
     //그룹 챌린지 생성
@@ -132,9 +132,9 @@ public class RoomController {
                 .memberStamps(room.getStamps())
                 .build();
 
-        Long challengeId = room.getNumber();
-        URI location = URI.create("/challenge/" + challengeId);
-        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
+//        Long challengeId = room.getNumber();
+//        URI location = URI.create("/challenge/" + challengeId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
     //챌린지 삭제&실패

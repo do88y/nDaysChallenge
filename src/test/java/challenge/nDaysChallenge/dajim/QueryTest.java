@@ -186,7 +186,7 @@ public class QueryTest { //N+1 테스트
     @DisplayName("특정 룸넘버에 해당하는 룸 찾기")
     @Test
     void findByRoomNumber(){
-        Room room = dajimRepository.findByRoomNumber(1L)
+        Room room = roomRepository.findByNumber(1L)
                 .orElseThrow(()->new RuntimeException("룸을 찾을 수 없습니다."));
 
         assertThat(room.getName()).isEqualTo("SingleRoom");
