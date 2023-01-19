@@ -32,9 +32,8 @@
 - 로그인 기능
 
 
-# ERD
+# ERD [링크](https://www.erdcloud.com/d/7omJZMM7j3oEdt2qE)
 ![N-days-challenge](https://user-images.githubusercontent.com/102232306/212079242-d90ea343-42f5-443f-930e-194ebe7065d4.png)
-[ERD 링크](https://www.erdcloud.com/d/7omJZMM7j3oEdt2qE)
 
 
 # 기술적 고민들
