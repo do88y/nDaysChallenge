@@ -244,7 +244,7 @@ public class RoomServiceTest {
 
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
-        assertThat(updateStamp.getDay()).isEqualTo("o");
+        assertThat(updateStamp.getDay()).isEqualTo("ox");
     }
 
     @Test
@@ -262,18 +262,31 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void findByRoomAndMember_쿼리() throws Exception {
+        //given
+        stampRepository.findByRoomAndMember(18L, "슬기");
+
+        //when
+
+        //then
+    }
+
+    @Test
     public void 스탬프_카운트_업데이트 () throws Exception {
         //given
         memberRepository.save(member);
         SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
 
         //when
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o,o,x,o"));
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
 
         em.flush();
         em.clear();
         //then
-        assertThat(room.getSuccessCount()).isEqualTo(1);
+        assertThat(room.getStamp().getSuccessCount()).isEqualTo(2);
+        assertThat(room.getStamp().getDay()).isEqualTo("oox");
     }
 
     //멤버

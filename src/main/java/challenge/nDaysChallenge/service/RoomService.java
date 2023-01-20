@@ -120,7 +120,7 @@ public class RoomService {
      * 스탬프 찍기
      */
     @Transactional
-    public Stamp updateStamp(Member member, Long roomNumber, StampDto dto) {
+    public StampDto updateStamp(Member member, Long roomNumber, StampDto dto) {
 
         //엔티티 조회
         Stamp stamp = stampRepository.findById(dto.getStampNumber()).orElseThrow(
@@ -133,14 +133,22 @@ public class RoomService {
 
         //count 업데이트
         if (stamp.getLatestStamp().equals("o")) {
-            room.addSuccess();
+            stamp.addSuccess();
         } else if (stamp.getLatestStamp().equals("x")) {
-            room.addPass();
+            stamp.addPass();
         } else {
             throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
         }
 
-        return updateStamp;
+        StampDto stampDto = StampDto.builder()
+                .roomNumber(roomNumber)
+                .stampNumber(updateStamp.number)
+                .day(updateStamp.day)
+                .successCount(stamp.getSuccessCount())
+                .usedPassCount(stamp.getUsedPassCount())
+                .build();
+
+        return stampDto;
     }
 
     /**
@@ -165,46 +173,6 @@ public class RoomService {
             }
             //그룹 챌린지 삭제
             roomRepository.delete(room);
-        }
-    }
-
-    /**
-     * 개인 챌린지 실패
-     */
-    @Transactional
-    public void failSingleRoom(Long roomNumber) {
-        //엔티티 조회
-        SingleRoom singleRoom = singleRoomRepository.findById(roomNumber).orElseThrow(
-                () -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
-
-        //개인 챌린지 멤버 조회
-        Member member = singleRoom.giveMember();
-        int usedPassCount = singleRoom.getUsedPassCount();
-        int passCount = singleRoom.getPassCount();
-
-        if (usedPassCount > passCount) {
-            roomRepository.deleteById(roomNumber);
-        }
-    }
-
-    /**
-     * 단체 챌린지 실패
-     */
-    @Transactional
-    public void failGroupRoom(Long roomNumber) {
-        //엔티티 조회
-        GroupRoom groupRoom = groupRoomRepository.findById(roomNumber).orElseThrow(
-                () -> new NoSuchElementException("해당 개인 챌린지가 존재하지 않습니다"));
-
-        //그룹 챌린지 멤버 조회
-        List<RoomMember> roomMembers = groupRoom.getRoomMemberList();
-        int usedPassCount = groupRoom.getUsedPassCount();
-        int passCount = groupRoom.getPassCount();
-
-        if (usedPassCount > passCount) {
-            for (RoomMember roomMember : roomMembers) {
-                roomRepository.deleteById(roomMember.getNumber());
-            }
         }
     }
 

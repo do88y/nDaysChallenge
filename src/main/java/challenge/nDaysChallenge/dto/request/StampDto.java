@@ -1,17 +1,24 @@
 package challenge.nDaysChallenge.dto.request;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class StampDto {
 
     public Long roomNumber;
     public Long stampNumber;
     public String day;
 
+    public int successCount;
+    public int usedPassCount;
+
+    @Builder
+    public StampDto(Long roomNumber, Long stampNumber, String day, int successCount, int usedPassCount) {
+        this.roomNumber = roomNumber;
+        this.stampNumber = stampNumber;
+        this.day = day;
+        this.successCount = successCount;
+        this.usedPassCount = usedPassCount;
+    }
 }
