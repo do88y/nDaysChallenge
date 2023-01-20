@@ -28,7 +28,7 @@ public class EmotionService {
     public EmotionResponseDto manageEmotion(EmotionRequestDto emotionRequestDto, Member member) {
         Sticker sticker = Sticker.valueOf(emotionRequestDto.getSticker());
 
-        Dajim dajim = dajimRepository.findByDajimNumber(emotionRequestDto.getDajimNumber())
+        Dajim dajim = dajimRepository.findByNumber(emotionRequestDto.getDajimNumber())
             .orElseThrow(()->new RuntimeException("감정 스티커를 등록할 다짐을 찾을 수 없습니다."));
 
         Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(emotionRequestDto.getDajimNumber(), member.getNumber());
