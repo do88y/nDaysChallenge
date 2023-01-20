@@ -41,4 +41,3 @@ jobs:
           TAG_NAME: nightly-tag-${{ env.date }}
           RELEASE_NAME: nightly-release-${{ env.date }}
         shell: bash
-
