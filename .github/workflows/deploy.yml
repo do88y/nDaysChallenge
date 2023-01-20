@@ -17,7 +17,9 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -31,9 +33,9 @@ jobs:
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
-          format: YYYY-MM-DDTHH-mm-ss # (1)
+          format: YYYY-MM-DDTHH-mm-ss 
           utcOffset: "+09:00"
 
       - name: Show Current Time
-        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # (2)
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" 
         shell: bash
