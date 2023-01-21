@@ -21,12 +21,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-        shell: bash
-
-      - name: Build with Gradle
-        run: ./gradlew clean -x test build
+      - name: make application.yml
+        if: contains(github.ref, 'develop')
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
         shell: bash
 
       - name: make application-prod.yml
@@ -37,12 +37,12 @@ jobs:
           echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
         shell: bash
 
-      - name: make application.yml
-        if: contains(github.ref, 'develop')
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION }}" > ./application.yml
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew clean -x test build
         shell: bash
 
       - name: Get current date
