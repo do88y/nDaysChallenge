@@ -31,11 +31,25 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_STATE
+        run: | 
+          echo "builddate={$(date +'%Y-%m-%d')}" >> $GITHUB_STATE
 
-      - name: Show current date
-        run: echo $TAG_NAME - $RELEASE_NAME
-        env:
-          TAG_NAME: nightly-tag-${{ env.date }}
-          RELEASE_NAME: nightly-release-${{ env.date }}
-        shell: bash
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip .
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: NDaysChallenge-backend-dev
+          environment_name: PROD-NDC-API-SERVICE
+          version_label: github-action-${{ steps.version.outputs.builddate }}
+          region: us-west-2
+          deployment_package: deploy/deploy.zip
