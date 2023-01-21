@@ -32,15 +32,15 @@ jobs:
       - name: make application.properties
         run: |
           cd ./src/main/resources
-          touch ./application.properties
-          echo "${{ secrets.APPLICATION }}" > ./application.properties
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
         shell: bash
 
       - name: make application-prod.properties
         run: |
           cd ./src/main/resources
-          touch ./application-prod.properties
-          echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.properties
+          touch ./application-prod.yml
+          echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
         shell: bash
 
       - name: Get current date
