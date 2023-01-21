@@ -14,15 +14,15 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoomRequestDto {
 
+    private String type;
     private String name;
     private String category;
-    private String reward;
-    private int passCount;
-
+    private Long totalDays;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
-    private Long totalDays;
-    private String type;
+    private int passCount;
+    private String reward;
+
     private int successCount;
     private int usedPassCount;
 
@@ -30,13 +30,13 @@ public class GroupRoomRequestDto {
 
     @Builder
     public GroupRoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
+        this.type = type;
         this.name = name;
         this.category = category;
-        this.reward = reward;
-        this.passCount = passCount;
-        this.startDate = startDate;
         this.totalDays = totalDays;
-        this.type = type;
+        this.startDate = startDate;
+        this.passCount = passCount;
+        this.reward = reward;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
         for (Long members : groupMembers) {

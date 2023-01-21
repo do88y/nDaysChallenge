@@ -53,8 +53,6 @@ public class SingleRoom extends Room {
         this.status = RoomStatus.CONTINUE;
         this.passCount = passCount;
         this.reward = reward;
-        this.usedPassCount = usedPassCount;
-        this.successCount = successCount;
     }
 
 }
