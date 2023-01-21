@@ -29,18 +29,18 @@ jobs:
         run: ./gradlew clean -x test build
         shell: bash
 
-      - name: make application.properties
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION }}" > ./application.yml
-        shell: bash
-
-      - name: make application-prod.properties
+      - name: make application-prod.yml
         run: |
           cd ./src/main/resources
           touch ./application-prod.yml
           echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
+        shell: bash
+
+      - name: make application.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
         shell: bash
 
       - name: Get current date
