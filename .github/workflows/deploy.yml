@@ -30,9 +30,9 @@ jobs:
         shell: bash
 
       - name: Get current date
-        id: date
+        id: version
         run: | 
-          echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
+          echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
 
       - name: Generate deployment package
         run: |
@@ -50,6 +50,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: NDaysChallenge-backend-dev
           environment_name: PROD-NDC-API-SERVICE
-          version_label: github-action-${{ env.date }}
+          version_label: github-action-${{ steps.version.outputs.builddate }}
           region: us-west-2
           deployment_package: deploy/deploy.zip
