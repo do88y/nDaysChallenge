@@ -30,6 +30,7 @@ jobs:
         shell: bash
 
       - name: make application-prod.yml
+        if: contains(github.ref, 'develop')
         run: |
           cd ./src/main/resources
           touch ./application-prod.yml
@@ -37,6 +38,7 @@ jobs:
         shell: bash
 
       - name: make application.yml
+        if: contains(github.ref, 'develop')
         run: |
           cd ./src/main/resources
           touch ./application.yml
