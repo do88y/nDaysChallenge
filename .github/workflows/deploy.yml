@@ -29,10 +29,24 @@ jobs:
         run: ./gradlew clean -x test build
         shell: bash
 
+      - name: make application.properties
+        run: |
+          cd ./src/main/resources
+          touch ./application.properties
+          echo "${{ secrets.APPLICATION }}" > ./application.properties
+        shell: bash
+
+      - name: make application-prod.properties
+        run: |
+          cd ./src/main/resources
+          touch ./application-prod.properties
+          echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.properties
+        shell: bash
+
       - name: Get current date
         id: version
         run: | 
-          echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+          echo "builddate=$(date +'%Y-%m-%dT%H:%M:%S -d "+9 hours" TZ=":Asia/Seoul"')" >> $GITHUB_OUTPUT
 
       - name: Generate deployment package
         run: |
