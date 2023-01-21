@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
@@ -8,6 +9,7 @@ import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
 import challenge.nDaysChallenge.dto.request.StampDto;
 import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 public class RoomController {
 
     private final RoomRepository roomRepository;
+    private final StampRepository stampRepository;
     private final RoomService roomService;
 
     //챌린지 리스트(메인)
@@ -51,23 +54,46 @@ public class RoomController {
                 () -> new NoSuchElementException("해당 챌린지가 없습니다"));
 
 
-        RoomResponseDto roomDetail = RoomResponseDto.builder()
-                .roomNumber(room.getNumber())
-                .type(room.getType().name())
-                .name(room.getName())
-                .category(room.getCategory().name())
-                .totalDays(room.getPeriod().getTotalDays())
-                .startDate(room.getPeriod().getStartDate())
-                .endDate(room.getPeriod().getEndDate())
-                .passCount(room.getPassCount())
-                .reward(room.getReward())
-                .status(room.getStatus().name())
-                .stamp(room.getStamp().getNumber())
-                .successCount(room.getStamp().getSuccessCount())
-                .usedPassCount(room.getStamp().getUsedPassCount())
-                .build();
+        if (room.getType() == RoomType.SINGLE) {
+            RoomResponseDto roomDetail = RoomResponseDto.builder()
+                    .roomNumber(room.getNumber())
+                    .type(room.getType().name())
+                    .name(room.getName())
+                    .category(room.getCategory().name())
+                    .totalDays(room.getPeriod().getTotalDays())
+                    .startDate(room.getPeriod().getStartDate())
+                    .endDate(room.getPeriod().getEndDate())
+                    .passCount(room.getPassCount())
+                    .reward(room.getReward())
+                    .status(room.getStatus().name())
+                    .stamp(room.getStamp().getNumber())
+                    .successCount(room.getStamp().getSuccessCount())
+                    .usedPassCount(room.getStamp().getUsedPassCount())
+                    .build();
+            return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
+        if (room.getType() == RoomType.GROUP) {
+            Stamp stamp = stampRepository.findByRoomAndMember(room, memberAdapter.getMember());
+            RoomResponseDto roomDetail = RoomResponseDto.builder()
+                    .roomNumber(room.getNumber())
+                    .type(room.getType().name())
+                    .name(room.getName())
+                    .category(room.getCategory().name())
+                    .totalDays(room.getPeriod().getTotalDays())
+                    .startDate(room.getPeriod().getStartDate())
+                    .endDate(room.getPeriod().getEndDate())
+                    .passCount(room.getPassCount())
+                    .reward(room.getReward())
+                    .status(room.getStatus().name())
+                    .stamp(room.getStamp().getNumber())
+                    .successCount(stamp.getSuccessCount())
+                    .usedPassCount(stamp.getUsedPassCount())
+                    .build();
+            return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     //스탬프 찍기

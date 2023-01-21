@@ -264,7 +264,7 @@ public class RoomServiceTest {
     @Test
     public void findByRoomAndMember_쿼리() throws Exception {
         //given
-        stampRepository.findByRoomAndMember(18L, "슬기");
+        stampRepository.findByRoomAndMember(room, member);
 
         //when
 

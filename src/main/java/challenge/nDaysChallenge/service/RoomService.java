@@ -140,6 +140,7 @@ public class RoomService {
             throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
         }
 
+        //dto 생성
         StampDto stampDto = StampDto.builder()
                 .roomNumber(roomNumber)
                 .stampNumber(updateStamp.number)

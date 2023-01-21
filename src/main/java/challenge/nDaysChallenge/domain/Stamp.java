@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain;
 
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,10 @@ public class Stamp {
 
     @OneToOne(fetch = FetchType.LAZY)
     public Room room;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_number")
+    public Member member;
     public String day;
     public LocalDate latestDate;
     protected int usedPassCount;
