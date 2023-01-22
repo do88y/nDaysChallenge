@@ -6,6 +6,7 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
+import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
@@ -73,14 +74,14 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
         em.flush();
         em.clear();
 
         //then
-        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getNumber()).orElseThrow(() ->
+        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getRoomNumber()).orElseThrow(() ->
                 new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
-        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getNumber());
+        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getRoomNumber());
 
 
         //멤버에서 singleRooms 조회
@@ -125,14 +126,14 @@ public class RoomServiceTest {
         //given
         em.persist(member);
 
-        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
 
         em.flush();
         em.clear();
 
         //when
-        Long roomNumber = room.getNumber();
-        roomService.deleteRoom(member, room.getNumber());
+        Long roomNumber = room.getRoomNumber();
+        roomService.deleteRoom(member, room.getRoomNumber());
 
         //then
         assertThat(roomRepository.findByNumber(roomNumber).get());
@@ -157,7 +158,7 @@ public class RoomServiceTest {
         singleRoomRepository.save(createSingleRoom2);
         singleRoomRepository.save(createSingleRoom3);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
         roomMemberRepository.save(roomMember);
 
         em.flush();
@@ -214,7 +215,7 @@ public class RoomServiceTest {
 
         groupRoomRepository.save(groupRoom);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
         roomMemberRepository.save(roomMember);
 
         em.flush();
@@ -275,8 +276,8 @@ public class RoomServiceTest {
     public void 스탬프_카운트_업데이트 () throws Exception {
         //given
         memberRepository.save(member);
-        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
-
+        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
         //when
         roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
         roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
@@ -304,9 +305,9 @@ public class RoomServiceTest {
     GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
 
     //스탬프
-    Stamp stamp1 = Stamp.createStamp(singleRoom1);
-    Stamp stamp2 = Stamp.createStamp(singleRoom2);
-    Stamp stamp3 = Stamp.createStamp(singleRoom3);
+    Stamp stamp1 = Stamp.createStamp(singleRoom1, member1);
+    Stamp stamp2 = Stamp.createStamp(singleRoom2, member2);
+    Stamp stamp3 = Stamp.createStamp(singleRoom3, member3);
 
     //기간
     Period period = new Period(LocalDate.now(),30L);

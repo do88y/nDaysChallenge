@@ -99,9 +99,9 @@ public class DajimFeedRepositoryTest {
         //그룹룸 (룸2-멤버1,2,3)
         GroupRoom room2 = new GroupRoom(member1, "GroupRoom", new Period(LocalDate.now(),100L), Category.ETC, 3, "", 0, 0);
         roomRepository.save(room2);
-        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2, Stamp.createStamp(room2));
-        RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2, Stamp.createStamp(room2));
-        RoomMember roomMember3 = RoomMember.createRoomMember(member3, room2, Stamp.createStamp(room2));
+        RoomMember roomMember1 = RoomMember.createRoomMember(member1, room2, Stamp.createStamp(room2, member1));
+        RoomMember roomMember2 = RoomMember.createRoomMember(member2, room2, Stamp.createStamp(room2, member2));
+        RoomMember roomMember3 = RoomMember.createRoomMember(member3, room2, Stamp.createStamp(room2, member3));
         roomMemberRepository.save(roomMember1);
         roomMemberRepository.save(roomMember2);
         roomMemberRepository.save(roomMember3);

@@ -34,9 +34,10 @@ public class Stamp {
 
 
     //==생성 메서드==//
-    public static Stamp createStamp(Room room) {
+    public static Stamp createStamp(Room room, Member member) {
         Stamp stamp = new Stamp();
         stamp.room = room;
+        stamp.member = member;
         stamp.day = "";
         stamp.latestDate = LocalDate.now().minusDays(1L);
         stamp.usedPassCount = 0;
