@@ -21,12 +21,7 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
             " ORDER BY d.updatedDate")
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
-    //룸 넘버로 룸 객체 찾기
-    @Query("SELECT r FROM Room r WHERE r.number = :roomNumber")
-    Optional<Room> findByRoomNumber(@Param("roomNumber") Long roomNumber);
-
-    @Query("SELECT d FROM Dajim d WHERE d.number = :dajimNumber")
-    Optional<Dajim> findByDajimNumber(@Param("dajimNumber") Long dajimNumber);
+    Optional<Dajim> findByNumber(Long dajimNumber);
 
     @Query("SELECt d FROM Dajim d WHERE d.member.nickname = :nickname")
     Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);

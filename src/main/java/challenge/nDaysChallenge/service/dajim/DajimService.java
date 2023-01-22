@@ -8,6 +8,7 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +23,17 @@ public class DajimService {
 
     private final DajimRepository dajimRepository;
 
+    private final RoomRepository roomRepository;
+
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
-        Room room = dajimRepository.findByRoomNumber(roomNumber)
+        Room room = roomRepository.findByNumber(roomNumber)
                 .orElseThrow(()
                         -> new RuntimeException("챌린지룸을 찾을 수 없습니다."));
 
-        Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto);
+//        roomRepository.findByMemberNumber
+
+        Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto.getContent(), dajimUploadRequestDto.getOpen());
 
         Dajim savedDajim = dajimRepository.save(newDajim);
 
@@ -42,7 +47,7 @@ public class DajimService {
 
     //다짐 수정
     public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, Member member) {
-        Dajim dajim = dajimRepository.findByDajimNumber(dajimUpdateRequestDto.getDajimNumber())
+        Dajim dajim = dajimRepository.findByNumber(dajimUpdateRequestDto.getDajimNumber())
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
         checkRoomAndMember(dajim, member, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인

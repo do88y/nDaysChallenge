@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 public class AuthServiceTest {
-
+//
 //    @BeforeTransaction
 //    public void 회원가입(){
 //        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);

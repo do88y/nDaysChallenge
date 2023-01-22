@@ -91,3 +91,7 @@ task('release') {
 	}
 
 }
+
+jar {
+	enabled = false
+}

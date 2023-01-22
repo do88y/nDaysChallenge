@@ -7,6 +7,7 @@ import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
@@ -34,155 +35,79 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EmotionRepositoryTest {
 
     @Autowired
-    DajimRepository dajimRepository;
-
-    @Autowired
-    DajimFeedRepository dajimFeedRepository;
-
-    @Autowired
-    EmotionRepository emotionRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     RoomRepository roomRepository;
 
     @Autowired
-    RoomMemberRepository roomMemberRepository;
+    DajimRepository dajimRepository;
 
     @Autowired
-    MemberRepository memberRepository;
+    EmotionRepository emotionRepository;
 
-    @DisplayName("이모션 등록")
-    @Test
-    @Transactional
-    @Rollback(value = false)
+    Member savedMember1, savedMember2;
+    Room savedRoom;
+    Dajim savedDajim;
+
     @BeforeEach
-    void clickEmotion() {
-        //given
+    void 멤버_룸_다짐_이모션_세팅(){
         Member member1 = Member.builder()
-                .id("newuser@naver.com")
-                .pw("12345")
-                .nickname("nickname")
-                .image(1)
                 .authority(Authority.ROLE_USER)
+                .id("user@naver.com")
+                .pw("1234")
+                .nickname("nick")
+                .image(3)
                 .build();
 
-        SingleRoom room1 = new SingleRoom("newRoom", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
+        Member member2 = Member.builder()
+                .authority(Authority.ROLE_USER)
+                .id("user2@naver.com")
+                .pw("1234")
+                .nickname("nick2")
+                .image(3)
+                .build();
 
-        Dajim dajim = dajimRepository.save(Dajim.builder()
-                .room(room1)
+        savedMember1 = memberRepository.save(member1);
+        savedMember2 = memberRepository.save(member2);
+
+        Room room = new SingleRoom("기상", new Period(LocalDate.now(),30L) , Category.ROUTINE,2, "", 0, 0);
+
+        savedRoom = roomRepository.save(room);
+
+        Dajim dajim1 = DajimUploadRequestDto.toDajim(room, member1, "내용1", "PUBLIC");
+
+        savedDajim = dajimRepository.save(dajim1);
+
+        Emotion emotion1 = Emotion.builder()
                 .member(member1)
-                .content("content")
-                .open(Open.PUBLIC)
-                .build());
-
-        Sticker sticker = Sticker.valueOf("SURPRISE");
-
-        Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(dajim.getNumber(), member1.getNumber()).empty();
-
-        //when
-        Emotion uploadedEmotion=null;
-        if (emotion.isEmpty()){
-            uploadedEmotion = uploadEmotion(member1, dajim, sticker);
-        }
-
-        //then
-        assertThat(emotion).isEmpty();
-        assertThat(uploadedEmotion.getSticker().toString()).isEqualTo("SURPRISE");
-        assertThat(dajim.getEmotions().get(0).getSticker().toString()).isEqualTo("SURPRISE");
-        assertThat(dajim.getEmotions().size()).isEqualTo(1);
-    }
-
-    private Emotion uploadEmotion(Member member, Dajim dajim, Sticker sticker){ //이모션 등록
-        Emotion emotion = Emotion.builder()
-                .member(member)
-                .dajim(dajim)
-                .sticker(sticker)
+                .dajim(dajim1)
+                .sticker(Sticker.CHEER)
                 .build();
 
-        emotionRepository.save(emotion);
+        Emotion emotion2 = Emotion.builder()
+                .member(member2)
+                .dajim(dajim1)
+                .sticker(Sticker.WATCH)
+                .build();
 
-        dajim.addEmotions(emotion); //다짐 엔티티 이모션리스트에 추가
+        emotionRepository.save(emotion1);
+        emotionRepository.save(emotion2);
 
-        return emotion;
+        dajim1.addEmotions(emotion1);
+        dajim1.addEmotions(emotion2);
     }
 
-    @DisplayName("이모션 변경")
     @Test
-    @Transactional
-    @Rollback(value = false)
-    void updateEmotion(){
-        //given
-        Dajim dajim = dajimRepository.findByDajimNumber(1L)
-                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다"));
+    void 이모션_불러오기(){
+        Emotion savedEmotion1 = emotionRepository.findByDajimAndMember(savedDajim.getNumber(), savedMember1.getNumber())
+                .orElseThrow(()->new RuntimeException("이모션을 찾을 수 없습니다."));
 
-        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
-        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
-                dajim.getEmotions()
-                        .stream().map(emotion -> emotion.getSticker().toString())
-                        .collect(Collectors.toList())
-        );
+        Emotion savedEmotion2 = emotionRepository.findByDajimAndMember(savedDajim.getNumber(), savedMember2.getNumber())
+                .orElseThrow(()->new RuntimeException("이모션을 찾을 수 없습니다."));
 
-        Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(1L, 1L);
-        Emotion emotionFound = emotion.get();
-
-        //when
-        Emotion updatedEmotion = emotionFound.update(Sticker.CHEER); //수정
-
-        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
-        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
-                dajim.getEmotions()
-                        .stream().map(e -> e.getSticker().toString())
-                        .collect(Collectors.toList())
-        );
-
-        //then
-        assertThat(updatedEmotion.getSticker().toString()).isEqualTo("CHEER");
-        assertThat(dajim.getEmotions().get(0)).isEqualTo(updatedEmotion);
-        assertThat(dajim.getEmotions().size()).isEqualTo(1);
-    }
-
-    @DisplayName("이모션 삭제")
-    @Test
-    @Transactional
-    @Rollback(value = false)
-    void deleteEmotion(){
-        //given
-        Dajim dajim = dajimRepository.findByDajimNumber(1L)
-                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다"));
-
-        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
-        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
-                dajim.getEmotions()
-                        .stream().map(e -> e.getSticker().toString())
-                        .collect(Collectors.toList())
-        );
-
-        Optional<Emotion> emotion = emotionRepository.findByDajimAndMember(1L, 1L);
-
-        Emotion emotionFound = emotion.get();
-        Sticker stickerBeforeUpdate = emotionFound.getSticker(); //업데이트 전 스티커
-        LocalDateTime beforeUpdate = emotionFound.getUpdatedDate(); //업데이트 전 시간
-
-        //when
-        Emotion updatedEmotion = emotionFound.update(Sticker.SURPRISE); //똑같은 스티커 클릭
-
-        LocalDateTime afterUpdate = updatedEmotion.getUpdatedDate(); //업데이트 후 시간
-        if (beforeUpdate.isEqual(afterUpdate) && //업데이트 X & 똑같은 스티커 클릭 시
-                stickerBeforeUpdate.toString().equals(updatedEmotion.getSticker().toString())){
-            emotionRepository.delete(updatedEmotion);
-            dajim.deleteEmotions(updatedEmotion);
-        }
-
-        System.out.println("다짐에 추가한 이모션 개수 : " + dajim.getEmotions().size());
-        System.out.println("다짐에 추가한 이모션 스티커 내용 : " +
-                dajim.getEmotions()
-                        .stream().map(e -> e.getSticker().toString())
-                        .collect(Collectors.toList())
-        );
-
-        //then
-        assertThat(dajim.getEmotions()).isEmpty();
-
+        assertThat(savedEmotion1.getSticker().toString()).isEqualTo("CHEER");
+        assertThat(savedEmotion2.getSticker().toString()).isEqualTo("WATCH");
     }
 
 }

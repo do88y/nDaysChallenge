@@ -25,7 +25,7 @@ public class ReportService {
     public Report report(Long dajimNumber, int cause, boolean oDajim, String content) {
 
         //엔티티 조회
-        Optional<Dajim> findDajim = dajimRepository.findByDajimNumber(dajimNumber);
+        Optional<Dajim> findDajim = dajimRepository.findByNumber(dajimNumber);
         Dajim dajim = findDajim.orElseThrow(() -> new NoSuchElementException("해당 다짐이 없습니다. "));
 
         Report report = Report.createReport(dajim, cause, oDajim, content);
