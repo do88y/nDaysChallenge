@@ -69,3 +69,4 @@ jobs:
           version_label: github-action-${{ steps.version.outputs.builddate }}
           region: us-west-2
           deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 60
