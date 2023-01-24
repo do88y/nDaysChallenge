@@ -5,6 +5,8 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
+import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
+import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,31 +37,23 @@ public class RoomService {
      * 챌린지 조회(메인)
      */
     public List<SingleRoom> findSingleRooms(Member member) {
-        try {
-            return singleRoomRepository.findSingleRooms(member);
-        } catch (Exception e) {
-            throw new RuntimeException("진행중인 개인 챌린지가 없습니다.");
-        }
+        return singleRoomRepository.findSingleRooms(member);
     }
     public List<GroupRoom> findGroupRooms(Member member) {
-        try {
-            return groupRoomRepository.findGroupRooms(member);
-        } catch (Exception e) {
-            throw new RuntimeException("진행중인 단체 챌린지가 없습니다.");
-        }
+        return groupRoomRepository.findGroupRooms(member);
     }
 
     /**
      * 개인 챌린지 생성
      */
     @Transactional
-    public SingleRoom singleRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
+    public RoomResponseDto singleRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
 
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
 
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom);
+        Stamp stamp = Stamp.createStamp(newRoom, member);
 
         //저장
         singleRoomRepository.save(newRoom);
@@ -67,7 +62,9 @@ public class RoomService {
         //멤버에 챌린지 저장
         newRoom.addRoom(newRoom, member, stamp);
 
-        return newRoom;
+        RoomResponseDto roomDto = createRoomDto(newRoom, stamp);
+
+        return roomDto;
     }
 
     /**
@@ -90,7 +87,7 @@ public class RoomService {
 
         //방장
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom);
+        Stamp stamp = Stamp.createStamp(newRoom, member);
         stampRepository.save(stamp);
         //룸멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
@@ -100,13 +97,13 @@ public class RoomService {
         stamps.put(member.getNickname(), stamp.getNumber());
 
         //그 외 멤버
-        for (Member fidnMember : memberList) {
-            Member member1 = memberRepository.findByNumber(fidnMember.getNumber()).get();
+        for (Member findMember : memberList) {
+            Member member1 = memberRepository.findByNumber(findMember.getNumber()).get();
             //스탬프 생성
-            Stamp newStamp = Stamp.createStamp(newRoom);
+            Stamp newStamp = Stamp.createStamp(newRoom, findMember);
             stampRepository.save(newStamp);
             //룸멤버 생성
-            RoomMember result = RoomMember.createRoomMember(fidnMember, newRoom, newStamp);
+            RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
             roomMemberRepository.save(result);
 
             RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(member1, newRoom);
@@ -140,6 +137,7 @@ public class RoomService {
             throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
         }
 
+        //dto 생성
         StampDto stampDto = StampDto.builder()
                 .roomNumber(roomNumber)
                 .stampNumber(updateStamp.number)
@@ -203,6 +201,23 @@ public class RoomService {
         } catch (Exception e) {
             throw new RuntimeException("완료된 단체 챌린지가 없습니다.");
         }
+    }
+
+    private RoomResponseDto createRoomDto(Room room, Stamp stamp) {
+        RoomResponseDto roomResponseDto = RoomResponseDto.builder()
+                .roomNumber(room.getNumber())
+                .type(room.getType().name())
+                .name(room.getName())
+                .category(room.getCategory().name())
+                .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .passCount(room.getPassCount())
+                .reward(room.getReward())
+                .status(room.getStatus().name())
+                .stamp(stamp.getNumber())
+                .build();
+        return roomResponseDto;
     }
 
     //작성자가 맞는지 확인

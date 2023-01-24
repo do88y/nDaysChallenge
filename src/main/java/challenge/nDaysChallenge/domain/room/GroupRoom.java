@@ -23,10 +23,6 @@ public class GroupRoom extends Room {
     @OneToMany(mappedBy = "room")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "room_number"))
-    @Column(name = "stamp_number")
-    private Map<String, Long> stamps = new HashMap<>();
 
     //==생성자==//
     public GroupRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
