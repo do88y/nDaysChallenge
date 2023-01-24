@@ -93,9 +93,6 @@ public class RoomService {
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
         roomMemberRepository.save(roomMember);
 
-        Map<String, Long> stamps = newRoom.getStamps();
-        stamps.put(member.getNickname(), stamp.getNumber());
-
         //그 외 멤버
         for (Member findMember : memberList) {
             Member member1 = memberRepository.findByNumber(findMember.getNumber()).get();
@@ -105,9 +102,6 @@ public class RoomService {
             //룸멤버 생성
             RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
             roomMemberRepository.save(result);
-
-            RoomMember findRoomMember = roomMemberRepository.findByMemberAndRoom(member1, newRoom);
-            stamps.put(findRoomMember.getMember().getNickname(), newStamp.getNumber());
         }
 
         return newRoom;

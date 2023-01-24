@@ -54,6 +54,7 @@ public class RoomServiceTest {
     @Test
     public void 개인_챌린지_builder() throws Exception {
         //given
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
         em.persist(room);
 
         //when
@@ -71,6 +72,7 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         em.persist(member);
 
         //when
@@ -97,6 +99,9 @@ public class RoomServiceTest {
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Long> selectedMembers = new HashSet<>();
+        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, Authority.ROLE_USER);
+        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, Authority.ROLE_USER);
+        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, Authority.ROLE_USER);
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
@@ -124,6 +129,7 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         em.persist(member);
 
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
@@ -140,32 +146,42 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 진행_챌린지_조회() throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "", 0, 0);
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠", 0, 0);
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
+
+        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        stampRepository.save(stamp1);
+        stampRepository.save(stamp2);
+        stampRepository.save(stamp3);
+
+        singleRoom1.addRoom(singleRoom1, member, stamp1);
+        singleRoom2.addRoom(singleRoom2, member, stamp2);
+        singleRoom3.addRoom(singleRoom3, member, stamp3);
+
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
         groupRoomRepository.save(groupRoom);
-
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
-        singleRoomRepository.save(createSingleRoom1);
-        singleRoomRepository.save(createSingleRoom2);
-        singleRoomRepository.save(createSingleRoom3);
-
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
+        Stamp stamp4 = Stamp.createStamp(singleRoom1, member);
+        stampRepository.save(stamp4);
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, stamp4);
         roomMemberRepository.save(roomMember);
-
-        em.flush();
-        em.clear();
 
         //when
         roomService.changeStatus(singleRoom1.getNumber());
+
+        em.flush();
+        em.clear();
 
         List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
         List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
@@ -182,18 +198,26 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
+        memberRepository.save(member);
+
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "", 0, 0);
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠", 0, 0);
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
-        memberRepository.save(member);
+        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        stampRepository.save(stamp1);
+        stampRepository.save(stamp2);
+        stampRepository.save(stamp3);
 
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
-        singleRoomRepository.save(createSingleRoom1);
-        singleRoomRepository.save(createSingleRoom2);
-        singleRoomRepository.save(createSingleRoom3);
+        singleRoom1.addRoom(singleRoom1, member, stamp1);
+        singleRoom2.addRoom(singleRoom2, member, stamp2);
+        singleRoom3.addRoom(singleRoom3, member, stamp3);
 
         em.flush();
         em.clear();
@@ -211,8 +235,10 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
         groupRoomRepository.save(groupRoom);
 
         RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
@@ -232,14 +258,19 @@ public class RoomServiceTest {
     @Test
     public void update_stamp_쿼리() throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
+        memberRepository.save(member);
+
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
         singleRoomRepository.save(room);
+        Stamp stamp1 = Stamp.createStamp(room, member);
         stampRepository.save(stamp1);
 
         //when
         Stamp updateStamp = stamp1.updateStamp(room, "o");
         em.flush();
         em.clear();
-        Stamp updateStamp2 = stamp1.updateStamp(room, "x");
+        stamp1.updateStamp(room, "x");
         em.flush();
         em.clear();
 
@@ -265,16 +296,21 @@ public class RoomServiceTest {
     @Test
     public void findByRoomAndMember_쿼리() throws Exception {
         //given
-        stampRepository.findByRoomAndMember(room, member);
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
 
         //when
+        roomRepository.save(room);
+        memberRepository.save(member);
 
         //then
+        stampRepository.findByRoomAndMember(room, member);
     }
 
     @Test
     public void 스탬프_카운트_업데이트 () throws Exception {
         //given
+        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
         RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
@@ -289,25 +325,6 @@ public class RoomServiceTest {
         assertThat(room.getStamp().getSuccessCount()).isEqualTo(2);
         assertThat(room.getStamp().getDay()).isEqualTo("oox");
     }
-
-    //멤버
-    Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-    Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, Authority.ROLE_USER);
-    Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, Authority.ROLE_USER);
-    Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, Authority.ROLE_USER);
-
-    //개인챌린지
-    SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
-    SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
-    SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "", 0, 0);
-    SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠", 0, 0);
-    //그룹챌린지
-    GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
-
-    //스탬프
-    Stamp stamp1 = Stamp.createStamp(singleRoom1, member1);
-    Stamp stamp2 = Stamp.createStamp(singleRoom2, member2);
-    Stamp stamp3 = Stamp.createStamp(singleRoom3, member3);
 
     //기간
     Period period = new Period(LocalDate.now(),30L);
