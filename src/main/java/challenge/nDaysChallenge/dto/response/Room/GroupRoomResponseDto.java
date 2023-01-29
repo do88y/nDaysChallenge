@@ -6,6 +6,7 @@ import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,10 +30,9 @@ public class GroupRoomResponseDto {
 
 
     private Set<Long> groupMembers = new HashSet<>();
-    private JSONObject jsonObject;
 
     @Builder
-    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers, Map<String, Long> memberStamps) {
+    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.name = name;
@@ -43,11 +43,7 @@ public class GroupRoomResponseDto {
         this.passCount = passCount;
         this.reward = reward;
         this.status = status;
-        for (Long members : groupMembers) {
-            this.groupMembers.add(members);
-        }
-        jsonObject = new JSONObject(memberStamps);
-
+        this.groupMembers.addAll(groupMembers);
     }
 
 }

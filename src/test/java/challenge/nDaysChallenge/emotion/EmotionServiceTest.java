@@ -8,6 +8,7 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Category;
 import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.domain.room.SingleRoom;
 import challenge.nDaysChallenge.dto.request.dajim.EmotionRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.EmotionResponseDto;
@@ -88,7 +89,7 @@ public class EmotionServiceTest {
         memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         member = memberRequestDto.toMember(passwordEncoder);
 
-        room = roomService.singleRoom(member, "기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
+        room = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
 
         dajim = Dajim.builder()
                 .number(1L)

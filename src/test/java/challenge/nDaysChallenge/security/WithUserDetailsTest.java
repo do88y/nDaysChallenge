@@ -114,7 +114,7 @@ public class WithUserDetailsTest {
         //룸 객체 연결
         SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward", 0, 0);
         singleRoomRepository.save(singleRoom);
-        Stamp stamp = Stamp.createStamp(singleRoom);
+        Stamp stamp = Stamp.createStamp(singleRoom, currentMember);
         singleRoom.addRoom(singleRoom, currentMember, stamp);
 
         //다짐 작성

@@ -78,8 +78,8 @@ public class DajimServiceTest {
         memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         member = memberRequestDto.toMember(passwordEncoder);
 
-        room = roomService.singleRoom(member, "기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
-        room2 = roomService.singleRoom(member, "기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
+        room = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
+        room2 = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
 
         dajim = Dajim.builder()
                 .number(1L)

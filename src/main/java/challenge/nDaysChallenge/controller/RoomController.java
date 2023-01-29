@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
@@ -8,6 +9,7 @@ import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
 import challenge.nDaysChallenge.dto.request.StampDto;
 import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 public class RoomController {
 
     private final RoomRepository roomRepository;
+    private final StampRepository stampRepository;
     private final RoomService roomService;
 
     //챌린지 리스트(메인)
@@ -38,18 +41,20 @@ public class RoomController {
 
         List<SingleRoom> singleRooms = roomService.findSingleRooms(memberAdapter.getMember());
         List<GroupRoom> groupRooms = roomService.findGroupRooms(memberAdapter.getMember());
+
         return getResponseEntity(singleRooms, groupRooms);
     }
 
-    //챌린지 상세
+    //개인 챌린지 상세
     @GetMapping("/challenge/{challengeId}")
     public ResponseEntity<?> detail(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                     @PathVariable("challengeId") Long roomNumber) {
 
         checkLogin(memberAdapter.getMember());
+
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 없습니다"));
-
+        Stamp findstamp = stampRepository.findByRoomAndMember(room, memberAdapter.getMember());
 
         RoomResponseDto roomDetail = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -62,11 +67,11 @@ public class RoomController {
                 .passCount(room.getPassCount())
                 .reward(room.getReward())
                 .status(room.getStatus().name())
-                .stamp(room.getStamp().getNumber())
-                .successCount(room.getStamp().getSuccessCount())
-                .usedPassCount(room.getStamp().getUsedPassCount())
+                .stamp(findstamp.getNumber())
+                .day(findstamp.getDay())
+                .successCount(findstamp.getSuccessCount())
+                .usedPassCount(findstamp.getUsedPassCount())
                 .build();
-
         return ResponseEntity.status(HttpStatus.OK).body(roomDetail);
     }
 
@@ -91,11 +96,10 @@ public class RoomController {
 
         checkLogin(memberAdapter.getMember());
 
-        Room room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
-        RoomResponseDto savedRoom = createRoomDto(room);
+        RoomResponseDto room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
 
-        URI location = URI.create("/challenge/" + room.getNumber());
-        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
+        URI location = URI.create("/challenge/" + room.getRoomNumber());
+        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(room);
     }
 
     //그룹 챌린지 생성
@@ -119,7 +123,6 @@ public class RoomController {
                 .reward(room.getReward())
                 .status(room.getStatus().name())
                 .groupMembers(dto.getGroupMembers())
-                .memberStamps(room.getStamps())
                 .build();
 
         Long challengeId = room.getNumber();
@@ -188,7 +191,6 @@ public class RoomController {
                 .passCount(room.getPassCount())
                 .reward(room.getReward())
                 .status(room.getStatus().name())
-                .stamp(room.getStamp().getNumber())
                 .build();
         return roomResponseDto;
     }

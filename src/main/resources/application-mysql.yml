@@ -4,7 +4,6 @@ spring:
     url: jdbc:mysql://localhost:3306/challenge?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: '1234'
-
     hikari:
       initialization-fail-timeout: 0 #커넥션 초기화 실패 시 유효성 검사 시도
 
