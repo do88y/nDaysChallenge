@@ -15,7 +15,6 @@ import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.jwt.RefreshTokenRepository;
-import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
@@ -61,8 +60,6 @@ public class WithUserDetailsTest {
     @Autowired
     DajimRepository dajimRepository;
 
-    @Autowired
-    DajimFeedRepository dajimFeedRepository;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -147,7 +144,7 @@ public class WithUserDetailsTest {
         assertThat(dajimsList.get(0).getContent()).isEqualTo(savedDajim.getContent());
 
         //피드에서 다짐 조회
-        List<Dajim> dajimFeed = dajimFeedRepository.findAllByOpen();
+        List<Dajim> dajimFeed = dajimRepository.findAllByOpen();
 
         List<DajimFeedResponseDto> dajimFeedList = dajimFeed.stream().map(d ->
                 new DajimFeedResponseDto(

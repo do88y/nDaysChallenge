@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     private LocalDateTime createdDate;
+
     private LocalDateTime updatedDate;
 
     @PrePersist //persist 직전

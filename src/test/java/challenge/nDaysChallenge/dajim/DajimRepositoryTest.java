@@ -3,30 +3,19 @@ package challenge.nDaysChallenge.dajim;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
-import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.transaction.BeforeTransaction;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,9 +32,6 @@ class DajimRepositoryTest {
 
     @Autowired
     DajimRepository dajimRepository;
-
-    @Autowired
-    DajimFeedRepository dajimFeedRepository;
 
     Member savedMember1, savedMember2;
     Room savedRoom;
@@ -123,7 +109,7 @@ class DajimRepositoryTest {
 
     @Test
     void 다짐_피드_조회(){
-        List<Dajim> dajimFeed = dajimFeedRepository.findAllByOpen();
+        List<Dajim> dajimFeed = dajimRepository.findAllByOpen();
 
         assertThat(dajimFeed.size()).isEqualTo(3);
     }

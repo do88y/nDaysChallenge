@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
+import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,16 @@ public class DajimController {
         List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber);
 
         return ResponseEntity.ok().body(dajimResponseDtoList);
+    }
+
+    //피드 전체 조회 (다짐 + 감정스티커 리스트)
+    @GetMapping("/feed")
+    public ResponseEntity<?> viewDajimOnFeed(){
+
+        List<DajimFeedResponseDto> dajimFeedDto = dajimService.viewDajimOnFeed();
+
+        return ResponseEntity.ok().body(dajimFeedDto);
+
     }
 
     private void checkLogin(Member member) {
