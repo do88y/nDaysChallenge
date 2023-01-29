@@ -18,11 +18,31 @@ public class EmotionController { //감정 스티커 등록
 
     //이모션 등록/수정/삭제
     @PostMapping("/feed/emotion")
-    public ResponseEntity<?> manageEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+    public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        EmotionResponseDto emotionResponseDto = emotionService.manageEmotion(emotionRequestDto, memberAdapter.getMember());
+        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(emotionResponseDto);
+    }
+
+    @PatchMapping("/feed/emotion")
+    public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(emotionResponseDto);
+    }
+
+    @DeleteMapping("/feed/emotion")
+    public ResponseEntity<?> deleteEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        EmotionResponseDto emotionResponseDto = emotionService.deleteEmotion(emotionRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(emotionResponseDto);
     }

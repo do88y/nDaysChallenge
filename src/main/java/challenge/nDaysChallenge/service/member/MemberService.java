@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,15 +59,15 @@ public class MemberService {
         String nickname = member.getNickname();
 
         //constraintviolation 오류 해결 위해 fk 엔티티 삭제
-        Optional<List<Dajim>> dajims = dajimRepository.findAllByMemberNickname(nickname);
-        Optional<List<RoomMember>> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname);
+        List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
 
-        if (dajims.isPresent()){
-            dajimRepository.deleteAll(dajims.get());
+        if (!dajims.isEmpty()){
+            dajimRepository.deleteAll(dajims);
         }
 
-        if (roomMembers.isPresent()){
-            roomMemberRepository.deleteAll(roomMembers.get()); //룸멤버에서 탈퇴 회원만 삭제 (룸 유지)
+        if (!roomMembers.isEmpty()){
+            roomMemberRepository.deleteAll(roomMembers); //룸멤버에서 탈퇴 회원만 삭제 (룸 유지)
         }
 
         //멤버 삭제

@@ -15,15 +15,19 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
     @Override
     <S extends Dajim> S save(S entity);
 
-    //룸멤버 (1~4명) 다짐 상세 조회
+    Optional<Dajim> findByNumber(Long dajimNumber);
+
+    @Query("SELECt d FROM Dajim d WHERE d.member.nickname = :nickname")
+    Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);
+
+    //챌린지 룸 다짐 조회 - 룸멤버 (1~4명) 다짐 상세 조회
     @Query("SELECT d FROM Dajim d JOIN d.room r" +
             " WHERE r.number = :roomNumber" +
             " ORDER BY d.updatedDate")
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
-    Optional<Dajim> findByNumber(Long dajimNumber);
-
-    @Query("SELECt d FROM Dajim d WHERE d.member.nickname = :nickname")
-    Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);
+    //피드 다짐 조회 - open=PUBLIC인 다짐
+    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.number DESC")
+    List<Dajim> findAllByOpen();
 
 }
