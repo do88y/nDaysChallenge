@@ -32,6 +32,30 @@ public class MemberService {
 
     private final RoomMemberRepository roomMemberRepository;
 
+    //아이디 중복 검사
+    @Transactional(readOnly = true)
+    public String idCheck(String id){
+        boolean exists = memberRepository.existsById(id);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
+
+    //닉네임 중복 검사
+    @Transactional(readOnly = true)
+    public String nicknameCheck(String nickname){
+        boolean exists = memberRepository.existsByNickname(nickname);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
+
     //회원정보 조회 (수정 전)
     @Transactional(readOnly = true)
     public MemberInfoResponseDto findMemberInfo(String id) {

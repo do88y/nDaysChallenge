@@ -14,9 +14,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-public class MemberController { //마이페이지 전용
+public class MemberController {
 
     private final MemberService memberService;
+
+    //아이디 중복 검사 (ok = 중복 아님 / exists = 중복)
+    @GetMapping("/auth/id-check")
+    public ResponseEntity<String> idCheck (@RequestBody String id){
+        return ResponseEntity.ok().body(memberService.idCheck(id));
+    }
+
+    //닉네임 중복 검사
+    @GetMapping("/auth/nickname-check")
+    public ResponseEntity<String> nicknameCheck (@RequestBody String nickname){
+        return ResponseEntity.ok().body(memberService.nicknameCheck(nickname));
+    }
 
     //회원정보 조회 (수정 전)
     @GetMapping("/user/details")

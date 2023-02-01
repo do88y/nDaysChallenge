@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.domain.member;
 
+import ch.qos.logback.classic.db.names.ColumnName;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(name = "unique", columnNames = {"member_id", "nickname"}))
 public class Member {
 
     @Id
