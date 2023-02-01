@@ -21,7 +21,7 @@ public class Stamp {
     @Column(name = "stamp_number")
     public Long number;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "stamp", fetch = FetchType.LAZY)
     public Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)

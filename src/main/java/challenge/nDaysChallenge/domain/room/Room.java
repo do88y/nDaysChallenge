@@ -17,6 +17,7 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 @Getter
+@DiscriminatorColumn
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
