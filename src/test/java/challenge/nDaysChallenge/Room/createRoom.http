@@ -9,7 +9,7 @@ Content-Type: application/json
 ###
 POST http://localhost:8080/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MjUxNTAzfQ.vTYLeaV5G2jwuoGL2oc3vtve1LBb96Klr66oP56oH_s
+Authorization: Bearer 
 
 {
   "name": "명상",
