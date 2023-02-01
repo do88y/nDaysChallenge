@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
-    //진행중인 개인 챌린지
+    //진행 개인 챌린지
     @Query(value = "select s from SingleRoom s" +
                     " where s.member = :member" +
                     " and s.status = 'CONTINUE'")
     public List<SingleRoom> findSingleRooms(@Param("member") Member member);
 
-    //완료 개인 챌린지r
+    //완료 개인 챌린지
     @Query(value = "select s from SingleRoom s" +
                     " where s.member = :member" +
                     " and s.status = 'END'")
