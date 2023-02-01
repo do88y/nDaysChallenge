@@ -27,11 +27,14 @@ public class Stamp {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
     public Member member;
-    public String day;
-    public LocalDate latestDate;
-    protected int usedPassCount;
-    protected int successCount;
 
+    public String day;
+
+    public LocalDate latestDate;
+
+    protected int usedPassCount;
+
+    protected int successCount;
 
     //==생성 메서드==//
     public static Stamp createStamp(Room room, Member member) {
@@ -79,5 +82,10 @@ public class Stamp {
     //실패 +1
     public void addPass() {
         usedPassCount += 1;
+    }
+
+    public void deleteConnection(){
+        this.room=null;
+        this.member=null;
     }
 }

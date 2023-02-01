@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.domain.member;
 
 import ch.qos.logback.classic.db.names.ColumnName;
 import challenge.nDaysChallenge.domain.Relationship;
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import lombok.AccessLevel;
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = @UniqueConstraint(name = "unique", columnNames = {"member_id", "nickname"}))
+@Table(uniqueConstraints = @UniqueConstraint(name = "unique", columnNames = {"id", "nickname"}))
 public class Member {
 
     @Id
@@ -25,7 +26,6 @@ public class Member {
     @Column(name = "member_number")
     private Long number;
 
-    @Column(name = "member_id")
     private String id;
 
     private String pw;
@@ -46,6 +46,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stamp> stamps = new ArrayList<>();
 
     @Builder
     public Member(String id, String pw ,String nickname, int image, Authority authority) {

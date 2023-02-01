@@ -3,9 +3,9 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "aaee89@gmail.com",
+  "id": "aaee819@gmail.com",
   "pw": "123",
-  "nickname": "bcd9",
+  "nickname": "bcd91",
   "image": 3
 }
 
