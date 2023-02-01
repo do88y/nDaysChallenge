@@ -3,9 +3,9 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "aaee819@gmail.com",
+  "id": "id12@gmail.com",
   "pw": "123",
-  "nickname": "bcd91",
+  "nickname": "bcd911",
   "image": 3
 }
 
@@ -15,7 +15,7 @@ POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "id": "aaee89@gmail.com",
+  "id": "id12@gmail.com",
   "pw": "123"
 }
 

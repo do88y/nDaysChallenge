@@ -55,4 +55,8 @@ public class SingleRoom extends Room {
         this.reward = reward;
     }
 
+    public void deleteConnection(){
+        this.member=null;
+    }
+
 }
