@@ -36,4 +36,8 @@ public class GroupRoom extends Room {
         this.reward = reward;
     }
 
+    public void deleteConnection(){
+        this.member=null;
+    }
+
 }

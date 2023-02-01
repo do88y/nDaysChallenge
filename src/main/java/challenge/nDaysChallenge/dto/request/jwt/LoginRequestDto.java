@@ -14,6 +14,11 @@ public class LoginRequestDto {
 
     private String pw;
 
+    public LoginRequestDto(String id, String pw) {
+        this.id = id;
+        this.pw = pw;
+    }
+
     public UsernamePasswordAuthenticationToken toAuthentication(){
         return new UsernamePasswordAuthenticationToken(id, pw);
     }

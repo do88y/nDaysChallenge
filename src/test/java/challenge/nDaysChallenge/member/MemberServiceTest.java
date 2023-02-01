@@ -48,6 +48,26 @@ public class MemberServiceTest {
     PasswordEncoder passwordEncoder;
 
     @Test
+    void 아이디_중복_검사(){
+        //when
+        when(memberRepository.existsById(anyString())).thenReturn(true);
+        String idCheck = memberService.idCheck("abc@naver.com");
+
+        //then
+        assertThat(idCheck).isEqualTo("exists");
+    }
+
+    @Test
+    void 닉네임_중복_검사(){
+        //when
+        when(memberRepository.existsByNickname(anyString())).thenReturn(true);
+        String nicknameCheck = memberService.nicknameCheck("abc");
+
+        //then
+        assertThat(nicknameCheck).isEqualTo("exists");
+    }
+
+    @Test
     void 회원정보_조회(){
         //given
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);

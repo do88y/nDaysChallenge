@@ -32,19 +32,6 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
         return ResponseEntity.ok().body(memberResponseDto);
     }
 
-    //아이디 중복 검사 (ok = 중복 아님 / exists = 중복)
-    @GetMapping("/auth/id-check")
-    public ResponseEntity<String> idCheck (@RequestBody String id){
-        return ResponseEntity.ok().body(authService.idCheck(id));
-    }
-
-
-    //닉네임 중복 검사
-    @GetMapping("/auth/nickname-check")
-    public ResponseEntity<String> nicknameCheck (@RequestBody String nickname){
-        return ResponseEntity.ok().body(authService.nicknameCheck(nickname));
-    }
-
     //로그인
     @PostMapping("/auth/login")
     public ResponseEntity<TokenResponseDto> login (@RequestBody LoginRequestDto loginRequestDto){

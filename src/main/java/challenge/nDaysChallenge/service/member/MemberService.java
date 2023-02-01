@@ -1,11 +1,13 @@
 package challenge.nDaysChallenge.service.member;
 
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
@@ -31,6 +33,32 @@ public class MemberService {
     private final DajimRepository dajimRepository;
 
     private final RoomMemberRepository roomMemberRepository;
+
+    private final StampRepository stampRepository;
+
+    //아이디 중복 검사
+    @Transactional(readOnly = true)
+    public String idCheck(String id){
+        boolean exists = memberRepository.existsById(id);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
+
+    //닉네임 중복 검사
+    @Transactional(readOnly = true)
+    public String nicknameCheck(String nickname){
+        boolean exists = memberRepository.existsByNickname(nickname);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
 
     //회원정보 조회 (수정 전)
     @Transactional(readOnly = true)
@@ -61,13 +89,26 @@ public class MemberService {
         //constraintviolation 오류 해결 위해 fk 엔티티 삭제
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
 
         if (!dajims.isEmpty()){
-            dajimRepository.deleteAll(dajims);
+            dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
+        }
+
+        for (RoomMember roomMember:roomMembers){
+            roomMember.deleteConnection();
+        }
+
+        for (Stamp stamp:stamps){
+            stamp.deleteConnection();
         }
 
         if (!roomMembers.isEmpty()){
-            roomMemberRepository.deleteAll(roomMembers); //룸멤버에서 탈퇴 회원만 삭제 (룸 유지)
+            roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
+        }
+
+        if (!stamps.isEmpty()){
+            stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
         }
 
         //멤버 삭제

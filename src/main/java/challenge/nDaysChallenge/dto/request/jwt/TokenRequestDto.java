@@ -12,4 +12,8 @@ public class TokenRequestDto {
     private String accessToken;
     private String refreshToken;
 
+    public TokenRequestDto(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
 }
