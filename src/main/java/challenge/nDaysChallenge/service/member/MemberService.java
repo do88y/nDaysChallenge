@@ -121,18 +121,19 @@ public class MemberService {
         //레포지토리에서 직접 삭제
         if (!dajims.isEmpty()){
             dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
-        }
 
-        if (!singleRooms.isEmpty()){
-            singleRoomRepository.deleteAll(singleRooms); //싱글룸 삭제
         }
 
         if (!roomMembers.isEmpty()){
-            roomMemberRepository.deleteAll(roomMembers); //룸멤버 삭제
+            roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
         }
 
         if (!stamps.isEmpty()){
-            stampRepository.deleteAll(stamps); //스탬프 삭제
+            stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
+        }
+
+        if (!singleRooms.isEmpty()){
+            singleRoomRepository.deleteAll(singleRooms);
         }
 
         //멤버 삭제
