@@ -22,10 +22,10 @@ Content-Type: application/json
 
 ###액세스 토큰 재발급
 POST http://localhost:8080/auth/reissue
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODlAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzUwOTUxNTd9.0Y7urKOhzdMPcyqsXiPHUgM_KUFIq8ValqguPbFt7N8
+Authorization: Bearer
 Content-Type: application/json
 
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODlAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzUwOTUxNTd9.0Y7urKOhzdMPcyqsXiPHUgM_KUFIq8ValqguPbFt7N8",
-  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzU2OTgxNTd9.QTLDl2f0IzpN12JyKqqvRczVPCL5BTe3zvfuluiVteo"
+  "accessToken": "",
+  "refreshToken": ""
 }
