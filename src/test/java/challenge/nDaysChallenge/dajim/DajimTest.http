@@ -1,11 +1,11 @@
 ### 다짐 등록
-POST http://localhost:8080/challenge/11/dajim
+POST http://localhost:8080/challenge/1/dajim
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5NDk3fQ.isL1sVvpbU1y9QxhbUjnO52LVGjhtp_BqCrhqeoI1fg
 
 {
-  "content": "다짐 등록2",
-  "open": "PRIVATE"
+  "content": "다짐 등록",
+  "open": "PUBLIC"
 }
 
 ### 다짐 수정

@@ -53,7 +53,7 @@ public class RoomMember {
     }
 
     public void deleteConnection(){
-        this.member=null;
+//        this.member=null;
         this.room=null;
         this.stamp=null;
     }
