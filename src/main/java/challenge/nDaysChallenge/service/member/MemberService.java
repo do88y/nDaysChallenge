@@ -142,6 +142,3 @@ public class MemberService {
     }
 
 }
-
-
-
