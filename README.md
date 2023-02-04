@@ -25,7 +25,6 @@
   - AWS Elastic Beanstalk
   - AWS EC2
   - AWS RDS
-  - AWS Route53
   - Github Actions
 - 협업툴
   - Github
@@ -33,7 +32,7 @@
 
 
 # 아키텍처
-
+![AWS-architecture](https://user-images.githubusercontent.com/104435274/216767253-ee4e6b41-a5dd-4f23-bbd4-0c4f58c53992.png)
 
 
 # 메인기능
