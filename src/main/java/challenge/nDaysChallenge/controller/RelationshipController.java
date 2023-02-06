@@ -26,7 +26,9 @@ public class RelationshipController {
 
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
-    public ResponseEntity<?> findFriends(@RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
+    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
+        Member member = memberAdapter.getMember();
+
         String id;
         String nickname;
 
@@ -42,14 +44,14 @@ public class RelationshipController {
             throw new NoSuchElementException("아이디를 입력하지않았습니다.");
         }
 
-        Member member = relationshipService.findFriends(id, nickname);
+        Member foundFriend = relationshipService.findFriends(member.getId(), member.getNickname());
 
-        FindFriendsResponseDTO foundFriend = new FindFriendsResponseDTO(
-                member.getId(),
-                member.getNickname(),
-                member.getImage());
+        FindFriendsResponseDTO foundFriendDTO = new FindFriendsResponseDTO(
+                foundFriend.getId(),
+                foundFriend.getNickname(),
+                foundFriend.getImage());
 
-        return ResponseEntity.ok().body(foundFriend);
+        return ResponseEntity.ok().body(foundFriendDTO);
     }
 
 

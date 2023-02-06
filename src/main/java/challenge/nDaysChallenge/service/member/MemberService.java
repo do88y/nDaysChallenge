@@ -94,14 +94,14 @@ public class MemberService {
     public String deleteMember(Member member) {
         String nickname = member.getNickname();
 
-        //constraintviolation 오류 해결 위해 fk 엔티티 삭제
+        //멤버 참조하는 엔티티 불러오기
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<SingleRoom> singleRooms = singleRoomRepository.findSingleRooms(member);
         List<GroupRoom> groupRooms = groupRoomRepository.findGroupRooms(member);
 
-        //연관관계부터 삭제
+        //룸 관련 엔티티는 연관관계부터 삭제
         for (RoomMember roomMember:roomMembers) {
             roomMember.deleteConnection();
         }
@@ -114,12 +114,12 @@ public class MemberService {
             groupRoom.deleteConnection();
         }
 
-        //레포지토리에서 직접 삭제
-        dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
+        //레포지토리에서 직접 엔티티 삭제
+        dajimRepository.deleteAll(dajims); //다짐 + 이모션 삭제
 
-        roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
+        roomMemberRepository.deleteAll(roomMembers);
 
-        stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
+        stampRepository.deleteAll(stamps);
 
         singleRoomRepository.deleteAll(singleRooms);
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +29,8 @@ public class DajimService {
 
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
+        /////if문으로 다짐 존재 체크 (같은 룸-멤버에선 하나의 다짐만 허용)
+
         Room room = roomRepository.findByNumber(roomNumber)
                 .orElseThrow(() -> new RuntimeException("챌린지룸을 찾을 수 없습니다."));
 
@@ -40,7 +43,7 @@ public class DajimService {
 
     //다짐 수정
     public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, Member member) {
-        Dajim dajim = dajimRepository.findByNumber(dajimUpdateRequestDto.getDajimNumber())
+        Dajim dajim = dajimRepository.findByNumber(dajimUpdateRequestDto.getDajimNumber()) //////멤버넘버, 룸넘버로 파라미터 수정
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
         checkRoomAndMember(dajim, member, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
