@@ -1,9 +1,29 @@
-### 감정스티커 등록, 수정, 삭제
+### 감정스티커 등록
 POST http://localhost:8080/feed/emotion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5NDk3fQ.isL1sVvpbU1y9QxhbUjnO52LVGjhtp_BqCrhqeoI1fg
 
 {
-  "dajimNumber": 7,
+  "dajimNumber": 1,
   "sticker": "WATCH"
+}
+
+### 감정스티커 수정
+PATCH http://localhost:8080/feed/emotion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5MTUxfQ.ZSUUNhyHOyRpgof43TClkZBgxBWiCiAJkvPuGGZOnLs
+
+{
+  "dajimNumber": 1,
+  "sticker": "CHEER"
+}
+
+### 감정스티커 삭제
+DELETE http://localhost:8080/feed/emotion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5MTUxfQ.ZSUUNhyHOyRpgof43TClkZBgxBWiCiAJkvPuGGZOnLs
+
+{
+  "dajimNumber": 1,
+  "sticker": "CHEER"
 }
