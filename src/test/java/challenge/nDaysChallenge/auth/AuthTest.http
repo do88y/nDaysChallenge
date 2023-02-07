@@ -1,17 +1,17 @@
 ###회원가입
-POST http://localhost:8080/auth/signup
+POST http://ec2-34-221-101-240.us-west-2.compute.amazonaws.com:80/auth/signup
 Content-Type: application/json
 
 {
   "id": "id12@gmail.com",
   "pw": "123",
-  "nickname": "bcd911",
+  "nickname": "abcd",
   "image": 3
 }
 
 
 ###로그인
-POST http://localhost:8080/auth/login
+POST http://ec2-34-221-101-240.us-west-2.compute.amazonaws.com:80/auth/login
 Content-Type: application/json
 
 {

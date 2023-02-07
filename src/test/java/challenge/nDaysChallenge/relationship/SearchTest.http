@@ -1,7 +1,8 @@
-GET http://localhost:8080/friends/find
+GET http://ec2-34-221-101-240.us-west-2.compute.amazonaws.com:80/friends/find
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NjczNTI4fQ.K0o9af3q-X58m0ZnZuAvvGpYlYGJOUlwyrq29DrRE7Y
 
 {
-"nickname":"내루미"
+  "id": "wonsy1006@gmail.com",
+  "nickname": ""
 }

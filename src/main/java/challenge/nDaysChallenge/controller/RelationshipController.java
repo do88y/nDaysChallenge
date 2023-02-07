@@ -10,6 +10,7 @@ import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class RelationshipController {
 
     private final RelationshipService relationshipService;
@@ -27,29 +29,21 @@ public class RelationshipController {
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
     public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
-        Member member = memberAdapter.getMember();
-
-        String id;
-        String nickname;
-
-        try {
-            nickname = findFriendsRequestDTO.getNickname();
-        } catch (Exception e) {
-            throw new NoSuchElementException("닉네임을 입력하지 않았습니다.");
+        //로그인 확인
+        if (memberAdapter == null) {
+            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
         }
+        log.info("controller - 1");
 
-        try {
-           id = findFriendsRequestDTO.getId();
-        } catch (Exception e) {
-            throw new NoSuchElementException("아이디를 입력하지않았습니다.");
-        }
-
-        Member foundFriend = relationshipService.findFriends(member.getId(), member.getNickname());
+        Member foundFriend = relationshipService.findFriends(findFriendsRequestDTO.getId(), findFriendsRequestDTO.getNickname());
+        log.info("controller - 2");
 
         FindFriendsResponseDTO foundFriendDTO = new FindFriendsResponseDTO(
                 foundFriend.getId(),
                 foundFriend.getNickname(),
                 foundFriend.getImage());
+        log.info("controller - 3");
+
 
         return ResponseEntity.ok().body(foundFriendDTO);
     }
@@ -75,7 +69,6 @@ public class RelationshipController {
 
         return ResponseEntity.ok().body(askResponseDTOList);
     }
-
 
     //친구 수락==친구목록 //
     @PostMapping("/friends/accept")

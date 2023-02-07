@@ -23,6 +23,10 @@ Authorization: Bearer
   "usedPassCount" : 0
 }
 
+###
+
+
+
 ### 진행 챌린지
 GET http://localhost:8080/challenge/list
 Content-Type: application/json
