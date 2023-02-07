@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = @UniqueConstraint(name = "unique", columnNames = {"id", "nickname"}))
+@Table(uniqueConstraints = @UniqueConstraint(name = "idNickname", columnNames = {"id", "nickname"}))
 public class Member {
 
     @Id

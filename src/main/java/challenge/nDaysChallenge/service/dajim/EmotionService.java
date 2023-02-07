@@ -24,7 +24,7 @@ public class EmotionService {
 
     private final DajimRepository dajimRepository;
 
-    //스티커 등록/변경/삭제
+    //스티커 등록
     public EmotionResponseDto uploadEmotion(EmotionRequestDto emotionRequestDto, Member member) {
         Sticker sticker = Sticker.valueOf(emotionRequestDto.getSticker());
 
