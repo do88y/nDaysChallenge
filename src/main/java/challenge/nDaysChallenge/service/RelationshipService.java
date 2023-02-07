@@ -10,6 +10,7 @@ import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -21,12 +22,34 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class RelationshipService {
 
     //리포지토리 값을 쓸꺼니까 먼저 선언을 해줌//
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
+    //id, nickname 검색//
+    public Member findFriends(String id, String nickname) {
+        if (id == null || id.equals("") || id.equals("null")) {
+            Member foundMember = memberRepository.findByNickname(nickname)
+                    .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
+            log.info(foundMember.getNickname());
+            return foundMember;
+        }
+        log.info("service - 1");
+
+
+        if (nickname == null || nickname.equals("")|| nickname.equals("null")) {
+            Member foundMember = memberRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
+            log.info(foundMember.getNickname());
+            return foundMember;
+        }
+        log.info("service - 2");
+
+        return null;
+    }
 
     //relationship 생성//
     @Transactional
@@ -136,19 +159,5 @@ public class RelationshipService {
 
     }
 
-
-//id, nickname 검색//
-    public Member findFriends(String id, String nickname) {
-        if (id == null || id.equals("") || id.equals("null")) {
-            return memberRepository.findByNickname(nickname)
-                    .orElseThrow(() -> new RuntimeException("해당 닉네임이 검색되지 않습니다."));
-        }
-
-        if (nickname == null || id.equals("")|| id.equals("null")) {
-            return memberRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("해당 아이디가 검색되지 않습니다."));
-        }
-      return null;
-    }
 }
 
