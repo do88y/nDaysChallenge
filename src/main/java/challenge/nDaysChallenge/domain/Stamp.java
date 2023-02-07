@@ -19,22 +19,23 @@ public class Stamp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stamp_number")
-    public Long number;
+    private Long number;
 
-    @OneToOne(mappedBy = "stamp", fetch = FetchType.LAZY)
-    public Room room;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_number", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_number")
-    public Member member;
+    private Member member;
 
-    public String day;
+    private String day;
 
-    public LocalDate latestDate;
+    private LocalDate latestDate;
 
-    protected int usedPassCount;
+    private int usedPassCount;
 
-    protected int successCount;
+    private int successCount;
 
     //==생성 메서드==//
     public static Stamp createStamp(Room room, Member member) {

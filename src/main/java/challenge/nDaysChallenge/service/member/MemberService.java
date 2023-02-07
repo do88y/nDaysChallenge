@@ -20,10 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +42,7 @@ public class MemberService {
 
     private final SingleRoomRepository singleRoomRepository;
     private final GroupRoomRepository groupRoomRepository;
+    private final EntityManager em;
 
     //아이디 중복 검사
     @Transactional(readOnly = true)
@@ -98,8 +98,8 @@ public class MemberService {
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<SingleRoom> singleRooms = singleRoomRepository.findSingleRooms(member);
-        List<GroupRoom> groupRooms = groupRoomRepository.findGroupRooms(member);
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member);
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member);
 
         //룸 관련 엔티티는 연관관계부터 삭제
         for (RoomMember roomMember:roomMembers) {
@@ -111,7 +111,11 @@ public class MemberService {
         }
 
         for (GroupRoom groupRoom : groupRooms) {
-            groupRoom.deleteConnection();
+            groupRoom.deleteHostConnection();
+        }
+
+        for (SingleRoom singleRoom:singleRooms){
+            singleRoom.deleteConnection();
         }
 
         //레포지토리에서 직접 엔티티 삭제

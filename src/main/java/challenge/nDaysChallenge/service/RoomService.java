@@ -5,7 +5,6 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
-import challenge.nDaysChallenge.dto.response.Room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -47,10 +45,10 @@ public class RoomService {
      * 개인 챌린지 생성
      */
     @Transactional
-    public RoomResponseDto singleRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
+    public RoomResponseDto singleRoom(Member member, String name, Period period, Category category, int passCount, String reward) {
 
         //챌린지 생성
-        SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
+        SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
 
         //스탬프 생성
         Stamp stamp = Stamp.createStamp(newRoom, member);
@@ -82,7 +80,7 @@ public class RoomService {
         }
 
         //챌린지 생성
-        GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward, usedPassCount, successCount);
+        GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
         groupRoomRepository.save(newRoom);
 
         //방장
@@ -134,8 +132,8 @@ public class RoomService {
         //dto 생성
         StampDto stampDto = StampDto.builder()
                 .roomNumber(roomNumber)
-                .stampNumber(updateStamp.number)
-                .day(updateStamp.day)
+                .stampNumber(updateStamp.getNumber())
+                .day(updateStamp.getDay())
                 .successCount(stamp.getSuccessCount())
                 .usedPassCount(stamp.getUsedPassCount())
                 .build();

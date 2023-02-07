@@ -25,7 +25,7 @@ public class RoomMember {
     @JoinColumn(name = "room_number")
     private Room room;
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "stamp_number")
     private Stamp stamp;
 

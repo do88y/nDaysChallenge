@@ -47,8 +47,6 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stamp> stamps = new ArrayList<>();
 
     @Builder
     public Member(String id, String pw ,String nickname, int image, Authority authority) {
