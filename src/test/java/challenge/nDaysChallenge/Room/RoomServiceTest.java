@@ -54,7 +54,7 @@ public class RoomServiceTest {
     @Test
     public void 개인_챌린지_builder() throws Exception {
         //given
-        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         em.persist(room);
 
         //when
@@ -76,7 +76,7 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
@@ -132,7 +132,7 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         em.persist(member);
 
-        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
 
         em.flush();
         em.clear();
@@ -152,9 +152,9 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
-        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "", 0, 0);
-        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠", 0, 0);
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠");
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
@@ -170,7 +170,7 @@ public class RoomServiceTest {
         singleRoom2.addRoom(singleRoom2, member, stamp2);
         singleRoom3.addRoom(singleRoom3, member, stamp3);
 
-        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
         Stamp stamp4 = Stamp.createStamp(singleRoom1, member);
         stampRepository.save(stamp4);
@@ -201,9 +201,9 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
-        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "", 0, 0);
-        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠", 0, 0);
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠");
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
@@ -238,7 +238,7 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행", 0, 0);
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
 
         RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
@@ -261,7 +261,7 @@ public class RoomServiceTest {
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
 
-        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         singleRoomRepository.save(room);
         Stamp stamp1 = Stamp.createStamp(room, member);
         stampRepository.save(stamp1);
@@ -296,7 +296,7 @@ public class RoomServiceTest {
     @Test
     public void findByRoomAndMember_쿼리() throws Exception {
         //given
-        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "", 0, 0);
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
 
         //when
@@ -312,7 +312,7 @@ public class RoomServiceTest {
         //given
         Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
         memberRepository.save(member);
-        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
         //when
         roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));

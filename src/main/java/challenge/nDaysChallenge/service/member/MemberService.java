@@ -20,10 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +42,7 @@ public class MemberService {
 
     private final SingleRoomRepository singleRoomRepository;
     private final GroupRoomRepository groupRoomRepository;
+    private final EntityManager em;
 
     //아이디 중복 검사
     @Transactional(readOnly = true)
@@ -98,8 +98,8 @@ public class MemberService {
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<SingleRoom> singleRooms = singleRoomRepository.findSingleRooms(member);
-        List<GroupRoom> groupRooms = groupRoomRepository.findGroupRooms(member);
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member);
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member);
 
         //연관관계부터 삭제
         for (RoomMember roomMember:roomMembers){
@@ -111,7 +111,11 @@ public class MemberService {
         }
 
         for (GroupRoom groupRoom : groupRooms) {
-            groupRoom.deleteConnection();
+            if (groupRoom.getMember().equals(member)) {
+                groupRoom.deleteHostConnection();
+            } else {
+                groupRoom.deleteGuestConnection();
+            }
         }
 
         for (SingleRoom singleRoom:singleRooms){
@@ -122,18 +126,26 @@ public class MemberService {
         if (!dajims.isEmpty()){
             dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
         }
+        em.flush();
+        em.clear();
 
         if (!roomMembers.isEmpty()){
             roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
         }
+        em.flush();
+        em.clear();
 
         if (!stamps.isEmpty()){
             stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
         }
+        em.flush();
+        em.clear();
 
         if (!singleRooms.isEmpty()){
             singleRoomRepository.deleteAll(singleRooms);
         }
+        em.flush();
+        em.clear();
 
         //멤버 삭제
         memberRepository.delete(member);

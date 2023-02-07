@@ -45,7 +45,7 @@ public class SingleRoom extends Room {
     }
 
     //==생성자==//
-    public SingleRoom(String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount) {
+    public SingleRoom(String name, Period period, Category category, int passCount, String reward) {
         this.name = name;
         this.period = period;
         this.category = category;
@@ -57,6 +57,7 @@ public class SingleRoom extends Room {
 
     public void deleteConnection(){
         this.member=null;
+        this.stamp=null;
     }
 
 }

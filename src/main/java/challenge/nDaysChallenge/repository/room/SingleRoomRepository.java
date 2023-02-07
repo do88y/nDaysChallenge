@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
@@ -23,4 +22,8 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
                     " and s.status = 'END'")
     public List<SingleRoom> finishedSingleRooms(@Param("member") Member member);
 
+    //전체 개인 챌린지
+    @Query(value = "select s from SingleRoom s" +
+                    " where s.member = :member")
+    public List<SingleRoom> findAll(@Param("member") Member member);
 }
