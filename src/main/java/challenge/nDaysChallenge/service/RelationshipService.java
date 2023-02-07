@@ -25,7 +25,6 @@ import java.util.Optional;
 @Slf4j
 public class RelationshipService {
 
-    //리포지토리 값을 쓸꺼니까 먼저 선언을 해줌//
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 

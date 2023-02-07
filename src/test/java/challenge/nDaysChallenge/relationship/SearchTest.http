@@ -1,6 +1,6 @@
 GET http://ec2-34-221-101-240.us-west-2.compute.amazonaws.com:80/friends/find
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NjczNTI4fQ.K0o9af3q-X58m0ZnZuAvvGpYlYGJOUlwyrq29DrRE7Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU0Nzc2fQ.UpZbmu96rL6aSNy2snDMQDM93qFzsApNY87Ui_mn9xc
 
 {
   "id": "wonsy1006@gmail.com",
