@@ -37,12 +37,15 @@ public class Member {
     private Authority authority;
 
     //내가 수락한 친구들만 리스트에 들어가게//
+    @Builder.Default
     @OneToMany(mappedBy = "number", cascade = CascadeType.ALL, orphanRemoval = true)
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
 

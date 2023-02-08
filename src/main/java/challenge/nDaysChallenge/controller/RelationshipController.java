@@ -28,7 +28,9 @@ public class RelationshipController {
 
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
-    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestParam(value = "id") String id, @RequestParam(value = "nickname") String nickname) {
+    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                         @RequestParam(value = "id",required = false) String id,
+                                         @RequestParam(value = "nickname", required = false) String nickname) {
         //로그인 확인
         if (memberAdapter == null) {
             throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
