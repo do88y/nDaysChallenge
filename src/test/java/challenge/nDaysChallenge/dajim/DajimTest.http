@@ -1,10 +1,10 @@
 ### 다짐 등록
-POST http://localhost:8080/challenge/1/dajim
+POST http://localhost:8080/challenge/6/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5NDk3fQ.isL1sVvpbU1y9QxhbUjnO52LVGjhtp_BqCrhqeoI1fg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
 
 {
-  "content": "다짐 등록",
+  "content": "6번 방의 선물",
   "open": "PUBLIC"
 }
 

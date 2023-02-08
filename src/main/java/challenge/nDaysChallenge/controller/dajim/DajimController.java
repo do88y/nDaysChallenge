@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -57,9 +58,9 @@ public class DajimController {
 
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
     @GetMapping("/feed")
-    public ResponseEntity<?> viewDajimOnFeed(){
+    public ResponseEntity<?> viewDajimOnFeed(Principal principal){
 
-        List<DajimFeedResponseDto> dajimFeedDto = dajimService.viewDajimOnFeed();
+        List<DajimFeedResponseDto> dajimFeedDto = dajimService.viewDajimOnFeed(principal);
 
         return ResponseEntity.ok().body(dajimFeedDto);
 

@@ -28,22 +28,20 @@ public class RelationshipController {
 
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
-    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestBody FindFriendsRequestDTO findFriendsRequestDTO) {
+    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                         @RequestParam(value = "id", required = false, defaultValue = "") String id,
+                                         @RequestParam(value = "nickname", required = false, defaultValue = "") String nickname) {
         //로그인 확인
         if (memberAdapter == null) {
             throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
         }
-        log.info("controller - 1");
 
-        Member foundFriend = relationshipService.findFriends(findFriendsRequestDTO.getId(), findFriendsRequestDTO.getNickname());
-        log.info("controller - 2");
+        Member foundFriend = relationshipService.findFriends(id, nickname);
 
         FindFriendsResponseDTO foundFriendDTO = new FindFriendsResponseDTO(
                 foundFriend.getId(),
                 foundFriend.getNickname(),
                 foundFriend.getImage());
-        log.info("controller - 3");
-
 
         return ResponseEntity.ok().body(foundFriendDTO);
     }
@@ -57,7 +55,6 @@ public class RelationshipController {
         List<AskResponseDTO> savedRequestFriendsList = relationshipService.saveRelationship(memberAdapter.getMember(),applyDTO);
 
         return ResponseEntity.ok().body(savedRequestFriendsList);
-
     }
 
     //친구 요청 get//

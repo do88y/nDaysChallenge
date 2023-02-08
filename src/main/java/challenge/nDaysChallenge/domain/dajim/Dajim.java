@@ -24,6 +24,7 @@ public class Dajim extends BaseEntity {
 
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     List<Emotion> emotions = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)

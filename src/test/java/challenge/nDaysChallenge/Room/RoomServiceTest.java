@@ -72,8 +72,12 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-        em.persist(member);
+        Member member = Member.builder()
+                .id("user@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        em.persist(member);
 
         //when
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
@@ -99,9 +103,24 @@ public class RoomServiceTest {
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Long> selectedMembers = new HashSet<>();
-        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, Authority.ROLE_USER);
-        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, Authority.ROLE_USER);
-        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, Authority.ROLE_USER);
+        Member member1 = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member2 = Member.builder()
+                .id("user2@naver.com")
+                .pw("11111")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member3 = Member.builder()
+                .id("user3@naver.com")
+                .pw("22222")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
@@ -129,8 +148,12 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-        em.persist(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        em.persist(member);
 
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
 
@@ -149,8 +172,12 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 진행_챌린지_조회() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-        memberRepository.save(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -198,8 +225,12 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-        memberRepository.save(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -235,8 +266,12 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-        memberRepository.save(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
 
         GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
@@ -258,7 +293,12 @@ public class RoomServiceTest {
     @Test
     public void update_stamp_쿼리() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
         memberRepository.save(member);
 
         SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
@@ -297,8 +337,12 @@ public class RoomServiceTest {
     public void findByRoomAndMember_쿼리() throws Exception {
         //given
         SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
-
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
         //when
         roomRepository.save(room);
         memberRepository.save(member);
@@ -310,7 +354,12 @@ public class RoomServiceTest {
     @Test
     public void 스탬프_카운트_업데이트 () throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, Authority.ROLE_USER);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
         memberRepository.save(member);
         RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));

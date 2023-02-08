@@ -26,6 +26,11 @@ public class EmotionService {
 
     //스티커 등록
     public EmotionResponseDto uploadEmotion(EmotionRequestDto emotionRequestDto, Member member) {
+        //이미 존재하는 이모션인지 확인 (한 다짐, 한 멤버 당 하나의 이모션)
+        if (emotionRepository.findByDajimAndMember(emotionRequestDto.getDajimNumber(), member.getNumber()).isPresent()){
+            throw new RuntimeException("이미 존재하는 이모션입니다.");
+        }
+
         Sticker sticker = Sticker.valueOf(emotionRequestDto.getSticker());
 
         Dajim dajim = dajimRepository.findByNumber(emotionRequestDto.getDajimNumber())

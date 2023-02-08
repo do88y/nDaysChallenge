@@ -24,8 +24,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +80,8 @@ public class DajimServiceTest {
         memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         member = memberRequestDto.toMember(passwordEncoder);
 
-        room = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
-        room2 = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상", 0, 0);
+        room = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상");
+        room2 = new SingleRoom(member.getNickname(), new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "보상");
 
         dajim = Dajim.builder()
                 .number(1L)
@@ -155,7 +157,7 @@ public class DajimServiceTest {
         when(dajimRepository.findAllByOpen()).thenReturn(dajims);
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed();
+        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         //then
         System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));

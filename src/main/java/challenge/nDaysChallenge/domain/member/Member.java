@@ -5,10 +5,7 @@ import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,7 +15,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(name = "idNickname", columnNames = {"id", "nickname"}))
+@Builder
 public class Member {
 
     @Id
@@ -38,24 +37,17 @@ public class Member {
     private Authority authority;
 
     //내가 수락한 친구들만 리스트에 들어가게//
+    @Builder.Default
     @OneToMany(mappedBy = "number", cascade = CascadeType.ALL, orphanRemoval = true)
     private  List<Relationship> confirmedFriendsList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomMember> roomMemberList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
-
-
-    @Builder
-    public Member(String id, String pw ,String nickname, int image, Authority authority) {
-        this.id = id;
-        this.pw = pw;
-        this.nickname = nickname;
-        this.image = image;
-        this.authority = authority;
-    }
 
     public Member update (String nickname, String pw, int image){
         this.nickname = nickname;
