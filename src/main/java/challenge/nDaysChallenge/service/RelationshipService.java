@@ -25,7 +25,6 @@ import java.util.Optional;
 @Slf4j
 public class RelationshipService {
 
-    //리포지토리 값을 쓸꺼니까 먼저 선언을 해줌//
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
@@ -34,20 +33,14 @@ public class RelationshipService {
         if (id == null || id.equals("") || id.equals("null")) {
             Member foundMember = memberRepository.findByNickname(nickname)
                     .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
-            log.info(foundMember.getNickname());
             return foundMember;
         }
-        log.info("service - 1");
-
 
         if (nickname == null || nickname.equals("")|| nickname.equals("null")) {
             Member foundMember = memberRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
-            log.info(foundMember.getNickname());
             return foundMember;
         }
-        log.info("service - 2");
-
         return null;
     }
 

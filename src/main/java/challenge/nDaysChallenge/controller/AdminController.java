@@ -22,7 +22,7 @@ public class AdminController {
 
     //챌린지 조회(id, status) - 현재 개인 챌린지만
     @GetMapping("admin/challenge/search")
-    public ResponseEntity<?> findRooms(@RequestBody RoomSearch roomSearch) {
+    public ResponseEntity<?> findRooms(@RequestParam RoomSearch roomSearch) {
 
         List<Room> rooms = adminService.findRooms(roomSearch);
         List<RoomResponseDto> list = new ArrayList<>();

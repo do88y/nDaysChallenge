@@ -24,8 +24,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +157,7 @@ public class DajimServiceTest {
         when(dajimRepository.findAllByOpen()).thenReturn(dajims);
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed();
+        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         //then
         System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));

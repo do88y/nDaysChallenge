@@ -35,7 +35,7 @@ class DajimRepositoryTest {
 
     Member savedMember1, savedMember2;
     Room savedRoom;
-    Dajim savedDajim1, savedDajim2, savedDajim3;
+    Dajim savedDajim1, savedDajim2;
 
     @BeforeEach
     void 멤버_룸_다짐_세팅(){
@@ -64,11 +64,9 @@ class DajimRepositoryTest {
 
         Dajim dajim1 = DajimUploadRequestDto.toDajim(room, member1, "내용1", "PUBLIC");
         Dajim dajim2 = DajimUploadRequestDto.toDajim(room, member2, "내용2", "PUBLIC");
-        Dajim dajim3 = DajimUploadRequestDto.toDajim(room, member2, "내용3", "PUBLIC");
 
         savedDajim1 = dajimRepository.save(dajim1);
         savedDajim2 = dajimRepository.save(dajim2);
-        savedDajim3 = dajimRepository.save(dajim3);
     }
 
     @Test
@@ -79,20 +77,18 @@ class DajimRepositoryTest {
         System.out.println(dajims.stream().map(dajim -> dajim.getContent())
                                             .collect(Collectors.toList()));
 
-        assertThat(dajims.size()).isEqualTo(3);}
+        assertThat(dajims.size()).isEqualTo(2);}
 
     @Test
     void 다짐번호로_다짐_조회(){
-        Dajim dajim1 = dajimRepository.findByNumber(savedDajim1.getNumber())
+        Dajim dajim1 = dajimRepository.findByMemberNumberAndRoomNumber(savedDajim1.getMember().getNumber(),savedDajim1.getRoom().getNumber())
                 .orElseThrow(()->new RuntimeException("다짐이 없습니다"));
-        Dajim dajim2 = dajimRepository.findByNumber(savedDajim2.getNumber())
+        Dajim dajim2 = dajimRepository.findByMemberNumberAndRoomNumber(savedDajim2.getMember().getNumber(),savedDajim2.getRoom().getNumber())
                 .orElseThrow(()->new RuntimeException("다짐이 없습니다"));
-        Dajim dajim3 = dajimRepository.findByNumber(savedDajim3.getNumber())
-                .orElseThrow(()->new RuntimeException("다짐이 없습니다"));
+
 
         assertThat(dajim1.getMember().getNumber()).isEqualTo(savedDajim1.getMember().getNumber());
         assertThat(dajim2.getMember().getNumber()).isEqualTo(savedDajim2.getMember().getNumber());
-        assertThat(dajim3.getMember().getNumber()).isEqualTo(savedDajim3.getMember().getNumber());
     }
 
     @Test
@@ -100,7 +96,7 @@ class DajimRepositoryTest {
         List<Dajim> nickDajims = dajimRepository.findAllByMemberNickname("nick2")
                 .orElseThrow(()->new RuntimeException("해당 멤버에게 다짐이 없습니다."));
 
-        assertThat(nickDajims.size()).isEqualTo(2);
+        assertThat(nickDajims.size()).isEqualTo(1);
 
         System.out.println(nickDajims.stream().map(dajim ->
                         dajim.getContent())
@@ -111,7 +107,7 @@ class DajimRepositoryTest {
     void 다짐_피드_조회(){
         List<Dajim> dajimFeed = dajimRepository.findAllByOpen();
 
-        assertThat(dajimFeed.size()).isEqualTo(3);
+        assertThat(dajimFeed.size()).isEqualTo(2);
     }
 
 }
