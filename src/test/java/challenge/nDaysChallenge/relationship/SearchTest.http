@@ -1,8 +1,8 @@
-GET http://localhost:8080/friends/find
+GET http://ec2-34-214-168-51.us-west-2.compute.amazonaws.com/friends/find
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1ODI5NDY1fQ.2bSZuxhTef6VCLxQepGzRsungS7VYGqIxRuuiC3XloI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1ODMwNDk2fQ.v_YNGpMuIcp9PmiSV4rgb0IkO_uCzsvlkldsioLlEAk
 
 {
-  "id": "id1234@gmail.com",
-  "nickname": ""
+  "id": "jaerong@gmail.com",
+  "nickname": "백재롱"
 }
