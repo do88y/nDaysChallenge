@@ -28,13 +28,13 @@ public class RelationshipController {
 
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
-    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestParam FindFriendsRequestDTO findFriendsRequestDTO) {
+    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter, @RequestParam(value = "id") String id, @RequestParam(value = "nickname") String nickname) {
         //로그인 확인
         if (memberAdapter == null) {
             throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
         }
 
-        Member foundFriend = relationshipService.findFriends(findFriendsRequestDTO.getId(), findFriendsRequestDTO.getNickname());
+        Member foundFriend = relationshipService.findFriends(id, nickname);
 
         FindFriendsResponseDTO foundFriendDTO = new FindFriendsResponseDTO(
                 foundFriend.getId(),
