@@ -40,7 +40,6 @@ public class GroupRoom extends Room {
     }
 
     public void deleteGuestConnection(){
-        this.member=null;
         this.stamp=null;
     }
 

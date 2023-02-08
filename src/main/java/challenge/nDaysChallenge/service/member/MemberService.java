@@ -110,19 +110,25 @@ public class MemberService {
         }
 
         for (GroupRoom groupRoom : groupRooms) {
-            groupRoom.deleteHostConnection();
+            if (groupRoom.getMember().equals(member)) {
+                groupRoom.deleteHostConnection();
+            } else {
+                groupRoom.deleteGuestConnection();
+            }
         }
 
         for (SingleRoom singleRoom:singleRooms){
             singleRoom.deleteConnection();
         }
+        em.flush();
+        em.clear();
 
-        //레포지토리에서 직접 엔티티 삭제
-        dajimRepository.deleteAll(dajims); //다짐 + 이모션 삭제
+        //레포지토리에서 직접 삭제
+        dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
 
-        roomMemberRepository.deleteAll(roomMembers);
+        roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
 
-        stampRepository.deleteAll(stamps);
+        stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
 
         singleRoomRepository.deleteAll(singleRooms);
 
