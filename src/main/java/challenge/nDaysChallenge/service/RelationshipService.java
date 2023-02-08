@@ -30,16 +30,12 @@ public class RelationshipService {
 
     //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
-        if (id == null || id.equals("") || id.equals("null")) {
-            Member foundMember = memberRepository.findByNickname(nickname)
+        if (nickname.length()>0&&id.equals("")||id==null) {
+            return memberRepository.findByNickname(nickname)
                     .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
-            return foundMember;
-        }
-
-        if (nickname == null || nickname.equals("")|| nickname.equals("null")) {
-            Member foundMember = memberRepository.findById(id)
+        } else if (id.length()>0&&nickname.equals("")||nickname==null) {
+            return memberRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
-            return foundMember;
         }
         return null;
     }

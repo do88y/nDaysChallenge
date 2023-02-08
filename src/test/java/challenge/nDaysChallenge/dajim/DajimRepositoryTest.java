@@ -58,7 +58,7 @@ class DajimRepositoryTest {
         savedMember1 = memberRepository.save(member1);
         savedMember2 = memberRepository.save(member2);
 
-        Room room = new SingleRoom("기상", new Period(LocalDate.now(),30L) , Category.ROUTINE,2, "", 0, 0);
+        Room room = new SingleRoom("기상", new Period(LocalDate.now(),30L) , Category.ROUTINE,2, "");
 
         savedRoom = roomRepository.save(room);
 
