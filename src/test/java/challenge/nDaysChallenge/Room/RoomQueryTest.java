@@ -108,7 +108,7 @@ public class RoomQueryTest {
     List<GroupRoom> makeGroupRooms() {
         List<GroupRoom> groupRooms = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            GroupRoom groupRoom = new GroupRoom(member, "명상", new Period(LocalDate.now(), 30L), Category.MINDFULNESS, 20, "여행", 0, 0);
+            GroupRoom groupRoom = new GroupRoom(member, "명상", new Period(LocalDate.now(), 30L), Category.MINDFULNESS, 20, "여행");
             groupRooms.add(groupRoom);
         }
         groupRoomRepository.saveAll(groupRooms);

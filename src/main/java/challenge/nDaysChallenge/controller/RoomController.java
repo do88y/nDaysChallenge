@@ -96,7 +96,7 @@ public class RoomController {
 
         checkLogin(memberAdapter.getMember());
 
-        RoomResponseDto room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount());
+        RoomResponseDto room = roomService.singleRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward());
 
         URI location = URI.create("/challenge/" + room.getRoomNumber());
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(room);

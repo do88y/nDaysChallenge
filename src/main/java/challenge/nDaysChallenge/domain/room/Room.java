@@ -3,12 +3,8 @@ package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.Stamp;
 import lombok.*;
-import net.minidev.json.JSONUtil;
 
 import javax.persistence.*;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static lombok.AccessLevel.*;
 
@@ -17,8 +13,8 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 @Getter
-@DiscriminatorColumn
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
