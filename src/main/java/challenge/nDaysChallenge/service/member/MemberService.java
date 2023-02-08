@@ -101,17 +101,16 @@ public class MemberService {
         List<SingleRoom> singleRooms = singleRoomRepository.findSingleRooms(member);
         List<GroupRoom> groupRooms = groupRoomRepository.findGroupRooms(member);
 
-        //룸 관련 엔티티는 연관관계부터 삭제
         for (RoomMember roomMember:roomMembers) {
             roomMember.deleteConnection();
         }
 
+//        for (GroupRoom groupRoom:groupRooms) {
+//            groupRoom.deleteConnection();
+//        }
+
         for (Stamp stamp:stamps) {
             stamp.deleteConnection();
-        }
-
-        for (GroupRoom groupRoom : groupRooms) {
-            groupRoom.deleteConnection();
         }
 
         //레포지토리에서 직접 엔티티 삭제

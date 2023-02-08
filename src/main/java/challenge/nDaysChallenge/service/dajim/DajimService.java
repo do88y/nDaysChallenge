@@ -1,7 +1,9 @@
 package challenge.nDaysChallenge.service.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
@@ -9,14 +11,18 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
+import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -26,6 +32,8 @@ public class DajimService {
     private final DajimRepository dajimRepository;
 
     private final RoomRepository roomRepository;
+
+    private final EmotionRepository emotionRepository;
 
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
@@ -72,8 +80,24 @@ public class DajimService {
 
     //전체 다짐 조회 (피드)
     @Transactional(readOnly = true)
-    public List<DajimFeedResponseDto> viewDajimOnFeed() {
+    public List<DajimFeedResponseDto> viewDajimOnFeed(Principal principal) {
         List<Dajim> dajims = dajimRepository.findAllByOpen();
+
+        //피드 각 다짐별 스티커 총 개수 카운트
+        //다짐1: CHEER:1, SURPRISE:2,...
+        List<List<Sticker>> stickersList = dajims.stream().map(
+                dajim -> dajim.getEmotions().stream().map(
+                        emotion -> emotion.getSticker()).collect(Collectors.toList()
+                )
+        ).collect(Collectors.toList());
+        System.out.println(stickersList);
+
+        //사용자별 이모션 (멤버 닉네임, 다짐번호, 스티커내용)
+        if (principal!=null){
+            String id = principal.getName();
+            List<Emotion> memberEmotions = emotionRepository.findAllByMemberId(id)
+                    .orElseGet(ArrayList::new);
+        }
 
         //도메인->dto
         List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->

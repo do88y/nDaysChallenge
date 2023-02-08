@@ -33,20 +33,14 @@ public class RelationshipService {
         if (id == null || id.equals("") || id.equals("null")) {
             Member foundMember = memberRepository.findByNickname(nickname)
                     .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
-            log.info(foundMember.getNickname());
             return foundMember;
         }
-        log.info("service - 1");
-
 
         if (nickname == null || nickname.equals("")|| nickname.equals("null")) {
             Member foundMember = memberRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
-            log.info(foundMember.getNickname());
             return foundMember;
         }
-        log.info("service - 2");
-
         return null;
     }
 
