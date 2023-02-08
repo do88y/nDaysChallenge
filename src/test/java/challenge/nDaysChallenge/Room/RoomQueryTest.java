@@ -40,8 +40,12 @@ public class RoomQueryTest {
     RoomService roomService;
 
 
-    Member member = new Member("user@naver.com", "12345", "nick", 1, Authority.ROLE_USER);
-
+    Member member = Member.builder()
+            .id("user@naver.com")
+            .pw("123")
+            .nickname("abc")
+            .authority(Authority.ROLE_USER)
+            .build();
 
     @Test
     public void 중복_쿼리_테스트() throws Exception {
@@ -97,7 +101,7 @@ public class RoomQueryTest {
     List<SingleRoom> makeSingleRooms() {
         List<SingleRoom> singleRooms = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            SingleRoom singleRoom = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "", 0, 0);
+            SingleRoom singleRoom = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
             singleRooms.add(singleRoom);
         }
         singleRoomRepository.saveAll(singleRooms);

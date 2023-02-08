@@ -32,8 +32,13 @@ public class ReportServiceTest {
     @Test
     public void 신고_생성() throws Exception {
         //given
-        Member member = new Member("user@naver.com","12345","userN",1,Authority.ROLE_USER);
-        SingleRoom room = new SingleRoom("기상", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "", 0, 0);
+        Member member = Member.builder()
+                .id("user@naver.com")
+                .pw("123")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        SingleRoom room = new SingleRoom("기상", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)
