@@ -92,7 +92,7 @@
 ## 3. DTO-엔티티 변환 계층
 
 
-### - 고민
+### - 고민 1
 컨트롤러/서비스 계층 중 DTO-엔티티 변환할 계층 선택  
 
 (서비스의 비즈니스 로직에서 엔티티를 사용해야 하므로 레포지토리 계층에서 변환하는 것은 제외했으나 쿼리dsl 사용 시 레포지토리 계층에서 변환하는 것도 가능하다고 함)  
@@ -133,16 +133,19 @@
 
 
 ### - 선택
-  - 서비스 계층에서의 DTO-엔티티 변환
+  ✔️**서비스 계층에서의 DTO-엔티티 변환**
   컨트롤러는 DTO 교환, 서비스는 비즈니스 로직에 집중하게 하는 구조가 깔끔하다고 판단함  
   
   그리고 앤챌 프로젝트는 도메인 별로 컨트롤러, 서비스가 각각 사용되고 있기 때문에 컨트롤러의 유연성이 필요하지 않음  
   
   
-**+**
+  
+  
+### - 고민 2
 서비스 내에서 엔티티-DTO 변환과 비즈니스 로직을 모두 작성하니 코드가 지나치게 길어짐  
 
-=> 요청DTO 내부에 엔티티로 변환하는 toEntity 메소드, 엔티티 내부에는 DTO로 변환하는 of 메소드를 작성해 서비스 내 코드 감축
+### - 선택
+요청DTO 내부에 엔티티로 변환하는 toEntity 메소드, 엔티티 내부에는 DTO로 변환하는 of 메소드 작성 -> 서비스 내 코드 감축
 
 
 
@@ -169,32 +172,89 @@ ex.
 
 
 
-## 5. AuthenticationPrincipal - 어댑터 디자인 패턴 채택
+## 5. @AuthenticationPrincipal
 
-### - 고민 
-서비스 코드에서 Member 엔티티를 자주 사용하므로 @AuthenticationPrincipal을 통해 Member 객체를 가져와 서비스에 전달하고자 함  
+### - 상황 1 : @AuthenticationPrincial 통한 Member 객체 반환
+서비스 코드에서 Member 엔티티를 자주 사용하므로 @AuthenticationPrincipal에서 Member 객체를 가져와 서비스에 전달하고자 함  
 
-어노테이션을 통해 Member을 불러오려면 UserDetails 구현하거나 User 상속받아야 하지만 엔티티는 다른 클래스에 의존하지 않는 것이 권장됨
+해당 어노테이션은 UserDetailsService의 구현 클래스의 loadUserByUsername 메소드에서 반환한 객체를 가져오므로, Member 객체를 반환하도록 하려면 Member 엔티티가 UserDetails을 구현하거나 User을 상속받아야 함  
 
-※
-@AuthenticationPrincipal은 UserDetailsService를 구현한 클래스의 loadUserByUsername 메소드에서 반환한 객체를 가져오는 어노테이션  
+하지만 도메인 객체는 다른 기술에 종속되지 않는 것이 권장됨  
+  
 
-이때 반환할 객체 타입은 UserDetails 또는 User이어야 함
+### - 해결
+User을 상속하는 MemberAdapter를 생성
 
-### - 선택 
-어댑터 패턴을 적용한 MemberAdapter를 생성해 User을 상속하기로 함  
+CustomUserDetailsService의 메소드에서 MemberAdapter 객체를 리턴받도록 코드 작성 하여, 
 
-@AuthenticationPrincipal에서 MemberAdapter 객체를 받은 후, getMember 메소드로 멤버 객체 불러옴
+컨트롤러 @AuthenticationPrincipal에서 MemberAdapter 객체를 불러와 Member 객체를 받음
+  
+  ex. MemberAdapter
+  
+```
+  public class MemberAdapter extends User {
+
+    private Member member;
+
+    public MemberAdapter(Member member){
+        super(member.getId(), member.getPw(), Collections.singleton(member.getAuthority()));
+        this.member=member;
+    }
+
+    public Member getMember(){
+        return member;
+    }
+
+  }  
+```  
+
+   
+  ex. CustomUserDetailsService
+  
+```  
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(id + " -> db에서 찾을 수 없습니다."));
+
+        log.info("db에서 Member 객체를 가져왔습니다.");
+
+        return new MemberAdapter(member);
+    }
+```  
+  
+  
+### - 상황 2 : 불러온 객체의 준영속화
+스프링 프레임워크는 클라이언트 -> 필터 -> 디스패처 서블릿 -> 인터셉터 -> 컨트롤러 순서로 동작  
+
+Member 객체는 필터(Security Filter - UserDetailsService)를 거쳐 컨트롤러로 불려옴  
+
+기존 디폴트값으로 설정된 OpenEntityManagerInterceptor은 영속성 컨텍스트를 프레젠테이션 계층에서도 열어두는 기능이지만 인터셉터이기 때문에 필터 이후에 적용됨  
+
+즉 사용자 객체는 시큐리티 필터에서 준영속화된 채 OpenEntityManagerInterceptor을 거쳐 컨트롤러에 불려옴
 
 
-### - 또다른 고민
-계속 @AuthenticationPrincipal 통해 Member 객체를 가져오는 것보다 Principal의 name(아이디)을 서비스로 전달해 필요한 메소드 내에서만 레포지토리에서 Member 객체를 불러오는 기본적인 방식이 더 효율적일 것 같음  
+### - 해결
+  - ✔️1. OpenEntityManagerInterceptor을 필터로 교체해 DelegatingFilterProxy 필터보다 앞단에 추가  
+        
+    DelegatingFilterProxy 필터에서는 시큐리티 기능 수행하는 Security Filter Chain 동작 (이때 UserDetailsService에서 사용자 객체 반환)  
+    
+    OpenEntityManagerInterceptor을 DelegatingFilterProxy 필터 앞에 추가하면 프레젠테이션 계층에 영속성 컨텍스트를 유지하도록 설정한 후 Security Filter을 거침
+    
+    => UserDetailsService에서 영속화된 사용자 객체 반환받을 수 있음  
+    
+  - 2. Principal의 name(아이디)을 서비스로 전달해 필요한 메소드 내에서만 레포지토리에서 Member 객체를 불러오기
 
-다시 한번 고민해보고 수정해나갈 예정
 
+### - 고민
+필터를 새로 교체하고, 영속성 컨텍스트를 유지해가며 DB 커넥션도 연장해 장애 발생 가능성을 만드는 것보다는  
 
+시큐리티 컨텍스트에 내재된 Principal의 name(아이디)만 서비스로 전달하고, 필요한 메소드에서 레포지토리를 통해 Member 객체를 불러오는 것이 효율적이고 안전할 것 같음  
 
-
+고민 후 수정할 예정
+  
+    
 ## 6. 등록/수정을 하나의 메소드에서 구현
 
 ### - 고민
