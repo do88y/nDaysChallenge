@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,7 +106,8 @@ class DajimRepositoryTest {
 
     @Test
     void 다짐_피드_조회(){
-        List<Dajim> dajimFeed = dajimRepository.findAllByOpen();
+        List<Dajim> dajimFeed = dajimRepository.findAllByOpen()
+                .orElseGet(ArrayList::new);
 
         assertThat(dajimFeed.size()).isEqualTo(2);
     }

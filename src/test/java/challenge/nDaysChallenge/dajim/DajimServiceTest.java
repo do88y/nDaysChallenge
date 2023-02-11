@@ -1,8 +1,11 @@
 package challenge.nDaysChallenge.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
@@ -27,11 +30,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,6 +105,21 @@ public class DajimServiceTest {
                 .content("내용2")
                 .emotions(new ArrayList<>())
                 .build();
+
+        Emotion emotion = Emotion.builder()
+                .dajim(dajim)
+                .sticker(Sticker.CHEER)
+                .member(member)
+                .build();
+
+        Emotion emotion2 = Emotion.builder()
+                .dajim(dajim)
+                .sticker(Sticker.LIKE)
+                .member(member)
+                .build();
+
+        dajim.addEmotions(emotion);
+        dajim2.addEmotions(emotion2);
     }
 
     @Test
@@ -149,20 +169,44 @@ public class DajimServiceTest {
     }
 
     @Test
-    void 피드_다짐들_조회() {
+    void 미로그인_피드_다짐들_조회() {
         //given
         List<Dajim> dajims = new ArrayList<>();
         dajims.add(dajim);
         dajims.add(dajim2);
-        when(dajimRepository.findAllByOpen()).thenReturn(dajims);
+        when(dajimRepository.findAllByOpen()).thenReturn(Optional.of(dajims));
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed();
 
         //then
         System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));
-        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
+        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
+        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
 
+        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
+        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toSet())).size().isEqualTo(1);
+
+    }
+
+    @Test
+    void 로그인유저_피드_다짐들_조회() {
+        //given
+        List<Dajim> dajims = new ArrayList<>();
+        dajims.add(dajim);
+        dajims.add(dajim2);
+        when(dajimRepository.findAllByOpen()).thenReturn(Optional.of(dajims));
+
+        //when
+        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed(member);
+
+        //then
+        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));
+        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
+        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
+
+        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
+        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toList())).isNotEmpty();
     }
 
 }

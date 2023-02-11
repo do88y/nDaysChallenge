@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
-public class MemberAdapter extends User implements UserDetails {
+public class MemberAdapter extends User {
 
     private Member member;
 
