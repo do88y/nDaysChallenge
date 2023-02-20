@@ -32,8 +32,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -144,7 +146,8 @@ public class WithUserDetailsTest {
         assertThat(dajimsList.get(0).getContent()).isEqualTo(savedDajim.getContent());
 
         //피드에서 다짐 조회
-        List<Dajim> dajimFeed = dajimRepository.findAllByOpen();
+        List<Dajim> dajimFeed = dajimRepository.findAllByOpen()
+                .orElseGet(ArrayList::new);
 
         List<DajimFeedResponseDto> dajimFeedList = dajimFeed.stream().map(d ->
                 new DajimFeedResponseDto(
@@ -152,9 +155,12 @@ public class WithUserDetailsTest {
                         d.getMember().getNickname(),
                         d.getMember().getImage(),
                         d.getContent(),
-                        d.getEmotions().stream().map(emotion ->
-                                        emotion.getSticker().toString())
-                                .collect(Collectors.toList()),
+                        d.getEmotions().stream()
+                                .map(emotion -> emotion.getSticker().toString())
+                                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())),
+                        d.getEmotions().stream()
+                                .filter(emotion -> emotion.getMember().getId().equals(currentMember.getId()))
+                                .map(emotion -> emotion.getSticker().toString()).toString(),
                         d.getUpdatedDate()
                 )).collect(Collectors.toList());
 

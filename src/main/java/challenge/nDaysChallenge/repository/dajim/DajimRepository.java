@@ -31,7 +31,7 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
     //피드 다짐 조회 - open=PUBLIC인 다짐
-    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.number DESC")
-    List<Dajim> findAllByOpen();
+    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.updatedDate DESC")
+    Optional<List<Dajim>> findAllByOpen();
 
 }

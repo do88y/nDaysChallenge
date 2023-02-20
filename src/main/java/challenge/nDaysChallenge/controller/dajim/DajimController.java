@@ -9,11 +9,13 @@ import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -58,9 +60,14 @@ public class DajimController {
 
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
     @GetMapping("/feed")
-    public ResponseEntity<?> viewDajimOnFeed(Principal principal){
+    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal @Nullable MemberAdapter memberAdapter){
+        List<DajimFeedResponseDto> dajimFeedDto;
 
-        List<DajimFeedResponseDto> dajimFeedDto = dajimService.viewDajimOnFeed(principal);
+        try {
+            dajimFeedDto = dajimService.viewDajimOnFeed(memberAdapter.getMember());
+        } catch (NullPointerException e) {
+            dajimFeedDto = dajimService.viewDajimOnFeed();
+        }
 
         return ResponseEntity.ok().body(dajimFeedDto);
 
