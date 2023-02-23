@@ -22,6 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -146,10 +149,9 @@ public class WithUserDetailsTest {
         assertThat(dajimsList.get(0).getContent()).isEqualTo(savedDajim.getContent());
 
         //피드에서 다짐 조회
-        List<Dajim> dajimFeed = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10));
 
-        List<DajimFeedResponseDto> dajimFeedList = dajimFeed.stream().map(d ->
+        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream().map(d ->
                 new DajimFeedResponseDto(
                         d.getNumber(),
                         d.getMember().getNickname(),

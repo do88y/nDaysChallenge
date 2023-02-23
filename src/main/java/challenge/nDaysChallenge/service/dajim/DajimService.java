@@ -16,6 +16,10 @@ import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,30 +89,38 @@ public class DajimService {
 
     //피드 - 전체 다짐 조회 (미로그인)
     @Transactional(readOnly = true)
-    public List<DajimFeedResponseDto> viewDajimOnFeed() {
-        List<Dajim> dajims = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+    public Slice<DajimResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
+//        List<Dajim> dajims = dajimRepository.findAllByOpen()
+//                .orElseGet(ArrayList::new);
+//
+//        //도메인->dto
+//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+//                DajimFeedResponseDto.of(dajim, null)
+//        ).collect(Collectors.toList());
+        Slice<DajimResponseDto> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable)
+                                                            .map(DajimResponseDto::of);
 
-        //도메인->dto
-        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                DajimFeedResponseDto.of(dajim, null)
-        ).collect(Collectors.toList());
-
-        return dajimFeedList;
+        return new CustomSliceImpl<>(dajimPage.getContent(),pageable, dajimPage.hasNext());
     }
 
     //피드 - 전체 다짐 조회 (로그인 시)
     @Transactional(readOnly = true)
-    public List<DajimFeedResponseDto> viewDajimOnFeed(Member member) {
-        List<Dajim> dajims = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+    public Slice<DajimResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
+//        List<Dajim> dajims = dajimRepository.findAllByOpen()
+//                .orElseGet(ArrayList::new);
+//
+//        //도메인->dto
+//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+//                DajimFeedResponseDto.of(dajim, member)
+//        ).collect(Collectors.toList());
 
-        //도메인->dto
-        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                DajimFeedResponseDto.of(dajim, member)
-        ).collect(Collectors.toList());
+        Slice<DajimResponseDto> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable)
+                                                            .map(DajimResponseDto::of);
 
-        return dajimFeedList;
+        //allstickers, loginsticker 직접 추가 (slice.getcontent.add)
+
+
+        return new CustomSliceImpl<>(dajimPage.getContent(),pageable, dajimPage.hasNext());
     }
 
     //다짐 수정 시 작성자/룸 체크
