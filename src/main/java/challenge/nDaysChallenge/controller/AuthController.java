@@ -8,12 +8,14 @@ import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,14 +31,20 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
         }
 
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
-        return ResponseEntity.ok().body(memberResponseDto);
+
+        URI location = URI.create("/");
+
+        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(memberResponseDto);
     }
 
     //로그인
     @PostMapping("/auth/login")
     public ResponseEntity<TokenResponseDto> login (@RequestBody LoginRequestDto loginRequestDto){
         TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
-        return ResponseEntity.ok().body(tokenResponseDto);
+
+        URI location = URI.create("/");
+
+        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(tokenResponseDto);
     }
 
     //로그아웃
@@ -44,7 +52,10 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
     public ResponseEntity<String> logout (@AuthenticationPrincipal MemberAdapter memberAdapter){
         String id = memberAdapter.getMember().getId();
         authService.logout(id);
-        return ResponseEntity.ok().body(id + " 로그아웃 완료");
+
+        URI location = URI.create("/");
+
+        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(id + " 로그아웃 완료");
     }
 
     //토큰 재발급

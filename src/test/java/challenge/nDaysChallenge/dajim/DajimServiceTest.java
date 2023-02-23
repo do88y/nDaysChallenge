@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -179,7 +180,7 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Page<DajimResponseDto> dajimPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
+        Slice<DajimResponseDto> dajimPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
 
         //then
         System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
@@ -200,7 +201,7 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Page<DajimResponseDto> dajimPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
+        Slice<DajimResponseDto> dajimPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
 
         //then
         System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));

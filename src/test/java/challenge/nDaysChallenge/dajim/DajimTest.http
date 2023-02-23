@@ -25,5 +25,5 @@ Content-Type: application/json
 Authorization: Bearer
 
 ### 피드 조회
-GET http://localhost:8080/feed?page=0
+GET http://localhost:8080/feed
 Content-Type: application/json

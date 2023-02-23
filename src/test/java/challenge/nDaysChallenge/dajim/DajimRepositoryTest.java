@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -109,14 +110,14 @@ class DajimRepositoryTest {
 
     @Test
     void 다짐_피드_조회(){
-        Page<Dajim> dajimPage = dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10));
+        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC,Pageable.ofSize(10));
 
         assertThat(dajimPage.getContent().size()).isEqualTo(4);
     }
 
     @Test
     void new_다짐_피드_조회(){
-        Page<Dajim> dajims = dajimRepository.findAllByOpen(Open.PUBLIC, Pageable.ofSize(10));
+        Slice<Dajim> dajims = dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10));
 
         System.out.println(dajims.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
 

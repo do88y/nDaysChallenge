@@ -6,12 +6,10 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
+import challenge.nDaysChallenge.service.dajim.CustomSliceImpl;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -70,7 +68,7 @@ public class DajimController {
             @PageableDefault(sort = "updatedDate", direction = Sort.Direction.DESC) Pageable pageable){
 //        List<DajimFeedResponseDto> dajimFeedDto;
 
-        Page dajimPage;
+        Slice dajimPage;
 
         try {
             dajimPage = dajimService.viewDajimFeedLoggedIn(memberAdapter.getMember(), pageable);
