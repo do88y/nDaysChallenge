@@ -32,9 +32,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
 
-        URI location = URI.create("/");
-
-        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(memberResponseDto);
+        return ResponseEntity.ok().body(memberResponseDto);
     }
 
     //로그인
@@ -42,9 +40,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
     public ResponseEntity<TokenResponseDto> login (@RequestBody LoginRequestDto loginRequestDto){
         TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
 
-        URI location = URI.create("/");
-
-        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(tokenResponseDto);
+        return ResponseEntity.ok().body(tokenResponseDto);
     }
 
     //로그아웃
@@ -55,7 +51,7 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
         URI location = URI.create("/");
 
-        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(id + " 로그아웃 완료");
+        return ResponseEntity.status(301).location(location).build();
     }
 
     //토큰 재발급
