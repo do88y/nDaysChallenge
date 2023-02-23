@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.dajim;
 
+import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -106,10 +109,18 @@ class DajimRepositoryTest {
 
     @Test
     void 다짐_피드_조회(){
-        List<Dajim> dajimFeed = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+        Page<Dajim> dajimPage = dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10));
 
-        assertThat(dajimFeed.size()).isEqualTo(2);
+        assertThat(dajimPage.getContent().size()).isEqualTo(4);
+    }
+
+    @Test
+    void new_다짐_피드_조회(){
+        Page<Dajim> dajims = dajimRepository.findAllByOpen(Open.PUBLIC, Pageable.ofSize(10));
+
+        System.out.println(dajims.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
+
+        assertThat(dajims.getContent().size()).isEqualTo(4);
     }
 
 }

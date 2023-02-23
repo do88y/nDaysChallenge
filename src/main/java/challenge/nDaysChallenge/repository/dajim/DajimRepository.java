@@ -1,7 +1,10 @@
 package challenge.nDaysChallenge.repository.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Room;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,7 +34,9 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
     //피드 다짐 조회 - open=PUBLIC인 다짐
-    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.updatedDate DESC")
-    Optional<List<Dajim>> findAllByOpen();
+//    @Query("SELECT d FROM Dajim d WHERE d.open = 'PUBLIC' ORDER BY d.updatedDate DESC")
+//    Optional<List<Dajim>> findAllByOpen();
+
+    Page<Dajim> findAllByOpen(Open open, Pageable pageable);
 
 }

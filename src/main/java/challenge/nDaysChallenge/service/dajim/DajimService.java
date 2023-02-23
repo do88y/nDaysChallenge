@@ -16,6 +16,9 @@ import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,30 +88,38 @@ public class DajimService {
 
     //피드 - 전체 다짐 조회 (미로그인)
     @Transactional(readOnly = true)
-    public List<DajimFeedResponseDto> viewDajimOnFeed() {
-        List<Dajim> dajims = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+    public Page<DajimResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
+//        List<Dajim> dajims = dajimRepository.findAllByOpen()
+//                .orElseGet(ArrayList::new);
+//
+//        //도메인->dto
+//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+//                DajimFeedResponseDto.of(dajim, null)
+//        ).collect(Collectors.toList());
+        Page<Dajim> dajims = dajimRepository.findAllByOpen(Open.PUBLIC, pageable);
 
-        //도메인->dto
-        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                DajimFeedResponseDto.of(dajim, null)
-        ).collect(Collectors.toList());
+        Page<DajimResponseDto> dajimsPage = dajims.map(DajimResponseDto::of);
 
-        return dajimFeedList;
+
+        return dajimsPage;
     }
 
     //피드 - 전체 다짐 조회 (로그인 시)
     @Transactional(readOnly = true)
-    public List<DajimFeedResponseDto> viewDajimOnFeed(Member member) {
-        List<Dajim> dajims = dajimRepository.findAllByOpen()
-                .orElseGet(ArrayList::new);
+    public Page<DajimResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
+//        List<Dajim> dajims = dajimRepository.findAllByOpen()
+//                .orElseGet(ArrayList::new);
+//
+//        //도메인->dto
+//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
+//                DajimFeedResponseDto.of(dajim, member)
+//        ).collect(Collectors.toList());
 
-        //도메인->dto
-        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-                DajimFeedResponseDto.of(dajim, member)
-        ).collect(Collectors.toList());
+        Page<Dajim> dajims = dajimRepository.findAllByOpen(Open.PUBLIC, pageable);
 
-        return dajimFeedList;
+        Page<DajimResponseDto> dajimsPage = dajims.map(DajimResponseDto::of);
+
+        return dajimsPage;
     }
 
     //다짐 수정 시 작성자/룸 체크

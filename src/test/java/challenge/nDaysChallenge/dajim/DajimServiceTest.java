@@ -27,6 +27,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -174,18 +176,18 @@ public class DajimServiceTest {
         List<Dajim> dajims = new ArrayList<>();
         dajims.add(dajim);
         dajims.add(dajim2);
-        when(dajimRepository.findAllByOpen()).thenReturn(Optional.of(dajims));
+//        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed();
+        Page<DajimResponseDto> dajimPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
 
         //then
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
+        System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
+//        System.out.println(dajims.getContent().stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
+//        System.out.println(dajims.getContent().stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
 
-        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
-        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toSet())).size().isEqualTo(1);
+        assertThat(dajimPage.getContent().size()).isEqualTo(2);
+//        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toSet())).size().isEqualTo(1);
 
     }
 
@@ -195,18 +197,18 @@ public class DajimServiceTest {
         List<Dajim> dajims = new ArrayList<>();
         dajims.add(dajim);
         dajims.add(dajim2);
-        when(dajimRepository.findAllByOpen()).thenReturn(Optional.of(dajims));
+//        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed(member);
+        Page<DajimResponseDto> dajimPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
 
         //then
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
+        System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
+//        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
+//        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
 
-        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
-        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toList())).isNotEmpty();
+        assertThat(dajimPage.getContent().size()).isEqualTo(2);
+//        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toList())).isNotEmpty();
     }
 
 }

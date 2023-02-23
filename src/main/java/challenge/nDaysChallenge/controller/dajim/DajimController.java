@@ -8,6 +8,11 @@ import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -60,16 +65,20 @@ public class DajimController {
 
     //피드 전체 조회 (다짐 + 감정스티커 리스트)
     @GetMapping("/feed")
-    public ResponseEntity<?> viewDajimOnFeed(@AuthenticationPrincipal @Nullable MemberAdapter memberAdapter){
-        List<DajimFeedResponseDto> dajimFeedDto;
+    public ResponseEntity<?> viewDajimOnFeed(
+            @AuthenticationPrincipal @Nullable MemberAdapter memberAdapter,
+            @PageableDefault(sort = "updatedDate", direction = Sort.Direction.DESC) Pageable pageable){
+//        List<DajimFeedResponseDto> dajimFeedDto;
+
+        Page dajimPage;
 
         try {
-            dajimFeedDto = dajimService.viewDajimOnFeed(memberAdapter.getMember());
+            dajimPage = dajimService.viewDajimFeedLoggedIn(memberAdapter.getMember(), pageable);
         } catch (NullPointerException e) {
-            dajimFeedDto = dajimService.viewDajimOnFeed();
+            dajimPage = dajimService.viewDajimFeedWithoutLogin(pageable);
         }
 
-        return ResponseEntity.ok().body(dajimFeedDto);
+        return ResponseEntity.ok().body(dajimPage);
 
     }
 
