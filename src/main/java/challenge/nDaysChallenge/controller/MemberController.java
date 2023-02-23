@@ -57,9 +57,7 @@ public class MemberController {
         MemberInfoResponseDto memberInfoResponseDto =
                 memberService.editMemberInfo(memberAdapter.getMember(), memberEditRequestDto);
 
-        URI location = URI.create("/mypage");
-
-        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(memberInfoResponseDto);
+        return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원 탈퇴
