@@ -7,10 +7,13 @@ import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
@@ -54,7 +57,9 @@ public class MemberController {
         MemberInfoResponseDto memberInfoResponseDto =
                 memberService.editMemberInfo(memberAdapter.getMember(), memberEditRequestDto);
 
-        return ResponseEntity.ok().body(memberInfoResponseDto);
+        URI location = URI.create("/mypage");
+
+        return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).location(location).body(memberInfoResponseDto);
     }
 
     //회원 탈퇴
