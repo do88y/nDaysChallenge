@@ -180,14 +180,14 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Slice<DajimResponseDto> dajimPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
 
         //then
-        System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
+        System.out.println(dajimFeedPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
 //        System.out.println(dajims.getContent().stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
 //        System.out.println(dajims.getContent().stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
 
-        assertThat(dajimPage.getContent().size()).isEqualTo(2);
+        assertThat(dajimFeedPage.getContent().size()).isEqualTo(2);
 //        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toSet())).size().isEqualTo(1);
 
     }
@@ -201,14 +201,14 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Slice<DajimResponseDto> dajimPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
 
         //then
-        System.out.println(dajimPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
+        System.out.println(dajimFeedPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
 //        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getAllStickers()).collect(Collectors.toList()));
 //        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.joining()));
 
-        assertThat(dajimPage.getContent().size()).isEqualTo(2);
+        assertThat(dajimFeedPage.getContent().size()).isEqualTo(2);
 //        assertThat(dajimFeedResponseDtos.stream().map(d->d.getLoginSticker()).collect(Collectors.toList())).isNotEmpty();
     }
 
