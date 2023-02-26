@@ -72,7 +72,7 @@ public class DajimFeedResponseDto {
                     dajim.getEmotions().stream()
                             .map(emotion -> emotion.getSticker().toString())
                             .collect(Collectors.groupingBy(s -> s, Collectors.counting())),
-                    "non-login",
+                    "",
                     dajim.getUpdatedDate()
             );
         }

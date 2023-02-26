@@ -89,38 +89,27 @@ public class DajimService {
 
     //피드 - 전체 다짐 조회 (미로그인)
     @Transactional(readOnly = true)
-    public Slice<DajimResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
-//        List<Dajim> dajims = dajimRepository.findAllByOpen()
-//                .orElseGet(ArrayList::new);
-//
-//        //도메인->dto
-//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-//                DajimFeedResponseDto.of(dajim, null)
-//        ).collect(Collectors.toList());
-        Slice<DajimResponseDto> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable)
-                                                            .map(DajimResponseDto::of);
+    public Slice<DajimFeedResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
+        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        return new CustomSliceImpl<>(dajimPage.getContent(),pageable, dajimPage.hasNext());
+        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
+                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
+                .collect(toList());
+
+        return new CustomSliceImpl<>(dajimFeedList, pageable, dajimPage.hasNext());
     }
 
     //피드 - 전체 다짐 조회 (로그인 시)
     @Transactional(readOnly = true)
-    public Slice<DajimResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
-//        List<Dajim> dajims = dajimRepository.findAllByOpen()
-//                .orElseGet(ArrayList::new);
-//
-//        //도메인->dto
-//        List<DajimFeedResponseDto> dajimFeedList = dajims.stream().map(dajim ->
-//                DajimFeedResponseDto.of(dajim, member)
-//        ).collect(Collectors.toList());
+    public Slice<DajimFeedResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
+        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        Slice<DajimResponseDto> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable)
-                                                            .map(DajimResponseDto::of);
-
-        //allstickers, loginsticker 직접 추가 (slice.getcontent.add)
+        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
+                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
+                .collect(toList());
 
 
-        return new CustomSliceImpl<>(dajimPage.getContent(),pageable, dajimPage.hasNext());
+        return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
     }
 
     //다짐 수정 시 작성자/룸 체크
