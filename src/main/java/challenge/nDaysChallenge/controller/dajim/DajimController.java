@@ -62,22 +62,6 @@ public class DajimController {
         return ResponseEntity.ok().body(dajimResponseDtoList);
     }
 
-    //피드 전체 조회 (다짐 + 감정스티커)
-    @GetMapping("/feed")
-    public ResponseEntity<?> viewDajimOnFeed(
-            @AuthenticationPrincipal @Nullable MemberAdapter memberAdapter,
-            @PageableDefault(sort = "updatedDate", direction = Sort.Direction.DESC) Pageable pageable){
-        Slice dajimPage;
-
-        try {
-            dajimPage = dajimService.viewDajimFeedLoggedIn(memberAdapter.getMember(), pageable);
-        } catch (NullPointerException e) {
-            dajimPage = dajimService.viewDajimFeedWithoutLogin(pageable);
-        }
-
-        return ResponseEntity.ok().body(dajimPage);
-
-    }
 
     private void checkLogin(Member member) {
         if (member == null) {

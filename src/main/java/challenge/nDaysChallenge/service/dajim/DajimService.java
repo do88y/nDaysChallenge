@@ -86,33 +86,6 @@ public class DajimService {
         return dajimsList;
     }
 
-    //피드 - 전체 다짐 조회 (미로그인)
-    @PreAuthorize("isAnonymous()")
-    @Transactional(readOnly = true)
-    public Slice<DajimFeedResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
-        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
-
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
-                .collect(toList());
-
-        return new CustomSliceImpl<>(dajimFeedList, pageable, dajimPage.hasNext());
-    }
-
-    //피드 - 전체 다짐 조회 (로그인 시)
-    @PreAuthorize("isAuthenticated()")
-    @Transactional(readOnly = true)
-    public Slice<DajimFeedResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
-        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
-
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
-                .collect(toList());
-
-
-        return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
-    }
-
     //다짐 수정 시 작성자/룸 체크
     private void checkRoomAndMember(Dajim dajim, Member member, Long roomNumber){
         if (dajim.getMember()!=member || dajim.getRoom().getNumber()!=roomNumber){
