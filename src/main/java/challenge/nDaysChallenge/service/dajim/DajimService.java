@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +42,6 @@ public class DajimService {
     private final DajimRepository dajimRepository;
 
     private final RoomRepository roomRepository;
-
-    private final EmotionRepository emotionRepository;
 
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
@@ -88,6 +87,7 @@ public class DajimService {
     }
 
     //피드 - 전체 다짐 조회 (미로그인)
+    @PreAuthorize("isAnonymous()")
     @Transactional(readOnly = true)
     public Slice<DajimFeedResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
@@ -100,6 +100,7 @@ public class DajimService {
     }
 
     //피드 - 전체 다짐 조회 (로그인 시)
+    @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
     public Slice<DajimFeedResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);

@@ -13,6 +13,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,13 +62,11 @@ public class DajimController {
         return ResponseEntity.ok().body(dajimResponseDtoList);
     }
 
-    //피드 전체 조회 (다짐 + 감정스티커 리스트)
+    //피드 전체 조회 (다짐 + 감정스티커)
     @GetMapping("/feed")
     public ResponseEntity<?> viewDajimOnFeed(
             @AuthenticationPrincipal @Nullable MemberAdapter memberAdapter,
             @PageableDefault(sort = "updatedDate", direction = Sort.Direction.DESC) Pageable pageable){
-//        List<DajimFeedResponseDto> dajimFeedDto;
-
         Slice dajimPage;
 
         try {
