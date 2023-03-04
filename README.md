@@ -2,7 +2,6 @@
 
 # 프로젝트 소개
 - 팀소개
-  - [노션 링크](https://www.notion.so/N-3875b06df3254acbb0edc1194cacba20)
   - [Figma 링크](https://www.figma.com/file/uRxyBkYgUa0FFCY39vvrcz/NDaysChallange?node-id=0%3A1&t=rArekkfnpvnnXEvK-0)
   - 백엔드: 서슬기, 오희경, 최예은 (3명)
   - 프론트엔드: 원소연 (1명)
@@ -59,7 +58,7 @@
 ---
 
 # ERD [링크](https://www.erdcloud.com/d/7omJZMM7j3oEdt2qE)
-![N-days-challenge](https://user-images.githubusercontent.com/102232306/212079242-d90ea343-42f5-443f-930e-194ebe7065d4.png)
+![N-days-challenge](https://user-images.githubusercontent.com/104435274/222881840-85b0b08c-461b-4ba2-8dbb-d7bee43d9471.png)
 
 ---
 
