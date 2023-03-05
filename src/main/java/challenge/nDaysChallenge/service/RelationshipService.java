@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +31,34 @@ public class RelationshipService {
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
+    private final EntityManager em;
+
     //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
-        if (nickname.length()>0&&id.equals("")||id==null) {
-            return memberRepository.findByNickname(nickname)
-                    .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
-        } else if (id.length()>0&&nickname.equals("")||nickname==null) {
-            return memberRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
+//        if (nickname!=null&&!nickname.isEmpty()) {
+//            return memberRepository.findByNickname(nickname)
+//                    .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
+//        } else if (id!=null&&!id.isEmpty()) {
+//            return memberRepository.findById(id)
+//                    .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
+//        }
+//        throw new RuntimeException("친구 신청할 사용자의 닉네임이나 아이디를 입력해주세요.");
+        String jpql = "select m from Member m where ";
+
+        if (nickname!=null&&!nickname.isEmpty()) {
+            jpql += "m.nickname = :nickname";
+        } else if (id!=null&&!id.isEmpty()) {
+            jpql += "m.id = :id";
         }
-        return null;
+
+        TypedQuery<Member> query = em.createQuery(jpql, Member.class);
+        if (nickname!=null&&!nickname.isEmpty()) {
+            query = query.setParameter("nickname", nickname);
+        } else if (id!=null&&!id.isEmpty()) {
+            query = query.setParameter("id", id);
+        }
+
+        return query.getSingleResult();
     }
 
     //relationship 생성//

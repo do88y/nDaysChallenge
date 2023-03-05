@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +42,6 @@ public class DajimService {
     private final DajimRepository dajimRepository;
 
     private final RoomRepository roomRepository;
-
-    private final EmotionRepository emotionRepository;
 
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
@@ -85,31 +84,6 @@ public class DajimService {
                 .collect(Collectors.toList());
 
         return dajimsList;
-    }
-
-    //피드 - 전체 다짐 조회 (미로그인)
-    @Transactional(readOnly = true)
-    public Slice<DajimFeedResponseDto> viewDajimFeedWithoutLogin(Pageable pageable) {
-        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
-
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
-                .collect(toList());
-
-        return new CustomSliceImpl<>(dajimFeedList, pageable, dajimPage.hasNext());
-    }
-
-    //피드 - 전체 다짐 조회 (로그인 시)
-    @Transactional(readOnly = true)
-    public Slice<DajimFeedResponseDto> viewDajimFeedLoggedIn(Member member, Pageable pageable) {
-        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
-
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
-                .collect(toList());
-
-
-        return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
     }
 
     //다짐 수정 시 작성자/룸 체크

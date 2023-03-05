@@ -20,6 +20,7 @@ import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
+import challenge.nDaysChallenge.service.dajim.DajimFeedService;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,9 @@ public class DajimServiceTest {
 
     @Mock
     private DajimRepository dajimRepository;
+
+    @Mock
+    private DajimFeedService dajimFeedService;
 
     @Mock
     private EmotionRepository emotionRepository;
@@ -180,7 +184,7 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Slice<DajimFeedResponseDto> dajimFeedPage = dajimService.viewDajimFeedWithoutLogin(Pageable.ofSize(0));
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedWithoutLogin(Pageable.ofSize(0));
 
         //then
         System.out.println(dajimFeedPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
@@ -201,7 +205,7 @@ public class DajimServiceTest {
 //        when(dajimRepository.findAllByOpen(Open.PUBLIC,Pageable.ofSize(10))).thenReturn();
 
         //when
-        Slice<DajimFeedResponseDto> dajimFeedPage = dajimService.viewDajimFeedLoggedIn(member, Pageable.ofSize(0));
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedLoggedIn(member, Pageable.ofSize(0));
 
         //then
         System.out.println(dajimFeedPage.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
