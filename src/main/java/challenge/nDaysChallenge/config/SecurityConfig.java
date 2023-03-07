@@ -94,7 +94,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
+        configuration.setAllowCredentials(true); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
         configuration.setAllowedOrigins(

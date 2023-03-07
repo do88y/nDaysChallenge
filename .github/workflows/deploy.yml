@@ -22,7 +22,7 @@ jobs:
           cache: gradle
 
       - name: make application.yml
-        if: contains(github.ref, 'develop')
+        #if: contains(github.ref, 'main')
         run: |
           cd ./src/main/resources
           touch ./application.yml
@@ -30,7 +30,7 @@ jobs:
         shell: bash
 
       - name: make application-prod.yml
-        if: contains(github.ref, 'develop')
+        #if: contains(github.ref, 'main')
         run: |
           cd ./src/main/resources
           touch ./application-prod.yml
