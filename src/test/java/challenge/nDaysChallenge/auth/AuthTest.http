@@ -3,7 +3,7 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "id1236@gmail.com",
+  "id": "id123@gmail.com",
   "pw": "123",
   "nickname": "ab6d",
   "image": 3
@@ -27,10 +27,10 @@ Content-Type: application/json
 
 ###액세스 토큰 재발급
 POST http://localhost:8080/auth/reissue
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3ODI2MjY2M30.etYiiUwvFfRijdgzLtVhMFapLcwTaIxNp-A-suluuvw
 Content-Type: application/json
 
 {
-  "accessToken": "",
-  "refreshToken": ""
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3ODI2MjY2M30.etYiiUwvFfRijdgzLtVhMFapLcwTaIxNp-A-suluuvw",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzg4NjU2NjN9.sAwqzCsWrpD9In4RlvgyI0mRg5uwfikRH2mt1nKxvTI"
 }

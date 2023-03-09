@@ -54,7 +54,6 @@ public class DajimFeedService {
                 .map(dajim -> DajimFeedResponseDto.of(dajim, member))
                 .collect(toList());
 
-
         return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
     }
 
