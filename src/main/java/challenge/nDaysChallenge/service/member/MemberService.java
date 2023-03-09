@@ -42,7 +42,6 @@ public class MemberService {
 
     private final SingleRoomRepository singleRoomRepository;
     private final GroupRoomRepository groupRoomRepository;
-    private final EntityManager em;
 
     //아이디 중복 검사
     @Transactional(readOnly = true)

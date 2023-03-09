@@ -1,14 +1,21 @@
 package challenge.nDaysChallenge.member;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.member.Member;
-import challenge.nDaysChallenge.domain.room.RoomMember;
+import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
+import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
+import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
+import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
+import challenge.nDaysChallenge.repository.room.RoomRepository;
+import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
+import challenge.nDaysChallenge.service.jwt.AuthService;
 import challenge.nDaysChallenge.service.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +25,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +51,23 @@ public class MemberServiceTest {
     @Mock
     RoomMemberRepository roomMemberRepository;
 
+    @Mock
+    StampRepository stampRepository;
+
+    @Mock
+    RoomRepository roomRepository;
+
+    @Mock
+    SingleRoomRepository singleRoomRepository;
+
+    @Mock
+    GroupRoomRepository groupRoomRepository;
+
     @InjectMocks
     MemberService memberService;
+
+    @InjectMocks
+    AuthService authService;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -104,17 +129,39 @@ public class MemberServiceTest {
         //회원 세팅
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
-        List<Dajim> dajims = new ArrayList<>();
-        List<RoomMember> roomMembers = new ArrayList<>();
+
+        SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
+        SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30L), Category.ETC, 4, "");
+        List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
+        when(singleRoomRepository.findAll(member)).thenReturn(singleRooms);
+        when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(new ArrayList<>()));
+        when(groupRoomRepository.findAll(member)).thenReturn(new ArrayList<>());
+
+        Dajim dajim1 = Dajim.builder()
+                .number(1L)
+                .room(room1)
+                .member(member)
+                .content("내용1")
+                .open(Open.PUBLIC).build();
+
+        Dajim dajim2 = Dajim.builder()
+                .number(1L)
+                .room(room2)
+                .member(member)
+                .content("내용2")
+                .open(Open.PUBLIC).build();
+
+        List<Dajim> dajims = Arrays.asList(dajim1, dajim2);
+        when(dajimRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(dajims));
 
         //when
         doNothing().when(memberRepository).delete(member);
-        when(dajimRepository.findAllByMemberNickname("aaa")).thenReturn(Optional.ofNullable(dajims));
-        when(roomMemberRepository.findAllByMemberNickname("aaa")).thenReturn(Optional.ofNullable(roomMembers));
         String nickname = memberService.deleteMember(member);
 
         //then
         assertThat(nickname).isEqualTo(memberRequestDto.getNickname());
+        verify(dajimRepository, times(1)).deleteAll(eq(dajims));
+        verify(singleRoomRepository, times(1)).deleteAll(eq(singleRooms));
         verify(memberRepository, times(1)).delete(member);
     }
 
