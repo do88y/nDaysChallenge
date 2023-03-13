@@ -58,7 +58,7 @@
 ---
 
 # ERD [링크](https://www.erdcloud.com/d/7omJZMM7j3oEdt2qE)
-![N-days-challenge](https://user-images.githubusercontent.com/104435274/222881840-85b0b08c-461b-4ba2-8dbb-d7bee43d9471.png)
+![N-days-challenge (1)](https://user-images.githubusercontent.com/104435274/224782738-91929c56-b9eb-49c0-ac1c-eef3edd52595.png)
 
 ---
 
