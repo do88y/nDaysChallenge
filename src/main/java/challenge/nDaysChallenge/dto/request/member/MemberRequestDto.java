@@ -29,16 +29,11 @@ public class MemberRequestDto {
     @Max(value = 6)
     private int image;
 
-    @NotNull(message = "룸 제한 횟수를 전달해 주세요.")
-    @Min(value = 1)
-    private int roomLimit;
-
-    public MemberRequestDto(String id, String pw, String nickname, int image, int roomLimit) {
+    public MemberRequestDto(String id, String pw, String nickname, int image) {
         this.id = id;
         this.pw = pw;
         this.nickname = nickname;
         this.image = image;
-        this.roomLimit = roomLimit;
     }
 
     public Member toMember(PasswordEncoder passwordEncoder){
@@ -48,7 +43,6 @@ public class MemberRequestDto {
                 .authority(Authority.ROLE_USER)
                 .nickname(nickname)
                 .image(image)
-                .roomLimit(roomLimit)
                 .build();
     }
 

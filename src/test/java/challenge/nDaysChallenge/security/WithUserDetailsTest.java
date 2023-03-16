@@ -15,7 +15,6 @@ import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.jwt.RefreshTokenRepository;
-import challenge.nDaysChallenge.repository.dajim.DajimFeedRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
@@ -23,6 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,8 +35,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,8 +65,6 @@ public class WithUserDetailsTest {
     @Autowired
     DajimRepository dajimRepository;
 
-    @Autowired
-    DajimFeedRepository dajimFeedRepository;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -79,7 +81,7 @@ public class WithUserDetailsTest {
 
     @BeforeTransaction
     public void 회원가입() {
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com", "12345", "aaa", 1, 2);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com", "12345", "aaa", 1);
         Member member = memberRequestDto.toMember(passwordEncoder);
         memberRepository.save(member);
     }
@@ -115,9 +117,9 @@ public class WithUserDetailsTest {
         Member currentMember = member.get();
 
         //룸 객체 연결
-        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward", 0, 0);
+        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
         singleRoomRepository.save(singleRoom);
-        Stamp stamp = Stamp.createStamp(singleRoom);
+        Stamp stamp = Stamp.createStamp(singleRoom, currentMember);
         singleRoom.addRoom(singleRoom, currentMember, stamp);
 
         //다짐 작성
@@ -147,17 +149,20 @@ public class WithUserDetailsTest {
         assertThat(dajimsList.get(0).getContent()).isEqualTo(savedDajim.getContent());
 
         //피드에서 다짐 조회
-        List<Dajim> dajimFeed = dajimFeedRepository.findAllByOpen();
+        Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10));
 
-        List<DajimFeedResponseDto> dajimFeedList = dajimFeed.stream().map(d ->
+        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream().map(d ->
                 new DajimFeedResponseDto(
                         d.getNumber(),
                         d.getMember().getNickname(),
                         d.getMember().getImage(),
                         d.getContent(),
-                        d.getEmotions().stream().map(emotion ->
-                                        emotion.getSticker().toString())
-                                .collect(Collectors.toList()),
+                        d.getEmotions().stream()
+                                .map(emotion -> emotion.getSticker().toString())
+                                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())),
+                        d.getEmotions().stream()
+                                .filter(emotion -> emotion.getMember().getId().equals(currentMember.getId()))
+                                .map(emotion -> emotion.getSticker().toString()).toString(),
                         d.getUpdatedDate()
                 )).collect(Collectors.toList());
 

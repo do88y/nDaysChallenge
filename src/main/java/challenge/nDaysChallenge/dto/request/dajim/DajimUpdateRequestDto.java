@@ -15,4 +15,10 @@ public class DajimUpdateRequestDto {
 
     private String open;
 
+    public DajimUpdateRequestDto(Long dajimNumber, String content, String open) {
+        this.dajimNumber = dajimNumber;
+        this.content = content;
+        this.open = open;
+    }
+
 }

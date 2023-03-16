@@ -1,15 +1,21 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
+import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +25,45 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class RelationshipService {
 
-    //리포지토리 값을 쓸꺼니까 먼저 선언을 해줌//
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
+    private final EntityManager em;
+
+    //id, nickname 검색//
+    public Member findFriends(String id, String nickname) {
+//        if (nickname!=null&&!nickname.isEmpty()) {
+//            return memberRepository.findByNickname(nickname)
+//                    .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
+//        } else if (id!=null&&!id.isEmpty()) {
+//            return memberRepository.findById(id)
+//                    .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
+//        }
+//        throw new RuntimeException("친구 신청할 사용자의 닉네임이나 아이디를 입력해주세요.");
+        String jpql = "select m from Member m where ";
+
+        if (nickname!=null&&!nickname.isEmpty()) {
+            jpql += "m.nickname = :nickname";
+        } else if (id!=null&&!id.isEmpty()) {
+            jpql += "m.id = :id";
+        }
+
+        TypedQuery<Member> query = em.createQuery(jpql, Member.class);
+        if (nickname!=null&&!nickname.isEmpty()) {
+            query = query.setParameter("nickname", nickname);
+        } else if (id!=null&&!id.isEmpty()) {
+            query = query.setParameter("id", id);
+        }
+
+        return query.getSingleResult();
+    }
 
     //relationship 생성//
     @Transactional
-    public Member saveRelationship(Member user, RelationshipRequestDTO dto) {
+    public  List<AskResponseDTO> saveRelationship(Member user, RelationshipRequestDTO dto) {
 
         Optional<Member> findFriend = memberRepository.findById(dto.getId());
         Member friend = findFriend.orElseThrow(() -> new NoSuchElementException("해당 멤버가 존재하지않습니다."));
@@ -38,8 +73,28 @@ public class RelationshipService {
         relationshipRepository.save(userRelationship);
         relationshipRepository.save(friendRelationship);
 
-        return friend;
+        //내 요청 리스트(내가 받은 요청 리스트) 보기//
+        List<Relationship> viewRequestList = relationshipRepository.findRelationshipByFriendAndStatus(user);
+        List<AskResponseDTO> askResponseDTOList = createResponseDTO(viewRequestList);
+        return askResponseDTOList;
+    }
 
+
+    //request response 따로 메서드로 만듦//
+    public static List<AskResponseDTO> createResponseDTO(List<Relationship> viewRequestList) {
+        List<AskResponseDTO> askResponseDTOList = new ArrayList<>();
+
+        for (Relationship askRelation : viewRequestList) {
+            AskResponseDTO askResponseDTO = AskResponseDTO.builder()
+                    .id(askRelation.getFriend().getId())
+                    .nickname(askRelation.getFriend().getNickname())
+                    .image(askRelation.getFriend().getImage())
+                    .requestDate(LocalDateTime.now())
+                    .build();
+
+                    askResponseDTOList.add(askResponseDTO);
+        }
+        return askResponseDTOList;
     }
 
 
@@ -66,8 +121,8 @@ public class RelationshipService {
                     .id(friendInfo.getId())
                     .nickname(friendInfo.getNickname())
                     .image(friendInfo.getImage())
-                    .acceptedDate(LocalDateTime.now())
                     .relationshipStatus(relationship.getStatus().name())
+                    .acceptedDate(relationship.getAcceptedDate())
                     .build();
 
                     acceptResponseDTOList.add(acceptFollowerDTO);
@@ -84,19 +139,18 @@ public class RelationshipService {
         Optional<Member> findId = memberRepository.findById(dto.getId());
         Member friend = findId.orElseThrow(() -> new NoSuchElementException("해당 id가 없습니다."));
 
-        //거절을 눌렀을 때 시행되는 메서드//
+        //엔티티 찾기//
         Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);
         Relationship findFriend = relationshipRepository.findByUserAndFriend(friend, user);
-        //서로를 찾기//
+        //서로를 찾아 지움//
         relationshipRepository.delete(findUser);
         relationshipRepository.delete(findFriend);
 
-        //user의 현재 친구리스트(수락) 찾기//
+
+        //user 의 현재 친구리스트(수락한 친구들) 갱신/조회//
         List<Relationship> friendList = relationshipRepository.findRelationshipByUserAndStatus(user);
         List<AcceptResponseDTO> friendList2 = new ArrayList<>();
 
-
-        //친구 리스트 안에 있는 넘버로 멤버 리포지토리의 친구 id 발굴//
         for (Relationship relationship : friendList) {
             Member member = memberRepository.findByNumber(relationship.getFriend().getNumber()).orElseThrow(
                     () -> new NoSuchElementException("해당 회원이 없습니다.")
@@ -105,7 +159,7 @@ public class RelationshipService {
                     .id(member.getId())
                     .nickname(member.getNickname())
                     .image(member.getImage())
-                    .relationshipStatus(RelationshipStatus.ACCEPT.name())
+                    .relationshipStatus(relationship.getStatus().name())
                     .build();
 
             friendList2.add(friendInfo);
@@ -115,19 +169,5 @@ public class RelationshipService {
 
     }
 
-
-//id, nickname 검색//
-    public Member findFriends(String id, String nickname) {
-        if ((id == null)) {
-            return  memberRepository.findByNickname(nickname)
-                    .orElseThrow(() -> new RuntimeException("해당 닉네임이 검색되지 않습니다."));
-        }
-
-        if ((nickname == null)) {
-            return memberRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("해당 아이디가 검색되지 않습니다."));
-        }
-      return null;
-    }
 }
 

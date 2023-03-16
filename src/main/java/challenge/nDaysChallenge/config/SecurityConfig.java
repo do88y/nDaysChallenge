@@ -31,7 +31,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -94,10 +94,15 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
+        configuration.setAllowCredentials(true); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
-        configuration.addAllowedOrigin("http://ndayschallenge.com"); ////
+        configuration.setAllowedOrigins(
+                Arrays.asList("http://ndayschallenge.com",
+                        "https://ndayschallenge.com",
+                        "http://api.ndayschallenge.com",
+                        "https://api.ndayschallenge.com"
+                ));
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accessToken");

@@ -22,12 +22,12 @@ public class DajimUploadRequestDto {
         this.open = open;
     }
 
-    public static Dajim toDajim(Room room, Member member, DajimUploadRequestDto dajimUploadRequestDto) {
+    public static Dajim toDajim(Room room, Member member, String content, String open) {
         return Dajim.builder()
                 .room(room)
                 .member(member)
-                .content(dajimUploadRequestDto.getContent())
-                .open(Open.valueOf(dajimUploadRequestDto.getOpen()))
+                .content(content)
+                .open(Open.valueOf(open))
                 .build();
     }
 

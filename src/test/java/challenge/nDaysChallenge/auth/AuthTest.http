@@ -1,0 +1,36 @@
+###회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "id": "id123@gmail.com",
+  "pw": "123",
+  "nickname": "ab6d",
+  "image": 3
+}
+
+
+###로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "id": "id123@gmail.com",
+  "pw": "123"
+}
+
+###로그아웃
+POST http://localhost:8080/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3NzEzNjI1N30.AdgpSVN-AQiYjW6JMHmTAtH7xGanK77_-Y-CPVB1FKU
+Content-Type: application/json
+
+
+###액세스 토큰 재발급
+POST http://localhost:8080/auth/reissue
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3ODI2MjY2M30.etYiiUwvFfRijdgzLtVhMFapLcwTaIxNp-A-suluuvw
+Content-Type: application/json
+
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3ODI2MjY2M30.etYiiUwvFfRijdgzLtVhMFapLcwTaIxNp-A-suluuvw",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzg4NjU2NjN9.sAwqzCsWrpD9In4RlvgyI0mRg5uwfikRH2mt1nKxvTI"
+}

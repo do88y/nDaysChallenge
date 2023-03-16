@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.dajim.Dajim;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 

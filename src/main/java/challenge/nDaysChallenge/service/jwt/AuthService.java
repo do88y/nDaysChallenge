@@ -50,30 +50,6 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         return MemberResponseDto.of(member); //아이디, 닉네임 리턴
     }
 
-    //아이디 중복 검사
-    @Transactional(readOnly = true)
-    public String idCheck(String id){
-        boolean exists = memberRepository.existsById(id);
-
-        if (exists){
-            return "exists";
-        } else {
-            return "ok";
-        }
-    }
-
-    //닉네임 중복 검사
-    @Transactional(readOnly = true)
-    public String nicknameCheck(String nickname){
-        boolean exists = memberRepository.existsByNickname(nickname);
-
-        if (exists){
-            return "exists";
-        } else {
-            return "ok";
-        }
-    }
-
     //로그인
     public TokenResponseDto login(LoginRequestDto loginRequestDto) {
         //id, pw 검증
