@@ -7,16 +7,32 @@ import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
 import challenge.nDaysChallenge.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-public class MemberController { //마이페이지 전용
+public class MemberController {
 
     private final MemberService memberService;
+
+    //아이디 중복 검사 (ok = 중복 아님 / exists = 중복)
+    @GetMapping("/auth/id-check")
+    public ResponseEntity<String> idCheck (@RequestBody String id){
+        return ResponseEntity.ok().body(memberService.idCheck(id));
+    }
+
+    //닉네임 중복 검사
+    @GetMapping("/auth/nickname-check")
+    public ResponseEntity<String> nicknameCheck (@RequestBody String nickname){
+        return ResponseEntity.ok().body(memberService.nicknameCheck(nickname));
+    }
 
     //회원정보 조회 (수정 전)
     @GetMapping("/user/details")

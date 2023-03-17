@@ -16,15 +16,37 @@ public class EmotionController { //감정 스티커 등록
 
     private final EmotionService emotionService;
 
-    //이모션 등록/수정/삭제
+    //이모션 등록
     @PostMapping("/feed/emotion")
-    public ResponseEntity<?> manageEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+    public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
         checkLogin(memberAdapter.getMember());
 
-        EmotionResponseDto emotionResponseDto = emotionService.manageEmotion(emotionRequestDto, memberAdapter.getMember());
+        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
 
         return ResponseEntity.ok().body(emotionResponseDto);
+    }
+
+    //이모션 수정
+    @PatchMapping("/feed/emotion")
+    public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(emotionResponseDto);
+    }
+
+    //이모션 삭제
+    @DeleteMapping("/feed/emotion")
+    public ResponseEntity<?> deleteEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
+                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
+        checkLogin(memberAdapter.getMember());
+
+        EmotionResponseDto emotionResponseDto = emotionService.deleteEmotion(emotionRequestDto, memberAdapter.getMember());
+
+        return ResponseEntity.ok().body(emotionResponseDto.getMemberNickname()+"님의 "+emotionResponseDto.getSticker()+" 스티커가 삭제되었습니다.");
     }
 
     private void checkLogin(Member member) {
@@ -32,24 +54,5 @@ public class EmotionController { //감정 스티커 등록
             throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
         }
     }
-
-//    //감정 스티커 new 등록 (프론트 unselected된 상태에서)
-//    @PostMapping("/feed/emotion")
-//    public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
-//                                           @AuthenticationPrincipal MemberAdapter memberAdapter){
-//        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, memberAdapter.getMember());
-//
-//        return ResponseEntity.ok().body(emotionResponseDto);
-//    }
-//
-//    //감정 스티커 변경 or null 등록 (프론트 selected된 상태에서 다른 스티커 select 시 or 두번 똑같은 스티커 클릭 시)
-//    @PatchMapping("/feed/emotion")
-//    public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
-//                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
-//
-//        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, memberAdapter.getMember());
-//
-//        return ResponseEntity.ok().body(emotionResponseDto);
-//    }
 
 }

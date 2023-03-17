@@ -31,6 +31,7 @@ public class Report {
         return isDajim;
     }
 
+    //==생성 메서드==//
     public static Report createReport(Dajim dajim, int cause, boolean isDajim, String content) {
         Report report = new Report();
         report.dajim = dajim;

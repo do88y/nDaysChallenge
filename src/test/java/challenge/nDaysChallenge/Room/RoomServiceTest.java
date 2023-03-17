@@ -5,6 +5,8 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.StampDto;
+import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
@@ -52,12 +54,11 @@ public class RoomServiceTest {
     @Test
     public void 개인_챌린지_builder() throws Exception {
         //given
-        SingleRoom room = new SingleRoom("기상", period, Category.ROUTINE,2, "", 0, 0);
-
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         em.persist(room);
 
         //when
-        Room findRoom = roomRepository.findById(room.getNumber()).orElseThrow(() ->
+        Room findRoom = roomRepository.findByNumber(room.getNumber()).orElseThrow(() ->
                 new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
 
         //then
@@ -71,19 +72,22 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
-
-        em.persist(member);
+        Member member = Member.builder()
+                .id("user@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        em.persist(member);
 
         //when
-        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
         //then
-        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getNumber()).orElseThrow(() ->
+        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getRoomNumber()).orElseThrow(() ->
                 new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
-        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getNumber());
+        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getRoomNumber());
 
 
         //멤버에서 singleRooms 조회
@@ -99,9 +103,24 @@ public class RoomServiceTest {
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Long> selectedMembers = new HashSet<>();
-        Member member1 = new Member("user1@naver.com", "12345", "nick1", 1, 4, Authority.ROLE_USER);
-        Member member2 = new Member("user2@naver.com", "11111", "nick2", 2, 4, Authority.ROLE_USER);
-        Member member3 = new Member("user3@naver.com", "22222", "nick3", 3, 4, Authority.ROLE_USER);
+        Member member1 = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member2 = Member.builder()
+                .id("user2@naver.com")
+                .pw("11111")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member3 = Member.builder()
+                .id("user3@naver.com")
+                .pw("22222")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
         memberRepository.save(member1);
         memberRepository.save(member2);
         memberRepository.save(member3);
@@ -129,59 +148,67 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick0", 1, 4, Authority.ROLE_USER);
-        em.persist(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        em.persist(member);
 
-        SingleRoom room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "", 0, 0);
+        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
 
         em.flush();
         em.clear();
 
         //when
-        Long roomNumber = room.getNumber();
-        roomService.deleteRoom(member, room.getNumber());
+        Long roomNumber = room.getRoomNumber();
+        roomService.deleteRoom(member, room.getRoomNumber());
 
         //then
-        assertThat(roomRepository.findById(roomNumber).get());
+        assertThat(roomRepository.findByNumber(roomNumber).get());
     }
 
     @Test
-    @Transactional
     @Rollback(value = true)
     public void 진행_챌린지_조회() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-        memberRepository.save(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
 
-        SingleRoom singleRoom1 = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
-        SingleRoom singleRoom2 = new SingleRoom("공부", period, Category.ETC, 0, "", 0, 0);
-        SingleRoom singleRoom3 = new SingleRoom("청소", period, Category.EXERCISE, 10, "꿀잠", 0, 0);
-        GroupRoom groupRoom = new GroupRoom(member, "명상", period, Category.MINDFULNESS, 20, "여행", 0, 0);
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠");
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
+
+        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        stampRepository.save(stamp1);
+        stampRepository.save(stamp2);
+        stampRepository.save(stamp3);
+
+        singleRoom1.addRoom(singleRoom1, member, stamp1);
+        singleRoom2.addRoom(singleRoom2, member, stamp2);
+        singleRoom3.addRoom(singleRoom3, member, stamp3);
+
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
-
-        Stamp stamp1 = Stamp.createStamp(singleRoom1);
-        Stamp stamp2 = Stamp.createStamp(singleRoom2);
-        Stamp stamp3 = Stamp.createStamp(singleRoom3);
-        Stamp stamp4 = Stamp.createStamp(groupRoom);
-
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
-        singleRoomRepository.save(createSingleRoom1);
-        singleRoomRepository.save(createSingleRoom2);
-        singleRoomRepository.save(createSingleRoom3);
-
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
+        Stamp stamp4 = Stamp.createStamp(singleRoom1, member);
+        stampRepository.save(stamp4);
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, stamp4);
         roomMemberRepository.save(roomMember);
-
-        em.flush();
-        em.clear();
 
         //when
         roomService.changeStatus(singleRoom1.getNumber());
+
+        em.flush();
+        em.clear();
 
         List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
         List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
@@ -198,26 +225,30 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
-        SingleRoom singleRoom1 = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
-        SingleRoom singleRoom2 = new SingleRoom("공부", period, Category.ETC, 0, "", 0, 0);
-        SingleRoom singleRoom3 = new SingleRoom("청소", period, Category.EXERCISE, 10, "꿀잠", 0, 0);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
+
+        SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
+        SingleRoom singleRoom3 = new SingleRoom("청소", this.period, Category.EXERCISE, 10, "꿀잠");
         singleRoomRepository.save(singleRoom1);
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
-        Stamp stamp1 = Stamp.createStamp(singleRoom1);
-        Stamp stamp2 = Stamp.createStamp(singleRoom2);
-        Stamp stamp3 = Stamp.createStamp(singleRoom3);
+        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        stampRepository.save(stamp1);
+        stampRepository.save(stamp2);
+        stampRepository.save(stamp3);
 
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-        memberRepository.save(member);
-
-        SingleRoom createSingleRoom1 = singleRoom1.addRoom(singleRoom1, member, stamp1);
-        SingleRoom createSingleRoom2 = singleRoom2.addRoom(singleRoom2, member, stamp2);
-        SingleRoom createSingleRoom3 = singleRoom3.addRoom(singleRoom3, member, stamp3);
-        singleRoomRepository.save(createSingleRoom1);
-        singleRoomRepository.save(createSingleRoom2);
-        singleRoomRepository.save(createSingleRoom3);
+        singleRoom1.addRoom(singleRoom1, member, stamp1);
+        singleRoom2.addRoom(singleRoom2, member, stamp2);
+        singleRoom3.addRoom(singleRoom3, member, stamp3);
 
         em.flush();
         em.clear();
@@ -235,13 +266,17 @@ public class RoomServiceTest {
     @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
-        Member member = new Member("user@naver.com", "12345", "nick", 1, 4, Authority.ROLE_USER);
-        memberRepository.save(member);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();        memberRepository.save(member);
 
-        GroupRoom groupRoom = new GroupRoom(member, "명상", period, Category.MINDFULNESS, 20, "여행", 0, 0);
+        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom));
+        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
         roomMemberRepository.save(roomMember);
 
         em.flush();
@@ -258,22 +293,30 @@ public class RoomServiceTest {
     @Test
     public void update_stamp_쿼리() throws Exception {
         //given
-        SingleRoom singleRoom = new SingleRoom("기상", period, Category.ROUTINE, 2, "", 0, 0);
-        singleRoomRepository.save(singleRoom);
-        Stamp stamp = Stamp.createStamp(singleRoom);
-        stampRepository.save(stamp);
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        memberRepository.save(member);
+
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        singleRoomRepository.save(room);
+        Stamp stamp1 = Stamp.createStamp(room, member);
+        stampRepository.save(stamp1);
 
         //when
-        Stamp updateStamp = stamp.updateStamp(singleRoom, "0");
+        Stamp updateStamp = stamp1.updateStamp(room, "o");
         em.flush();
         em.clear();
-        Stamp updateStamp2 = stamp.updateStamp(singleRoom, "1");
+        stamp1.updateStamp(room, "x");
         em.flush();
         em.clear();
 
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
-//        assertThat(updateStamp.getDay()).isEqualTo(1);
+        assertThat(updateStamp.getDay()).isEqualTo("ox");
     }
 
     @Test
@@ -290,6 +333,49 @@ public class RoomServiceTest {
         List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
     }
 
+    @Test
+    public void findByRoomAndMember_쿼리() throws Exception {
+        //given
+        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        //when
+        roomRepository.save(room);
+        memberRepository.save(member);
+
+        //then
+        stampRepository.findByRoomAndMember(room, member);
+    }
+
+    @Test
+    public void 스탬프_카운트_업데이트 () throws Exception {
+        //given
+        Member member = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        memberRepository.save(member);
+        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
+        //when
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
+
+        em.flush();
+        em.clear();
+        //then
+        assertThat(room.getStamp().getSuccessCount()).isEqualTo(2);
+        assertThat(room.getStamp().getDay()).isEqualTo("oox");
+    }
+
+    //기간
     Period period = new Period(LocalDate.now(),30L);
 
 }

@@ -1,0 +1,29 @@
+### 다짐 등록
+POST http://localhost:8080/challenge/6/dajim
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
+
+{
+  "content": "6번 방의 선물",
+  "open": "PUBLIC"
+}
+
+### 다짐 수정
+PATCH http://localhost:8080/challenge/10/dajim
+Content-Type: application/json
+Authorization: Bearer
+
+{
+  "dajimNumber": 7,
+"content": "다짐 수정1111",
+"open": "PUBLIC"
+}
+
+### 챌린지룸 내 다짐 조회
+GET http://localhost:8080/challenge/1/dajim
+Content-Type: application/json
+Authorization: Bearer
+
+### 피드 조회
+GET http://localhost:8080/feed
+Content-Type: application/json

@@ -6,39 +6,58 @@ Content-Type: application/json
   "pw": "1234"
 }
 
-###
-POST http://localhost:8080/challenge/create
+### 개인 챌린지
+POST http://localhost:8080/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
 
 {
-  "name": "테스트",
+  "name": "명상",
   "category": "MINDFULNESS",
-  "reward": "삭제",
+  "reward": "",
   "passCount": 10,
-  "startDate": "2022-12-30",
+  "startDate": "2023-01-11",
   "totalDays": 10,
   "type": "SINGLE",
   "successCount": 0,
   "usedPassCount" : 0
 }
 
+### 그룹 챌린지
+POST http://localhost:8080/challenge/group
+Content-Type: application/json
+Authorization: Bearer
+
+{
+  "name": "밥",
+  "category": "ETC",
+  "reward": "살",
+  "passCount": 10,
+  "startDate": "2022-12-30",
+  "totalDays": 30,
+  "type": "GROUP",
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "groupMembers": [5,6]
+}
+
+
 ### 진행 챌린지
 GET http://localhost:8080/challenge/list
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 완료 챌린지
-GET http://localhost:8080/user/finishedChallenges
+GET http://localhost:8080/user/challenges
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 삭제
-DELETE http://localhost:8080/challenge/58
+DELETE http://localhost:8080/challenge/100
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMTEzOTk2fQ.h0-teapwK_5YWnNiq22KboNTrXMRxIm8g8jSBzA-Drs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 상태 변경
-POST http://localhost:8080/challenge/44/success
+POST http://localhost:8080/challenge/70
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcyMDM4NTU3fQ.shzcYw5yFjWVL57a4f5WhJIRtdjLVT2TPKpdWgR5o-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE

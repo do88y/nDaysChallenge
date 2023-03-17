@@ -2,11 +2,9 @@ package challenge.nDaysChallenge.domain.dajim;
 
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.member.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Dajim extends BaseEntity {
 
     @Id
@@ -24,6 +24,7 @@ public class Dajim extends BaseEntity {
 
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     List<Emotion> emotions = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "dajim", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -42,14 +43,6 @@ public class Dajim extends BaseEntity {
     //공개 여부 enum
     @Enumerated(EnumType.STRING)
     private Open open;
-
-    @Builder
-    public Dajim(Room room, Member member, String content, Open open) {
-        this.room = room;
-        this.member = member;
-        this.content = content;
-        this.open = open;
-    }
 
     public Dajim update(Open open, String content) {
         this.open = open;

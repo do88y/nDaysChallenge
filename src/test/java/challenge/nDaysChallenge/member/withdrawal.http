@@ -1,2 +1,0 @@
-DELETE http://localhost:8080/user/withdrawal
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjNAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzI5MjAyMTR9.nZpB3-15bEGERYvsEAbzjWKbNvVVoyr3wbhgVtwVsVI

@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.dto.response.Room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 
@@ -11,35 +12,37 @@ import java.time.LocalDate;
 public class RoomResponseDto {
 
     private Long roomNumber;
+    private String type;
     private String name;
     private String category;
-    private String reward;
-    private int passCount;
-    private String type;
-    private String status;
-
+    private Long totalDays;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    private int passCount;
+    private String reward;
+    private String status;
+
     private Long stamp;
-    private Long totalDays;
+    private String day;
     private int successCount;
     private int usedPassCount;
 
     @Builder
-    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long stamp, Long totalDays, int successCount, int usedPassCount) {
+    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Long stamp, String day, int successCount, int usedPassCount) {
         this.roomNumber = roomNumber;
+        this.type = type;
         this.name = name;
         this.category = category;
-        this.reward = reward;
-        this.type = type;
-        this.status = status;
-        this.passCount = passCount;
-        this.stamp = stamp;
         this.totalDays = totalDays;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.passCount = passCount;
+        this.reward = reward;
+        this.status = status;
+        this.stamp = stamp;
+        this.day = day;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
     }

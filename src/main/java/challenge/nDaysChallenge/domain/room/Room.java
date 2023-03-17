@@ -3,12 +3,8 @@ package challenge.nDaysChallenge.domain.room;
 
 import challenge.nDaysChallenge.domain.Stamp;
 import lombok.*;
-import net.minidev.json.JSONUtil;
 
 import javax.persistence.*;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static lombok.AccessLevel.*;
 
@@ -18,6 +14,7 @@ import static lombok.AccessLevel.*;
 @AllArgsConstructor(access = PROTECTED)
 @Getter
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_number")
@@ -46,9 +43,11 @@ public class Room {
     protected Stamp stamp;
 
     protected int passCount;
-    protected int usedPassCount;
-    protected int successCount;
 
+
+    //==비즈니스 로직==//
+
+    //챌린지 상태 변경
     public void end() {
         this.status = RoomStatus.END;
     }
