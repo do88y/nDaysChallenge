@@ -1,15 +1,15 @@
-POST http://localhost:8080/auth/login
+POST http://{{review-api}}/auth/login
 Content-Type: application/json
 
 {
-  "id": "aaaa@naver.com",
-  "pw": "1234"
+  "id": "{{username}}",
+  "pw": "{{password}}"
 }
 
 ### 개인 챌린지
-POST http://localhost:8080/challenge
+POST http://{{review-api}}/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc5OTEwODYwfQ.r2EpqOmC6Fj47H-zi5OuYvoRLjid_UVTw98FXGPuuFY
 
 {
   "name": "명상",
@@ -24,7 +24,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1d
 }
 
 ### 그룹 챌린지
-POST http://localhost:8080/challenge/group
+POST http://{{review-api}}/challenge/group
 Content-Type: application/json
 Authorization: Bearer
 
@@ -43,21 +43,21 @@ Authorization: Bearer
 
 
 ### 진행 챌린지
-GET http://localhost:8080/challenge/list
+GET http://{{review-api}}/challenge/list
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 완료 챌린지
-GET http://localhost:8080/user/challenges
+GET http://{{review-api}}/user/challenges
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 삭제
-DELETE http://localhost:8080/challenge/100
+DELETE http://{{review-api}}/challenge/100
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 상태 변경
-POST http://localhost:8080/challenge/70
+POST http://{{review-api}}/challenge/70
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
