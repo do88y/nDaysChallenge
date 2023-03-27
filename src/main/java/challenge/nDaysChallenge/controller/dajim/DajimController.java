@@ -6,14 +6,20 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
+import challenge.nDaysChallenge.service.dajim.CustomSliceImpl;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,15 +62,6 @@ public class DajimController {
         return ResponseEntity.ok().body(dajimResponseDtoList);
     }
 
-    //피드 전체 조회 (다짐 + 감정스티커 리스트)
-    @GetMapping("/feed")
-    public ResponseEntity<?> viewDajimOnFeed(Principal principal){
-
-        List<DajimFeedResponseDto> dajimFeedDto = dajimService.viewDajimOnFeed(principal);
-
-        return ResponseEntity.ok().body(dajimFeedDto);
-
-    }
 
     private void checkLogin(Member member) {
         if (member == null) {

@@ -1,17 +1,17 @@
 ### 감정스티커 등록
 POST http://localhost:8080/feed/emotion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3NjA0NDI0Nn0.-z308xEvZzSgb-DZXVz8_xrKGYwvkhWVKZj0PBWYdFI
 
 {
-  "dajimNumber": 8,
-  "sticker": "LIKE"
+  "dajimNumber": 7,
+  "sticker": "WATCH"
 }
 
 ### 감정스티커 수정
 PATCH http://localhost:8080/feed/emotion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWVlODE5QGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1MzA5MTUxfQ.ZSUUNhyHOyRpgof43TClkZBgxBWiCiAJkvPuGGZOnLs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3NjA0NDI0Nn0.-z308xEvZzSgb-DZXVz8_xrKGYwvkhWVKZj0PBWYdFI
 
 {
   "dajimNumber": 1,

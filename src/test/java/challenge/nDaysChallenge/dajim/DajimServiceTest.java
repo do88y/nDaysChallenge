@@ -1,8 +1,11 @@
 package challenge.nDaysChallenge.dajim;
 
 import challenge.nDaysChallenge.domain.dajim.Dajim;
+import challenge.nDaysChallenge.domain.dajim.Emotion;
 import challenge.nDaysChallenge.domain.dajim.Open;
+import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
@@ -17,6 +20,8 @@ import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
+import challenge.nDaysChallenge.service.dajim.CustomSliceImpl;
+import challenge.nDaysChallenge.service.dajim.DajimFeedService;
 import challenge.nDaysChallenge.service.dajim.DajimService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,14 +29,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.lang.reflect.Array;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,6 +75,9 @@ public class DajimServiceTest {
     private DajimService dajimService;
 
     @InjectMocks
+    private DajimFeedService dajimFeedService;
+
+    @InjectMocks
     private RoomService roomService;
 
     private MemberRequestDto memberRequestDto;
@@ -100,6 +110,21 @@ public class DajimServiceTest {
                 .content("내용2")
                 .emotions(new ArrayList<>())
                 .build();
+
+        Emotion emotion = Emotion.builder()
+                .dajim(dajim)
+                .sticker(Sticker.CHEER)
+                .member(member)
+                .build();
+
+        Emotion emotion2 = Emotion.builder()
+                .dajim(dajim)
+                .sticker(Sticker.LIKE)
+                .member(member)
+                .build();
+
+        dajim.addEmotions(emotion);
+        dajim2.addEmotions(emotion2);
     }
 
     @Test
@@ -121,10 +146,10 @@ public class DajimServiceTest {
     @Test
     void 다짐_수정(){
         //given
-        when(dajimRepository.findByNumber(any())).thenReturn(Optional.ofNullable(dajim));
         DajimUpdateRequestDto dajimUpdateRequestDto = new DajimUpdateRequestDto(dajim.getNumber(), "수정한 내용", "PRIVATE");
 
         //when
+        when(dajimRepository.findByMemberNumberAndRoomNumber(any(),any())).thenReturn(Optional.ofNullable(dajim));
         DajimResponseDto dajimResponseDto = dajimService.updateDajim(room.getNumber(), dajimUpdateRequestDto, member);
 
         //then
@@ -149,20 +174,33 @@ public class DajimServiceTest {
     }
 
     @Test
-    void 피드_다짐들_조회() {
+    void 미로그인_피드_다짐들_조회() {
         //given
-        List<Dajim> dajims = new ArrayList<>();
-        dajims.add(dajim);
-        dajims.add(dajim2);
-        when(dajimRepository.findAllByOpen()).thenReturn(dajims);
+        List<Dajim> dajims = Arrays.asList(dajim, dajim2); //피드 다짐 리스트
+        Slice<Dajim> dajimPage = new CustomSliceImpl<>(dajims, Pageable.ofSize(10).withPage(0), false); //피드 다짐 페이징 객체(슬라이스)
 
         //when
-        List<DajimFeedResponseDto> dajimFeedResponseDtos = dajimService.viewDajimOnFeed((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        when(dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10).withPage(0))).thenReturn(dajimPage);
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedWithoutLogin(Pageable.ofSize(10).withPage(0));
 
         //then
-        System.out.println(dajimFeedResponseDtos.stream().map(d->d.getContent()).collect(Collectors.toList()));
-        assertThat(dajimFeedResponseDtos.size()).isEqualTo(2);
+        assertThat(dajimFeedPage.getContent().size()).isEqualTo(2);
+        System.out.println(dajimFeedPage.stream().map(d->d.getContent()).collect(Collectors.toList()));
+    }
 
+    @Test
+    void 로그인유저_피드_다짐들_조회() {
+        //given
+        List<Dajim> dajims = Arrays.asList(dajim, dajim2); //피드 다짐 리스트
+        Slice<Dajim> dajimPage = new CustomSliceImpl<>(dajims, Pageable.ofSize(10).withPage(0), false); //피드 다짐 페이징 객체(슬라이스)
+
+        //when
+        when(dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10).withPage(0))).thenReturn(dajimPage);
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedLoggedIn(member, Pageable.ofSize(10).withPage(0));
+
+        //then
+        assertThat(dajimFeedPage.getContent().size()).isEqualTo(2);
+        System.out.println(dajimFeedPage.stream().map(d->d.getContent()).collect(Collectors.toList()));
     }
 
 }

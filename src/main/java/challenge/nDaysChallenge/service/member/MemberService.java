@@ -42,6 +42,7 @@ public class MemberService {
 
     private final SingleRoomRepository singleRoomRepository;
     private final GroupRoomRepository groupRoomRepository;
+
     private final EntityManager em;
 
     //아이디 중복 검사
@@ -124,17 +125,11 @@ public class MemberService {
         em.clear();
 
         //레포지토리에서 직접 삭제
-        if (!dajims.isEmpty()){
-            dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
-        }
+        dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
 
-        if (!roomMembers.isEmpty()){
-            roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
-        }
+        roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
 
-        if (!stamps.isEmpty()){
-            stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
-        }
+        stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
 
         if (!singleRooms.isEmpty()){
             singleRoomRepository.deleteAll(singleRooms);

@@ -16,7 +16,7 @@ public class EmotionController { //감정 스티커 등록
 
     private final EmotionService emotionService;
 
-    //이모션 등록/수정/삭제
+    //이모션 등록
     @PostMapping("/feed/emotion")
     public ResponseEntity<?> uploadEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
@@ -27,6 +27,7 @@ public class EmotionController { //감정 스티커 등록
         return ResponseEntity.ok().body(emotionResponseDto);
     }
 
+    //이모션 수정
     @PatchMapping("/feed/emotion")
     public ResponseEntity<?> updateEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
@@ -37,6 +38,7 @@ public class EmotionController { //감정 스티커 등록
         return ResponseEntity.ok().body(emotionResponseDto);
     }
 
+    //이모션 삭제
     @DeleteMapping("/feed/emotion")
     public ResponseEntity<?> deleteEmotion(@RequestBody EmotionRequestDto emotionRequestDto,
                                            @AuthenticationPrincipal MemberAdapter memberAdapter){
