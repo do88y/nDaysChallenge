@@ -93,7 +93,6 @@ public class RoomService {
 
         //그 외 멤버
         for (Member findMember : memberList) {
-            Member member1 = memberRepository.findByNumber(findMember.getNumber()).get();
             //스탬프 생성
             Stamp newStamp = Stamp.createStamp(newRoom, findMember);
             stampRepository.save(newStamp);
@@ -211,12 +210,5 @@ public class RoomService {
                 .build();
         return roomResponseDto;
     }
-
-    //작성자가 맞는지 확인
-/*    private void userCheck(Member currentMember, Member writeMember) {
-        if (!currentMember.getNumber().equals(writeMember)) {
-            throw new RuntimeException("접근 권한이 없습니다.");
-        }
-    }*/
 
 }

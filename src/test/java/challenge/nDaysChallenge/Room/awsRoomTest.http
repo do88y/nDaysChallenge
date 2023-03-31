@@ -1,13 +1,13 @@
-POST http://localhost:8080/auth/login
+POST https://api.ndayschallenge.com/auth/login
 Content-Type: application/json
 
 {
-  "id": "wonsy1006@gmail.com",
+  "id": "jaerong@gmail.com",
   "pw": "!Jinwoo4318"
 }
 
-### 챌린지 생성
-POST http://localhost:8080/challenge
+### 개인 챌린지 생성
+POST https://api.ndayschallenge.com/challenge
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzQxMTA2MDJ9.Wkdvi9sDF_9THEV_9xlOVcWwBNVJ2fihCYT49nPC0rI
 
@@ -23,8 +23,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tI
   "usedPassCount" : 0
 }
 
-###
-POST http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/createGroup
+### 그룹 챌린지 생성
+POST https://api.ndayschallenge.com/challenge/createGroup
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3ODI5fQ.JGQlP_g3rdUhrmwY3xpjfHbFU9Id0p4J6JeoYDlWYpc
 
@@ -42,17 +42,33 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1d
   "groupMembers": [1, 2, 3]
 }
 
-### 진행 챌린지
-GET http://prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/list
+### 챌린지 상세
+GET https://api.ndayschallenge.com/challenge/5
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BuYXZlci5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3MTgwMDk4Mn0.MsMnoQH409UeGrtwgHwEAEHMsEAZuRr5QSmQpzeLxVs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWVyb25nQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjUyMzUwfQ.4SWIsNgtmXdqiUX4umTgcPAnyGwg4Bmqj9gD9J5RJk0
+
+### 진행 챌린지
+GET https://api.ndayschallenge.com/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYWVyb25nQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjUyMzUwfQ.4SWIsNgtmXdqiUX4umTgcPAnyGwg4Bmqj9gD9J5RJk0
 
 ### 완료 챌린지
-GET prod-ndc-api-service.us-west-2.elasticbeanstalk.com/user/finishedChallenges
+GET https://api.ndayschallenge.com/user/finishedChallenges
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjY2NjQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxODAyMzgyfQ.a37jUUdbvsd8OS7yetYdyVPwL0OpuGXCJ444y9I1PZk
 
 ### 챌린지 삭제
-DELETE prod-ndc-api-service.us-west-2.elasticbeanstalk.com/challenge/8
+DELETE https://api.ndayschallenge.com/challenge/8
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxODQ5NTE4fQ.ShbQk6X3iZ3g7f06fOvPeUvUdQkUu_ybX4bLVUrzKsI
+
+### 스탬프 찍기
+POST https://api.ndayschallenge.com/challenge/stamp
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+{
+  "roomNumber": 1,
+  "stampNumber": 1,
+  "day":"o"
+}
