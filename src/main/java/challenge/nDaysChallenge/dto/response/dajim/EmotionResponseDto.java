@@ -28,9 +28,4 @@ public class EmotionResponseDto {
         );
     }
 
-    //삭제할 이모션객체 다짐넘버 null로 수정
-    public void updateNull(){
-        this.sticker = null;
-    }
-
 }
