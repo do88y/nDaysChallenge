@@ -61,20 +61,6 @@ public class SecurityConfig {
             .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 에러 핸들링
             .accessDeniedHandler(customAccessDeniedHandler) //인가 에러 핸들링
 
-                // 테스트 위해 주석 처리함
-//                .and()
-//            .formLogin()
-//            .loginPage("/auth/login")
-//            .usernameParameter("id") ////로그인 아이디의 name 속성값
-//            .passwordParameter("pw")
-//            .defaultSuccessUrl("/")
-
-
-//            .and()
-//            .headers()
-//            .frameOptions()
-//            .sameOrigin()
-
             //인증,인가에 대한 path matching & Preflight Request 허용
             .and()
             .authorizeRequests() //요청에 대한 권한 설정
@@ -94,7 +80,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true); //cross origin으로부터 쿠키 받을지
+        configuration.setAllowCredentials(false); //cross origin으로부터 쿠키 받을지
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); //허용할 origin
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); //허용할 http method
         configuration.setAllowedOrigins(
