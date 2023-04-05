@@ -18,9 +18,6 @@ import java.util.Optional;
 @Repository
 public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
-    @Override
-    <S extends Dajim> S save(S entity);
-
     Optional<Dajim> findByNumber(Long dajimNumber);
 
     @Query("SELECT d FROM Dajim d WHERE d.member.number = :memberNumber AND d.room.number = :roomNumber")
