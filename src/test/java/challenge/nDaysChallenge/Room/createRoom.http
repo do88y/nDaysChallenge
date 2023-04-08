@@ -9,7 +9,7 @@ Content-Type: application/json
 ### 개인 챌린지
 POST http://localhost:8080/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc1NzU4OTQ0fQ.tsqapfdXPfAyvYMN7EV5tf3ClqFl7v4tR29aHk722VM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
 
 {
   "name": "명상",
@@ -26,7 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyQGdtYWlsLmNvbSIsImF1d
 ### 그룹 챌린지
 POST http://localhost:8080/challenge/group
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
 
 {
   "name": "밥",
@@ -38,7 +38,7 @@ Authorization: Bearer
   "type": "GROUP",
   "successCount": 0,
   "usedPassCount" : 0,
-  "groupMembers": [5,6]
+  "groupMembers": [1]
 }
 
 

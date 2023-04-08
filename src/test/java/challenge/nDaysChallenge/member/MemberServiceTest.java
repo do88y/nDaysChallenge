@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.member;
 
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
 import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.member.Member;
@@ -132,10 +133,15 @@ public class MemberServiceTest {
 
         SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
         SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30L), Category.ETC, 4, "");
+
+        Stamp stamp = Stamp.createStamp(room1, member);
+        List<Stamp> stamps = Arrays.asList(stamp);
+
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-        when(singleRoomRepository.findAll(member)).thenReturn(singleRooms);
-        when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member)).thenReturn(new ArrayList<>());
+        when(singleRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(singleRooms));
+        when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(new ArrayList<>()));
+        when(groupRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(new ArrayList<>()));
+        when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
 
         Dajim dajim1 = Dajim.builder()
                 .number(1L)
@@ -162,6 +168,7 @@ public class MemberServiceTest {
         assertThat(nickname).isEqualTo(memberRequestDto.getNickname());
         verify(dajimRepository, times(1)).deleteAll(eq(dajims));
         verify(singleRoomRepository, times(1)).deleteAll(eq(singleRooms));
+        verify(stampRepository, times(1)).deleteAll(eq(stamps));
         verify(memberRepository, times(1)).delete(member);
     }
 
