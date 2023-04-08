@@ -21,9 +21,6 @@ public interface StampRepository extends JpaRepository<Stamp, Long> {
     @Query("select s from Stamp s where s.room = :room")
     public List<Stamp> findByGroupRoom(@Param("room") Room room);
 
-    @Query("select s from Stamp s where s.room = :room")
-    public List<Stamp> findGroupStampByRoom(@Param("room") Room room);
-
 
     @Query("select s from Stamp s where s.room = :room and s.member = :member")
     public Stamp findByRoomAndMember(@Param("room") Room room,

@@ -158,8 +158,8 @@ public class RoomService {
             //RoomMember 삭제
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
             List<Stamp> findStamps = stampRepository.findByGroupRoom(room);
-            roomMembers.forEach(roomMember -> roomMemberRepository.delete(roomMember));//Member의 roomMemberList에서도 삭제 됨
-            findStamps.forEach(stamp -> stampRepository.delete(stamp));
+            roomMembers.forEach(roomMemberRepository::delete);//Member의 roomMemberList에서도 삭제 됨
+            findStamps.forEach(stampRepository::delete);
             //그룹 챌린지 삭제
             roomRepository.delete(room);
         }
