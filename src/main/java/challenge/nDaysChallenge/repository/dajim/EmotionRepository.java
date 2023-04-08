@@ -18,7 +18,4 @@ public interface EmotionRepository extends JpaRepository<Emotion, Long> {
             "and e.member.number = :memberNumber")
     Optional<Emotion> findByDajimAndMember(@Param("dajimNumber")Long dajimNumber, @Param("memberNumber")Long memberNumber);
 
-    @Query("SELECT e FROM Emotion e WHERE e.member.id = :memberId")
-    Optional<List<Emotion>> findAllByMemberId(@Param("memberId") String memberId);
-
 }
