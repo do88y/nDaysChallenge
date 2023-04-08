@@ -131,7 +131,9 @@ public class MemberService {
 
         stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
 
-        singleRoomRepository.deleteAll(singleRooms);
+        if (!singleRooms.isEmpty()){
+            singleRoomRepository.deleteAll(singleRooms);
+        }
 
         //멤버 삭제
         memberRepository.delete(member);

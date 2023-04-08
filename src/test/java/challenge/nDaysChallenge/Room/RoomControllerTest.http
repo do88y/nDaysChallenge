@@ -1,0 +1,79 @@
+POST http://{{review-api}}/auth/login
+Content-Type: application/json
+
+{
+  "id": "{{username}}",
+  "pw": "{{password}}"
+}
+
+### 개인 챌린지 생성
+POST http://{{review-api}}/challenge
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc5OTEwODYwfQ.r2EpqOmC6Fj47H-zi5OuYvoRLjid_UVTw98FXGPuuFY
+
+{
+  "name": "명상",
+  "category": "MINDFULNESS",
+  "reward": "",
+  "passCount": 10,
+  "startDate": "2023-01-11",
+  "totalDays": 10,
+  "type": "SINGLE",
+  "successCount": 0,
+  "usedPassCount" : 0
+}
+
+### 그룹 챌린지 생성
+POST http://{{review-api}}/challenge/group
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
+
+{
+  "name": "밥",
+  "category": "ETC",
+  "reward": "살",
+  "passCount": 10,
+  "startDate": "2022-12-30",
+  "totalDays": 30,
+  "type": "GROUP",
+  "successCount": 0,
+  "usedPassCount" : 0,
+  "groupMembers": [5,6]
+}
+
+### 챌린지 상세
+GET http://{{review-api}}/challenge/85
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
+
+
+### 진행 챌린지
+GET http://{{review-api}}/challenge/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
+
+### 완료 챌린지
+GET http://{{review-api}}/user/challenges
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+### 챌린지 삭제
+DELETE http://{{review-api}}/challenge/100
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+### 챌린지 상태 변경
+POST http://{{review-api}}/challenge/70
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+### 스탬프 찍기
+POST http://{{review-api}}/challenge/stamp
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+{
+    "roomNumber": 1,
+    "stampNumber": 1,
+    "day":"o"
+}
