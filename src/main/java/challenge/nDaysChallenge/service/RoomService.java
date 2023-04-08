@@ -157,9 +157,9 @@ public class RoomService {
         } else if (room.getType() == RoomType.GROUP) {
             //RoomMember 삭제
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
-            for (RoomMember roomMember : roomMembers) {
-                roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
-            }
+            List<Stamp> findStamps = stampRepository.findByGroupRoom(room);
+            roomMembers.forEach(roomMember -> roomMemberRepository.delete(roomMember));//Member의 roomMemberList에서도 삭제 됨
+            findStamps.forEach(stamp -> stampRepository.delete(stamp));
             //그룹 챌린지 삭제
             roomRepository.delete(room);
         }

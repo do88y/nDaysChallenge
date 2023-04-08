@@ -35,7 +35,6 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Rollback(value = true)
 @MockBean(JpaMetamodelMappingContext.class)
 public class RoomServiceTest {
 
@@ -76,7 +75,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        em.persist(member);
+                .build();
+        em.persist(member);
 
         //when
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
@@ -176,7 +176,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -228,7 +229,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -268,7 +270,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
