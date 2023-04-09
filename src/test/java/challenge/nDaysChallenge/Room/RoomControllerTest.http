@@ -9,7 +9,7 @@ Content-Type: application/json
 ### 개인 챌린지 생성
 POST http://{{review-api}}/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjc5OTEwODYwfQ.r2EpqOmC6Fj47H-zi5OuYvoRLjid_UVTw98FXGPuuFY
+Authorization: Bearer
 
 {
   "name": "명상",
@@ -26,7 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1d
 ### 그룹 챌린지 생성
 POST http://{{review-api}}/challenge/group
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
+Authorization: Bearer e
 
 {
   "name": "밥",
@@ -38,7 +38,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1d
   "type": "GROUP",
   "successCount": 0,
   "usedPassCount" : 0,
-  "groupMembers": [5,6]
+  "groupMembers": [1]
 }
 
 ### 챌린지 상세

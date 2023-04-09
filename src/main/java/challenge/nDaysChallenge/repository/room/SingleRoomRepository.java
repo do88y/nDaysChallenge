@@ -26,5 +26,6 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
     //전체 개인 챌린지
     @Query(value = "select s from SingleRoom s" +
                     " where s.member = :member")
-    public Optional<List<SingleRoom>> findAll(@Param("member") Member member);
+    Optional<List<SingleRoom>> findAll(@Param("member") Member member);
+
 }

@@ -7,9 +7,9 @@ Content-Type: application/json
 }
 
 ### 개인 챌린지 생성
-POST https://api.ndayschallenge.com/challenge
+POST http://localhost:8080/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2NzQxMTA2MDJ9.Wkdvi9sDF_9THEV_9xlOVcWwBNVJ2fihCYT49nPC0rI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDk1MzgxNH0.28LNx8BsqThLYKxAeL3Hhd9MX8hG6YNjgZtuCv2bkfI
 
 {
   "name": "명상",
@@ -24,9 +24,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3b25zeTEwMDZAZ21haWwuY29tI
 }
 
 ### 그룹 챌린지 생성
-POST https://api.ndayschallenge.com/challenge/createGroup
+POST http://localhost:8080/challenge/group
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjcxNzk3ODI5fQ.JGQlP_g3rdUhrmwY3xpjfHbFU9Id0p4J6JeoYDlWYpc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDk1NDk4OX0.Z3uXvikMIkZCgcyRZBzZ2eti76f8ujt3-R7zYjVpc4U
 
 {
   "name": "공부",
@@ -39,7 +39,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1d
   "successCount": 0,
   "usedPassCount" : 0,
   "memberNumber": 4,
-  "groupMembers": [1, 2, 3]
+  "groupMembers": [2]
 }
 
 ### 챌린지 상세

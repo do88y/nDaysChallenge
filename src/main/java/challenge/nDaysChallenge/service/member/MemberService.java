@@ -16,8 +16,10 @@ import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -26,7 +28,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
 @Slf4j
 public class MemberService {
 
@@ -44,6 +45,86 @@ public class MemberService {
     private final GroupRoomRepository groupRoomRepository;
 
     private final EntityManager em;
+
+    //회원정보 조회 (수정 전)
+    @Transactional(readOnly = true)
+    public MemberInfoResponseDto findMemberInfo(String id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
+        return MemberInfoResponseDto.of(member);
+    }
+
+    //회원정보 수정
+    @Transactional
+    public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
+        Member updatedMember = member.update(memberEditRequestDto.getNickname(),
+                passwordEncoder.encode(memberEditRequestDto.getPw()),
+                memberEditRequestDto.getImage());
+
+        return MemberInfoResponseDto.of(updatedMember);
+    }
+
+    //회원 삭제
+    @Transactional
+    public String deleteMember(Member member) {
+        String nickname = member.getNickname();
+
+        //참조 엔티티들 불러오기
+        List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member).orElseGet(ArrayList::new);
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member).orElseGet(ArrayList::new);
+
+        //룸 도메인 연관관계 끊기
+        deleteConnection(member,roomMembers, stamps, singleRooms, groupRooms);
+
+        em.flush();
+        em.clear();
+
+        //관련 엔티티 삭제
+        dajimRepository.deleteAll(dajims); //다짐 -> 이모션 삭제
+        roomMemberRepository.deleteAll(roomMembers);
+        stampRepository.deleteAll(stamps);
+        singleRoomRepository.deleteAll(singleRooms);
+
+        //멤버 삭제
+        memberRepository.delete(member);
+
+        return nickname;
+    }
+
+    @Transactional
+    public void deleteConnection(Member member, List<RoomMember> roomMembers, List<Stamp> stamps, List<SingleRoom> singleRooms, List<GroupRoom> groupRooms){
+
+        if (!roomMembers.isEmpty()){
+            for (RoomMember roomMember:roomMembers) {
+                roomMember.deleteConnection();
+            }
+        }
+
+        if (!stamps.isEmpty()){
+            for (Stamp stamp:stamps) {
+                stamp.deleteConnection();
+            }
+        }
+
+        if (!groupRooms.isEmpty()){
+            for (GroupRoom groupRoom : groupRooms) {
+                if (member.equals(groupRoom.getMember())) {
+                    groupRoom.deleteHostConnection();
+                }
+            }
+        }
+
+        if (!singleRooms.isEmpty()){
+            for (SingleRoom singleRoom:singleRooms){
+                singleRoom.deleteConnection();
+            }
+        }
+
+    }
 
     //아이디 중복 검사
     @Transactional(readOnly = true)
@@ -67,76 +148,6 @@ public class MemberService {
         } else {
             return "ok";
         }
-    }
-
-    //회원정보 조회 (수정 전)
-    @Transactional(readOnly = true)
-    public MemberInfoResponseDto findMemberInfo(String id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
-
-        MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(member);
-
-        return memberInfoResponseDto;
-    }
-
-    //회원정보 수정
-    public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
-        Member updatedMember = member.update(memberEditRequestDto.getNickname(),
-                passwordEncoder.encode(memberEditRequestDto.getPw()),
-                memberEditRequestDto.getImage());
-
-        MemberInfoResponseDto updatedMemberInfoDto = MemberInfoResponseDto.of(updatedMember);
-
-        return updatedMemberInfoDto;
-    }
-
-    //회원 삭제
-    public String deleteMember(Member member) {
-        String nickname = member.getNickname();
-
-        //멤버 참조하는 엔티티 불러오기
-        List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member).orElseGet(ArrayList::new);
-        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member).orElseGet(ArrayList::new);
-
-        for (RoomMember roomMember:roomMembers) {
-            roomMember.deleteConnection();
-        }
-
-        for (Stamp stamp:stamps) {
-            stamp.deleteConnection();
-        }
-
-        for (GroupRoom groupRoom : groupRooms) {
-            if (member.equals(groupRoom.getMember())) {
-                groupRoom.deleteHostConnection();
-            }
-        }
-
-        for (SingleRoom singleRoom:singleRooms){
-            singleRoom.deleteConnection();
-        }
-        em.flush();
-        em.clear();
-
-        //레포지토리에서 직접 삭제
-        dajimRepository.deleteAll(dajims); //탈퇴 회원 다짐 삭제 -> 이모션도 삭제
-
-        roomMemberRepository.deleteAll(roomMembers); //탈퇴 회원 룸멤버 테이블에서 삭제
-
-        stampRepository.deleteAll(stamps); //탈퇴 회원 스탬프 삭제
-
-        if (!singleRooms.isEmpty()){
-            singleRoomRepository.deleteAll(singleRooms);
-        }
-
-        //멤버 삭제
-        memberRepository.delete(member);
-
-        return nickname;
     }
 
 }
