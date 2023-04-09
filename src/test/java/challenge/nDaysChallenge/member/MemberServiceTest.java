@@ -138,16 +138,10 @@ public class MemberServiceTest {
         List<Stamp> stamps = Arrays.asList(stamp);
 
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-<<<<<<< HEAD
         when(singleRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(singleRooms));
         when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(new ArrayList<>()));
         when(groupRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(new ArrayList<>()));
         when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
-=======
-        when(singleRoomRepository.findAll(member)).thenReturn(Optional.of(new ArrayList<>()));
-        when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member)).thenReturn(Optional.of(new ArrayList<>()));
->>>>>>> e4df1f4b8cba30a799df6fe0671c557043ec9218
 
         Dajim dajim1 = Dajim.builder()
                 .number(1L)
