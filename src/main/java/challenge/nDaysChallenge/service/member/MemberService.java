@@ -46,54 +46,27 @@ public class MemberService {
 
     private final EntityManager em;
 
-
-    //아이디 중복 검사
-    @Transactional(readOnly = true)
-    public String idCheck(String id){
-        boolean exists = memberRepository.existsById(id);
-
-        if (exists){
-            return "exists";
-        } else {
-            return "ok";
-        }
-    }
-
-    //닉네임 중복 검사
-    @Transactional(readOnly = true)
-    public String nicknameCheck(String nickname){
-        boolean exists = memberRepository.existsByNickname(nickname);
-
-        if (exists){
-            return "exists";
-        } else {
-            return "ok";
-        }
-    }
-
     //회원정보 조회 (수정 전)
     @Transactional(readOnly = true)
     public MemberInfoResponseDto findMemberInfo(String id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
 
-        MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(member);
-
-        return memberInfoResponseDto;
+        return MemberInfoResponseDto.of(member);
     }
 
     //회원정보 수정
+    @Transactional
     public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
         Member updatedMember = member.update(memberEditRequestDto.getNickname(),
                 passwordEncoder.encode(memberEditRequestDto.getPw()),
                 memberEditRequestDto.getImage());
 
-        MemberInfoResponseDto updatedMemberInfoDto = MemberInfoResponseDto.of(updatedMember);
-
-        return updatedMemberInfoDto;
+        return MemberInfoResponseDto.of(updatedMember);
     }
 
     //회원 삭제
+    @Transactional
     public String deleteMember(Member member) {
         String nickname = member.getNickname();
 
@@ -122,7 +95,8 @@ public class MemberService {
         return nickname;
     }
 
-    private void deleteConnection(Member member, List<RoomMember> roomMembers, List<Stamp> stamps, List<SingleRoom> singleRooms, List<GroupRoom> groupRooms){
+    @Transactional
+    public void deleteConnection(Member member, List<RoomMember> roomMembers, List<Stamp> stamps, List<SingleRoom> singleRooms, List<GroupRoom> groupRooms){
         if (!roomMembers.isEmpty()){
             for (RoomMember roomMember:roomMembers) {
                 roomMember.deleteConnection();
@@ -153,5 +127,28 @@ public class MemberService {
 
     }
 
+    //아이디 중복 검사
+    @Transactional(readOnly = true)
+    public String idCheck(String id){
+        boolean exists = memberRepository.existsById(id);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
+
+    //닉네임 중복 검사
+    @Transactional(readOnly = true)
+    public String nicknameCheck(String nickname){
+        boolean exists = memberRepository.existsByNickname(nickname);
+
+        if (exists){
+            return "exists";
+        } else {
+            return "ok";
+        }
+    }
 
 }
