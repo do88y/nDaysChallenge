@@ -99,8 +99,8 @@ public class MemberService {
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member);
-        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member);
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member).orElseGet(ArrayList::new);
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member).orElseGet(ArrayList::new);
 
         for (RoomMember roomMember:roomMembers) {
             roomMember.deleteConnection();
@@ -111,10 +111,8 @@ public class MemberService {
         }
 
         for (GroupRoom groupRoom : groupRooms) {
-            if (groupRoom.getMember().equals(member)) {
+            if (member.equals(groupRoom.getMember())) {
                 groupRoom.deleteHostConnection();
-            } else {
-                groupRoom.deleteGuestConnection();
             }
         }
 
