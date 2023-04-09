@@ -8,6 +8,7 @@ NDaysChallengeFrontend/
 .elasticbeanstalk/
 build/
 src/main/resources/*
+http-client.private.env.json
 
 ### STS ###
 .apt_generated

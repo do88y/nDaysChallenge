@@ -1,15 +1,15 @@
-POST http://localhost:8080/auth/login
+POST http://{{review-api}}/auth/login
 Content-Type: application/json
 
 {
-  "id": "aaaa@naver.com",
-  "pw": "1234"
+  "id": "{{username}}",
+  "pw": "{{password}}"
 }
 
-### 개인 챌린지
-POST http://localhost:8080/challenge
+### 개인 챌린지 생성
+POST http://{{review-api}}/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
+Authorization: Bearer
 
 {
   "name": "명상",
@@ -23,10 +23,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhd
   "usedPassCount" : 0
 }
 
-### 그룹 챌린지
-POST http://localhost:8080/challenge/group
+### 그룹 챌린지 생성
+POST http://{{review-api}}/challenge/group
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
+Authorization: Bearer e
 
 {
   "name": "밥",
@@ -41,23 +41,39 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhd
   "groupMembers": [1]
 }
 
+### 챌린지 상세
+GET http://{{review-api}}/challenge/85
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
+
 
 ### 진행 챌린지
-GET http://localhost:8080/challenge/list
+GET http://{{review-api}}/challenge/list
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZGRkQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjgwMjQ1NjA1fQ.hLOBGvNSMJmUnzd1FrDsrpzhf7mHw167Xdeb02Eq4A8
 
 ### 완료 챌린지
-GET http://localhost:8080/user/challenges
+GET http://{{review-api}}/user/challenges
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 삭제
-DELETE http://localhost:8080/challenge/100
+DELETE http://{{review-api}}/challenge/100
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
 
 ### 챌린지 상태 변경
-POST http://localhost:8080/challenge/70
+POST http://{{review-api}}/challenge/70
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+### 스탬프 찍기
+POST http://{{review-api}}/challenge/stamp
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhQG5hdmVyLmNvbSIsImF1dGgiOiJudWxsIiwiZXhwIjoxNjczNzY2Nzk1fQ.0naUqyxTo7f96vWTH35aG7QnbId9fnPyHtfCSdRZNhE
+
+{
+    "roomNumber": 1,
+    "stampNumber": 1,
+    "day":"o"
+}

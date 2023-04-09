@@ -93,7 +93,6 @@ public class RoomService {
 
         //그 외 멤버
         for (Member findMember : memberList) {
-            Member member1 = memberRepository.findByNumber(findMember.getNumber()).get();
             //스탬프 생성
             Stamp newStamp = Stamp.createStamp(newRoom, findMember);
             stampRepository.save(newStamp);
@@ -158,9 +157,9 @@ public class RoomService {
         } else if (room.getType() == RoomType.GROUP) {
             //RoomMember 삭제
             Set<RoomMember> roomMembers = roomMemberRepository.findByRoom(room);
-            for (RoomMember roomMember : roomMembers) {
-                roomMemberRepository.delete(roomMember);  //Member의 roomMemberList에서도 삭제 됨
-            }
+            List<Stamp> findStamps = stampRepository.findByGroupRoom(room);
+            roomMembers.forEach(roomMemberRepository::delete);//Member의 roomMemberList에서도 삭제 됨
+            findStamps.forEach(stampRepository::delete);
             //그룹 챌린지 삭제
             roomRepository.delete(room);
         }
@@ -211,12 +210,5 @@ public class RoomService {
                 .build();
         return roomResponseDto;
     }
-
-    //작성자가 맞는지 확인
-/*    private void userCheck(Member currentMember, Member writeMember) {
-        if (!currentMember.getNumber().equals(writeMember)) {
-            throw new RuntimeException("접근 권한이 없습니다.");
-        }
-    }*/
 
 }

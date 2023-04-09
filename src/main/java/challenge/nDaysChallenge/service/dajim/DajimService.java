@@ -55,9 +55,9 @@ public class DajimService {
 
         Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto.getContent(), dajimUploadRequestDto.getOpen());
 
-        Dajim savedDajim = dajimRepository.save(newDajim);
+        dajimRepository.save(newDajim);
 
-        return DajimResponseDto.of(savedDajim);
+        return DajimResponseDto.of(newDajim);
     }
 
     //다짐 수정

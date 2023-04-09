@@ -35,7 +35,6 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Rollback(value = true)
 @MockBean(JpaMetamodelMappingContext.class)
 public class RoomServiceTest {
 
@@ -69,7 +68,6 @@ public class RoomServiceTest {
 
 
     @Test
-    @Rollback(value = true)
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
         //give
         Member member = Member.builder()
@@ -77,7 +75,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        em.persist(member);
+                .build();
+        em.persist(member);
 
         //when
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
@@ -99,7 +98,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Rollback(value = true)
     public void 그룹_챌린지_생성_메서드_전체() throws Exception {
         //given
         Set<Long> selectedMembers = new HashSet<>();
@@ -145,7 +143,6 @@ public class RoomServiceTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    @Rollback(value = true)
     public void 챌린지_삭제() throws Exception {
         //given
         Member member = Member.builder()
@@ -153,7 +150,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        em.persist(member);
+                .build();
+        em.persist(member);
 
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
 
@@ -166,10 +164,11 @@ public class RoomServiceTest {
 
         //then
         assertThat(roomRepository.findByNumber(roomNumber).get());
+
+        fail("exception should be accrued");
     }
 
     @Test
-    @Rollback(value = true)
     public void 진행_챌린지_조회() throws Exception {
         //given
         Member member = Member.builder()
@@ -177,7 +176,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -222,7 +222,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Rollback(value = true)
     public void 완료_개인챌린지_리스트() throws Exception {
         //given
         Member member = Member.builder()
@@ -230,7 +229,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         SingleRoom singleRoom1 = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         SingleRoom singleRoom2 = new SingleRoom("공부", this.period, Category.ETC, 0, "");
@@ -263,7 +263,6 @@ public class RoomServiceTest {
     }
 
     @Test
-    @Rollback(value = true)
     public void 완료_그룹챌린지_리스트() throws Exception {
         //given
         Member member = Member.builder()
@@ -271,7 +270,8 @@ public class RoomServiceTest {
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
-                .build();        memberRepository.save(member);
+                .build();
+        memberRepository.save(member);
 
         GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);

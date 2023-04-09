@@ -1,10 +1,10 @@
 ### 감정스티커 등록
 POST http://localhost:8080/feed/emotion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzRAZ21haWwuY29tIiwiYXV0aCI6Im51bGwiLCJleHAiOjE2ODA5NTQwNjV9.OyBudOn8yFvaOMVGx0SOvtHShQIHCs_smJ6DqPydhNU
 
 {
-  "dajimNumber": 2,
+  "dajimNumber": 4,
   "sticker": "WATCH"
 }
 

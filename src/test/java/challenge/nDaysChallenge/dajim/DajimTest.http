@@ -1,17 +1,17 @@
 ### 다짐 등록
-POST http://localhost:8080/challenge/2/dajim
+POST http://localhost:8080/challenge/4/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDg4NTgzMX0.K4rothmF7hk0fsjFkMZOFpEjTKL9dRVDBe4K6zZrwoc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDk1MzgxNH0.28LNx8BsqThLYKxAeL3Hhd9MX8hG6YNjgZtuCv2bkfI
 
 {
-  "content": "6번 방의 선물",
+  "content": "4번 방의 선물",
   "open": "PUBLIC"
 }
 
 ### 다짐 수정
 PATCH http://localhost:8080/challenge/10/dajim
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDk1MzgxNH0.28LNx8BsqThLYKxAeL3Hhd9MX8hG6YNjgZtuCv2bkfI
 
 {
   "dajimNumber": 7,
