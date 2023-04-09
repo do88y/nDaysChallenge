@@ -27,4 +27,5 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
     @Query(value = "select s from SingleRoom s" +
                     " where s.member = :member")
     Optional<List<SingleRoom>> findAll(@Param("member") Member member);
+
 }

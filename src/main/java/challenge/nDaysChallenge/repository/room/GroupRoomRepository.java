@@ -32,4 +32,5 @@ public interface GroupRoomRepository extends JpaRepository<GroupRoom, Long> {
             " on g.number = rm.room.number" +
             " where rm.member = :member")
     Optional<List<GroupRoom>> findAll(@Param("member") Member member);
+
 }

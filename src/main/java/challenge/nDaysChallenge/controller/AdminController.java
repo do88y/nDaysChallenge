@@ -8,6 +8,7 @@ import challenge.nDaysChallenge.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,30 +21,15 @@ public class AdminController {
     private final AdminService adminService;
 
 
+
     //챌린지 조회(id, status) - 현재 개인 챌린지만
     @GetMapping("admin/challenge/search")
-    public ResponseEntity<?> findRooms(@RequestParam RoomSearch roomSearch) {
+    public String findRooms(@RequestParam RoomSearch roomSearch, Model model) {
 
         List<Room> rooms = adminService.findRooms(roomSearch);
-        List<RoomResponseDto> list = new ArrayList<>();
+        model.addAttribute("challenges", rooms);
 
-        for (Room room : rooms) {
-            RoomResponseDto roomResponseDto = RoomResponseDto.builder()
-                    .roomNumber(room.getNumber())
-                    .name(room.getName())
-                    .category(room.getCategory().name())
-                    .reward(room.getReward())
-                    .type(room.getType().name())
-                    .status(room.getStatus().name())
-                    .passCount(room.getPassCount())
-                    .totalDays(room.getPeriod().getTotalDays())
-                    .startDate(room.getPeriod().getStartDate())
-                    .endDate(room.getPeriod().getEndDate())
-                    .build();
-            list.add(roomResponseDto);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        return "admin/challenge";
     }
 
     //챌린지 삭제 - 여러개 동시에

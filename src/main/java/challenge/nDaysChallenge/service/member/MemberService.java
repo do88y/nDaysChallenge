@@ -112,10 +112,8 @@ public class MemberService {
 
         if (!groupRooms.isEmpty()){
             for (GroupRoom groupRoom : groupRooms) {
-                if (groupRoom.getMember().getNumber().equals(member.getNumber())) {
+                if (member.equals(groupRoom.getMember())) {
                     groupRoom.deleteHostConnection();
-                } else {
-                    groupRoom.deleteGuestConnection();
                 }
             }
         }
