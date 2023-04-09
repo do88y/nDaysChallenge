@@ -36,11 +36,6 @@ public class GroupRoom extends Room {
 
     public void deleteHostConnection(){
         this.member=null;
-        this.stamp=null;
-    }
-
-    public void deleteGuestConnection(){
-        this.stamp=null;
     }
 
 }

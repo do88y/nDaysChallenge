@@ -133,9 +133,9 @@ public class MemberServiceTest {
         SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
         SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30L), Category.ETC, 4, "");
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-        when(singleRoomRepository.findAll(member)).thenReturn(singleRooms);
+        when(singleRoomRepository.findAll(member)).thenReturn(Optional.of(new ArrayList<>()));
         when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member)).thenReturn(new ArrayList<>());
+        when(groupRoomRepository.findAll(member)).thenReturn(Optional.of(new ArrayList<>()));
 
         Dajim dajim1 = Dajim.builder()
                 .number(1L)
