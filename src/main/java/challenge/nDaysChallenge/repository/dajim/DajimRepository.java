@@ -32,6 +32,9 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
             " ORDER BY d.updatedDate")
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
-    Slice<Dajim> findByOpen(Open open, Pageable pageable);
+    @Query("SELECT d FROM Dajim d " +
+            "WHERE d.open = :open " +
+            "AND length(trim(d.content)) >= 1")
+    Slice<Dajim> findByOpen(@Param("open") Open open, Pageable pageable);
 
 }

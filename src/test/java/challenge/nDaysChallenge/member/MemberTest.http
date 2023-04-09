@@ -17,5 +17,5 @@ Authorization: Bearer
 
 ### 회원 탈퇴
 DELETE http://localhost:8080/user/withdrawal
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MDk1NjQxMH0.85qTvxOGiDdEgxD9zvYP__pdv9D4TjAL9jrhefkSfd0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MTAyNjA0N30.XtmcrUrDb-DAXCnKumx5l8ofnoWgF5t8OVZlBWT3AGQ
 

@@ -54,6 +54,7 @@ public class Dajim extends BaseEntity {
     public Dajim update(Open open, String content) {
         this.open = open;
         this.content = content;
+        this.emotions.clear();
         return this;
     }
 

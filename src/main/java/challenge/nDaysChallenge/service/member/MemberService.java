@@ -97,6 +97,7 @@ public class MemberService {
 
     @Transactional
     public void deleteConnection(Member member, List<RoomMember> roomMembers, List<Stamp> stamps, List<SingleRoom> singleRooms, List<GroupRoom> groupRooms){
+
         if (!roomMembers.isEmpty()){
             for (RoomMember roomMember:roomMembers) {
                 roomMember.deleteConnection();
