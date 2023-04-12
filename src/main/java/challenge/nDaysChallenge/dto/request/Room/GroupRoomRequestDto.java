@@ -39,8 +39,6 @@ public class GroupRoomRequestDto {
         this.reward = reward;
         this.successCount = successCount;
         this.usedPassCount = usedPassCount;
-        for (Long members : groupMembers) {
-            this.groupMembers.add(members);
-        }
+        this.groupMembers.addAll(groupMembers);
     }
 }

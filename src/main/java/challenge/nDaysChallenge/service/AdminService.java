@@ -27,13 +27,11 @@ public class AdminService {
 
     //여러 챌린지 삭제
     @Transactional
-    public void deleteRoom(DeleteRoomRequestDto dto) {
-
-        List<Long> numbers = dto.getNumbers();
+    public void deleteRoom(List<Long> numbers) {
 
         for (Long number : numbers) {
-            Optional<Room> findRoom = roomRepository.findByNumber(number);
-            Room room = findRoom.orElseThrow(() -> new NoSuchElementException("챌린지가 존재하지 않습니다."));
+            Room room = roomRepository.findByNumber(number).orElseThrow(
+                    () -> new NoSuchElementException("챌린지가 존재하지 않습니다."));
             roomRepository.delete(room);
         }
     }

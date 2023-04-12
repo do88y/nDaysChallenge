@@ -1,17 +1,13 @@
-package challenge.nDaysChallenge.dto.response.Room;
+package challenge.nDaysChallenge.dto.response.room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoomResponseDto {
 

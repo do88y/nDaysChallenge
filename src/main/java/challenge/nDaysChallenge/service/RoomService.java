@@ -5,7 +5,7 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
-import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
+import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
@@ -129,13 +129,7 @@ public class RoomService {
         }
 
         //dto 생성
-        StampDto stampDto = StampDto.builder()
-                .roomNumber(roomNumber)
-                .stampNumber(updateStamp.getNumber())
-                .day(updateStamp.getDay())
-                .successCount(stamp.getSuccessCount())
-                .usedPassCount(stamp.getUsedPassCount())
-                .build();
+        StampDto stampDto = getStampDto(roomNumber, stamp, updateStamp);
 
         return stampDto;
     }
@@ -194,6 +188,8 @@ public class RoomService {
         }
     }
 
+    //==공통 메서드==//
+    //roomDto 생성
     private RoomResponseDto createRoomDto(Room room, Stamp stamp) {
         RoomResponseDto roomResponseDto = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -209,6 +205,18 @@ public class RoomService {
                 .stamp(stamp.getNumber())
                 .build();
         return roomResponseDto;
+    }
+
+    //stampDto 생성
+    private static StampDto getStampDto(Long roomNumber, Stamp stamp, Stamp updateStamp) {
+        StampDto stampDto = StampDto.builder()
+                .roomNumber(roomNumber)
+                .stampNumber(updateStamp.getNumber())
+                .day(updateStamp.getDay())
+                .successCount(stamp.getSuccessCount())
+                .usedPassCount(stamp.getUsedPassCount())
+                .build();
+        return stampDto;
     }
 
 }
