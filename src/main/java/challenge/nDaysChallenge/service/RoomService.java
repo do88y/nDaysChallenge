@@ -49,16 +49,14 @@ public class RoomService {
 
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
-
         //스탬프 생성
         Stamp stamp = Stamp.createStamp(newRoom, member);
+        //챌린지에 멤버, 스탬프 추가
+        newRoom.addRoom(member, stamp);
 
         //저장
-        singleRoomRepository.save(newRoom);
         stampRepository.save(stamp);
-
-        //멤버에 챌린지 저장
-        newRoom.addRoom(newRoom, member, stamp);
+        singleRoomRepository.save(newRoom);
 
         RoomResponseDto roomDto = createRoomDto(newRoom, stamp);
 
@@ -69,7 +67,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount, Set<Long> selectedMember) {
+    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
 
         //엔티티 조회
         Set<Member> memberList = new HashSet<>();
@@ -81,23 +79,27 @@ public class RoomService {
 
         //챌린지 생성
         GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
-        groupRoomRepository.save(newRoom);
 
         //방장
         //스탬프 생성
         Stamp stamp = Stamp.createStamp(newRoom, member);
-        stampRepository.save(stamp);
         //룸멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
+
+        //저장
+        groupRoomRepository.save(newRoom);
+        stampRepository.save(stamp);
         roomMemberRepository.save(roomMember);
 
         //그 외 멤버
         for (Member findMember : memberList) {
             //스탬프 생성
             Stamp newStamp = Stamp.createStamp(newRoom, findMember);
-            stampRepository.save(newStamp);
             //룸멤버 생성
             RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
+
+            //저장
+            stampRepository.save(newStamp);
             roomMemberRepository.save(result);
         }
 

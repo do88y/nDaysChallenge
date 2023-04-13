@@ -120,7 +120,7 @@ public class WithUserDetailsTest {
         SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
         singleRoomRepository.save(singleRoom);
         Stamp stamp = Stamp.createStamp(singleRoom, currentMember);
-        singleRoom.addRoom(singleRoom, currentMember, stamp);
+        singleRoom.addRoom(currentMember, stamp);
 
         //다짐 작성
         DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");

@@ -16,24 +16,12 @@ public class SingleRoom extends Room {
     @JoinColumn(name = "member_number")
     private Member member;
 
-    //setter
-    public void addMember(Member member) {
-        this.member = member;
-    }
-
-    public void addStamp(Stamp stamp) {
-        this.stamp = stamp;
-    }
 
     //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅
-    public void joinRoom(Room room) {
+    public SingleRoom addRoom(Member member, Stamp stamp) {
+        this.member = member;
+        this.stamp = stamp;
         member.addSingleRooms(this);
-    }
-
-    public SingleRoom addRoom(Room room, Member member, Stamp stamp) {
-        this.addMember(member);
-        this.addStamp(stamp);
-        this.joinRoom(room);
 
         return this;
     }

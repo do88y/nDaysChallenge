@@ -24,18 +24,4 @@ public class Period {
         this.endDate = startDate.plusDays(totalDays-1);
         this.totalDays = totalDays;
     }
-
-    //==값 타입 비교==//  인스턴스가 아닌 값이 같은지 비교해야 함
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Period period = (Period) o;
-        return Objects.equals(getStartDate(), period.getStartDate()) && Objects.equals(getEndDate(), period.getEndDate());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getStartDate(), getEndDate());
-    }
 }

@@ -92,7 +92,7 @@ public class RoomController {
 
         checkLogin(memberAdapter.getMember());
 
-        GroupRoom room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getUsedPassCount(), dto.getSuccessCount(), dto.getGroupMembers());
+        GroupRoom room = roomService.groupRoom(memberAdapter.getMember(), dto.getName(), new Period(dto.getStartDate(), dto.getTotalDays()), Category.valueOf(dto.getCategory()), dto.getPassCount(), dto.getReward(), dto.getGroupMembers());
         GroupRoomResponseDto savedRoom = getGroupRoomResponseDto(dto, room);
 
         URI location = URI.create("/challenge/" + room.getNumber());

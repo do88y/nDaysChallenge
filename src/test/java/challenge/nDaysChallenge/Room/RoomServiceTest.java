@@ -52,6 +52,8 @@ public class RoomServiceTest {
         //given
         SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         em.persist(room);
+        em.flush();
+        em.clear();
 
         //when
         Room findRoom = roomRepository.findByNumber(room.getNumber()).orElseThrow(() ->
@@ -60,9 +62,46 @@ public class RoomServiceTest {
         //then
         assertThat(room.getNumber()).isEqualTo(findRoom.getNumber());
         assertThat(room.getReward()).isEqualTo(findRoom.getReward());
-        assertThat(room.getPeriod()).isEqualTo(findRoom.getPeriod());
+        assertThat(room.getPeriod().getTotalDays()).isEqualTo(findRoom.getPeriod().getTotalDays());
     }
 
+    @Test
+    public void roomMember_연관관계_테스트() throws Exception {
+        //given
+        Set<Long> selectedMembers = new HashSet<>();
+        Member member1 = Member.builder()
+                .id("use1r@naver.com")
+                .pw("12345")
+                .nickname("abc1")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member2 = Member.builder()
+                .id("user2@naver.com")
+                .pw("11111")
+                .nickname("abc2")
+                .authority(Authority.ROLE_USER)
+                .build();
+        Member member3 = Member.builder()
+                .id("user3@naver.com")
+                .pw("22222")
+                .nickname("abc3")
+                .authority(Authority.ROLE_USER)
+                .build();
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        selectedMembers.add(member2.getNumber());
+        selectedMembers.add(member3.getNumber());
+
+        //when
+        GroupRoom groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        em.flush();
+        em.clear();
+
+        //then
+        assertThat(groupRoom.getRoomMemberList().size()).isEqualTo(3);
+        assertThat(groupRoom.getRoomMemberList().get(0)).isInstanceOf(RoomMember.class);
+    }
 
     @Test
     public void 개인_챌린지_생성_메서드_전체() throws Exception {
@@ -123,20 +162,14 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", 0, 0, selectedMembers);
+        GroupRoom groupRoom1 = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
 
         //then
-        RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom);
-        System.out.println("findRoomByMember = " + findRoomByMember.getMember().getNickname());
-        assertThat(groupRoom.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
+        RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom1);
+        assertThat(groupRoom1.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
 
-        //멤버에서 roomMemberList 조회
-        List<RoomMember> roomMemberList = member2.getRoomMemberList();
-        for (RoomMember roomMember : roomMemberList) {
-            System.out.println("roomMember = " + roomMember.getRoom().getName());
-        }
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -190,9 +223,9 @@ public class RoomServiceTest {
         stampRepository.save(stamp2);
         stampRepository.save(stamp3);
 
-        singleRoom1.addRoom(singleRoom1, member, stamp1);
-        singleRoom2.addRoom(singleRoom2, member, stamp2);
-        singleRoom3.addRoom(singleRoom3, member, stamp3);
+        singleRoom1.addRoom(member, stamp1);
+        singleRoom2.addRoom(member, stamp2);
+        singleRoom3.addRoom(member, stamp3);
 
         GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
@@ -243,9 +276,9 @@ public class RoomServiceTest {
         stampRepository.save(stamp2);
         stampRepository.save(stamp3);
 
-        singleRoom1.addRoom(singleRoom1, member, stamp1);
-        singleRoom2.addRoom(singleRoom2, member, stamp2);
-        singleRoom3.addRoom(singleRoom3, member, stamp3);
+        singleRoom1.addRoom(member, stamp1);
+        singleRoom2.addRoom(member, stamp2);
+        singleRoom3.addRoom(member, stamp3);
 
         em.flush();
         em.clear();
@@ -314,20 +347,6 @@ public class RoomServiceTest {
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
         assertThat(updateStamp.getDay()).isEqualTo("ox");
-    }
-
-    @Test
-    public void 관리자_SingleRoom_status_select_쿼리() throws Exception {
-        //given
-        RoomSearch roomSearch = new RoomSearch("END", null);
-        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
-        System.out.println("singleRoomAdmin.size() = " + singleRoomAdmin.size());
-    }
-    @Test
-    public void 관리자_SingleRoom_member_select_쿼리() throws Exception {
-        //given
-        RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
-        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
     }
 
     @Test

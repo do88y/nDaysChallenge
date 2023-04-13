@@ -10,7 +10,6 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
 import challenge.nDaysChallenge.service.RoomService;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,21 @@ public class RoomAdminTest {
     @Autowired RoomRepository roomRepository;
     @Autowired RoomService roomService;
     @Autowired AdminService adminService;
+
+
+    @Test
+    public void 관리자_SingleRoom_status_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch("END", null);
+        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
+        System.out.println("singleRoomAdmin.size() = " + singleRoomAdmin.size());
+    }
+    @Test
+    public void 관리자_SingleRoom_member_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
+        roomRepository.findSingleRoomAdmin(roomSearch);
+    }
 
     @Test
     public void 상태와_ID로_검색() throws Exception {
