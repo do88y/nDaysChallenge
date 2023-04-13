@@ -7,4 +7,6 @@ import java.util.List;
 public interface RoomRepositoryCustom {
 
     public List<Room> findSingleRoomAdmin(RoomSearch roomSearch);
+
+    public List<Room> findGroupRoomAdmin(RoomSearch roomSearch);
 }

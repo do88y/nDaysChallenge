@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

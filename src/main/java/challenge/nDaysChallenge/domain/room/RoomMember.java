@@ -30,7 +30,7 @@ public class RoomMember {
     private Stamp stamp;
 
     //==연관관계 메서드==//  RoomMember의 room에 roomNumber값 넣으면서 roomMemberList에도 roomNumber 세팅되게
-    public void setMember(Member member) {
+    public void addMember(Member member) {
         this.member = member;
         member.getRoomMemberList().add(this);
     }
@@ -46,7 +46,7 @@ public class RoomMember {
     public static RoomMember createRoomMember(Member member, Room room, Stamp stamp) {
         RoomMember roomMember = new RoomMember();
         roomMember.joinRoom(room);
-        roomMember.setMember(member);
+        roomMember.addMember(member);
         roomMember.addStamp(stamp);
 
         return roomMember;
