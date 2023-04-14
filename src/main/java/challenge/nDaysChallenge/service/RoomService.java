@@ -165,7 +165,7 @@ public class RoomService {
      * 상태 완료로 변경
      */
     @Transactional
-    public void changeStus(Long roomNumber) {
+    public void changeStatus(Long roomNumber) {
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
 

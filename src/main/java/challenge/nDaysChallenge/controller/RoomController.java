@@ -116,7 +116,7 @@ public class RoomController {
 
         Room findRoom = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
-        findRoom.end();
+        roomService.changeStatus(findRoom.getNumber());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

@@ -7,8 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +21,14 @@ public class AdminService {
     private final RoomRepository roomRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public List<Room> findRooms(RoomSearch roomSearch) {
+    public List<Tuple> findRooms(RoomSearch roomSearch) {
 
-        return roomRepository.findSingleRoomAdmin(roomSearch);
+        List<Tuple> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch);
+        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
+        List<Tuple> result = Stream.concat(
+                singleRoomResult.stream(), groupRoomResult.stream()
+                ).collect(Collectors.toList());
+        return result;
     }
 
     //여러 챌린지 삭제

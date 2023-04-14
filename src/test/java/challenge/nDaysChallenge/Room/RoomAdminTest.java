@@ -18,7 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -38,7 +40,7 @@ public class RoomAdminTest {
     public void 관리자_SingleRoom_status_select_쿼리() throws Exception {
         //given
         RoomSearch roomSearch = new RoomSearch("END", null);
-        List<Room> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
+        List<Tuple> singleRoomAdmin = roomRepository.findSingleRoomAdmin(roomSearch);
         System.out.println("singleRoomAdmin.size() = " + singleRoomAdmin.size());
     }
     @Test
@@ -70,17 +72,30 @@ public class RoomAdminTest {
         RoomResponseDto room2 = roomService.singleRoom(member1, "명상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
         RoomResponseDto room3 = roomService.singleRoom(member2, "운동", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
 
-        Room findRoom1 = roomRepository.findByNumber(room1.getRoomNumber()).get();
         Room findRoom2 = roomRepository.findByNumber(room2.getRoomNumber()).get();
-        Room findRoom3 = roomRepository.findByNumber(room3.getRoomNumber()).get();
 
         findRoom2.end();
 
         //when
+        List<Tuple> allResults = adminService.findRooms(new RoomSearch(null, null));
+        List<Tuple> userResults = adminService.findRooms(new RoomSearch(null, "user1@naver.com"));
+        List<Tuple> finishedResults = adminService.findRooms(new RoomSearch("END", null));
 
-        List<Room> allRooms = adminService.findRooms(new RoomSearch(null, null));
-        List<Room> userRooms = adminService.findRooms(new RoomSearch(null, "user1@naver.com"));
-        List<Room> finishedRooms = adminService.findRooms(new RoomSearch("END", null));
+        List<Room> allRooms = new ArrayList<>();
+        for (Tuple allResult : allResults) {
+            Room room = allResult.get(0, Room.class);
+            allRooms.add(room);
+        }
+        List<Room> userRooms = new ArrayList<>();
+        for (Tuple userResult : userResults) {
+            Room room = userResult.get(0, Room.class);
+            userRooms.add(room);
+        }
+        List<Room> finishedRooms = new ArrayList<>();
+        for (Tuple finishedResult : finishedResults) {
+            Room room = finishedResult.get(0, Room.class);
+            finishedRooms.add(room);
+        }
 
         //then
         assertThat(allRooms)
