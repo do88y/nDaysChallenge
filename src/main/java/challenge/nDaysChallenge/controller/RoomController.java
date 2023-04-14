@@ -114,7 +114,10 @@ public class RoomController {
     @PostMapping("/challenge/{challengeId}")
     public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
 
-        roomService.changeStatus(roomNumber);
+        Room findRoom = roomRepository.findByNumber(roomNumber).orElseThrow(
+                () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        findRoom.end();
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
