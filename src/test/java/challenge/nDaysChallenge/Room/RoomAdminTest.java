@@ -51,36 +51,49 @@ public class RoomAdminTest {
     @Test
     public void 상태와_ID로_검색() throws Exception {
         //given
-        Member member = Member.builder()
-                .id("user@naver.com")
+        Member member1 = Member.builder()
+                .id("user1@naver.com")
                 .pw("12345")
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
                 .build();
-        em.persist(member);
+        Member member2 = Member.builder()
+                .id("user2@naver.com")
+                .pw("12345")
+                .nickname("abc")
+                .authority(Authority.ROLE_USER)
+                .build();
+        em.persist(member1);
+        em.persist(member2);
 
-        RoomResponseDto room1 = roomService.singleRoom(member, "기상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
-        RoomResponseDto room2 = roomService.singleRoom(member, "기상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
-        RoomResponseDto room3 = roomService.singleRoom(member, "기상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
+        RoomResponseDto room1 = roomService.singleRoom(member1, "기상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
+        RoomResponseDto room2 = roomService.singleRoom(member1, "명상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
+        RoomResponseDto room3 = roomService.singleRoom(member2, "운동", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
 
         Room findRoom1 = roomRepository.findByNumber(room1.getRoomNumber()).get();
         Room findRoom2 = roomRepository.findByNumber(room2.getRoomNumber()).get();
         Room findRoom3 = roomRepository.findByNumber(room3.getRoomNumber()).get();
 
-        findRoom3.end();
+        findRoom2.end();
 
         //when
 
         List<Room> allRooms = adminService.findRooms(new RoomSearch(null, null));
-        List<Room> rooms = adminService.findRooms(new RoomSearch(null, "user@naver.com"));
+        List<Room> userRooms = adminService.findRooms(new RoomSearch(null, "user1@naver.com"));
         List<Room> finishedRooms = adminService.findRooms(new RoomSearch("END", null));
 
         //then
-        assertThat(allRooms).contains(findRoom1, findRoom2);
+        assertThat(allRooms)
+                .extracting("name")
+                .contains("기상", "명상", "운동");
 
-        assertThat(rooms.size()).isEqualTo(3);
-        assertThat(rooms).contains(findRoom1, findRoom2);
+        assertThat(userRooms.size()).isEqualTo(2);
+        assertThat(userRooms)
+                .extracting("name")
+                .contains("기상", "명상");
 
-        assertThat(finishedRooms.get(0)).isEqualTo(findRoom3);
+        assertThat(finishedRooms)
+                .extracting("name")
+                .containsExactly("명상");
     }
 }

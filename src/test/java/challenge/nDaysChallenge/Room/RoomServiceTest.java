@@ -115,22 +115,22 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        RoomResponseDto room1 = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        roomService.singleRoom(member, "운동", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
         //then
-        SingleRoom findSingleRoom = singleRoomRepository.findById(room.getRoomNumber()).orElseThrow(() ->
+        SingleRoom findSingleRoom = singleRoomRepository.findById(room1.getRoomNumber()).orElseThrow(() ->
                 new IllegalArgumentException("해당 챌린지가 존재하지 않습니다."));
-        assertThat(findSingleRoom.getNumber()).isEqualTo(room.getRoomNumber());
+        assertThat(findSingleRoom.getNumber()).isEqualTo(room1.getRoomNumber());
 
 
         //멤버에서 singleRooms 조회
         List<SingleRoom> singleRooms = member.getSingleRooms();
-        for (Room singleRoom : singleRooms) {
-            assertThat(singleRoom.getName()).isEqualTo(room.getName());
-            System.out.println("singleRoom = " + singleRoom.getName());
-        }
+        assertThat(singleRooms)
+                .extracting("name")
+                .containsExactly("기상", "운동");
     }
 
     @Test
@@ -235,7 +235,7 @@ public class RoomServiceTest {
         roomMemberRepository.save(roomMember);
 
         //when
-        roomService.changeStatus(singleRoom1.getNumber());
+        singleRoom1.end();
 
         em.flush();
         em.clear();
@@ -246,9 +246,12 @@ public class RoomServiceTest {
         //then
         assertThat(singleRooms.size()).isEqualTo(2);
         assertThat(groupRooms.size()).isEqualTo(1);
-        for (SingleRoom singleRoom : singleRooms) {
-            System.out.println("singleRoom = " + singleRoom.getName());
-        }
+        assertThat(singleRooms)
+                .extracting("name")
+                .containsExactly("공부", "청소");
+        assertThat(groupRooms)
+                .extracting("name")
+                .containsExactly("명상");
     }
 
     @Test
@@ -280,16 +283,20 @@ public class RoomServiceTest {
         singleRoom2.addRoom(member, stamp2);
         singleRoom3.addRoom(member, stamp3);
 
+        singleRoom1.end();
+        singleRoom2.end();
+
         em.flush();
         em.clear();
 
         //when
-        roomService.changeStatus(singleRoom1.getNumber());
-        roomService.changeStatus(singleRoom2.getNumber());
         List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member);
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(2);
+        assertThat(finishedRooms)
+                .extracting("name")
+                .containsExactly("기상", "공부");
     }
 
     @Test
@@ -303,21 +310,33 @@ public class RoomServiceTest {
                 .build();
         memberRepository.save(member);
 
-        GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
-        groupRoomRepository.save(groupRoom);
+        GroupRoom groupRoom1 = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom2 = new GroupRoom(member, "기상", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom3 = new GroupRoom(member, "운동", this.period, Category.MINDFULNESS, 20, "여행");
+        groupRoomRepository.save(groupRoom1);
+        groupRoomRepository.save(groupRoom2);
+        groupRoomRepository.save(groupRoom3);
 
-        RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, Stamp.createStamp(groupRoom, member));
-        roomMemberRepository.save(roomMember);
+        RoomMember roomMember1 = RoomMember.createRoomMember(member, groupRoom1, Stamp.createStamp(groupRoom1, member));
+        RoomMember roomMember2 = RoomMember.createRoomMember(member, groupRoom2, Stamp.createStamp(groupRoom2, member));
+        RoomMember roomMember3 = RoomMember.createRoomMember(member, groupRoom3, Stamp.createStamp(groupRoom3, member));
+        roomMemberRepository.save(roomMember1);
+        roomMemberRepository.save(roomMember2);
+        roomMemberRepository.save(roomMember3);
 
+        groupRoom1.end();
+        groupRoom2.end();
         em.flush();
         em.clear();
 
         //when
-        roomService.changeStatus(groupRoom.getNumber());
         List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member);
 
         //then
-        assertThat(finishedRooms.size()).isEqualTo(1);
+        assertThat(finishedRooms.size()).isEqualTo(2);
+        assertThat(finishedRooms)
+                .extracting("name")
+                .containsExactly("명상", "기상");
     }
 
     @Test
@@ -338,8 +357,6 @@ public class RoomServiceTest {
 
         //when
         Stamp updateStamp = stamp1.updateStamp(room, "o");
-        em.flush();
-        em.clear();
         stamp1.updateStamp(room, "x");
         em.flush();
         em.clear();
@@ -379,6 +396,7 @@ public class RoomServiceTest {
         memberRepository.save(member);
         RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
+
         //when
         roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
         roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
@@ -386,6 +404,7 @@ public class RoomServiceTest {
 
         em.flush();
         em.clear();
+
         //then
         assertThat(room.getStamp().getSuccessCount()).isEqualTo(2);
         assertThat(room.getStamp().getDay()).isEqualTo("oox");
