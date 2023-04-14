@@ -79,7 +79,7 @@ public class RoomAdminTest {
         //when
         List<Tuple> allResults = adminService.findRooms(new RoomSearch(null, null));
         List<Tuple> userResults = adminService.findRooms(new RoomSearch(null, "user1@naver.com"));
-        List<Tuple> finishedResults = adminService.findRooms(new RoomSearch("END", null));
+        List<Tuple> finishedResults = adminService.findRooms(new RoomSearch("END", "user1@naver.com"));
 
         List<Room> allRooms = new ArrayList<>();
         for (Tuple allResult : allResults) {
@@ -99,8 +99,8 @@ public class RoomAdminTest {
 
         //then
         assertThat(allRooms)
-                .extracting("name")
-                .contains("기상", "명상", "운동");
+                .extracting("number")
+                .contains(room1.getRoomNumber(), room2.getRoomNumber(), room3.getRoomNumber());
 
         assertThat(userRooms.size()).isEqualTo(2);
         assertThat(userRooms)

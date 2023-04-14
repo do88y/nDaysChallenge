@@ -73,7 +73,8 @@ public class MemberService {
         //참조 엔티티들 불러오기
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
+        List<Stamp> stamps = roomMemberRepository.findStampByMember(member);
+//        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<SingleRoom> singleRooms = singleRoomRepository.findAll(member).orElseGet(ArrayList::new);
         List<GroupRoom> groupRooms = groupRoomRepository.findAll(member).orElseGet(ArrayList::new);
 
@@ -104,11 +105,11 @@ public class MemberService {
             }
         }
 
-        if (!stamps.isEmpty()){
+/*        if (!stamps.isEmpty()){
             for (Stamp stamp:stamps) {
                 stamp.deleteConnection();
             }
-        }
+        }*/
 
         if (!groupRooms.isEmpty()){
             for (GroupRoom groupRoom : groupRooms) {

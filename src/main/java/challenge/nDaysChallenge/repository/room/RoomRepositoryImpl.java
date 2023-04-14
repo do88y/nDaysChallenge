@@ -17,6 +17,8 @@ import java.util.List;
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final EntityManager em;
+
+    //개인 챌린지 검색
     @Override
     public List<Tuple> findSingleRoomAdmin(RoomSearch roomSearch) {
 
@@ -60,6 +62,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         return query.getResultList();
     }
 
+    //그룹 챌린지 검색
     @Override
     public List<Tuple> findGroupRoomAdmin(RoomSearch roomSearch) {
 
