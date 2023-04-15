@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RoomRepositoryCustom {
 
-    public List<Tuple> findSingleRoomAdmin(RoomSearch roomSearch);
+    List<Tuple> findSingleRoomAdmin(RoomSearch roomSearch);
 
-    public List<Tuple> findGroupRoomAdmin(RoomSearch roomSearch);
+    List<Tuple> findGroupRoomAdmin(RoomSearch roomSearch);
 }

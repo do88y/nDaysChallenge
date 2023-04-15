@@ -25,10 +25,6 @@ public class Stamp {
     @JoinColumn(name = "room_number", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Room room;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
-    private Member member;
-
     private String day;
 
     private LocalDate latestDate;
@@ -38,10 +34,9 @@ public class Stamp {
     private int successCount;
 
     //==생성 메서드==//
-    public static Stamp createStamp(Room room, Member member) {
+    public static Stamp createStamp(Room room) {
         Stamp stamp = new Stamp();
         stamp.room = room;
-        stamp.member = member;
         stamp.day = "";
         stamp.latestDate = LocalDate.now().minusDays(1L);
         stamp.usedPassCount = 0;
@@ -87,6 +82,5 @@ public class Stamp {
 
     public void deleteConnection(){
         this.room=null;
-        this.member=null;
     }
 }

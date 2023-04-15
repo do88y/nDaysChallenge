@@ -50,7 +50,7 @@ public class RoomService {
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom, member);
+        Stamp stamp = Stamp.createStamp(newRoom);
         //챌린지에 멤버, 스탬프 추가
         newRoom.addRoom(member, stamp);
 
@@ -82,7 +82,7 @@ public class RoomService {
 
         //방장
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom, member);
+        Stamp stamp = Stamp.createStamp(newRoom);
         //룸멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
 
@@ -94,7 +94,7 @@ public class RoomService {
         //그 외 멤버
         for (Member findMember : memberList) {
             //스탬프 생성
-            Stamp newStamp = Stamp.createStamp(newRoom, findMember);
+            Stamp newStamp = Stamp.createStamp(newRoom);
             //룸멤버 생성
             RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
 

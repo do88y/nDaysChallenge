@@ -54,9 +54,8 @@ public class RoomController {
 
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 없습니다"));
-        Stamp findstamp = stampRepository.findByRoomAndMember(room, memberAdapter.getMember());
 
-        return getRoomResponseDto(room, findstamp);
+        return getRoomResponseDto(room, room.getStamp());
     }
 
     //스탬프 찍기

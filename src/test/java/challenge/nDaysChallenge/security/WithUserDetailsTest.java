@@ -119,7 +119,7 @@ public class WithUserDetailsTest {
         //룸 객체 연결
         SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
         singleRoomRepository.save(singleRoom);
-        Stamp stamp = Stamp.createStamp(singleRoom, currentMember);
+        Stamp stamp = Stamp.createStamp(singleRoom);
         singleRoom.addRoom(currentMember, stamp);
 
         //다짐 작성

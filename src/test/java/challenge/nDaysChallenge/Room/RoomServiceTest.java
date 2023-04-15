@@ -216,9 +216,9 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
-        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
-        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
-        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        Stamp stamp1 = Stamp.createStamp(singleRoom1);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3);
         stampRepository.save(stamp1);
         stampRepository.save(stamp2);
         stampRepository.save(stamp3);
@@ -229,7 +229,7 @@ public class RoomServiceTest {
 
         GroupRoom groupRoom = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom);
-        Stamp stamp4 = Stamp.createStamp(singleRoom1, member);
+        Stamp stamp4 = Stamp.createStamp(singleRoom1);
         stampRepository.save(stamp4);
         RoomMember roomMember = RoomMember.createRoomMember(member, groupRoom, stamp4);
         roomMemberRepository.save(roomMember);
@@ -272,9 +272,9 @@ public class RoomServiceTest {
         singleRoomRepository.save(singleRoom2);
         singleRoomRepository.save(singleRoom3);
 
-        Stamp stamp1 = Stamp.createStamp(singleRoom1, member);
-        Stamp stamp2 = Stamp.createStamp(singleRoom2, member);
-        Stamp stamp3 = Stamp.createStamp(singleRoom3, member);
+        Stamp stamp1 = Stamp.createStamp(singleRoom1);
+        Stamp stamp2 = Stamp.createStamp(singleRoom2);
+        Stamp stamp3 = Stamp.createStamp(singleRoom3);
         stampRepository.save(stamp1);
         stampRepository.save(stamp2);
         stampRepository.save(stamp3);
@@ -317,9 +317,9 @@ public class RoomServiceTest {
         groupRoomRepository.save(groupRoom2);
         groupRoomRepository.save(groupRoom3);
 
-        RoomMember roomMember1 = RoomMember.createRoomMember(member, groupRoom1, Stamp.createStamp(groupRoom1, member));
-        RoomMember roomMember2 = RoomMember.createRoomMember(member, groupRoom2, Stamp.createStamp(groupRoom2, member));
-        RoomMember roomMember3 = RoomMember.createRoomMember(member, groupRoom3, Stamp.createStamp(groupRoom3, member));
+        RoomMember roomMember1 = RoomMember.createRoomMember(member, groupRoom1, Stamp.createStamp(groupRoom1));
+        RoomMember roomMember2 = RoomMember.createRoomMember(member, groupRoom2, Stamp.createStamp(groupRoom2));
+        RoomMember roomMember3 = RoomMember.createRoomMember(member, groupRoom3, Stamp.createStamp(groupRoom3));
         roomMemberRepository.save(roomMember1);
         roomMemberRepository.save(roomMember2);
         roomMemberRepository.save(roomMember3);
@@ -352,7 +352,7 @@ public class RoomServiceTest {
 
         SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
         singleRoomRepository.save(room);
-        Stamp stamp1 = Stamp.createStamp(room, member);
+        Stamp stamp1 = Stamp.createStamp(room);
         stampRepository.save(stamp1);
 
         //when
@@ -364,24 +364,6 @@ public class RoomServiceTest {
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
         assertThat(updateStamp.getDay()).isEqualTo("ox");
-    }
-
-    @Test
-    public void findByRoomAndMember_쿼리() throws Exception {
-        //given
-        SingleRoom room = new SingleRoom("기상", this.period, Category.ROUTINE, 2, "");
-        Member member = Member.builder()
-                .id("use1r@naver.com")
-                .pw("12345")
-                .nickname("abc")
-                .authority(Authority.ROLE_USER)
-                .build();
-        //when
-        roomRepository.save(room);
-        memberRepository.save(member);
-
-        //then
-        stampRepository.findByRoomAndMember(room, member);
     }
 
     @Test
