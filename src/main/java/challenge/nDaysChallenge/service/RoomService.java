@@ -131,7 +131,7 @@ public class RoomService {
         }
 
         //dto 생성
-        StampDto stampDto = getStampDto(roomNumber, stamp, updateStamp);
+        StampDto stampDto = getStampDto(roomNumber, updateStamp);
 
         return stampDto;
     }
@@ -210,13 +210,13 @@ public class RoomService {
     }
 
     //stampDto 생성
-    private static StampDto getStampDto(Long roomNumber, Stamp stamp, Stamp updateStamp) {
+    private static StampDto getStampDto(Long roomNumber, Stamp updateStamp) {
         StampDto stampDto = StampDto.builder()
                 .roomNumber(roomNumber)
                 .stampNumber(updateStamp.getNumber())
                 .day(updateStamp.getDay())
-                .successCount(stamp.getSuccessCount())
-                .usedPassCount(stamp.getUsedPassCount())
+                .successCount(updateStamp.getSuccessCount())
+                .usedPassCount(updateStamp.getUsedPassCount())
                 .build();
         return stampDto;
     }
