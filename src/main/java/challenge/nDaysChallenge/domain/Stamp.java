@@ -55,15 +55,6 @@ public class Stamp {
         return this;
     }
 
-    //마지막 스탬프 찾기
-    public String getLatestStamp() {
-
-        if (day.length() > 1) {
-            return day.substring(day.length()-1);
-        }
-        return day;
-    }
-
     //성공 +1
     public void addSuccess() {
         successCount += 1;
