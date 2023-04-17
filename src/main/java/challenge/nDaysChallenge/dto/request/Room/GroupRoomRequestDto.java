@@ -17,7 +17,7 @@ public class GroupRoomRequestDto {
     private String type;
     private String name;
     private String category;
-    private Long totalDays;
+    private int totalDays;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private int passCount;
@@ -29,7 +29,7 @@ public class GroupRoomRequestDto {
     private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, Long totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
+    public GroupRoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, int totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
         this.type = type;
         this.name = name;
         this.category = category;

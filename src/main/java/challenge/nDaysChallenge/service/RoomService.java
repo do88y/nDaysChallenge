@@ -122,9 +122,9 @@ public class RoomService {
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
         //count 업데이트
-        if (stamp.getLatestStamp().equals("o")) {
+        if (dto.getDay().equals("o")) {
             stamp.addSuccess();
-        } else if (stamp.getLatestStamp().equals("x")) {
+        } else if (dto.getDay().equals("x")) {
             stamp.addPass();
         } else {
             throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");

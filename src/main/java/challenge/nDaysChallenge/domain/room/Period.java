@@ -15,11 +15,11 @@ public class Period {
 
     private LocalDate startDate;
     private LocalDate endDate;
-    private Long totalDays;
+    private int totalDays;
 
 
     //==생성 메서드==//
-    public Period(LocalDate startDate, Long totalDays) {
+    public Period(LocalDate startDate, int totalDays) {
         this.startDate = startDate;
         this.endDate = startDate.plusDays(totalDays-1);
         this.totalDays = totalDays;

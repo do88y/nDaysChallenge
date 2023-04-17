@@ -356,14 +356,14 @@ public class RoomServiceTest {
         stampRepository.save(stamp1);
 
         //when
-        Stamp updateStamp = stamp1.updateStamp(room, "o");
-        stamp1.updateStamp(room, "x");
+        stamp1.updateStamp(room, "o");
+        Stamp updateStamp = stamp1.updateStamp(room, "x");
         em.flush();
         em.clear();
 
         //then
         System.out.println("updateStamp.getDay() = " + updateStamp.getDay());
-        assertThat(updateStamp.getDay()).isEqualTo("ox");
+        assertThat(updateStamp.getDay()).isEqualTo("oxuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
     }
 
     @Test
@@ -389,10 +389,10 @@ public class RoomServiceTest {
 
         //then
         assertThat(room.getStamp().getSuccessCount()).isEqualTo(2);
-        assertThat(room.getStamp().getDay()).isEqualTo("oox");
+        assertThat(room.getStamp().getDay()).isEqualTo("ooxuuuuuuuuuuuuuuuuuuuuuuuuuuu");
     }
 
     //기간
-    Period period = new Period(LocalDate.now(),30L);
+    Period period = new Period(LocalDate.now(),30);
 
 }

@@ -37,7 +37,7 @@ public class Stamp {
     public static Stamp createStamp(Room room) {
         Stamp stamp = new Stamp();
         stamp.room = room;
-        stamp.day = "";
+        stamp.day = "u".repeat(room.getPeriod().getTotalDays());
         stamp.latestDate = LocalDate.now().minusDays(1L);
         stamp.usedPassCount = 0;
         stamp.successCount = 0;
@@ -48,15 +48,9 @@ public class Stamp {
     //==비즈니스 로직==//
     //스탬프 찍기
     public Stamp updateStamp(Room room, String day) {
-
-            this.room = room;
-            this.latestDate = LocalDate.now();
-
-            if (this.day.equals("")) {  //첫 날
-                this.day = day;
-            } else {
-                this.day += day;
-            }
+        this.room = room;
+        this.latestDate = LocalDate.now();
+        this.day = this.day.replaceFirst("u", day);
 
         return this;
     }

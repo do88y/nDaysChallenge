@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 public class RoomController {
 
     private final RoomRepository roomRepository;
-    private final StampRepository stampRepository;
     private final RoomService roomService;
 
     //챌린지 리스트(메인)
@@ -58,19 +57,6 @@ public class RoomController {
         return getRoomResponseDto(room, room.getStamp());
     }
 
-    //스탬프 찍기
-    @PostMapping("/challenge/stamp")
-    public ResponseEntity<?> stamp(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                   @RequestBody StampDto dto) {
-
-        checkLogin(memberAdapter.getMember());
-
-        StampDto updatedStamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
-
-        URI location = URI.create("/challenge/" + updatedStamp.getStampNumber());
-        return ResponseEntity.status(HttpStatus.OK).location(location).body(updatedStamp);
-    }
-
     //개인 챌린지 생성
     @PostMapping("/challenge")
     public ResponseEntity<?> singleRoom(@AuthenticationPrincipal MemberAdapter memberAdapter,
@@ -96,6 +82,19 @@ public class RoomController {
 
         URI location = URI.create("/challenge/" + room.getNumber());
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedRoom);
+    }
+
+    //스탬프 찍기
+    @PostMapping("/challenge/stamp")
+    public ResponseEntity<?> stamp(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                   @RequestBody StampDto dto) {
+
+        checkLogin(memberAdapter.getMember());
+
+        StampDto updatedStamp = roomService.updateStamp(memberAdapter.getMember(), dto.getRoomNumber(), dto);
+
+        URI location = URI.create("/challenge/" + updatedStamp.getStampNumber());
+        return ResponseEntity.status(HttpStatus.OK).location(location).body(updatedStamp);
     }
 
     //챌린지 삭제&실패

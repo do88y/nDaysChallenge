@@ -68,9 +68,9 @@ public class RoomAdminTest {
         em.persist(member1);
         em.persist(member2);
 
-        RoomResponseDto room1 = roomService.singleRoom(member1, "기상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
-        RoomResponseDto room2 = roomService.singleRoom(member1, "명상", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
-        RoomResponseDto room3 = roomService.singleRoom(member2, "운동", new Period(LocalDate.now(), 15L), Category.ROUTINE, 2, "");
+        RoomResponseDto room1 = roomService.singleRoom(member1, "기상", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
+        RoomResponseDto room2 = roomService.singleRoom(member1, "명상", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
+        RoomResponseDto room3 = roomService.singleRoom(member2, "운동", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
 
         Room findRoom2 = roomRepository.findByNumber(room2.getRoomNumber()).get();
 

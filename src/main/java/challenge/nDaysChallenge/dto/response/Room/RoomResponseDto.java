@@ -13,7 +13,7 @@ public class RoomResponseDto {
     private String type;
     private String name;
     private String category;
-    private Long totalDays;
+    private int totalDays;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -28,7 +28,7 @@ public class RoomResponseDto {
     private int usedPassCount;
 
     @Builder
-    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Long stamp, String day, int successCount, int usedPassCount) {
+    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, int totalDays, Long stamp, String day, int successCount, int usedPassCount) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.name = name;

@@ -131,8 +131,8 @@ public class MemberServiceTest {
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
 
-        SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
-        SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30L), Category.ETC, 4, "");
+        SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30), Category.ROUTINE, 2, "");
+        SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30), Category.ETC, 4, "");
 
         Stamp stamp = Stamp.createStamp(room1);
         List<Stamp> stamps = Arrays.asList(stamp);
