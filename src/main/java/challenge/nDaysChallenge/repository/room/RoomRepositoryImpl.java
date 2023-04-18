@@ -1,24 +1,74 @@
 package challenge.nDaysChallenge.repository.room;
 
-import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.domain.room.RoomStatus;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
-import lombok.RequiredArgsConstructor;
+import challenge.nDaysChallenge.dto.response.room.QAdminRoomResponseDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
-import reactor.util.StringUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
-@RequiredArgsConstructor
+import static challenge.nDaysChallenge.domain.member.QMember.*;
+import static challenge.nDaysChallenge.domain.room.QSingleRoom.*;
+import static org.springframework.util.StringUtils.*;
+
+@Repository
 @Slf4j
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
 
-    //개인 챌린지 검색
+    public RoomRepositoryImpl(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public List<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch) {
+
+        String stringType = singleRoom.type.toString();
+        String stringCategory = singleRoom.category.toString();
+        String stringStatus = singleRoom.status.toString();
+
+        return queryFactory
+                .select(new QAdminRoomResponseDto(
+                        singleRoom.number.as("roomNumber"),
+                        singleRoom.name,
+                        Expressions.as(Expressions.constant(stringType), "type"),
+                        Expressions.as(Expressions.constant(stringCategory), "category"),
+                        Expressions.as(Expressions.constant(stringStatus), "status"),
+                        singleRoom.period.startDate,
+                        singleRoom.period.endDate,
+                        member.id.as("memberId")))
+                .from(singleRoom)
+                .join(singleRoom.member, member)
+                .where(
+                        statusEq(roomSearch.getStatus()),
+                        memberIdEq(roomSearch.getId()))
+                .fetch();
+    }
+
+    private static BooleanExpression statusEq(String status) {
+        return hasText(status) ? singleRoom.status.eq(RoomStatus.valueOf(status)) : null;
+    }
+
+    private static BooleanExpression memberIdEq(String id) {
+        return hasText(id) ? member.id.eq(id) : null;
+    }
+
+    @Override
+    public List<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch) {
+        return null;
+    }
+
+
+
+    /*    //개인 챌린지 검색
     @Override
     public List<Tuple> findSingleRoomAdmin(RoomSearch roomSearch) {
 
@@ -103,5 +153,5 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         }
 
         return query.getResultList();
-    }
+    }*/
 }

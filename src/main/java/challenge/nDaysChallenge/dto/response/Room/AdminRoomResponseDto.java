@@ -1,6 +1,7 @@
 package challenge.nDaysChallenge.dto.response.room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class AdminRoomResponseDto {
     private LocalDate endDate;
     private String memberId;
 
+    @QueryProjection
     @Builder
     public AdminRoomResponseDto(Long roomNumber, String name, String type, String category, String status, LocalDate startDate, LocalDate endDate, String memberId) {
         this.roomNumber = roomNumber;

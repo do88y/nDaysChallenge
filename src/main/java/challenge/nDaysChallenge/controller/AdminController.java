@@ -46,7 +46,7 @@ public class AdminController {
     }
 
     //챌린지 조회(id, status)
-    @PostMapping("challenge/search")
+/*    @PostMapping("challenge/search")
     public String findResult(RoomSearch roomSearch, RedirectAttributes redirectAttributes) {
 
         List<Tuple> results = adminService.findRooms(roomSearch);
@@ -61,7 +61,7 @@ public class AdminController {
         log.info("redirectAttributes.getFlashAttributes={}", redirectAttributes.getFlashAttributes());
 
         return "redirect:/admin/challenge";
-    }
+    }*/
 
     //챌린지 삭제 - 여러개 동시에
     @PostMapping("challenge/delete")

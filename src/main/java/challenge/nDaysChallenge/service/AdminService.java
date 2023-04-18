@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.repository.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
@@ -24,14 +25,14 @@ public class AdminService {
     private final ReportRepository reportRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public List<Tuple> findRooms(RoomSearch roomSearch) {
+    public List<AdminRoomResponseDto> findRooms(RoomSearch roomSearch) {
 
-        List<Tuple> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch);
-        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
-        List<Tuple> result = Stream.concat(
-                singleRoomResult.stream(), groupRoomResult.stream()
-                ).collect(Collectors.toList());
-        return result;
+        List<AdminRoomResponseDto> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch);
+//        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
+//        List<Tuple> result = Stream.concat(
+//                singleRoomResult.stream(), groupRoomResult.stream()
+//                ).collect(Collectors.toList());
+        return singleRoomResult;
     }
 
     //여러 챌린지 삭제
