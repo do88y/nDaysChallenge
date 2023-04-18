@@ -1,17 +1,13 @@
-package challenge.nDaysChallenge.dto.response.Room;
+package challenge.nDaysChallenge.dto.response.room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoomResponseDto {
 
@@ -19,7 +15,7 @@ public class GroupRoomResponseDto {
     private String type;
     private String name;
     private String category;
-    private Long totalDays;
+    private int totalDays;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -32,7 +28,7 @@ public class GroupRoomResponseDto {
     private Set<Long> groupMembers = new HashSet<>();
 
     @Builder
-    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Set<Long> groupMembers) {
+    public GroupRoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, int totalDays, Set<Long> groupMembers) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.name = name;

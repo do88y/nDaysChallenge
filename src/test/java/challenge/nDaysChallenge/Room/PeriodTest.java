@@ -14,7 +14,7 @@ public class PeriodTest {
     @Test
     public void 챌린지_기간() throws Exception {
         //given
-        Period period = new Period(LocalDate.now(),30L);
+        Period period = new Period(LocalDate.now(),30);
         //when
 
         //then

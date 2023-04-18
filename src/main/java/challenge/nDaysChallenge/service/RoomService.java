@@ -5,7 +5,7 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
-import challenge.nDaysChallenge.dto.response.Room.RoomResponseDto;
+import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
@@ -49,16 +49,14 @@ public class RoomService {
 
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
-
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom, member);
+        Stamp stamp = Stamp.createStamp(newRoom);
+        //챌린지에 멤버, 스탬프 추가
+        newRoom.addRoom(member, stamp);
 
         //저장
-        singleRoomRepository.save(newRoom);
         stampRepository.save(stamp);
-
-        //멤버에 챌린지 저장
-        newRoom.addRoom(newRoom, member, stamp);
+        singleRoomRepository.save(newRoom);
 
         RoomResponseDto roomDto = createRoomDto(newRoom, stamp);
 
@@ -69,7 +67,7 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, int usedPassCount, int successCount, Set<Long> selectedMember) {
+    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
 
         //엔티티 조회
         Set<Member> memberList = new HashSet<>();
@@ -81,23 +79,27 @@ public class RoomService {
 
         //챌린지 생성
         GroupRoom newRoom = new GroupRoom(member, name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
-        groupRoomRepository.save(newRoom);
 
         //방장
         //스탬프 생성
-        Stamp stamp = Stamp.createStamp(newRoom, member);
-        stampRepository.save(stamp);
+        Stamp stamp = Stamp.createStamp(newRoom);
         //룸멤버 생성
         RoomMember roomMember = RoomMember.createRoomMember(member, newRoom, stamp);
+
+        //저장
+        groupRoomRepository.save(newRoom);
+        stampRepository.save(stamp);
         roomMemberRepository.save(roomMember);
 
         //그 외 멤버
         for (Member findMember : memberList) {
             //스탬프 생성
-            Stamp newStamp = Stamp.createStamp(newRoom, findMember);
-            stampRepository.save(newStamp);
+            Stamp newStamp = Stamp.createStamp(newRoom);
             //룸멤버 생성
             RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
+
+            //저장
+            stampRepository.save(newStamp);
             roomMemberRepository.save(result);
         }
 
@@ -120,22 +122,16 @@ public class RoomService {
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
         //count 업데이트
-        if (stamp.getLatestStamp().equals("o")) {
+        if (dto.getDay().equals("o")) {
             stamp.addSuccess();
-        } else if (stamp.getLatestStamp().equals("x")) {
+        } else if (dto.getDay().equals("x")) {
             stamp.addPass();
         } else {
             throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
         }
 
         //dto 생성
-        StampDto stampDto = StampDto.builder()
-                .roomNumber(roomNumber)
-                .stampNumber(updateStamp.getNumber())
-                .day(updateStamp.getDay())
-                .successCount(stamp.getSuccessCount())
-                .usedPassCount(stamp.getUsedPassCount())
-                .build();
+        StampDto stampDto = getStampDto(roomNumber, updateStamp);
 
         return stampDto;
     }
@@ -194,6 +190,8 @@ public class RoomService {
         }
     }
 
+    //==공통 메서드==//
+    //roomDto 생성
     private RoomResponseDto createRoomDto(Room room, Stamp stamp) {
         RoomResponseDto roomResponseDto = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -209,6 +207,18 @@ public class RoomService {
                 .stamp(stamp.getNumber())
                 .build();
         return roomResponseDto;
+    }
+
+    //stampDto 생성
+    private static StampDto getStampDto(Long roomNumber, Stamp updateStamp) {
+        StampDto stampDto = StampDto.builder()
+                .roomNumber(roomNumber)
+                .stampNumber(updateStamp.getNumber())
+                .day(updateStamp.getDay())
+                .successCount(updateStamp.getSuccessCount())
+                .usedPassCount(updateStamp.getUsedPassCount())
+                .build();
+        return stampDto;
     }
 
 }

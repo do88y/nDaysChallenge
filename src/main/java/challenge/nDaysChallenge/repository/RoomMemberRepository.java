@@ -1,5 +1,6 @@
 package challenge.nDaysChallenge.repository;
 
+import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.Room;
@@ -16,9 +17,18 @@ import java.util.Set;
 public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
 
-    public RoomMember findByMemberAndRoom(Member member, Room room);
+    RoomMember findByMemberAndRoom(Member member, Room room);
 
     public Set<RoomMember> findByRoom(Room room);
+
+    @Query("select rm.stamp from RoomMember rm where rm.room = :room and rm.member = :member")
+    Stamp findStampByRoomAndMember(@Param("room") Room room, @Param("member") Member member);
+
+    @Query("select rm.stamp from RoomMember rm where rm.member = :member")
+    List<Stamp> findStampByMember(@Param("member") Member member);
+
+    @Query("select rm.stamp from RoomMember rm where rm.room = :room")
+    List<Stamp> findStampByRoom(@Param("room") Room room);
 
     @Query("SELECT r FROM RoomMember r WHERE r.member.nickname = :nickname")
     Optional<List<RoomMember>> findAllByMemberNickname(@Param("nickname") String nickname);

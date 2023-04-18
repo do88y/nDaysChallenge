@@ -25,10 +25,6 @@ public class Stamp {
     @JoinColumn(name = "room_number", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Room room;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
-    private Member member;
-
     private String day;
 
     private LocalDate latestDate;
@@ -38,11 +34,10 @@ public class Stamp {
     private int successCount;
 
     //==생성 메서드==//
-    public static Stamp createStamp(Room room, Member member) {
+    public static Stamp createStamp(Room room) {
         Stamp stamp = new Stamp();
         stamp.room = room;
-        stamp.member = member;
-        stamp.day = "";
+        stamp.day = "u".repeat(room.getPeriod().getTotalDays());
         stamp.latestDate = LocalDate.now().minusDays(1L);
         stamp.usedPassCount = 0;
         stamp.successCount = 0;
@@ -53,26 +48,11 @@ public class Stamp {
     //==비즈니스 로직==//
     //스탬프 찍기
     public Stamp updateStamp(Room room, String day) {
-
-            this.room = room;
-            this.latestDate = LocalDate.now();
-
-            if (this.day.equals("")) {  //첫 날
-                this.day = day;
-            } else {
-                this.day += day;
-            }
+        this.room = room;
+        this.latestDate = LocalDate.now();
+        this.day = this.day.replaceFirst("u", day);
 
         return this;
-    }
-
-    //마지막 스탬프 찾기
-    public String getLatestStamp() {
-
-        if (day.length() > 1) {
-            return day.substring(day.length()-1);
-        }
-        return day;
     }
 
     //성공 +1
@@ -87,6 +67,5 @@ public class Stamp {
 
     public void deleteConnection(){
         this.room=null;
-        this.member=null;
     }
 }
