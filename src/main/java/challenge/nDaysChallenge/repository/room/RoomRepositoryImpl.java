@@ -3,10 +3,14 @@ package challenge.nDaysChallenge.repository.room;
 import challenge.nDaysChallenge.domain.room.RoomStatus;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.QAdminRoomResponseDto;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,13 +33,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public List<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch) {
+    public Page<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
 
         String stringType = singleRoom.type.toString();
         String stringCategory = singleRoom.category.toString();
         String stringStatus = singleRoom.status.toString();
 
-        return queryFactory
+        QueryResults<AdminRoomResponseDto> results = queryFactory
                 .select(new QAdminRoomResponseDto(
                         singleRoom.number.as("roomNumber"),
                         singleRoom.name,
@@ -50,7 +54,14 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .where(
                         statusEq(roomSearch.getStatus()),
                         memberIdEq(roomSearch.getId()))
-                .fetch();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<AdminRoomResponseDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     private static BooleanExpression statusEq(String status) {

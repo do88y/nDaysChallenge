@@ -7,6 +7,8 @@ import challenge.nDaysChallenge.repository.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,9 @@ public class AdminService {
     private final ReportRepository reportRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public List<AdminRoomResponseDto> findRooms(RoomSearch roomSearch) {
+    public Page<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
 
-        List<AdminRoomResponseDto> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch);
+        Page<AdminRoomResponseDto> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch, pageable);
 //        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
 //        List<Tuple> result = Stream.concat(
 //                singleRoomResult.stream(), groupRoomResult.stream()
