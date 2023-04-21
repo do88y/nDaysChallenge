@@ -17,7 +17,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static challenge.nDaysChallenge.domain.member.QMember.*;
+import static challenge.nDaysChallenge.domain.room.QGroupRoom.*;
+import static challenge.nDaysChallenge.domain.room.QRoomMember.*;
 import static challenge.nDaysChallenge.domain.room.QSingleRoom.*;
+import static com.querydsl.core.types.dsl.Expressions.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
@@ -43,17 +46,17 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .select(new QAdminRoomResponseDto(
                         singleRoom.number.as("roomNumber"),
                         singleRoom.name,
-                        Expressions.as(Expressions.constant(stringType), "type"),
-                        Expressions.as(Expressions.constant(stringCategory), "category"),
-                        Expressions.as(Expressions.constant(stringStatus), "status"),
+                        as(constant(stringType), "type"),
+                        as(constant(stringCategory), "category"),
+                        as(constant(stringStatus), "status"),
                         singleRoom.period.startDate,
                         singleRoom.period.endDate,
                         member.id.as("memberId")))
                 .from(singleRoom)
                 .join(singleRoom.member, member)
                 .where(
-                        statusEq(roomSearch.getStatus()),
-                        memberIdEq(roomSearch.getId()))
+                        singleRoomStatusEq(roomSearch.getStatus()),
+                        singleRoomMemberIdEq(roomSearch.getId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -64,17 +67,47 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     }
 
-    private static BooleanExpression statusEq(String status) {
+    private static BooleanExpression singleRoomStatusEq(String status) {
         return hasText(status) ? singleRoom.status.eq(RoomStatus.valueOf(status)) : null;
     }
 
-    private static BooleanExpression memberIdEq(String id) {
+    private static BooleanExpression singleRoomMemberIdEq(String id) {
         return hasText(id) ? member.id.eq(id) : null;
     }
 
     @Override
     public List<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch) {
-        return null;
+
+        String stringType = groupRoom.type.toString();
+        String stringCategory = groupRoom.category.toString();
+        String stringStatus = groupRoom.status.toString();
+
+        return queryFactory
+                .select(new QAdminRoomResponseDto(
+                        groupRoom.number.as("roomNumber"),
+                        groupRoom.name,
+                        as(constant(stringType), "type"),
+                        as(constant(stringCategory), "category"),
+                        as(constant(stringStatus), "status"),
+                        groupRoom.period.startDate,
+                        groupRoom.period.endDate,
+                        roomMember.member.id.as("memberId")))
+                .distinct()
+                .from(groupRoom)
+                .join(roomMember)
+                .on(roomMember.room.number.eq(groupRoom.number))
+                .where(
+                        groupRoomStatusEq(roomSearch.getStatus()),
+                        groupRoomMemberIdEq(roomSearch.getId()))
+                .fetch();
+    }
+
+    private static BooleanExpression groupRoomStatusEq(String status) {
+        return hasText(status) ? groupRoom.status.eq(RoomStatus.valueOf(status)) : null;
+    }
+
+    private static BooleanExpression groupRoomMemberIdEq(String id) {
+        return hasText(id) ? roomMember.member.id.eq(id) : null;
     }
 
 

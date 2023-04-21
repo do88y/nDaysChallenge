@@ -38,7 +38,6 @@ public class RoomAdminTest {
     @Autowired RoomService roomService;
     @Autowired AdminService adminService;
 
-
     @Test
     public void 관리자_SingleRoom_status_select_쿼리() throws Exception {
         //given
@@ -54,6 +53,20 @@ public class RoomAdminTest {
         PageRequest pageRequest = PageRequest.of(0, 3);
 
         roomRepository.findSingleRoomAdmin(roomSearch, pageRequest);
+    }
+
+    @Test
+    public void 관리자_GroupRoom_status_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch("END", null);
+        roomRepository.findGroupRoomAdmin(roomSearch);
+    }
+    @Test
+    public void 관리자_GroupRoom_member_select_쿼리() throws Exception {
+        //given
+        RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
+
+        roomRepository.findGroupRoomAdmin(roomSearch);
     }
 
 /*    @Test
