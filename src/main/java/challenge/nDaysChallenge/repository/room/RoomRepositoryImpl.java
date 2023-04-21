@@ -76,13 +76,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public List<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch) {
+    public Page<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
 
         String stringType = groupRoom.type.toString();
         String stringCategory = groupRoom.category.toString();
         String stringStatus = groupRoom.status.toString();
 
-        return queryFactory
+        QueryResults<AdminRoomResponseDto> results = queryFactory
                 .select(new QAdminRoomResponseDto(
                         groupRoom.number.as("roomNumber"),
                         groupRoom.name,
@@ -99,7 +99,14 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .where(
                         groupRoomStatusEq(roomSearch.getStatus()),
                         groupRoomMemberIdEq(roomSearch.getId()))
-                .fetch();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<AdminRoomResponseDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     private static BooleanExpression groupRoomStatusEq(String status) {

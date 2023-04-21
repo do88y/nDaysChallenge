@@ -12,5 +12,5 @@ public interface RoomRepositoryCustom {
 
     Page<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch, Pageable pageable);
 
-    List<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch);
+    Page<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch, Pageable pageable);
 }

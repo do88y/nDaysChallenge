@@ -59,17 +59,20 @@ public class RoomAdminTest {
     public void 관리자_GroupRoom_status_select_쿼리() throws Exception {
         //given
         RoomSearch roomSearch = new RoomSearch("END", null);
-        roomRepository.findGroupRoomAdmin(roomSearch);
+        PageRequest pageRequest = PageRequest.of(0, 3);
+
+        roomRepository.findGroupRoomAdmin(roomSearch, pageRequest);
     }
     @Test
     public void 관리자_GroupRoom_member_select_쿼리() throws Exception {
         //given
         RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
+        PageRequest pageRequest = PageRequest.of(0, 3);
 
-        roomRepository.findGroupRoomAdmin(roomSearch);
+        roomRepository.findGroupRoomAdmin(roomSearch, pageRequest);
     }
 
-/*    @Test
+    @Test
     public void 상태와_ID로_검색() throws Exception {
         //given
         Member member1 = Member.builder()
@@ -96,9 +99,14 @@ public class RoomAdminTest {
         findRoom2.end();
 
         //when
-        List<Tuple> allResults = adminService.findRooms(new RoomSearch(null, null));
-        List<Tuple> userResults = adminService.findRooms(new RoomSearch(null, "user1@naver.com"));
-        List<Tuple> finishedResults = adminService.findRooms(new RoomSearch("END", "user1@naver.com"));
+        RoomSearch findAll = new RoomSearch(null, null);
+        RoomSearch findById = new RoomSearch(null, "user1@naver.com");
+        RoomSearch findByStatusId = new RoomSearch("END", "user1@naver.com");
+        PageRequest pageRequest = PageRequest.of(0, 2);
+
+        Page<AdminRoomResponseDto> allResults = adminService.findRooms(findAll, pageRequest);
+        Page<AdminRoomResponseDto> userResults = adminService.findRooms(findById, pageRequest);
+        Page<AdminRoomResponseDto> finishedResults = adminService.findRooms(findByStatusId, pageRequest);
 
         List<Room> allRooms = new ArrayList<>();
         for (Tuple allResult : allResults) {
@@ -129,5 +137,5 @@ public class RoomAdminTest {
         assertThat(finishedRooms)
                 .extracting("name")
                 .containsExactly("명상");
-    }*/
+    }
 }
