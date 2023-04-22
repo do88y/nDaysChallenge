@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static challenge.nDaysChallenge.domain.member.QMember.*;
 import static challenge.nDaysChallenge.domain.room.QGroupRoom.*;
@@ -36,19 +38,22 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public Page<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
+    public Page<AdminRoomResponseDto> findRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
 
-        String stringType = singleRoom.type.toString();
-        String stringCategory = singleRoom.category.toString();
-        String stringStatus = singleRoom.status.toString();
+        String stringSingleType = singleRoom.type.toString();
+        String stringSingleCategory = singleRoom.category.toString();
+        String stringSingleStatus = singleRoom.status.toString();
+        String stringGroupType = groupRoom.type.toString();
+        String stringGroupCategory = groupRoom.category.toString();
+        String stringGroupStatus = groupRoom.status.toString();
 
-        QueryResults<AdminRoomResponseDto> results = queryFactory
+        QueryResults<AdminRoomResponseDto> singleResults = queryFactory
                 .select(new QAdminRoomResponseDto(
                         singleRoom.number.as("roomNumber"),
                         singleRoom.name,
-                        as(constant(stringType), "type"),
-                        as(constant(stringCategory), "category"),
-                        as(constant(stringStatus), "status"),
+                        as(constant(stringSingleType), "type"),
+                        as(constant(stringSingleCategory), "category"),
+                        as(constant(stringSingleStatus), "status"),
                         singleRoom.period.startDate,
                         singleRoom.period.endDate,
                         member.id.as("memberId")))
@@ -61,34 +66,13 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<AdminRoomResponseDto> content = results.getResults();
-        long total = results.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
-    }
-
-    private static BooleanExpression singleRoomStatusEq(String status) {
-        return hasText(status) ? singleRoom.status.eq(RoomStatus.valueOf(status)) : null;
-    }
-
-    private static BooleanExpression singleRoomMemberIdEq(String id) {
-        return hasText(id) ? member.id.eq(id) : null;
-    }
-
-    @Override
-    public Page<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
-
-        String stringType = groupRoom.type.toString();
-        String stringCategory = groupRoom.category.toString();
-        String stringStatus = groupRoom.status.toString();
-
-        QueryResults<AdminRoomResponseDto> results = queryFactory
+        QueryResults<AdminRoomResponseDto> groupResults = queryFactory
                 .select(new QAdminRoomResponseDto(
                         groupRoom.number.as("roomNumber"),
                         groupRoom.name,
-                        as(constant(stringType), "type"),
-                        as(constant(stringCategory), "category"),
-                        as(constant(stringStatus), "status"),
+                        as(constant(stringGroupType), "type"),
+                        as(constant(stringGroupCategory), "category"),
+                        as(constant(stringGroupStatus), "status"),
                         groupRoom.period.startDate,
                         groupRoom.period.endDate,
                         roomMember.member.id.as("memberId")))
@@ -103,10 +87,20 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<AdminRoomResponseDto> content = results.getResults();
-        long total = results.getTotal();
+        List<AdminRoomResponseDto> content = Stream.concat(
+                singleResults.getResults().stream(), groupResults.getResults().stream()
+                ).collect(Collectors.toList());
+        long total = singleResults.getTotal() + groupResults.getTotal();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    private static BooleanExpression singleRoomStatusEq(String status) {
+        return hasText(status) ? singleRoom.status.eq(RoomStatus.valueOf(status)) : null;
+    }
+
+    private static BooleanExpression singleRoomMemberIdEq(String id) {
+        return hasText(id) ? member.id.eq(id) : null;
     }
 
     private static BooleanExpression groupRoomStatusEq(String status) {

@@ -12,11 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Tuple;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +26,7 @@ public class AdminService {
     //챌린지 조회(멤버 id, 챌린지 상태)
     public Page<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
 
-        Page<AdminRoomResponseDto> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch, pageable);
-//        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
-//        List<Tuple> result = Stream.concat(
-//                singleRoomResult.stream(), groupRoomResult.stream()
-//                ).collect(Collectors.toList());
-        return singleRoomResult;
+        return roomRepository.findRoomAdmin(roomSearch, pageable);
     }
 
     //여러 챌린지 삭제
