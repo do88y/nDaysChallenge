@@ -36,4 +36,18 @@ public class AdminRoomResponseDto {
         this.endDate = endDate;
         this.memberId = memberId;
     }
+
+    @Override
+    public String toString() {
+        return "AdminRoomResponseDto{" +
+                "roomNumber=" + roomNumber +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                ", status='" + status + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", memberId='" + memberId + '\'' +
+                '}';
+    }
 }

@@ -24,7 +24,7 @@ public class AdminService {
     private final ReportRepository reportRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public Page<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
+    public List<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
 
         return roomRepository.findRoomAdmin(roomSearch, pageable);
     }

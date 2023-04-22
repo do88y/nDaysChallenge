@@ -1,11 +1,11 @@
 package challenge.nDaysChallenge.repository.room;
 
 import challenge.nDaysChallenge.domain.room.RoomStatus;
+import challenge.nDaysChallenge.domain.room.RoomType;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.QAdminRoomResponseDto;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,7 +23,6 @@ import static challenge.nDaysChallenge.domain.member.QMember.*;
 import static challenge.nDaysChallenge.domain.room.QGroupRoom.*;
 import static challenge.nDaysChallenge.domain.room.QRoomMember.*;
 import static challenge.nDaysChallenge.domain.room.QSingleRoom.*;
-import static com.querydsl.core.types.dsl.Expressions.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
@@ -38,61 +38,56 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public Page<AdminRoomResponseDto> findRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
+    public List<AdminRoomResponseDto> findRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
 
-        String stringSingleType = singleRoom.type.toString();
-        String stringSingleCategory = singleRoom.category.toString();
-        String stringSingleStatus = singleRoom.status.toString();
-        String stringGroupType = groupRoom.type.toString();
-        String stringGroupCategory = groupRoom.category.toString();
-        String stringGroupStatus = groupRoom.status.toString();
-
-        QueryResults<AdminRoomResponseDto> singleResults = queryFactory
+        List<AdminRoomResponseDto> singleResults = queryFactory
                 .select(new QAdminRoomResponseDto(
                         singleRoom.number.as("roomNumber"),
                         singleRoom.name,
-                        as(constant(stringSingleType), "type"),
-                        as(constant(stringSingleCategory), "category"),
-                        as(constant(stringSingleStatus), "status"),
+                        singleRoom.type.stringValue().as("type"),
+                        singleRoom.category.stringValue().as("category"),
+                        singleRoom.status.stringValue().as("status"),
                         singleRoom.period.startDate,
                         singleRoom.period.endDate,
                         member.id.as("memberId")))
                 .from(singleRoom)
                 .join(singleRoom.member, member)
-                .where(
-                        singleRoomStatusEq(roomSearch.getStatus()),
+                .where(singleRoomStatusEq(roomSearch.getStatus()),
                         singleRoomMemberIdEq(roomSearch.getId()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetchResults();
 
-        QueryResults<AdminRoomResponseDto> groupResults = queryFactory
+        List<AdminRoomResponseDto> groupResult = queryFactory
                 .select(new QAdminRoomResponseDto(
                         groupRoom.number.as("roomNumber"),
                         groupRoom.name,
-                        as(constant(stringGroupType), "type"),
-                        as(constant(stringGroupCategory), "category"),
-                        as(constant(stringGroupStatus), "status"),
+                        groupRoom.type.stringValue().as("type"),
+                        groupRoom.category.stringValue().as("category"),
+                        groupRoom.status.stringValue().as("status"),
                         groupRoom.period.startDate,
                         groupRoom.period.endDate,
-                        roomMember.member.id.as("memberId")))
-                .distinct()
+                        member.id.as("memberId")))
                 .from(groupRoom)
-                .join(roomMember)
-                .on(roomMember.room.number.eq(groupRoom.number))
-                .where(
-                        groupRoomStatusEq(roomSearch.getStatus()),
+                .leftJoin(roomMember)
+                .on(groupRoom.number.eq(roomMember.room.number))
+                .leftJoin(member)
+                .on(member.number.eq(roomMember.member.number))
+                .where(groupRoomStatusEq(roomSearch.getStatus()),
                         groupRoomMemberIdEq(roomSearch.getId()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetchResults();
 
-        List<AdminRoomResponseDto> content = Stream.concat(
-                singleResults.getResults().stream(), groupResults.getResults().stream()
-                ).collect(Collectors.toList());
-        long total = singleResults.getTotal() + groupResults.getTotal();
-
-        return new PageImpl<>(content, pageable, total);
+//        List<AdminRoomResponseDto> content = Stream.concat(
+//                singleResults.getResults().stream(), groupResults.getResults().stream()
+//                ).collect(Collectors.toList());
+//        long total = singleResults.getTotal() + groupResults.getTotal();
+//
+//        return new PageImpl<>(content, pageable, total);
+        return Stream.concat(singleResults.stream(), groupResult.stream()).collect(Collectors.toList());
     }
 
     private static BooleanExpression singleRoomStatusEq(String status) {
