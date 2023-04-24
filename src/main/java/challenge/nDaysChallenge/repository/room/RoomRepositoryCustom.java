@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface RoomRepositoryCustom {
 
-    List<AdminRoomResponseDto> findRoomAdmin(RoomSearch roomSearch, Pageable pageable);
+    Page<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch, Pageable pageable);
+    Page<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch, Pageable pageable);
 }

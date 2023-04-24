@@ -38,9 +38,9 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public List<AdminRoomResponseDto> findRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
+    public Page<AdminRoomResponseDto> findSingleRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
 
-        List<AdminRoomResponseDto> singleResults = queryFactory
+        QueryResults<AdminRoomResponseDto> results = queryFactory
                 .select(new QAdminRoomResponseDto(
                         singleRoom.number.as("roomNumber"),
                         singleRoom.name,
@@ -52,14 +52,23 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         member.id.as("memberId")))
                 .from(singleRoom)
                 .join(singleRoom.member, member)
-                .where(singleRoomStatusEq(roomSearch.getStatus()),
+                .where(singleRoomTypeEq(roomSearch.getType()),
+                        singleRoomStatusEq(roomSearch.getStatus()),
                         singleRoomMemberIdEq(roomSearch.getId()))
-                .fetch();
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetchResults();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
-        List<AdminRoomResponseDto> groupResult = queryFactory
+        List<AdminRoomResponseDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Page<AdminRoomResponseDto> findGroupRoomAdmin(RoomSearch roomSearch, Pageable pageable) {
+
+        QueryResults<AdminRoomResponseDto> results = queryFactory
                 .select(new QAdminRoomResponseDto(
                         groupRoom.number.as("roomNumber"),
                         groupRoom.name,
@@ -70,24 +79,25 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         groupRoom.period.endDate,
                         member.id.as("memberId")))
                 .from(groupRoom)
-                .leftJoin(roomMember)
+                .join(roomMember)
                 .on(groupRoom.number.eq(roomMember.room.number))
-                .leftJoin(member)
+                .join(member)
                 .on(member.number.eq(roomMember.member.number))
-                .where(groupRoomStatusEq(roomSearch.getStatus()),
+                .where(groupRoomTypeEq(roomSearch.getType()),
+                        groupRoomStatusEq(roomSearch.getStatus()),
                         groupRoomMemberIdEq(roomSearch.getId()))
-                .fetch();
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetchResults();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
-//        List<AdminRoomResponseDto> content = Stream.concat(
-//                singleResults.getResults().stream(), groupResults.getResults().stream()
-//                ).collect(Collectors.toList());
-//        long total = singleResults.getTotal() + groupResults.getTotal();
-//
-//        return new PageImpl<>(content, pageable, total);
-        return Stream.concat(singleResults.stream(), groupResult.stream()).collect(Collectors.toList());
+        List<AdminRoomResponseDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private static BooleanExpression singleRoomTypeEq(String type) {
+        return hasText(type) ? singleRoom.type.stringValue().eq(type) : null;
     }
 
     private static BooleanExpression singleRoomStatusEq(String status) {
@@ -96,6 +106,10 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private static BooleanExpression singleRoomMemberIdEq(String id) {
         return hasText(id) ? member.id.eq(id) : null;
+    }
+
+    private static BooleanExpression groupRoomTypeEq(String type) {
+        return hasText(type) ? groupRoom.type.stringValue().eq(type) : null;
     }
 
     private static BooleanExpression groupRoomStatusEq(String status) {

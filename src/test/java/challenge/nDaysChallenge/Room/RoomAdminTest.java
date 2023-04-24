@@ -11,22 +11,19 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
 import challenge.nDaysChallenge.service.RoomService;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -43,10 +40,10 @@ public class RoomAdminTest {
     @Test
     public void 관리자_status_쿼리() throws Exception {
         //given
-        RoomSearch roomSearch = new RoomSearch("END", null);
+        RoomSearch roomSearch = new RoomSearch("SINGLE", "END", null);
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminRoomResponseDto> results = roomRepository.findRoomAdmin(roomSearch, pageRequest);
+        Page<AdminRoomResponseDto> results = roomRepository.findSingleRoomAdmin(roomSearch, pageRequest);
 
         //개인과 그룹 챌린지 각각 3개씩 조회되는 문제, 그룹챌린지 중복 조회되는 문제(distinct 적용)
         for (AdminRoomResponseDto result : results) {
@@ -57,17 +54,17 @@ public class RoomAdminTest {
     @Test
     public void 관리자_memberId_쿼리() throws Exception {
         //given
-        RoomSearch roomSearch = new RoomSearch(null, "aaaa@naver.com");
+        RoomSearch roomSearch = new RoomSearch("SINGLE", null, "aaaa@naver.com");
         PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<AdminRoomResponseDto> results = roomRepository.findRoomAdmin(roomSearch, pageRequest);
+        Page<AdminRoomResponseDto> results = roomRepository.findSingleRoomAdmin(roomSearch, pageRequest);
 
         for (AdminRoomResponseDto result : results) {
             System.out.println("result = " + result);
         }
     }
 
-/*    @Test
+    @Test
     public void 상태와_ID로_검색() throws Exception {
         //given
         Member member1 = Member.builder()
@@ -90,33 +87,34 @@ public class RoomAdminTest {
         RoomResponseDto room3 = roomService.singleRoom(member2, "운동", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
 //        roomService.groupRoom(member1, "커밋", new Period(LocalDate.now(), 15), 0, "", new Set<Long>(member2.getNumber()));
 
+        Room findRoom1 = roomRepository.findByNumber(room1.getRoomNumber()).get();
         Room findRoom2 = roomRepository.findByNumber(room2.getRoomNumber()).get();
+        Room findRoom3 = roomRepository.findByNumber(room3.getRoomNumber()).get();
 
         findRoom2.end();
 
         //when
-        RoomSearch findAll = new RoomSearch(null, null);
-        RoomSearch findById = new RoomSearch(null, "user1@naver.com");
-        RoomSearch findByStatusId = new RoomSearch("END", "user1@naver.com");
+        RoomSearch findAll = new RoomSearch("SINGLE", null, null);
+        RoomSearch findById = new RoomSearch("SINGLE", null, "user1@naver.com");
+        RoomSearch findByStatusId = new RoomSearch("SINGLE", "END", "user1@naver.com");
         PageRequest pageRequest = PageRequest.of(0, 2);
 
-        Page<AdminRoomResponseDto> allResults = roomRepository.findRoomAdmin(findAll, pageRequest);
-        Page<AdminRoomResponseDto> userResults = roomRepository.findRoomAdmin(findById, pageRequest);
-        Page<AdminRoomResponseDto> finishedResults = roomRepository.findRoomAdmin(findByStatusId, pageRequest);
+        Page<AdminRoomResponseDto> allResults = roomRepository.findSingleRoomAdmin(findAll, pageRequest);
+        Page<AdminRoomResponseDto> userResults = roomRepository.findSingleRoomAdmin(findById, pageRequest);
+        Page<AdminRoomResponseDto> finishedResults = roomRepository.findSingleRoomAdmin(findByStatusId, pageRequest);
 
         //then
-        assertThat(allResults.getSize()).isEqualTo(2);
         assertThat(allResults)
-                .extracting("name")
-                .contains("기상", "명상");
+                .extracting("roomNumber")
+                .contains(room1.getRoomNumber(), room2.getRoomNumber(), room3.getRoomNumber());
 
         assertThat(userResults.getSize()).isEqualTo(2);
         assertThat(userResults)
-                .extracting("name")
-                .contains("기상", "명상");
+                .extracting("roomNumber")
+                .contains(room1.getRoomNumber(), room2.getRoomNumber());
 
         assertThat(finishedResults)
-                .extracting("name")
-                .containsExactly("명상");
-    }*/
+                .extracting("roomNumber")
+                .containsExactly(room2.getRoomNumber());
+    }
 }

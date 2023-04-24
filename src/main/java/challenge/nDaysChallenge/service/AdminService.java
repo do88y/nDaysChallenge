@@ -8,10 +8,12 @@ import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -24,9 +26,14 @@ public class AdminService {
     private final ReportRepository reportRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public List<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
-
-        return roomRepository.findRoomAdmin(roomSearch, pageable);
+    public Page<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {
+        if ("SINGLE".equals(roomSearch.getType())) {
+            return roomRepository.findSingleRoomAdmin(roomSearch, pageable);
+        }
+        if ("GROUP".equals(roomSearch.getType())) {
+            return roomRepository.findGroupRoomAdmin(roomSearch, pageable);
+        }
+        return new PageImpl<>(new ArrayList<>(), pageable, 0l);
     }
 
     //여러 챌린지 삭제
