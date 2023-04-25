@@ -14,6 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,19 +54,20 @@ public class RoomAdminTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void 상태와_ID로_검색() throws Exception {
         //given
         Member member1 = Member.builder()
                 .id("user1@naver.com")
                 .pw("12345")
                 .nickname("abc")
-                .authority(Authority.ROLE_USER)
+                .authority(Authority.ROLE_ADMIN)
                 .build();
         Member member2 = Member.builder()
                 .id("user2@naver.com")
                 .pw("12345")
                 .nickname("abc")
-                .authority(Authority.ROLE_USER)
+                .authority(Authority.ROLE_ADMIN)
                 .build();
         em.persist(member1);
         em.persist(member2);

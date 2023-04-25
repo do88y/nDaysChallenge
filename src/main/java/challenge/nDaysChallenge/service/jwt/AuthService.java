@@ -68,6 +68,9 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         //CustomUserDetailsService의 loadUserByUsername 메소드 실행됨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+        log.info("authentication name : "+authentication.getName());
+        log.info("authentication authorities : "+authentication.getAuthorities());
+
         //인증 정보 기반으로 JWT 토큰 생성
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(authentication);
 

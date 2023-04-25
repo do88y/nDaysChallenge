@@ -1,6 +1,8 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.Report;
+import challenge.nDaysChallenge.domain.member.Member;
+import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
@@ -10,12 +12,16 @@ import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.Tuple;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 @RequiredArgsConstructor
+@Secured("ROLE_ADMIN")
 public class AdminController {
 
     private final AdminService adminService;
