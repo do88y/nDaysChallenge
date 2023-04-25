@@ -3,7 +3,7 @@ name: NDaysChallenge-Deploy
 on:
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
           cache: gradle
 
       - name: make application.yml
-        if: contains(github.ref, 'main') || contains(github.ref, 'develop')
+        if: contains(github.ref, 'main')
         run: |
           cd ./src/main/resources
           touch ./application.yml

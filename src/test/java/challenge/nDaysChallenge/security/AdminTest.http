@@ -2,4 +2,5 @@
 
 ### 메인페이지
 GET http://localhost:8080/admin/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzRAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODI0MDAyMzd9.2_AmuG8-WeUcOwRwsabHV0QS9UfMCIbeey8UV7z3oJ4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzRAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODI0MDQ1MDV9.z_qUfh58gdI9JMzOXG-i2uvdRX1QarSOhOS0UsgtKPA
+
