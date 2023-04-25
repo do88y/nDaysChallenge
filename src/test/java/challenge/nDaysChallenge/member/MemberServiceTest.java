@@ -131,17 +131,18 @@ public class MemberServiceTest {
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
 
-        SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30L), Category.ROUTINE, 2, "");
-        SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30L), Category.ETC, 4, "");
+        SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30), Category.ROUTINE, 2, "");
+        SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30), Category.ETC, 4, "");
 
-        Stamp stamp = Stamp.createStamp(room1, member);
+        Stamp stamp = Stamp.createStamp(room1);
         List<Stamp> stamps = Arrays.asList(stamp);
 
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-        when(singleRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(singleRooms));
+        when(singleRoomRepository.findAll(member));
         when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member)).thenReturn(Optional.ofNullable(new ArrayList<>()));
-        when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
+        when(groupRoomRepository.findAll(member));
+        when(singleRoomRepository.findStampByMember(member));
+//        when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
 
         Dajim dajim1 = Dajim.builder()
                 .number(1L)

@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -73,9 +75,11 @@ public class MemberService {
         //참조 엔티티들 불러오기
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<Stamp> stamps = stampRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
-        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member).orElseGet(ArrayList::new);
-        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member).orElseGet(ArrayList::new);
+        List<Stamp> stamps = Stream
+                .concat(singleRoomRepository.findStampByMember(member).stream(), roomMemberRepository.findStampByMember(member).stream())
+                .collect(Collectors.toList());
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member);
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member);
 
         //룸 도메인 연관관계 끊기
         deleteConnection(member,roomMembers, stamps, singleRooms, groupRooms);

@@ -8,6 +8,8 @@ NDaysChallengeFrontend/
 .elasticbeanstalk/
 build/
 src/main/resources/*
+!src/main/resources/templates
+!src/main/resources/static
 http-client.private.env.json
 
 ### STS ###

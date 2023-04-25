@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(id + " -> db에서 찾을 수 없습니다."));
 
         log.info("db에서 Member 객체를 가져왔습니다.");
+        log.info("권한 : " + member.getAuthority().toString());
 
         return new MemberAdapter(member);
     }

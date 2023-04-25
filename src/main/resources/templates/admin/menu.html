@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <title>관리자 메뉴</title>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>관리자 메뉴</h2>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button type="button"
+                class="btn btn-secondary btn-lg">회원 관리</button>
+
+        <button type="button"
+                th:onclick="|location.href='@{/admin/challenge}'|"
+                class="btn btn-secondary btn-lg">챌린지 관리</button>
+
+        <button type="button"
+                class="btn btn-secondary btn-lg">다짐 관리</button>
+
+        <button type="button"
+                class="btn btn-secondary btn-lg">친구 관리</button>
+
+        <button type="button"
+                th:onclick="|location.href='@{/admin/report}'|"
+                class="btn btn-secondary btn-lg">신고 관리</button>
+    </div>
+</div>
+</body>
+</html>

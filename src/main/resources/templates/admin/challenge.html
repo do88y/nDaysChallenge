@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <title>관리자 페이지</title>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>챌린지 관리</h2>
+    </div>
+    <form th:action="@{challenge/search}" th:object="${roomSearch}" method="post">
+        <div class="row g-3 align-items-center justify-content-center">
+            <div class="col-auto">
+                <label for="status">상태:</label>
+            </div>
+            <div class="col-auto">
+                <select class="form-control form-select" id="status" name="status">
+                    <option value="">전체</option>
+                    <option value="CONTINUE">진행중</option>
+                    <option value="END">완료</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="id">ID:</label>
+            </div>
+            <div class="col-auto">
+                <input class="form-control" type="text" id="id" name="id"/>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">검색</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-secondary float-end"
+                        th:onclick="|location.href='@{/admin/menu}'|"
+                        type="button">메뉴</button>
+            </div>
+        </div>
+    </form>
+
+    <hr class="my-4">
+
+    <form th:if="${param.status}" th:action="@{challenge/delete}" th:object="${dto}" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input class="form-check-input" type="checkbox" id="select-all"/></th>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>카테고리</th>
+                    <th>상태</th>
+                    <th>시작일</th>
+                    <th>종료일</th>
+                    <th>회원 ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="challenge : ${challenges}">
+                    <td><input class="form-check-input" type="checkbox" th:value="${challenge.roomNumber}" name="numbers"/></td>
+                    <td th:text="${challenge.roomNumber}"></td>
+                    <td th:text="${challenge.name}"></td>
+                    <td th:text="${challenge.type}"></td>
+                    <td th:text="${challenge.category}"></td>
+                    <td th:text="${challenge.status}"></td>
+                    <td th:text="${challenge.startDate}"></td>
+                    <td th:text="${challenge.endDate}"></td>
+                    <td th:text="${challenge.memberId}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary float-end" type="submit">삭제</button>
+    </form>
+</div> <!-- container -->
+</body>
+</html>

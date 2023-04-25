@@ -1,13 +1,11 @@
-package challenge.nDaysChallenge.dto.response.Room;
+package challenge.nDaysChallenge.dto.response.room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomResponseDto {
 
@@ -15,7 +13,7 @@ public class RoomResponseDto {
     private String type;
     private String name;
     private String category;
-    private Long totalDays;
+    private int totalDays;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -30,7 +28,7 @@ public class RoomResponseDto {
     private int usedPassCount;
 
     @Builder
-    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, Long totalDays, Long stamp, String day, int successCount, int usedPassCount) {
+    public RoomResponseDto(Long roomNumber, String name, String category, String reward, int passCount, String type, String status, LocalDate startDate, LocalDate endDate, int totalDays, Long stamp, String day, int successCount, int usedPassCount) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.name = name;
