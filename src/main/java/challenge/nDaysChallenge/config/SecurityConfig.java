@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -64,7 +65,7 @@ public class SecurityConfig {
             //인증,인가에 대한 path matching & Preflight Request 허용
             .and()
             .authorizeRequests() //요청에 대한 권한 설정
-            .antMatchers("/","/auth/**", "/feed").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
+            .antMatchers("/","/auth/**", "/feed", "/css/**").permitAll() //로그인, 회원가입 api는 인증 정보 요구 X
             .anyRequest().authenticated() //그외 모든 요청에 대해 인증 필요
 
             //JwtFilter를 addFilterBefore로 등록한 JwtSecurityConfig 적용

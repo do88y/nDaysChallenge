@@ -55,14 +55,14 @@ public class DajimService {
 
         Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto.getContent(), dajimUploadRequestDto.getOpen());
 
-        Dajim savedDajim = dajimRepository.save(newDajim);
+        dajimRepository.save(newDajim);
 
-        return DajimResponseDto.of(savedDajim);
+        return DajimResponseDto.of(newDajim);
     }
 
     //다짐 수정
     public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, Member member) {
-        Dajim dajim = dajimRepository.findByMemberNumberAndRoomNumber(member.getNumber(), roomNumber) //////멤버넘버, 룸넘버로 파라미터 수정
+        Dajim dajim = dajimRepository.findByMemberNumberAndRoomNumber(member.getNumber(), roomNumber)
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
         checkRoomAndMember(dajim, member, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
@@ -78,12 +78,7 @@ public class DajimService {
         List<Dajim> dajims = dajimRepository.findAllByRoomNumber(roomNumber)
                     .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
-        List<DajimResponseDto> dajimsList = dajims
-                .stream()
-                .map(dajim -> DajimResponseDto.of(dajim))
-                .collect(Collectors.toList());
-
-        return dajimsList;
+        return Dajim.toDajimResponseDto(dajims);
     }
 
     //다짐 수정 시 작성자/룸 체크

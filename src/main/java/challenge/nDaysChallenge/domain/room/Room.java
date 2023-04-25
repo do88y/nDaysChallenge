@@ -46,7 +46,6 @@ public class Room {
 
 
     //==비즈니스 로직==//
-
     //챌린지 상태 변경
     public void end() {
         this.status = RoomStatus.END;

@@ -16,17 +16,9 @@ import java.util.Optional;
 public interface StampRepository extends JpaRepository<Stamp, Long> {
 
     @Query("select s from Stamp s where s.room = :room")
-    public Stamp findByRoom(@Param("room") Room room);
+    Stamp findByRoom(@Param("room") Room room);
 
     @Query("select s from Stamp s where s.room = :room")
-    public List<Stamp> findGroupStampByRoom(@Param("room") Room room);
-
-
-    @Query("select s from Stamp s where s.room = :room and s.member = :member")
-    public Stamp findByRoomAndMember(@Param("room") Room room,
-                                     @Param("member") Member member);
-
-    @Query("SELECT s FROM Stamp s WHERE s.member.nickname = :nickname")
-    Optional<List<Stamp>> findAllByMemberNickname(@Param("nickname") String nickname);
+    List<Stamp> findByGroupRoom(@Param("room") Room room);
 
 }

@@ -62,7 +62,7 @@ public class AuthIntegrationTest {
     @Test
     public void 로그인() throws Exception{
         //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com", "123", "닉네임2", 4);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com", "123", "닉네임22", 4);
 
         mockMvc.perform(
                 post("/auth/signup")

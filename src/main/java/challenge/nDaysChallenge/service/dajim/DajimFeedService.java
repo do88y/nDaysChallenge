@@ -37,9 +37,7 @@ public class DajimFeedService {
     public Slice<DajimFeedResponseDto> viewFeedWithoutLogin(Pageable pageable) {
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
-                .collect(toList());
+        List<DajimFeedResponseDto> dajimFeedList = Dajim.toUnloggedInFeedDto(dajimPage);
 
         return new CustomSliceImpl<>(dajimFeedList, pageable, dajimPage.hasNext());
     }
@@ -50,9 +48,7 @@ public class DajimFeedService {
     public Slice<DajimFeedResponseDto> viewFeedLoggedIn(Member member, Pageable pageable) {
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
-                .collect(toList());
+        List<DajimFeedResponseDto> dajimFeedList = Dajim.toLoggedInFeedDto(member, dajimPage);
 
         return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
     }

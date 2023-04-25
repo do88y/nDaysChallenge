@@ -14,8 +14,6 @@ public class DeleteRoomRequestDto {
     List<Long> numbers = new ArrayList<>();
 
     public DeleteRoomRequestDto(List<Long> numbers) {
-        for (Long number : numbers) {
-            this.numbers.add(number);
-        }
+        this.numbers.addAll(numbers);
     }
 }

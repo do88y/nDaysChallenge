@@ -1,16 +1,20 @@
 package challenge.nDaysChallenge.service;
 
+import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.room.Room;
-import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
+import challenge.nDaysChallenge.repository.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -18,24 +22,35 @@ import java.util.Optional;
 public class AdminService {
 
     private final RoomRepository roomRepository;
+    private final ReportRepository reportRepository;
 
     //챌린지 조회(멤버 id, 챌린지 상태)
-    public List<Room> findRooms(RoomSearch roomSearch) {
+    public List<Tuple> findRooms(RoomSearch roomSearch) {
 
-        return roomRepository.findSingleRoomAdmin(roomSearch);
+        List<Tuple> singleRoomResult = roomRepository.findSingleRoomAdmin(roomSearch);
+        List<Tuple> groupRoomResult = roomRepository.findGroupRoomAdmin(roomSearch);
+        List<Tuple> result = Stream.concat(
+                singleRoomResult.stream(), groupRoomResult.stream()
+                ).collect(Collectors.toList());
+        return result;
     }
 
     //여러 챌린지 삭제
     @Transactional
-    public void deleteRoom(DeleteRoomRequestDto dto) {
-
-        List<Long> numbers = dto.getNumbers();
-
+    public void deleteRoom(List<Long> numbers) {
         for (Long number : numbers) {
-            Optional<Room> findRoom = roomRepository.findByNumber(number);
-            Room room = findRoom.orElseThrow(() -> new NoSuchElementException("챌린지가 존재하지 않습니다."));
+            Room room = roomRepository.findByNumber(number).orElseThrow(
+                    () -> new NoSuchElementException("챌린지가 존재하지 않습니다."));
             roomRepository.delete(room);
         }
     }
 
+    @Transactional
+    public void deleteReport(List<Long> numbers) {
+        for (Long number : numbers) {
+            Report report = reportRepository.findByNumber(number).orElseThrow(
+                    () -> new NoSuchElementException("신고가 존재하지 않습니다."));
+            reportRepository.delete(report);
+        }
+    }
 }

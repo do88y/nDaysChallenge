@@ -45,6 +45,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
+
         memberRepository.save(member);
 
         return MemberResponseDto.of(member); //아이디, 닉네임 리턴
@@ -67,16 +68,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         //CustomUserDetailsService의 loadUserByUsername 메소드 실행됨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+        log.info("authentication name : "+authentication.getName());
+        log.info("authentication authorities : "+authentication.getAuthorities());
+
         //인증 정보 기반으로 JWT 토큰 생성
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(authentication);
 
         //refresh 토큰 저장
         RefreshToken refreshToken = new RefreshToken(authentication.getName(), tokenResponseDto.getRefreshToken());
-
-//        RefreshToken refreshToken = RefreshToken.builder()
-//                .key(authentication.getName())
-//                .value(tokenDto.getRefreshToken())
-//                .build();
 
         refreshTokenRepository.save(refreshToken);
 
@@ -121,10 +120,6 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
         //토큰 생성
         TokenResponseDto tokenResponseDto = tokenProvider.reissueToken(authentication, tokenRequestDto.getRefreshToken());
-
-        //저장소에 새 리프레시 토큰 저장
-//        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
-//        refreshTokenRepository.save(newRefreshToken);
 
         //JWT 토큰 재발급
         return tokenResponseDto;

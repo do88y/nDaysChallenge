@@ -43,10 +43,6 @@ public class Member {
 
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoomMember> roomMemberList = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
     public Member update (String nickname, String pw, int image){

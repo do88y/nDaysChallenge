@@ -117,10 +117,10 @@ public class WithUserDetailsTest {
         Member currentMember = member.get();
 
         //룸 객체 연결
-        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10L), Category.ROUTINE, 2, "reward");
+        SingleRoom singleRoom = new SingleRoom("roomName", new Period(LocalDate.now(),10), Category.ROUTINE, 2, "reward");
         singleRoomRepository.save(singleRoom);
-        Stamp stamp = Stamp.createStamp(singleRoom, currentMember);
-        singleRoom.addRoom(singleRoom, currentMember, stamp);
+        Stamp stamp = Stamp.createStamp(singleRoom);
+        singleRoom.addRoom(currentMember, stamp);
 
         //다짐 작성
         DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("다짐 내용", "PUBLIC");

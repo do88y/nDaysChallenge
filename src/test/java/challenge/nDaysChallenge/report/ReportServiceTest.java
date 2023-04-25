@@ -38,7 +38,7 @@ public class ReportServiceTest {
                 .nickname("abc")
                 .authority(Authority.ROLE_USER)
                 .build();
-        SingleRoom room = new SingleRoom("기상", new Period(LocalDate.now(), 10L), Category.ROUTINE, 2, "");
+        SingleRoom room = new SingleRoom("기상", new Period(LocalDate.now(), 10), Category.ROUTINE, 2, "");
         Dajim newDajim = Dajim.builder()
                 .room(room)
                 .member(member)

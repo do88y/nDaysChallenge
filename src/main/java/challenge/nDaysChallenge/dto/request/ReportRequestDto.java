@@ -20,6 +20,7 @@ public class ReportRequestDto {
         return isDajim;
     }
 
+
     @Builder
     public ReportRequestDto(Long dajim, int cause, boolean isDajim, String content) {
         this.dajim = dajim;
