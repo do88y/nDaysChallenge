@@ -1,12 +1,17 @@
 package challenge.nDaysChallenge.Room;
 
+import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Category;
 import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.dto.response.ReportResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
+import challenge.nDaysChallenge.repository.dajim.DajimRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportSearch;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
@@ -35,10 +40,11 @@ public class RoomAdminTest {
     @Autowired EntityManager em;
     @Autowired RoomRepository roomRepository;
     @Autowired RoomService roomService;
+    @Autowired ReportRepository reportRepository;
     @Autowired AdminService adminService;
 
     @Test
-    public void 관리자_status_쿼리() throws Exception {
+    public void 챌린지_status_검색_쿼리() throws Exception {
         //given
         RoomSearch roomSearch = new RoomSearch("SINGLE", "END", null);
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -52,7 +58,7 @@ public class RoomAdminTest {
     }
 
     @Test
-    public void 관리자_memberId_쿼리() throws Exception {
+    public void 챌린지_memberId_검색_쿼리() throws Exception {
         //given
         RoomSearch roomSearch = new RoomSearch("SINGLE", null, "aaaa@naver.com");
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -65,7 +71,7 @@ public class RoomAdminTest {
     }
 
     @Test
-    public void 상태와_ID로_검색() throws Exception {
+    public void 챌린지_상태와_ID로_검색() throws Exception {
         //given
         Member member1 = Member.builder()
                 .id("user1@naver.com")
@@ -116,5 +122,13 @@ public class RoomAdminTest {
         assertThat(finishedResults)
                 .extracting("roomNumber")
                 .containsExactly(room2.getRoomNumber());
+    }
+
+    @Test
+    public void 다짐_쿼리_테스트() {
+        List<ReportResponseDto> reports = reportRepository.findReports(new ReportSearch(true, 1L));
+        for (ReportResponseDto report : reports) {
+            System.out.println("report = " + report);
+        }
     }
 }

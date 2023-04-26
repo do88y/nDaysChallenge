@@ -1,21 +1,34 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.Report;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
+import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
+import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
-import challenge.nDaysChallenge.repository.ReportRepository;
+import challenge.nDaysChallenge.jwt.TokenProvider;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportSearch;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
+import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +40,35 @@ public class AdminController {
 
     private final AdminService adminService;
     private final ReportRepository reportRepository;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
 
     //메인페이지
     @GetMapping
-    public String main() {
+    public String main(Model model) {
+        model.addAttribute("loginRequestDto", new LoginRequestDto());
         return "admin/main";
+    }
+
+    //관리자 로그인
+    @PostMapping("/login")
+    public String login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        // 토큰 생성
+        TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
+
+        Cookie cookie = new Cookie(
+                "access_token",
+                tokenResponseDto.getAccessToken());
+
+        cookie.setPath("/admin/menu");
+        cookie.setMaxAge(Integer.MAX_VALUE);
+
+        response.addCookie(cookie);
+
+        return "redirect:/admin/menu";
     }
 
     //메뉴
@@ -40,6 +77,7 @@ public class AdminController {
         return "admin/menu";
     }
 
+    //챌린지 관리자 페이지
     @GetMapping("/challenge")
     public String challenge() {
         return "admin/challenge";
@@ -93,6 +131,15 @@ public class AdminController {
                     .build();
             reports.add(dto);
         }
+        model.addAttribute("reports", reports);
+        return "admin/report";
+    }
+
+    @PostMapping("/report")
+    public String reportSearch(ReportSearch reportSearch, Model model) {
+
+        List<ReportResponseDto> reports = reportRepository.findReports(reportSearch);
+
         model.addAttribute("reports", reports);
         return "admin/report";
     }

@@ -3,7 +3,7 @@ package challenge.nDaysChallenge.service;
 import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
-import challenge.nDaysChallenge.repository.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;

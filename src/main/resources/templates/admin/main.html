@@ -10,20 +10,22 @@
     <div class="py-5 text-center">
         <h2>관리자 페이지</h2>
     </div>
-    <form action="#" method="post">
+    <form th:action="@{/admin/login}" th:object="${loginRequestDto}"  method="post">
         <div class="row g-3 align-items-center justify-content-center">
             <div class="col-auto">
-                <label class="form-label" for="username">아이디</label>
+                <label class="form-label" for="id">아이디</label>
             </div>
             <div class="col-auto">
-                <input class="form-control" type="text" id="username" name="username">
+                <input class="form-control" type="text" id=id name="id"
+                       th:value="${loginRequestDto.id}">
             </div>
 
             <div class="col-auto">
-                <label class="form-label" for="password">비밀번호</label>
+                <label class="form-label" for="pw">비밀번호</label>
             </div>
             <div class="col-auto">
-                <input class="form-control" type="password" id="password" name="password">
+                <input class="form-control" type="password" id="pw" name="pw"
+                       th:value="${loginRequestDto.id}">
             </div>
 
             <div class="col-auto">
