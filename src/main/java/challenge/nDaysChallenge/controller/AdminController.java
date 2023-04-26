@@ -6,8 +6,6 @@ import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
 import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
-import challenge.nDaysChallenge.jwt.TokenProvider;
-import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.report.ReportSearch;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
@@ -17,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,11 +35,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final ReportRepository reportRepository;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final TokenProvider tokenProvider;
 
     //메인페이지
     @GetMapping
