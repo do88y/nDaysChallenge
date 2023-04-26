@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.Report;
-import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
@@ -18,10 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +34,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 @RequiredArgsConstructor
+@Secured("ROLE_ADMIN")
 public class AdminController {
 
     private final AdminService adminService;

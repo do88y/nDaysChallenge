@@ -55,10 +55,10 @@ public class AuthServiceTest {
     @Test
     public void 로그인(){
         //given
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc123@naver.com", "123", "닉네임2", 4);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com", "123", "닉네임23", 4);
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
 
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abc123@naver.com", "123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("abc1@naver.com", "123");
 
         //when
         TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);

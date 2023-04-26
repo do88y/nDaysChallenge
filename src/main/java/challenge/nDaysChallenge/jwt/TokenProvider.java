@@ -47,6 +47,8 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        log.info("권한 : " + authorities);
+
         Long now = (new Date()).getTime();
 
         //access token 생성
@@ -126,8 +128,6 @@ public class TokenProvider { //유저 정보로 JWT 토큰 생성 & 토큰 통�
 //                .setSigningKey(key)
 //                .build()
 //                .parseClaimsJws(accessToken).getBody().getSubject();//토큰 내 아이디 추출
-
-        log.info("아이디 : " + claims.getSubject());
 
         UserDetails memberAdapter = customUserDetailsService.loadUserByUsername(claims.getSubject());
 

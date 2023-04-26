@@ -7,9 +7,13 @@ import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+=======
+import org.springframework.security.access.prepost.PreAuthorize;
+>>>>>>> origin
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

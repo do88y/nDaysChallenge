@@ -9,20 +9,19 @@ import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
-import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.report.ReportSearch;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.service.AdminService;
 import challenge.nDaysChallenge.service.RoomService;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,19 +70,20 @@ public class RoomAdminTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     public void 챌린지_상태와_ID로_검색() throws Exception {
         //given
         Member member1 = Member.builder()
                 .id("user1@naver.com")
                 .pw("12345")
                 .nickname("abc")
-                .authority(Authority.ROLE_USER)
+                .authority(Authority.ROLE_ADMIN)
                 .build();
         Member member2 = Member.builder()
                 .id("user2@naver.com")
                 .pw("12345")
                 .nickname("abc")
-                .authority(Authority.ROLE_USER)
+                .authority(Authority.ROLE_ADMIN)
                 .build();
         em.persist(member1);
         em.persist(member2);
