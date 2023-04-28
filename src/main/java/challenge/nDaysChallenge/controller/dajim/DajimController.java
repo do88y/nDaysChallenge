@@ -31,10 +31,8 @@ public class DajimController {
     @PostMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> uploadDajim(@PathVariable("challengeId") Long roomNumber,
                                          @RequestBody DajimUploadRequestDto dajimUploadRequestDto,
-                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
-        checkLogin(memberAdapter.getMember());
-
-        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimUploadRequestDto, memberAdapter.getMember());
+                                         Principal principal){
+        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(roomNumber, dajimUploadRequestDto, principal.getName());
 
         return ResponseEntity.ok().body(dajimResponseDto);
     }
@@ -42,31 +40,19 @@ public class DajimController {
     //다짐 수정
     @PatchMapping("/challenge/{challengeId}/dajim")
     public ResponseEntity<?> updateDajim(@PathVariable("challengeId") Long roomNumber,
-                                        @RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
-                                         @AuthenticationPrincipal MemberAdapter memberAdapter){
-        checkLogin(memberAdapter.getMember());
-
-        DajimResponseDto dajimResponseDto = dajimService.updateDajim(roomNumber, dajimUpdateRequestDto, memberAdapter.getMember());
+                                         @RequestBody DajimUpdateRequestDto dajimUpdateRequestDto,
+                                         Principal principal){
+        DajimResponseDto dajimResponseDto = dajimService.updateDajim(roomNumber, dajimUpdateRequestDto, principal.getName());
 
         return ResponseEntity.ok().body(dajimResponseDto);
     }
 
     //챌린지룸에 다짐 불러오기
     @GetMapping("/challenge/{challengeId}/dajim")
-    public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber,
-                                                  @AuthenticationPrincipal MemberAdapter memberAdapter){
-        checkLogin(memberAdapter.getMember());
-
+    public ResponseEntity<?> viewDajimOnChallenge(@PathVariable("challengeId") Long roomNumber, Principal principal){
         List<DajimResponseDto> dajimResponseDtoList = dajimService.viewDajimInRoom(roomNumber);
 
         return ResponseEntity.ok().body(dajimResponseDtoList);
-    }
-
-
-    private void checkLogin(Member member) {
-        if (member == null) {
-            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
-        }
     }
 
 }

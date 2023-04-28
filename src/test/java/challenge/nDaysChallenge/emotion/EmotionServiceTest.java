@@ -109,7 +109,8 @@ public class EmotionServiceTest {
 
         //when
         when(dajimRepository.findByNumber(any())).thenReturn(Optional.of(dajim));
-        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, member);
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
+        EmotionResponseDto emotionResponseDto = emotionService.uploadEmotion(emotionRequestDto, member.getId());
 
         //then
         verify(emotionRepository,times(1)).save(any());
@@ -130,10 +131,11 @@ public class EmotionServiceTest {
         assertThat(dajim.getEmotions().get(0).getSticker().toString()).isEqualTo("CHEER");
 
         //when
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         when(emotionRepository.findByDajimAndMember(any(),any())).thenReturn(Optional.of(emotion));
 
         EmotionRequestDto emotionRequestDto = new EmotionRequestDto(dajim.getNumber(), "SURPRISE");
-        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, member);
+        EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, member.getId());
 
         //then
         assertThat(emotionResponseDto.getSticker()).isEqualTo("SURPRISE");
@@ -157,10 +159,11 @@ public class EmotionServiceTest {
         EmotionRequestDto emotionRequestDto = new EmotionRequestDto(dajim.getNumber(), "WATCH");
 
         //when
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         when(dajimRepository.findByNumber(any())).thenReturn(Optional.of(dajim));
         when(emotionRepository.findByDajimAndMember(any(),any())).thenReturn(Optional.of(emotion));
 
-        emotionService.deleteEmotion(emotionRequestDto, member);
+        emotionService.deleteEmotion(emotionRequestDto, member.getId());
 
         //then
         verify(emotionRepository, times(1)).delete(any());

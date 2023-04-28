@@ -86,9 +86,9 @@ class DajimRepositoryTest {
 
     @Test
     void 다짐번호로_다짐_조회(){
-        Dajim dajim1 = dajimRepository.findByMemberNumberAndRoomNumber(savedDajim1.getMember().getNumber(),savedDajim1.getRoom().getNumber())
+        Dajim dajim1 = dajimRepository.findByMemberIdAndRoomNumber(savedDajim1.getMember().getId(),savedDajim1.getRoom().getNumber())
                 .orElseThrow(()->new RuntimeException("다짐이 없습니다"));
-        Dajim dajim2 = dajimRepository.findByMemberNumberAndRoomNumber(savedDajim2.getMember().getNumber(),savedDajim2.getRoom().getNumber())
+        Dajim dajim2 = dajimRepository.findByMemberIdAndRoomNumber(savedDajim2.getMember().getId(),savedDajim2.getRoom().getNumber())
                 .orElseThrow(()->new RuntimeException("다짐이 없습니다"));
 
 
@@ -112,16 +112,7 @@ class DajimRepositoryTest {
     void 다짐_피드_조회(){
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC,Pageable.ofSize(10));
 
-        assertThat(dajimPage.getContent().size()).isEqualTo(4);
-    }
-
-    @Test
-    void new_다짐_피드_조회(){
-        Slice<Dajim> dajims = dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10));
-
-        System.out.println(dajims.getContent().stream().map(d->d.getContent()).collect(Collectors.toList()));
-
-        assertThat(dajims.getContent().size()).isEqualTo(4);
+        assertThat(dajimPage.getContent().size()).isEqualTo(2);
     }
 
 }

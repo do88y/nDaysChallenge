@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.security.Principal;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,34 +37,27 @@ public class MemberController {
 
     //회원정보 조회 (수정 전)
     @GetMapping("/user/details")
-    public ResponseEntity<?> viewMemberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter) {
-        if (memberAdapter==null){
-            throw new RuntimeException("@AuthenticationPrincipal 어노테이션 객체가 비었습니다");
-        }
+    public ResponseEntity<?> viewMemberInfo(Principal principal) {
+        log.info(principal.getName());
 
-        log.info(memberAdapter.getMember().getId());
-        log.info(memberAdapter.getMember().getNickname());
-        log.info(memberAdapter.getMember().getPw());
-
-        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(memberAdapter.getMember().getId());
+        MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(principal.getName());
 
         return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원정보 수정
     @PatchMapping("/user/edit")
-    public ResponseEntity<MemberInfoResponseDto> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto,
-                                            @AuthenticationPrincipal MemberAdapter memberAdapter) {
+    public ResponseEntity<MemberInfoResponseDto> editMemberInfo(@RequestBody MemberEditRequestDto memberEditRequestDto, Principal principal) {
         MemberInfoResponseDto memberInfoResponseDto =
-                memberService.editMemberInfo(memberAdapter.getMember(), memberEditRequestDto);
+                memberService.editMemberInfo(principal.getName(), memberEditRequestDto);
 
         return ResponseEntity.ok().body(memberInfoResponseDto);
     }
 
     //회원 탈퇴
     @DeleteMapping("/user/withdrawal")
-    public ResponseEntity<String> withdrawMember(@AuthenticationPrincipal MemberAdapter memberAdapter) {
-        String nickname = memberService.deleteMember(memberAdapter.getMember());
+    public ResponseEntity<String> withdrawMember(Principal principal) {
+        String nickname = memberService.deleteMember(principal.getName());
 
         return ResponseEntity.ok().body(nickname+"님 탈퇴가 완료되었습니다."); //탈퇴한 회원 닉네임 리턴
     }

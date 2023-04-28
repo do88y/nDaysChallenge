@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled=true)
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
@@ -101,16 +101,16 @@ public class SecurityConfig {
 
         return source;
     }
-
-    //AuthenticationPrincipal 멤버객체 컨트롤러단에서부터 영속화
-    @Bean
-    public FilterRegistrationBean<OpenEntityManagerInViewFilter> openEntityManagerInViewFilter() {
-
-        FilterRegistrationBean<OpenEntityManagerInViewFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
-        filterFilterRegistrationBean.setFilter(new OpenEntityManagerInViewFilter());
-        filterFilterRegistrationBean.setOrder(Integer.MIN_VALUE);
-        return filterFilterRegistrationBean;
-
-    }
+//
+//    //AuthenticationPrincipal 멤버객체 컨트롤러단에서부터 영속화
+//    @Bean
+//    public FilterRegistrationBean<OpenEntityManagerInViewFilter> openEntityManagerInViewFilter() {
+//
+//        FilterRegistrationBean<OpenEntityManagerInViewFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
+//        filterFilterRegistrationBean.setFilter(new OpenEntityManagerInViewFilter());
+//        filterFilterRegistrationBean.setOrder(Integer.MIN_VALUE);
+//        return filterFilterRegistrationBean;
+//
+//    }
 
 }

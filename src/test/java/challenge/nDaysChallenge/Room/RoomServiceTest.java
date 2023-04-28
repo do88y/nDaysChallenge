@@ -94,7 +94,7 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoom groupRoom = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
 
@@ -115,8 +115,8 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        RoomResponseDto room1 = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
-        roomService.singleRoom(member, "운동", period, Category.ROUTINE, 2, "");
+        RoomResponseDto room1 = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
+        roomService.singleRoom(member.getId(), "운동", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
@@ -162,7 +162,7 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom1 = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoom groupRoom1 = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
 
@@ -183,14 +183,14 @@ public class RoomServiceTest {
                 .build();
         em.persist(member);
 
-        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        RoomResponseDto room = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
 
         em.flush();
         em.clear();
 
         //when
         Long roomNumber = room.getRoomNumber();
-        roomService.deleteRoom(member, room.getRoomNumber());
+        roomService.deleteRoom(member.getId(), room.getRoomNumber());
 
         //then
         assertThat(roomRepository.findByNumber(roomNumber).get());
@@ -240,8 +240,8 @@ public class RoomServiceTest {
         em.flush();
         em.clear();
 
-        List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
-        List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
+        List<SingleRoom> singleRooms = roomService.findSingleRooms(member.getId());
+        List<GroupRoom> groupRooms = roomService.findGroupRooms(member.getId());
 
         //then
         assertThat(singleRooms.size()).isEqualTo(2);
@@ -290,7 +290,7 @@ public class RoomServiceTest {
         em.clear();
 
         //when
-        List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member);
+        List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member.getId());
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(2);
@@ -330,7 +330,7 @@ public class RoomServiceTest {
         em.clear();
 
         //when
-        List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member);
+        List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member.getId());
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(2);
@@ -376,13 +376,13 @@ public class RoomServiceTest {
                 .authority(Authority.ROLE_USER)
                 .build();
         memberRepository.save(member);
-        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        RoomResponseDto roomDto = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
 
         //when
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
 
         em.flush();
         em.clear();

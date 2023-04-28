@@ -1,5 +1,5 @@
 ### 어드민
 
 ### 메인페이지
-GET http://localhost:8080/admin/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzRAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODI0MDQ1MDV9.z_qUfh58gdI9JMzOXG-i2uvdRX1QarSOhOS0UsgtKPA
+GET {{review-api}}/admin/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjYzODI1fQ.b5CwSseC6pa9IKi0yWu5siljRFAyJefE4I2QPQmerTs

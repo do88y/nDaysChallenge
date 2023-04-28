@@ -34,18 +34,20 @@ public class RoomService {
     /**
      * 챌린지 조회(메인)
      */
-    public List<SingleRoom> findSingleRooms(Member member) {
-        return singleRoomRepository.findSingleRooms(member);
+    public List<SingleRoom> findSingleRooms(String id) {
+        return singleRoomRepository.findSingleRooms(id);
     }
-    public List<GroupRoom> findGroupRooms(Member member) {
-        return groupRoomRepository.findGroupRooms(member);
+    public List<GroupRoom> findGroupRooms(String id) {
+        return groupRoomRepository.findGroupRooms(id);
     }
 
     /**
      * 개인 챌린지 생성
      */
     @Transactional
-    public RoomResponseDto singleRoom(Member member, String name, Period period, Category category, int passCount, String reward) {
+    public RoomResponseDto singleRoom(String id, String name, Period period, Category category, int passCount, String reward) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
 
         //챌린지 생성
         SingleRoom newRoom = new SingleRoom(name, new Period(period.getStartDate(), period.getTotalDays()), category, passCount, reward);
@@ -67,7 +69,9 @@ public class RoomService {
      * 그룹 챌린지 생성
      */
     @Transactional
-    public GroupRoom groupRoom(Member member, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
+    public GroupRoom groupRoom(String id, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
 
         //엔티티 조회
         Set<Member> memberList = new HashSet<>();
@@ -110,7 +114,7 @@ public class RoomService {
      * 스탬프 찍기
      */
     @Transactional
-    public StampDto updateStamp(Member member, Long roomNumber, StampDto dto) {
+    public StampDto updateStamp(String id, Long roomNumber, StampDto dto) {
 
         //엔티티 조회
         Stamp stamp = stampRepository.findById(dto.getStampNumber()).orElseThrow(
@@ -140,7 +144,7 @@ public class RoomService {
      * 챌린지 삭제
      */
     @Transactional
-    public void deleteRoom(Member member, Long roomNumber) {
+    public void deleteRoom(String id, Long roomNumber) {
 
         //엔티티 조회
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
@@ -175,16 +179,16 @@ public class RoomService {
     /**
      * 전체 완료 챌린지 조회
      */
-    public List<SingleRoom> findFinishedSingleRooms(Member member) {
+    public List<SingleRoom> findFinishedSingleRooms(String id) {
         try {
-            return singleRoomRepository.finishedSingleRooms(member);
+            return singleRoomRepository.finishedSingleRooms(id);
         } catch (Exception e) {
             throw new RuntimeException("완료된 개인 챌린지가 없습니다.");
         }
     }
-    public List<GroupRoom> findFinishedGroupRooms(Member member) {
+    public List<GroupRoom> findFinishedGroupRooms(String id) {
         try {
-            return groupRoomRepository.finishedGroupRoom(member);
+            return groupRoomRepository.finishedGroupRoom(id);
         } catch (Exception e) {
             throw new RuntimeException("완료된 단체 챌린지가 없습니다.");
         }

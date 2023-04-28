@@ -117,7 +117,7 @@ public class MemberServiceTest {
         MemberEditRequestDto memberEditRequestDto = new MemberEditRequestDto("123", "abc", 4);
 
         //when
-        MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member, memberEditRequestDto);
+        MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member.getNickname(), memberEditRequestDto);
 
         //then
         assertThat(memberInfoResponseDto.getNickname()).isEqualTo(memberEditRequestDto.getNickname());
@@ -138,10 +138,10 @@ public class MemberServiceTest {
         List<Stamp> stamps = Arrays.asList(stamp);
 
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-        when(singleRoomRepository.findAll(member));
+        when(singleRoomRepository.findAll(member.getId()));
         when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member));
-        when(singleRoomRepository.findStampByMember(member));
+        when(groupRoomRepository.findAll(member.getId()));
+        when(singleRoomRepository.findStampByMember(member.getId()));
 //        when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
 
         Dajim dajim1 = Dajim.builder()
@@ -163,7 +163,7 @@ public class MemberServiceTest {
 
         //when
         doNothing().when(memberRepository).delete(member);
-        String nickname = memberService.deleteMember(member);
+        String nickname = memberService.deleteMember(member.getNickname());
 
         //then
         assertThat(nickname).isEqualTo(memberRequestDto.getNickname());

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,9 +46,8 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //로그아웃
     @PostMapping("/auth/logout")
-    public ResponseEntity<String> logout (@AuthenticationPrincipal MemberAdapter memberAdapter){
-        String id = memberAdapter.getMember().getId();
-        authService.logout(id);
+    public ResponseEntity<String> logout (Principal principal){
+        authService.logout(principal.getName());
 
         URI location = URI.create("/");
 
@@ -56,8 +56,8 @@ public class AuthController { //회원가입 & 로그인 & 토큰 재발급
 
     //토큰 재발급
     @PostMapping("/auth/reissue")
-    public ResponseEntity<TokenResponseDto> reissue (@RequestBody TokenRequestDto tokenRequestDto, @AuthenticationPrincipal MemberAdapter memberAdapter){
-        TokenResponseDto tokenResponseDto = authService.reissue(tokenRequestDto, memberAdapter.getMember().getId());
+    public ResponseEntity<TokenResponseDto> reissue (@RequestBody TokenRequestDto tokenRequestDto, Principal principal){
+        TokenResponseDto tokenResponseDto = authService.reissue(tokenRequestDto, principal.getName());
         return ResponseEntity.ok().body(tokenResponseDto);
     }
 

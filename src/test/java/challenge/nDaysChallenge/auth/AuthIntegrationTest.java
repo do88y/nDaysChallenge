@@ -5,8 +5,10 @@ import challenge.nDaysChallenge.controller.AuthController;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
+import challenge.nDaysChallenge.repository.jwt.RefreshTokenRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.service.jwt.AuthService;
+import challenge.nDaysChallenge.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
@@ -14,24 +16,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.head;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = NDaysChallengeApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,32 +57,27 @@ public class AuthIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private AuthService authService;
 
-    @Test
-    public void 회원가입() throws Exception{
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc123@naver.com", "123", "닉네임", 4);
+    @Autowired
+    private MemberService memberService;
 
-        mockMvc.perform(
-                post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRequestDto))
-        ).andExpect(status().isOk());
+    @BeforeTransaction
+    public void 회원가입() {
+        MemberRequestDto memberRequestDto = new MemberRequestDto("test@naver.com", "123", "nickkk", 4);
+
+        authService.signup(memberRequestDto);
+    }
+
+    @AfterTransaction
+    public void 회원삭제(){
+        memberService.deleteMember("test@naver.com");
     }
 
     @Test
+    @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "test@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void 로그인() throws Exception{
-        //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com", "123", "닉네임22", 4);
-
-        mockMvc.perform(
-                post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRequestDto))
-        ).andExpect(status().isOk());
-
-        //로그인
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abc1@naver.com","123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("test@naver.com","123");
 
         mockMvc.perform(
                 post("/auth/login")
@@ -81,18 +87,10 @@ public class AuthIntegrationTest {
     }
 
     @Test
+    @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "test@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void 로그아웃() throws Exception{
-        //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc12@naver.com", "123", "닉네임3", 4);
-
-        mockMvc.perform(
-                post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRequestDto))
-        ).andExpect(status().isOk());
-
         //로그인
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abc12@naver.com","123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("test@naver.com","123");
 
         MvcResult result = mockMvc.perform(
                 post("/auth/login")
@@ -101,29 +99,16 @@ public class AuthIntegrationTest {
         ).andExpect(status().isOk()).andReturn();
 
         //로그아웃
-        String response = result.getResponse().getContentAsString(); //로그인 시 받은 Responsebody
-        String accessToken = response.substring(response.indexOf("accessToken")+14, response.indexOf("refreshToken")-3); //중 AccessToken 값만 요청 헤더에 넣기
-
-        System.out.println(accessToken);
         mockMvc.perform(
                 post("/auth/logout")
-                        .header("Authorization", "Bearer "+accessToken) //설정한 Authorization 형식
-        ).andExpect(status().isOk());
+        ).andExpect(status().isMovedPermanently());
     }
 
     @Test
+    @WithUserDetails(userDetailsServiceBeanName = "customUserDetailsService", value = "test@naver.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void 토큰_재발급() throws Exception{
-        //회원가입
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abcd12@naver.com", "123", "닉네임4", 4);
-
-        mockMvc.perform(
-                post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRequestDto))
-        ).andExpect(status().isOk());
-
-        //로그인
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abcd12@naver.com","123");
+        //로그인 -> 액세스, 리프레쉬 토큰 확인
+        LoginRequestDto loginRequestDto = new LoginRequestDto("test@naver.com","123");
 
         MvcResult result = mockMvc.perform(
                 post("/auth/login")
@@ -131,11 +116,11 @@ public class AuthIntegrationTest {
                         .content(objectMapper.writeValueAsString(loginRequestDto))
         ).andExpect(status().isOk()).andReturn();
 
-        //액세스토큰 재발급
         String response = result.getResponse().getContentAsString();
         String accessToken = response.substring(response.indexOf("accessToken")+14, response.indexOf("refreshToken")-3);
         String refreshToken = response.substring(response.indexOf("refreshToken")+15, response.indexOf("accessTokenExpireTime")-3);
 
+        //액세스토큰 재발급
         TokenRequestDto tokenRequestDto = new TokenRequestDto(accessToken, refreshToken);
 
         MvcResult newAccessToken = mockMvc.perform(
@@ -147,7 +132,6 @@ public class AuthIntegrationTest {
 
         System.out.println("기존 액세스, 리프레시 토큰 : " + response);
         System.out.println("재발급한 액세스, 리프레시 토큰 : " + newAccessToken.getResponse().getContentAsString());
-        //오류 발생 => 액세스토큰 값이 변하지 않음
     }
 
 }
