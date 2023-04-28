@@ -82,21 +82,21 @@ public class RoomQueryTest {
 
     }
 
-    @Test
-    void find_member_room() throws Exception {
-        //given
-        List<GroupRoom> groupRooms = makeGroupRooms();
-        List<Member> members = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            members.add(member);
-
-        }
-
-        //when
-
-        //then
-
-    }
+//    @Test
+//    void find_member_room() throws Exception {
+//        //given
+//        List<GroupRoom> groupRooms = makeGroupRooms();
+//        List<Member> members = new ArrayList<>();
+//        for (int i = 0; i < 9; i++) {
+//            members.add(member);
+//
+//        }
+//
+//        //when
+//
+//        //then
+//
+//    }
 
     List<SingleRoom> makeSingleRooms() {
         List<SingleRoom> singleRooms = new ArrayList<>();

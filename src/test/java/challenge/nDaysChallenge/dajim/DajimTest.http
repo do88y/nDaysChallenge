@@ -1,7 +1,7 @@
 ### 다짐 등록
 POST http://localhost:8080/challenge/6/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MTAyNzQ5OX0.sFQYvr6nBtDJbHGwWbvWuRzYTu_PC6dnqO65BXJXMKM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..sFQYvr6nBtDJbHGwWbvWuRzYTu_PC6dnqO65BXJXMKM
 
 {
   "content": "",
@@ -25,10 +25,10 @@ Content-Type: application/json
 Authorization: Bearer
 
 ### 피드 조회 (미로그인)
-GET http://localhost:8080/feed
+GET {{review-api}}/feed?page=0
 Content-Type: application/json
 
 ### 피드 조회 (로그인)
 GET http://localhost:8080/feed
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MTAyNzQ5OX0.sFQYvr6nBtDJbHGwWbvWuRzYTu_PC6dnqO65BXJXMKM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzRAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODI2NTI4Mzd9.myT3PfunIEF96nlALnieF2MBSnkTM9DzrO-W4v6OnmU

@@ -15,22 +15,22 @@ public interface GroupRoomRepository extends JpaRepository<GroupRoom, Long> {
     @Query(value = "select g from GroupRoom g" +
             " left join RoomMember rm" +
             " on g.number = rm.room.number" +
-            " where rm.member = :member" +
+            " where rm.member.id = :id" +
             " and g.status = 'CONTINUE'")
-    List<GroupRoom> findGroupRooms(@Param("member") Member member);
+    List<GroupRoom> findGroupRooms(@Param("id") String id);
 
     //완료 그룹 챌린지
     @Query(value = "select g from GroupRoom g" +
             " left join RoomMember rm" +
             " on g.number = rm.room.number" +
-            " where rm.member = :member" +
+            " where rm.member.id = :id" +
             " and g.status = 'END'")
-    List<GroupRoom> finishedGroupRoom(@Param("member") Member member);
+    List<GroupRoom> finishedGroupRoom(@Param("id") String id);
 
     @Query(value = "select g from GroupRoom g" +
             " left join RoomMember rm" +
             " on g.number = rm.room.number" +
-            " where rm.member = :member")
-    List<GroupRoom> findAll(@Param("member") Member member);
+            " where rm.member.id = :id")
+    List<GroupRoom> findAll(@Param("id") String id);
 
 }

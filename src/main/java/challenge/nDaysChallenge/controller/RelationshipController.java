@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,14 +30,9 @@ public class RelationshipController {
 
     //닉네임, 아이디로 검색//
     @GetMapping("/friends/find")
-    public ResponseEntity<?> findFriends(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> findFriends(Principal principal,
                                          @RequestParam(value = "id", required = false, defaultValue = "") String id,
                                          @RequestParam(value = "nickname", required = false, defaultValue = "") String nickname) {
-        //로그인 확인
-        if (memberAdapter == null) {
-            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
-        }
-
         Member foundFriend = relationshipService.findFriends(id, nickname);
 
         FindFriendsResponseDTO foundFriendDTO = new FindFriendsResponseDTO(
@@ -49,19 +46,19 @@ public class RelationshipController {
 
     //친구 요청 post//
     @PostMapping("/friends/request")
-    public ResponseEntity<?> postViewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public ResponseEntity<?> postViewRequestFriend(Principal principal,
                                                @RequestBody RelationshipRequestDTO applyDTO) {
 
-        List<AskResponseDTO> savedRequestFriendsList = relationshipService.saveRelationship(memberAdapter.getMember(),applyDTO);
+        List<AskResponseDTO> savedRequestFriendsList = relationshipService.saveRelationship(principal.getName(),applyDTO);
 
         return ResponseEntity.ok().body(savedRequestFriendsList);
     }
 
     //친구 요청 get//
     @GetMapping("/friends/request")
-    public ResponseEntity<?> getViewRequestFriend(@AuthenticationPrincipal MemberAdapter memberAdapter){
+    public ResponseEntity<?> getViewRequestFriend(Principal principal){
         //바로 repository 꺼 쓰기//
-        List<Relationship> savedRequestFriendsList = relationshipRepository.findRelationshipByFriendAndStatus(memberAdapter.getMember());
+        List<Relationship> savedRequestFriendsList = relationshipRepository.findRelationshipByFriendAndStatus(principal.getName());
         List<AskResponseDTO> askResponseDTOList =RelationshipService.createResponseDTO(savedRequestFriendsList);
 
         return ResponseEntity.ok().body(askResponseDTOList);
@@ -69,10 +66,8 @@ public class RelationshipController {
 
     //친구 수락==친구목록 //
     @PostMapping("/friends/accept")
-    public ResponseEntity<?> acceptFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                @RequestBody RelationshipRequestDTO applyDTO) {
-
-        List<AcceptResponseDTO> acceptRelationship = relationshipService.acceptRelationship(memberAdapter.getMember(), applyDTO);
+    public ResponseEntity<?> acceptFriendStatus(Principal principal, @RequestBody RelationshipRequestDTO applyDTO) {
+        List<AcceptResponseDTO> acceptRelationship = relationshipService.acceptRelationship(principal.getName(), applyDTO);
 
         return ResponseEntity.ok().body(acceptRelationship);
 
@@ -80,9 +75,9 @@ public class RelationshipController {
 
 
     @GetMapping("/friends/accept")
-    public ResponseEntity<?> getAcceptFriendStatus(@AuthenticationPrincipal MemberAdapter memberAdapter){
+    public ResponseEntity<?> getAcceptFriendStatus(Principal principal){
         //바로 repository 꺼 쓰기//
-        List<Relationship> acceptRelationship = relationshipRepository.findRelationshipByUserAndStatus(memberAdapter.getMember());
+        List<Relationship> acceptRelationship = relationshipRepository.findRelationshipByUserAndStatus(principal.getName());
         List<AcceptResponseDTO> acceptResponseDTOList = new ArrayList<>();
 
         for (Relationship relationship : acceptRelationship) {
@@ -101,10 +96,8 @@ public class RelationshipController {
 
     //요청거절 relationship 객채 삭제//
     @DeleteMapping("/friends/request")
-    public ResponseEntity<?> deleteFriendStatus( @AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                 @RequestBody RelationshipRequestDTO applyDTO ) {
-
-        List<AcceptResponseDTO> friendList = relationshipService.deleteEachRelation(memberAdapter.getMember(), applyDTO);
+    public ResponseEntity<?> deleteFriendStatus(Principal principal, @RequestBody RelationshipRequestDTO applyDTO ) {
+        List<AcceptResponseDTO> friendList = relationshipService.deleteEachRelation(principal.getName(), applyDTO);
 
         return ResponseEntity.ok().body(friendList);
     }

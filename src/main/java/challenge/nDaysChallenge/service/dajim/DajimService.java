@@ -13,6 +13,7 @@ import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +44,15 @@ public class DajimService {
 
     private final RoomRepository roomRepository;
 
+    private final MemberRepository memberRepository;
+
     //다짐 등록
-    public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, Member member) {
-        //if문으로 다짐 존재 체크 (같은 룸-멤버에선 하나의 다짐만 허용)
-        if (dajimRepository.findByMemberNumberAndRoomNumber(member.getNumber(), roomNumber).isPresent()){
+    public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, String id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
+        //다짐 존재 여부 확인 (같은 룸-멤버에선 하나의 다짐만 허용)
+        if (dajimRepository.findByMemberIdAndRoomNumber(id, roomNumber).isPresent()){
             throw new RuntimeException("이미 존재하는 다짐입니다.");
         }
 
@@ -55,17 +61,15 @@ public class DajimService {
 
         Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto.getContent(), dajimUploadRequestDto.getOpen());
 
-        dajimRepository.save(newDajim);
-
-        return DajimResponseDto.of(newDajim);
+        return DajimResponseDto.of(dajimRepository.save(newDajim));
     }
 
     //다짐 수정
-    public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, Member member) {
-        Dajim dajim = dajimRepository.findByMemberNumberAndRoomNumber(member.getNumber(), roomNumber)
+    public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, String id) {
+        Dajim dajim = dajimRepository.findByMemberIdAndRoomNumber(id, roomNumber)
                 .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
 
-        checkRoomAndMember(dajim, member, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
+        checkRoomAndMember(dajim, id, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
 
         Dajim updatedDajim = dajim.update(Open.valueOf(dajimUpdateRequestDto.getOpen()), dajimUpdateRequestDto.getContent());
 
@@ -82,8 +86,8 @@ public class DajimService {
     }
 
     //다짐 수정 시 작성자/룸 체크
-    private void checkRoomAndMember(Dajim dajim, Member member, Long roomNumber){
-        if (dajim.getMember()!=member || dajim.getRoom().getNumber()!=roomNumber){
+    private void checkRoomAndMember(Dajim dajim, String id, Long roomNumber){
+        if (dajim.getMember().getId()!=id || dajim.getRoom().getNumber()!=roomNumber){
             throw new RuntimeException("해당 챌린지 룸에 대한 접근 권한이 없습니다.");
         }
     }

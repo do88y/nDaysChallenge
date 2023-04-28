@@ -15,17 +15,17 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Long
 
 
 
-
-    Relationship findByUserAndFriend(Member user, Member friend);
+    @Query("select r from Relationship r where r.user.id=:myId and r.friend.id=:friendId")
+    Relationship findByUserIdAndFriendId(String myId, String friendId);
 
 
     //친구 요청시 시행되는 쿼리//
-    @Query("select r from Relationship r where r.user=:user and r.status='REQUEST'")
-    public List<Relationship>findRelationshipByFriendAndStatus(@Param("user")Member friend);
+    @Query("select r from Relationship r where r.user.id=:myId and r.status='REQUEST'")
+    List<Relationship>findRelationshipByFriendAndStatus(@Param("myId") String myId);
 
 
     //친구 수락시 시행되는 쿼리//
-    @Query("select r from Relationship r where r.user=:user and r.status='ACCEPT'")
-    public List<Relationship> findRelationshipByUserAndStatus(@Param("user")Member member);
+    @Query("select r from Relationship r where r.user.id=:myId and r.status='ACCEPT'")
+    List<Relationship> findRelationshipByUserAndStatus(@Param("myId") String myId);
 
 }

@@ -133,10 +133,11 @@ public class DajimServiceTest {
         DajimUploadRequestDto dajimUploadRequestDto = new DajimUploadRequestDto("내용", "PUBLIC");
 
         //when
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         when(roomRepository.findByNumber(any())).thenReturn(Optional.of(room));
         when(dajimRepository.save(any())).thenReturn(dajim);
 
-        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(room.getNumber(), dajimUploadRequestDto, member);
+        DajimResponseDto dajimResponseDto = dajimService.uploadDajim(room.getNumber(), dajimUploadRequestDto, member.getId());
 
         //then
         assertThat(dajimResponseDto.getContent()).isEqualTo(dajimUploadRequestDto.getContent());
@@ -149,8 +150,8 @@ public class DajimServiceTest {
         DajimUpdateRequestDto dajimUpdateRequestDto = new DajimUpdateRequestDto(dajim.getNumber(), "수정한 내용", "PRIVATE");
 
         //when
-        when(dajimRepository.findByMemberNumberAndRoomNumber(any(),any())).thenReturn(Optional.ofNullable(dajim));
-        DajimResponseDto dajimResponseDto = dajimService.updateDajim(room.getNumber(), dajimUpdateRequestDto, member);
+        when(dajimRepository.findByMemberIdAndRoomNumber(any(),any())).thenReturn(Optional.ofNullable(dajim));
+        DajimResponseDto dajimResponseDto = dajimService.updateDajim(room.getNumber(), dajimUpdateRequestDto, member.getId());
 
         //then
         assertThat(dajimResponseDto.getContent()).isEqualTo(dajimUpdateRequestDto.getContent());
@@ -195,8 +196,9 @@ public class DajimServiceTest {
         Slice<Dajim> dajimPage = new CustomSliceImpl<>(dajims, Pageable.ofSize(10).withPage(0), false); //피드 다짐 페이징 객체(슬라이스)
 
         //when
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         when(dajimRepository.findByOpen(Open.PUBLIC, Pageable.ofSize(10).withPage(0))).thenReturn(dajimPage);
-        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedLoggedIn(member, Pageable.ofSize(10).withPage(0));
+        Slice<DajimFeedResponseDto> dajimFeedPage = dajimFeedService.viewFeedLoggedIn(member.getId(), Pageable.ofSize(10).withPage(0));
 
         //then
         assertThat(dajimFeedPage.getContent().size()).isEqualTo(2);
