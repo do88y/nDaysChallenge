@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.repository.room;
 
 import challenge.nDaysChallenge.domain.room.RoomStatus;
-import challenge.nDaysChallenge.domain.room.RoomType;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.QAdminRoomResponseDto;
 import com.querydsl.core.QueryResults;
@@ -14,10 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static challenge.nDaysChallenge.domain.member.QMember.*;
 import static challenge.nDaysChallenge.domain.room.QGroupRoom.*;

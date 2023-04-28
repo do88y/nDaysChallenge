@@ -1,8 +1,10 @@
-package challenge.nDaysChallenge.service;
+package challenge.nDaysChallenge.admin;
 
 import challenge.nDaysChallenge.domain.Report;
+import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Room;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +25,15 @@ import java.util.NoSuchElementException;
 @Transactional(readOnly = true)
 public class AdminService {
 
+    private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
     private final ReportRepository reportRepository;
+
+    public Member loadUserByUsername(String id) throws UsernameNotFoundException {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("id를 찾을 수 없습니다."));
+        return member;
+    }
 
     //챌린지 조회(멤버 id, 챌린지 상태)
     public Page<AdminRoomResponseDto> findRooms(RoomSearch roomSearch, Pageable pageable) {

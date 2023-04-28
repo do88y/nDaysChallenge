@@ -125,9 +125,8 @@ public class RoomController {
 
         checkLogin(memberAdapter.getMember());
 
-        List<SingleRoom> findSingleRooms = roomService.findFinishedSingleRooms(memberAdapter.getMember());
-        List<GroupRoom> findGroupRooms = roomService.findFinishedGroupRooms(memberAdapter.getMember());
-        return getResponseEntity(findSingleRooms, findGroupRooms);
+        List<RoomResponseDto> roomList = roomService.findFinishedSingleRooms(memberAdapter.getMember());
+        return ResponseEntity.status(HttpStatus.OK).body(roomList);
     }
 
 

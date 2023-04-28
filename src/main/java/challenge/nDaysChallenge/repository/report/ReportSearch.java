@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.repository.report;
+package challenge.nDaysChallenge.admin;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,9 +16,6 @@ public class ReportSearch {
     }
 
     public ReportSearch(Boolean isDajim, Long dajimNumber) {
-        if (isDajim == null) {
-            this.isDajim = null;
-        }
         this.isDajim = isDajim;
         this.dajimNumber = dajimNumber;
     }

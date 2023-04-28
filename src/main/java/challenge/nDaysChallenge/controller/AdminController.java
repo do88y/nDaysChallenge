@@ -1,16 +1,8 @@
-package challenge.nDaysChallenge.controller;
+package challenge.nDaysChallenge.admin;
 
 import challenge.nDaysChallenge.domain.Report;
-import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
-import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
-import challenge.nDaysChallenge.dto.response.ReportResponseDto;
-import challenge.nDaysChallenge.dto.response.jwt.TokenResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.repository.report.ReportRepository;
-import challenge.nDaysChallenge.repository.report.ReportSearch;
-import challenge.nDaysChallenge.repository.room.RoomSearch;
-import challenge.nDaysChallenge.service.AdminService;
-import challenge.nDaysChallenge.service.jwt.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,32 +25,6 @@ public class AdminController {
 
     private final AdminService adminService;
     private final ReportRepository reportRepository;
-    private final AuthService authService;
-
-    //메인페이지
-    @GetMapping
-    public String main(Model model) {
-        model.addAttribute("loginRequestDto", new LoginRequestDto());
-        return "admin/main";
-    }
-
-    //관리자 로그인
-    @PostMapping("/login")
-    public String login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        // 토큰 생성
-        TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
-
-        Cookie cookie = new Cookie(
-                "access_token",
-                tokenResponseDto.getAccessToken());
-
-        cookie.setPath("/admin/menu");
-        cookie.setMaxAge(Integer.MAX_VALUE);
-
-        response.addCookie(cookie);
-
-        return "redirect:/admin/menu";
-    }
 
     //메뉴
     @GetMapping("/menu")
@@ -68,6 +32,9 @@ public class AdminController {
         return "admin/menu";
     }
 
+    /**
+     * 챌린지
+     */
     //챌린지 관리자 페이지
     @GetMapping("/challenge")
     public String challenge() {
@@ -75,7 +42,7 @@ public class AdminController {
     }
 
     //챌린지 조회(id, status)
-    @PostMapping("challenge/search")
+    @PostMapping("/challenge/search")
     public String findRoomResult(RoomSearch roomSearch, Pageable pageable,
                                  Model model, RedirectAttributes redirectAttributes) {
 
@@ -94,7 +61,7 @@ public class AdminController {
     }
 
     //챌린지 삭제 - 여러개 동시에
-    @PostMapping("challenge/delete")
+    @PostMapping("/challenge/delete")
     public String deleteRoom(DeleteRoomRequestDto dto, RedirectAttributes redirectAttributes) {
 
         adminService.deleteRoom(dto.getNumbers());
@@ -106,6 +73,9 @@ public class AdminController {
         return "redirect:/admin/challenge";
     }
 
+    /**
+     * 신고
+     */
     //신고 관리 페이지
     @GetMapping("/report")
     public String report(Model model) {
@@ -136,7 +106,7 @@ public class AdminController {
     }
 
     //신고 삭제
-    @PostMapping("report/delete")
+    @PostMapping("/report/delete")
     public String deleteReport(DeleteRoomRequestDto dto) {
 
         adminService.deleteReport(dto.getNumbers());
