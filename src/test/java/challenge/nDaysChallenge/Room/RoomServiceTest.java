@@ -12,7 +12,6 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import org.junit.Test;
@@ -184,16 +183,15 @@ public class RoomServiceTest {
         em.persist(member);
 
         RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
-
         em.flush();
         em.clear();
 
         //when
-        Long roomNumber = room.getRoomNumber();
-        roomService.deleteRoom(member, room.getRoomNumber());
+        Member findMember = singleRoomRepository.findMemberByRoomNumber(room.getRoomNumber()).get();
+        roomService.deleteRoom(findMember, room.getRoomNumber());
 
         //then
-        assertThat(roomRepository.findByNumber(roomNumber).get());
+        assertThat(roomRepository.findByNumber(room.getRoomNumber()).get());
 
         fail("exception should be accrued");
     }
@@ -290,7 +288,7 @@ public class RoomServiceTest {
         em.clear();
 
         //when
-        List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member);
+        List<RoomResponseDto> finishedRooms = roomService.findFinishedSingleRooms(member);
 
         //then
         assertThat(finishedRooms.size()).isEqualTo(2);
