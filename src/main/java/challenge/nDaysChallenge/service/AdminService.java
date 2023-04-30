@@ -1,18 +1,26 @@
-package challenge.nDaysChallenge.admin;
+package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
+import challenge.nDaysChallenge.dto.response.AdminLoginDto;
+import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,11 +37,22 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
     private final ReportRepository reportRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public Member loadUserByUsername(String id) throws UsernameNotFoundException {
-        Member member = memberRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("id를 찾을 수 없습니다."));
-        return member;
+    public AdminLoginDto login(LoginRequestDto loginRequestDto) {
+        //id, pw 검증
+        Member member = memberRepository.findById(loginRequestDto.getId())
+                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일입니다."));
+
+        if (!passwordEncoder.matches(loginRequestDto.getPw(), member.getPw())){
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        return AdminLoginDto.builder()
+                .id(member.getId())
+                .auth(member.getAuthority())
+                .build();
     }
 
     //챌린지 조회(멤버 id, 챌린지 상태)

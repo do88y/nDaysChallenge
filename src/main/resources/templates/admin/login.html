@@ -10,7 +10,8 @@
     <div class="py-5 text-center">
         <h2>관리자 페이지</h2>
     </div>
-    <form th:action="@{/admin/login}" th:object="${loginRequestDto}"  method="post">
+    <form th:action th:object="${loginRequestDto}"  method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="row g-3 align-items-center justify-content-center">
             <div class="col-auto">
                 <label class="form-label" for="id">아이디</label>

@@ -1,6 +1,5 @@
 package challenge.nDaysChallenge.Room;
 
-import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.member.Authority;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Category;

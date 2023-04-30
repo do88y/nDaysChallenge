@@ -392,5 +392,4 @@ public class RoomServiceTest {
 
     //기간
     Period period = new Period(LocalDate.now(),30);
-
 }

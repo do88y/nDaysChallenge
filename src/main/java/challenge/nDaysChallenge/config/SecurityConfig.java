@@ -12,11 +12,13 @@ import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -57,7 +59,7 @@ public class SecurityConfig {
             .and()
             .cors().configurationSource(corsConfigurationSource())
 
-            //Security Filter에서 발생하는 인증, 인가 오류 처리
+            //Security Filter에서 발생하는 인증, 인가 오류처리
             .and()
             .exceptionHandling()
             .authenticationEntryPoint(customAuthenticationEntryPoint) //인증 에러 핸들링
@@ -75,7 +77,6 @@ public class SecurityConfig {
             .apply(new JwtSecurityConfig(tokenProvider));
 
         return http.build();
-
     }
 
 //    CORS 허용

@@ -1,4 +1,4 @@
-package challenge.nDaysChallenge.admin;
+package challenge.nDaysChallenge.repository.report;
 
 import lombok.AccessLevel;
 import lombok.Getter;
