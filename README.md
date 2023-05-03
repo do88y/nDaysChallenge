@@ -68,10 +68,10 @@
 ## 1.챌린지 상속을 통한 개인 챌린지와 그룹 챌린지 관리
 
 
-### - 상황
+### ❓ 상황
   개인과 그룹챌린지 모두 Room 테이블에서 생성해서 관리하도록 설계 함. 멤버의 개인 챌린지와 그룹 챌린지 리스트를 가져오는 상황에서 문제 발생. 그룹의 경우 챌린지와 멤버 사이의 RoomMember 테이블에서 따로 검색 가능하지만, 개인 챌린지의 경우 따로 만든 room_type 컬럼으로 조건 걸고 검색해야 하는 것이 객체지향스럽지 못하다고 판단함.
    
-### - 해결방법
+### ✅ 해결방법
   좀 더 객체지향적인 설계를 위해 공통 속성은 Room에 두고 GroupRoom과 SingleRoom이 Room을 상속해서 개인과 그룹챌린지를 생성할 때 각각 생성 되도록 함. InheritanceType을 SINGLE_TABLE 전략으로  설정해서 결국 처음과 같이 테이블은 하나로 생성되지만, 각각의 repository에서 관리 가능하게 되어 가독성과 관리가 쉬워짐.
 
 
@@ -79,13 +79,13 @@
 
 ## 2.JpaRepository 상속 클래스애서 동적 쿼리 생성
 
-### - 상황
+### ❓ 상황
   관리자 페이지에서 챌린지 상태와 회원 ID로 검색 할 수 있도록 하는 쿼리를 만들어야 하는데 기존에 있던 JpaRepository를 상속받는 repository에서는 구현 메서드를 만들 수 없었음.
   
-### - 원인
+### ❕ 원인
   인터페이스에서는 구현 메서드를 만들 수 없음.
 
-### - 해결방법
+### ✅ 해결방법
   인터페이스를 새로 만들어서 그 안에 추상 메서드를 만들고 구현 클래스에서 검색을 동적쿼리로 구현함. 기존 RoomRepository가 새로 만든 인터페이스를 상속받아서 RoomRepository에서 바로 챌린지 상태와 ID로 검색하는 메서드에 접근 할 수 있도록 함.
 
 
@@ -93,7 +93,7 @@
 
 ## 3. DTO-엔티티 변환
 
-### - 고민 1 : 컨트롤러, 서비스 계층 중 DTO와 엔티티를 변환할 계층 선택
+### ❓ 고민 1 : 컨트롤러, 서비스 계층 중 DTO와 엔티티를 변환할 계층 선택
 
 1. 컨트롤러 계층에서 변환
     - 장점
@@ -120,24 +120,24 @@
         컨트롤러-서비스 간 결합도가 높아짐
         
 
-### -  선택 : 서비스 계층에서의 DTO-엔티티 변환
+### ✅ 선택 : 서비스 계층에서의 DTO-엔티티 변환
 
 컨트롤러는 DTO 교환, 서비스는 비즈니스 로직에 집중하게 하는 구조가 깔끔하다고 판단함
 
 그리고 엔챌 프로젝트는 컨트롤러, 서비스가 1:1로 사용되고 있기 때문에 컨트롤러의 유연성이 필요하지 않음
 
 
-### - 고민 2 
+### ❓ 고민 2 
 서비스 메소드에서 엔티티-DTO 변환, 비즈니스 로직을 모두 작성해 코드 가독성, 관심사 분리 수준이 낮음
 
-### - 선택
+### ✅ 선택
 
 요청DTO 내부에 엔티티로 변환하는 toEntity 메소드, 응답DTO 내부에는 엔티티에서 DTO로 변환하는 of 메소드 작성
 
 
 ## 4. @AuthenticationPrincipal
 
-### - 상황 1 : @AuthenticationPrincial으로 Member 객체 반환하고자 함
+### ❓ 상황 1 : @AuthenticationPrincial으로 Member 객체 반환하고자 함
 
 서비스 코드에서 Member 엔티티를 자주 사용하므로 @AuthenticationPrincipal을 통해 Member 객체를 불러와 서비스에 바로 전달하고자 함
 
@@ -145,7 +145,7 @@
 
 하지만 도메인 객체는 다른 기술에 종속되지 않는 것이 권장됨
 
-### - 해결 : 어댑터 패턴을 적용해 User을 상속하는 MemberAdapter 클래스 생성
+### ✅ 해결 : 어댑터 패턴을 적용해 User을 상속하는 MemberAdapter 클래스 생성
 
 CustomUserDetailsService의 메소드에서 MemberAdapter 객체를 리턴받도록 코드 작성, 
 컨트롤러에서 @AuthenticationPrincipal을 통해 MemberAdapter 객체를 불러와 Member 객체 사용
@@ -185,7 +185,7 @@ ex. CustomUserDetailsService
 ```
 
 
-### - 상황 2 : 불러온 Member 객체의 준영속화  
+### ❓ 상황 2 : 불러온 Member 객체의 준영속화  
 
 스프링 프레임워크는 클라이언트 -> 필터 -> 디스패처 서블릿 -> 인터셉터 -> 컨트롤러 순서로 동작
 
@@ -195,13 +195,15 @@ Member 객체는 필터(Security Filter - UserDetailsService)를 거쳐 컨트�
 
 즉 사용자 객체는 시큐리티 필터에서 준영속화된 채 OpenEntityManagerInterceptor을 거쳐 컨트롤러에 불려옴
 
-### - 해결 : OpenEntityManagerInterceptor을 필터로 교체해 앞단에 추가
+### ✅ 해결 : OpenEntityManagerInterceptor을 필터로 교체해 앞단에 추가
 DelegatingFilterProxy 필터에서 시큐리티 필터 체인이 동작함 (이때 UserDetailsService에서 사용자 객체 반환)
 OpenEntityManagerInterceptor을 DelegatingFilterProxy 필터 앞에 추가하면 프레젠테이션 계층에 영속성 컨텍스트를 유지하도록 설정한 이후 Security Filter을 거침
 
 => UserDetailsService에서 영속화된 사용자 객체 반환받을 수 있음
 
 
-### - 고민
 
-영속성 컨텍스트를 유지해가며 DB 커넥션 연장으로 인한 장애 발생 가능성을 만드는 것보다는 Principal의 name(아이디)만 서비스로 전달하고, 필요한 메소드에서 레포지토리를 통해 Member 객체를 불러오는 것이 효율적이고 안전할 것 같아 고민 후 수정할 예정
+### ❓✅ 고민 및 해결 : Principal로 로그인 사용자 정보 가져오기
+앞선 해결책이 영속성 컨텍스트, DB 커넥션를 연장해 장애 발생 가능성이 높아진다는 것을 알게 됨.
+이에 따라 Principal의 name(아이디)만 서비스로 전달하고, 필요한 메소드에서 레포지토리를 통해 Member 객체를 불러오는 것으로 수정
+
