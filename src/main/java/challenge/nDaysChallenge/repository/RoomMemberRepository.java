@@ -21,14 +21,11 @@ public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
     public Set<RoomMember> findByRoom(Room room);
 
-    @Query("select rm.stamp from RoomMember rm where rm.room = :room and rm.member = :member")
-    Stamp findStampByRoomAndMember(@Param("room") Room room, @Param("member") Member member);
-
     @Query("select rm.stamp from RoomMember rm where rm.member = :member")
     List<Stamp> findStampByMember(@Param("member") Member member);
 
-    @Query("select rm.stamp from RoomMember rm where rm.room = :room")
-    List<Stamp> findStampByRoom(@Param("room") Room room);
+    @Query("select rm.member from RoomMember rm where rm.stamp =:stamp")
+    Member findMemberByStamp(@Param("stamp") Stamp stamp);
 
     @Query("SELECT r FROM RoomMember r WHERE r.member.nickname = :nickname")
     Optional<List<RoomMember>> findAllByMemberNickname(@Param("nickname") String nickname);

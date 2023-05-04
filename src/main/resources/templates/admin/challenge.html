@@ -6,12 +6,23 @@
     <title>관리자 페이지</title>
 </head>
 <body>
+
 <div class="container">
     <div class="py-5 text-center">
         <h2>챌린지 관리</h2>
     </div>
+
     <form th:action="@{challenge/search}" th:object="${roomSearch}" method="post">
         <div class="row g-3 align-items-center justify-content-center">
+            <div class="col-auto">
+                <label for="type">타입:</label>
+            </div>
+            <div class="col-auto">
+                <select class="form-control form-select" id="type" name="type">
+                    <option value="SINGLE">개인</option>
+                    <option value="GROUP">그룹</option>
+                </select>
+            </div>
             <div class="col-auto">
                 <label for="status">상태:</label>
             </div>
@@ -70,8 +81,18 @@
                 </tr>
             </tbody>
         </table>
+
+        <nav style="text-align: center;">
+            <ul th:with="strat=${(challenges.)}">
+                <li>
+                    <a></a>
+                </li>
+            </ul>
+        </nav>
+
         <button class="btn btn-primary float-end" type="submit">삭제</button>
     </form>
 </div> <!-- container -->
+
 </body>
 </html>

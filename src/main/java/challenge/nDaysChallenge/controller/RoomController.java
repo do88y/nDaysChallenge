@@ -1,7 +1,6 @@
 package challenge.nDaysChallenge.controller;
 
 import challenge.nDaysChallenge.domain.Stamp;
-import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;
@@ -9,7 +8,6 @@ import challenge.nDaysChallenge.dto.request.Room.RoomRequestDto;
 import challenge.nDaysChallenge.dto.request.StampDto;
 import challenge.nDaysChallenge.dto.response.room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
-import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -100,9 +98,9 @@ public class RoomController {
     //마이페이지 - 완료 챌린지 조회
     @GetMapping("/user/challenges")
     public ResponseEntity<?> finishedRooms(Principal principal) {
-        List<SingleRoom> findSingleRooms = roomService.findFinishedSingleRooms(principal.getName());
-        List<GroupRoom> findGroupRooms = roomService.findFinishedGroupRooms(principal.getName());
-        return getResponseEntity(findSingleRooms, findGroupRooms);
+
+        List<RoomResponseDto> roomList = roomService.findFinishedRooms(principal.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(roomList);
     }
 
 

@@ -14,10 +14,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupRoom extends Room {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
-    private Member member;
-
     @OneToMany(mappedBy = "room")
     private List<RoomMember> roomMemberList = new ArrayList<>();
 

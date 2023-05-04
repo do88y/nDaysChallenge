@@ -2,6 +2,7 @@ package challenge.nDaysChallenge.domain.room;
 
 
 import challenge.nDaysChallenge.domain.Stamp;
+import challenge.nDaysChallenge.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,6 +42,10 @@ public class Room {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "stamp_number")
     protected Stamp stamp;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_number")
+    protected Member member;
 
     protected int passCount;
 

@@ -10,7 +10,7 @@
     <div class="py-5 text-center">
         <h2>신고 관리</h2>
     </div>
-    <form th:action="@{report}" method="get">
+    <form th:action="@{report}" th:object="${reportSearch}" method="post">
         <div class="row g-3 align-items-center justify-content-center">
             <div class="col-auto">
                 <label for="isDajim">다짐 여부:</label>
@@ -18,8 +18,8 @@
             <div class="col-auto">
                 <select class="form-control form-select" id="isDajim" name="isDajim">
                     <option value="">전체</option>
-                    <option value="CONTINUE">다짐</option>
-                    <option value="END">그 외</option>
+                    <option value=true>다짐</option>
+                    <option value=false>그 외</option>
                 </select>
             </div>
             <div class="col-auto">

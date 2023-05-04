@@ -1,27 +1,27 @@
 package challenge.nDaysChallenge.controller;
 
-import challenge.nDaysChallenge.domain.Report;
-import challenge.nDaysChallenge.domain.member.Member;
-import challenge.nDaysChallenge.domain.member.MemberAdapter;
-import challenge.nDaysChallenge.domain.room.Room;
+import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
+import challenge.nDaysChallenge.dto.response.AdminLoginDto;
+import challenge.nDaysChallenge.service.AdminService;
 import challenge.nDaysChallenge.dto.request.Room.DeleteRoomRequestDto;
 import challenge.nDaysChallenge.dto.response.ReportResponseDto;
+import challenge.nDaysChallenge.repository.report.ReportSearch;
+import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.dto.response.room.AdminRoomResponseDto;
-import challenge.nDaysChallenge.repository.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.room.RoomSearch;
-import challenge.nDaysChallenge.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.Tuple;
-import java.security.Principal;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +35,27 @@ public class AdminController {
     private final AdminService adminService;
     private final ReportRepository reportRepository;
 
-    //메인페이지
+    //로그인 페이지
     @GetMapping
-    public String main() {
-        return "admin/main";
+    public String login(Model model,
+                        LoginRequestDto loginRequestDto,
+                        CsrfToken csrfToken) {
+        model.addAttribute("loginRequestDto", loginRequestDto);
+        model.addAttribute("_csrf", csrfToken);
+        return "admin/login";
+    }
+
+    //관리자 로그인
+    @PostMapping
+    public String login(LoginRequestDto loginRequestDto, HttpSession session) {
+
+        AdminLoginDto memberDto = adminService.login(loginRequestDto);
+        session.setAttribute("id", memberDto.getId());
+        session.setAttribute("auth", memberDto.getAuth());
+
+        log.info("auth={}", memberDto.getAuth());
+
+        return "redirect:/admin/menu";
     }
 
     //메뉴
@@ -47,22 +64,27 @@ public class AdminController {
         return "admin/menu";
     }
 
+    /**
+     * 챌린지
+     */
+    //챌린지 관리자 페이지
     @GetMapping("/challenge")
     public String challenge() {
         return "admin/challenge";
     }
 
     //챌린지 조회(id, status)
-    @PostMapping("challenge/search")
-    public String findResult(RoomSearch roomSearch, RedirectAttributes redirectAttributes) {
+    @PostMapping("/challenge/search")
+    public String findRoomResult(RoomSearch roomSearch, Pageable pageable,
+                                 Model model, RedirectAttributes redirectAttributes) {
 
-        List<Tuple> results = adminService.findRooms(roomSearch);
-        List<AdminRoomResponseDto> rooms = new ArrayList<>();
+        Page<AdminRoomResponseDto> results = adminService.findRooms(roomSearch, pageable);
 
-        createRoomResponseDto(results, rooms);
-
-        redirectAttributes.addFlashAttribute("challenges", rooms);
         redirectAttributes.addAttribute("status", true);
+
+        model.addAttribute("challenges", results);
+        model.addAttribute("pages", results);
+        model.addAttribute("maxPage", 5);
 
         log.info("status={}, id={}", roomSearch.getStatus(), roomSearch.getId());
         log.info("redirectAttributes.getFlashAttributes={}", redirectAttributes.getFlashAttributes());
@@ -71,7 +93,7 @@ public class AdminController {
     }
 
     //챌린지 삭제 - 여러개 동시에
-    @PostMapping("challenge/delete")
+    @PostMapping("/challenge/delete")
     public String deleteRoom(DeleteRoomRequestDto dto, RedirectAttributes redirectAttributes) {
 
         adminService.deleteRoom(dto.getNumbers());
@@ -83,6 +105,9 @@ public class AdminController {
         return "redirect:/admin/challenge";
     }
 
+    /**
+     * 신고
+     */
     //신고 관리 페이지
     @GetMapping("/report")
     public String report(Model model) {
@@ -103,8 +128,17 @@ public class AdminController {
         return "admin/report";
     }
 
+    @PostMapping("/report")
+    public String reportSearch(ReportSearch reportSearch, Model model) {
+
+        List<ReportResponseDto> reports = reportRepository.findReports(reportSearch);
+
+        model.addAttribute("reports", reports);
+        return "admin/report";
+    }
+
     //신고 삭제
-    @PostMapping("report/delete")
+    @PostMapping("/report/delete")
     public String deleteReport(DeleteRoomRequestDto dto) {
 
         adminService.deleteReport(dto.getNumbers());
@@ -116,8 +150,8 @@ public class AdminController {
 
 
     //응답 dto 생성
-    private static void createRoomResponseDto(List<Tuple> results, List<AdminRoomResponseDto> rooms) {
-        for (Tuple result : results) {
+/*    private static void createRoomResponseDto(List<AdminRoomResponseDto> results, List<AdminRoomResponseDto> rooms) {
+        for (AdminRoomResponseDto result : results) {
             Room findRoom = result.get(0, Room.class);
             String memberId = result.get(1, String.class);
 
@@ -133,5 +167,5 @@ public class AdminController {
                     .build();
             rooms.add(dto);
         }
-    }
+    }*/
 }
