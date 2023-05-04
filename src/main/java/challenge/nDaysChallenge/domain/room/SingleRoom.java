@@ -9,12 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SingleRoom extends Room {
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_number")
-    private Member member;
 
 
     //==연관관계 메서드==//  SingleRoom의 room에 roomNumber 넣으면서 singleRooms에도 roomNumber 세팅

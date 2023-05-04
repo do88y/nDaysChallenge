@@ -93,7 +93,7 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoom groupRoom = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
 
@@ -114,8 +114,8 @@ public class RoomServiceTest {
         em.persist(member);
 
         //when
-        RoomResponseDto room1 = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
-        roomService.singleRoom(member, "운동", period, Category.ROUTINE, 2, "");
+        RoomResponseDto room1 = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
+        roomService.singleRoom(member.getId(), "운동", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
@@ -161,7 +161,7 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom1 = roomService.groupRoom(member1, "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoom groupRoom1 = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
 
@@ -182,13 +182,13 @@ public class RoomServiceTest {
                 .build();
         em.persist(member);
 
-        RoomResponseDto room = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        RoomResponseDto room = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
         em.flush();
         em.clear();
 
         //when
-        Member findMember = singleRoomRepository.findMemberByRoomNumber(room.getRoomNumber()).get();
-        roomService.deleteRoom(findMember, room.getRoomNumber());
+        Member findMember = roomRepository.findMemberByRoomNumber(room.getRoomNumber()).get();
+        roomService.deleteRoom(findMember.getId(), room.getRoomNumber());
 
         //then
         assertThat(roomRepository.findByNumber(room.getRoomNumber()).get());
@@ -238,8 +238,8 @@ public class RoomServiceTest {
         em.flush();
         em.clear();
 
-        List<SingleRoom> singleRooms = roomService.findSingleRooms(member);
-        List<GroupRoom> groupRooms = roomService.findGroupRooms(member);
+        List<SingleRoom> singleRooms = roomService.findSingleRooms(member.getId());
+        List<GroupRoom> groupRooms = roomService.findGroupRooms(member.getId());
 
         //then
         assertThat(singleRooms.size()).isEqualTo(2);
@@ -281,36 +281,9 @@ public class RoomServiceTest {
         singleRoom2.addRoom(member, stamp2);
         singleRoom3.addRoom(member, stamp3);
 
-        singleRoom1.end();
-        singleRoom2.end();
-
-        em.flush();
-        em.clear();
-
-        //when
-        List<RoomResponseDto> finishedRooms = roomService.findFinishedSingleRooms(member);
-
-        //then
-        assertThat(finishedRooms.size()).isEqualTo(2);
-        assertThat(finishedRooms)
-                .extracting("name")
-                .containsExactly("기상", "공부");
-    }
-
-    @Test
-    public void 완료_그룹챌린지_리스트() throws Exception {
-        //given
-        Member member = Member.builder()
-                .id("use1r@naver.com")
-                .pw("12345")
-                .nickname("abc")
-                .authority(Authority.ROLE_USER)
-                .build();
-        memberRepository.save(member);
-
-        GroupRoom groupRoom1 = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
-        GroupRoom groupRoom2 = new GroupRoom(member, "기상", this.period, Category.MINDFULNESS, 20, "여행");
-        GroupRoom groupRoom3 = new GroupRoom(member, "운동", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom1 = new GroupRoom(member, "그룹기상", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom2 = new GroupRoom(member, "그룹공부", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom3 = new GroupRoom(member, "그룹청소", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom1);
         groupRoomRepository.save(groupRoom2);
         groupRoomRepository.save(groupRoom3);
@@ -322,19 +295,22 @@ public class RoomServiceTest {
         roomMemberRepository.save(roomMember2);
         roomMemberRepository.save(roomMember3);
 
+        singleRoom1.end();
+        singleRoom2.end();
         groupRoom1.end();
         groupRoom2.end();
+
         em.flush();
         em.clear();
 
         //when
-        List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member);
+        List<RoomResponseDto> finishedRooms = roomService.findFinishedRooms(member.getId());
 
         //then
-        assertThat(finishedRooms.size()).isEqualTo(2);
+        assertThat(finishedRooms.size()).isEqualTo(4);
         assertThat(finishedRooms)
                 .extracting("name")
-                .containsExactly("명상", "기상");
+                .containsExactly("기상", "공부", "그룹기상", "그룹공부");
     }
 
     @Test
@@ -374,13 +350,13 @@ public class RoomServiceTest {
                 .authority(Authority.ROLE_USER)
                 .build();
         memberRepository.save(member);
-        RoomResponseDto roomDto = roomService.singleRoom(member, "기상", period, Category.ROUTINE, 2, "");
+        RoomResponseDto roomDto = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
 
         //when
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member, room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
 
         em.flush();
         em.clear();

@@ -35,14 +35,6 @@ public class RelationshipService {
 
     //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
-//        if (nickname!=null&&!nickname.isEmpty()) {
-//            return memberRepository.findByNickname(nickname)
-//                    .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자가 없습니다."));
-//        } else if (id!=null&&!id.isEmpty()) {
-//            return memberRepository.findById(id)
-//                    .orElseThrow(() -> new RuntimeException("해당 아이디의 사용자가 없습니다."));
-//        }
-//        throw new RuntimeException("친구 신청할 사용자의 닉네임이나 아이디를 입력해주세요.");
         String jpql = "select m from Member m where ";
 
         if (nickname!=null&&!nickname.isEmpty()) {
@@ -63,19 +55,23 @@ public class RelationshipService {
 
     //relationship 생성//
     @Transactional
-    public  List<AskResponseDTO> saveRelationship(Member user, RelationshipRequestDTO dto) {
+    public  List<AskResponseDTO> saveRelationship(String id, RelationshipRequestDTO dto) {
+        Member me = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
 
         Optional<Member> findFriend = memberRepository.findById(dto.getId());
         Member friend = findFriend.orElseThrow(() -> new NoSuchElementException("해당 멤버가 존재하지않습니다."));
 
-        Relationship userRelationship = Relationship.readyCreateRelation(user, friend);
-        Relationship friendRelationship = Relationship.readyCreateRelation(friend, user);
+        Relationship userRelationship = Relationship.readyCreateRelation(me, friend);
+        Relationship friendRelationship = Relationship.readyCreateRelation(friend, me);
+
         relationshipRepository.save(userRelationship);
         relationshipRepository.save(friendRelationship);
 
         //내 요청 리스트(내가 받은 요청 리스트) 보기//
-        List<Relationship> viewRequestList = relationshipRepository.findRelationshipByFriendAndStatus(user);
+        List<Relationship> viewRequestList = relationshipRepository.findRelationshipByFriendAndStatus(me.getId());
         List<AskResponseDTO> askResponseDTOList = createResponseDTO(viewRequestList);
+
         return askResponseDTOList;
     }
 
@@ -100,19 +96,23 @@ public class RelationshipService {
 
     @Transactional
     //수락 버튼을 눌렀을 때 시행되는 메서드//
-    public List<AcceptResponseDTO> acceptRelationship(Member user, RelationshipRequestDTO applyDTO) {
+    public List<AcceptResponseDTO> acceptRelationship(String id, RelationshipRequestDTO applyDTO) {
+        Member me = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
         Optional<Member> getFriendId = memberRepository.findById(applyDTO.getId());
         Member friend = getFriendId.orElseThrow(() -> new NoSuchElementException("해당 멤버가 없습니다."));
 
-        Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);//유저 조회
-        Relationship findFriend = relationshipRepository.findByUserAndFriend(friend, user);
+        Relationship findUser = relationshipRepository.findByUserIdAndFriendId(me.getId(), friend.getId());//유저 조회
+        Relationship findFriend = relationshipRepository.findByUserIdAndFriendId(friend.getId(), me.getId());
+
         findUser.updateStatus(RelationshipStatus.ACCEPT);
         findFriend.updateStatus(RelationshipStatus.ACCEPT);
-        user.addFriendList(findFriend);//친구 수락되면 일단 나도 수락상태가 되니까 친구리스트로 들어감
+        me.addFriendList(findFriend);//친구 수락되면 일단 나도 수락상태가 되니까 친구리스트로 들어감
         friend.addFriendList(findUser);
 
         //확정된 친구 리스트//
-        List<Relationship> confirmList = relationshipRepository.findRelationshipByUserAndStatus(user);
+        List<Relationship> confirmList = relationshipRepository.findRelationshipByUserAndStatus(me.getId());
         List<AcceptResponseDTO> acceptResponseDTOList = new ArrayList<>();
 
         for (Relationship relationship : confirmList) {
@@ -130,25 +130,23 @@ public class RelationshipService {
         return acceptResponseDTOList;
     }
 
-
-
-
     //친구 요청 거절//
     @Transactional
-    public List<AcceptResponseDTO> deleteEachRelation(Member user, RelationshipRequestDTO dto) {
+    public List<AcceptResponseDTO> deleteEachRelation(String myId, RelationshipRequestDTO dto) {
         Optional<Member> findId = memberRepository.findById(dto.getId());
+
         Member friend = findId.orElseThrow(() -> new NoSuchElementException("해당 id가 없습니다."));
 
         //엔티티 찾기//
-        Relationship findUser = relationshipRepository.findByUserAndFriend(user, friend);
-        Relationship findFriend = relationshipRepository.findByUserAndFriend(friend, user);
+        Relationship findUser = relationshipRepository.findByUserIdAndFriendId(myId, friend.getId());
+        Relationship findFriend = relationshipRepository.findByUserIdAndFriendId(friend.getId(), myId);
         //서로를 찾아 지움//
         relationshipRepository.delete(findUser);
         relationshipRepository.delete(findFriend);
 
 
         //user 의 현재 친구리스트(수락한 친구들) 갱신/조회//
-        List<Relationship> friendList = relationshipRepository.findRelationshipByUserAndStatus(user);
+        List<Relationship> friendList = relationshipRepository.findRelationshipByUserAndStatus(myId);
         List<AcceptResponseDTO> friendList2 = new ArrayList<>();
 
         for (Relationship relationship : friendList) {

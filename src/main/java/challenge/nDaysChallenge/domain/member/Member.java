@@ -5,9 +5,12 @@ import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
+import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +48,10 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
-    public Member update (String nickname, String pw, int image){
-        this.nickname = nickname;
-        this.pw = pw;
-        this.image = image;
+    public Member update (MemberEditRequestDto dto, PasswordEncoder passwordEncoder){
+        this.nickname = dto.getNickname();
+        this.pw = passwordEncoder.encode(dto.getPw());
+        this.image = dto.getImage();
         return this;
     }
 

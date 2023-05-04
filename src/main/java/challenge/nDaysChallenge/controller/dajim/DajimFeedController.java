@@ -17,6 +17,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,12 +29,12 @@ public class DajimFeedController {
     //피드 전체 조회 (다짐 + 감정스티커)
     @GetMapping("/feed")
     public ResponseEntity<?> viewDajimOnFeed(
-            @AuthenticationPrincipal @Nullable MemberAdapter memberAdapter,
+            @Nullable Principal principal,
             @PageableDefault(sort = "updatedDate", direction = Sort.Direction.DESC) Pageable pageable){
         Slice dajimPage;
 
         try {
-            dajimPage = dajimFeedService.viewFeedLoggedIn(memberAdapter.getMember(), pageable);
+            dajimPage = dajimFeedService.viewFeedLoggedIn(principal.getName(), pageable);
         } catch (NullPointerException e) {
             dajimPage = dajimFeedService.viewFeedWithoutLogin(pageable);
         }

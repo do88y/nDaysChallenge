@@ -20,8 +20,8 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
     Optional<Dajim> findByNumber(Long dajimNumber);
 
-    @Query("SELECT d FROM Dajim d WHERE d.member.number = :memberNumber AND d.room.number = :roomNumber")
-    Optional<Dajim> findByMemberNumberAndRoomNumber(@Param("memberNumber") Long memberNumber, @Param("roomNumber") Long roomNumber);
+    @Query("SELECT d FROM Dajim d WHERE d.member.id = :memberId AND d.room.number = :roomNumber")
+    Optional<Dajim> findByMemberIdAndRoomNumber(@Param("memberId") String memberId, @Param("roomNumber") Long roomNumber);
 
     @Query("SELECT d FROM Dajim d WHERE d.member.nickname = :nickname")
     Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);
@@ -32,9 +32,9 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
             " ORDER BY d.updatedDate")
     Optional<List<Dajim>> findAllByRoomNumber(@Param("roomNumber") Long roomNumber);
 
-    @Query("SELECT d FROM Dajim d " +
-            "WHERE d.open = :open " +
-            "AND length(trim(d.content)) >= 1")
+    @Query(value = "SELECT d FROM Dajim d WHERE d.open = :open AND length(trim(d.content)) >= 1",
+            countQuery = "SELECT count(d) FROM Dajim d WHERE d.open = :open AND length(trim(d.content))>=1"
+    )
     Slice<Dajim> findByOpen(@Param("open") Open open, Pageable pageable);
 
 }
