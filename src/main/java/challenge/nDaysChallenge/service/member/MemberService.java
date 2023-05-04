@@ -59,27 +59,35 @@ public class MemberService {
 
     //회원정보 수정
     @Transactional
-    public MemberInfoResponseDto editMemberInfo(Member member, MemberEditRequestDto memberEditRequestDto) {
-        Member updatedMember = member.update(memberEditRequestDto.getNickname(),
-                passwordEncoder.encode(memberEditRequestDto.getPw()),
-                memberEditRequestDto.getImage());
+    public MemberInfoResponseDto editMemberInfo(String id, MemberEditRequestDto memberEditRequestDto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
+        if (memberRepository.existsByNickname(memberEditRequestDto.getNickname())){
+            throw new RuntimeException("해당 닉네임이 이미 존재합니다.");
+        }
+
+        Member updatedMember = member.update(memberEditRequestDto, passwordEncoder);
 
         return MemberInfoResponseDto.of(updatedMember);
     }
 
     //회원 삭제
     @Transactional
-    public String deleteMember(Member member) {
+    public String deleteMember(String id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
         String nickname = member.getNickname();
 
         //참조 엔티티들 불러오기
         List<Dajim> dajims = dajimRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(nickname).orElseGet(ArrayList::new);
         List<Stamp> stamps = Stream
-                .concat(singleRoomRepository.findStampByMember(member).stream(), roomMemberRepository.findStampByMember(member).stream())
+                .concat(singleRoomRepository.findStampByMember(member.getId()).stream(), roomMemberRepository.findStampByMember(member).stream())
                 .collect(Collectors.toList());
-        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member);
-        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member);
+        List<SingleRoom> singleRooms = singleRoomRepository.findAll(member.getId());
+        List<GroupRoom> groupRooms = groupRoomRepository.findAll(member.getId());
 
         //룸 도메인 연관관계 끊기
         deleteConnection(member,roomMembers, stamps, singleRooms, groupRooms);

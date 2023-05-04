@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
+import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,8 @@ public class DajimFeedService {
 
     private final DajimRepository dajimRepository;
 
+    private final MemberRepository memberRepository;
+
     //피드 - 전체 다짐 조회 (미로그인)
     @PreAuthorize("isAnonymous()")
     @Transactional(readOnly = true)
@@ -45,7 +48,10 @@ public class DajimFeedService {
     //피드 - 전체 다짐 조회 (로그인 시)
     @PreAuthorize("isAuthenticated()")
     @Transactional(readOnly = true)
-    public Slice<DajimFeedResponseDto> viewFeedLoggedIn(Member member, Pageable pageable) {
+    public Slice<DajimFeedResponseDto> viewFeedLoggedIn(String id, Pageable pageable) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
         List<DajimFeedResponseDto> dajimFeedList = Dajim.toLoggedInFeedDto(member, dajimPage);

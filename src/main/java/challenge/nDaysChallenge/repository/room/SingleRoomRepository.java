@@ -14,22 +14,22 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
     //진행 개인 챌린지
     @Query("select s from SingleRoom s" +
-            " where s.member = :member" +
+            " where s.member.id = :id" +
             " and s.status = 'CONTINUE'")
-    List<SingleRoom> findSingleRooms(@Param("member") Member member);
+    List<SingleRoom> findSingleRooms(@Param("id") String id);
 
     //완료 개인 챌린지
     @Query("select s from SingleRoom s" +
-            " where s.member = :member" +
+            " where s.member.id = :id" +
                     " and s.status = 'END'")
-    List<SingleRoom> finishedSingleRooms(@Param("member") Member member);
+    List<SingleRoom> finishedSingleRooms(@Param("id") String id);
 
     //전체 개인 챌린지
     @Query("select s from SingleRoom s" +
-            " where s.member = :member")
-    List<SingleRoom> findAll(@Param("member") Member member);
+            " where s.member.id = :id")
+    List<SingleRoom> findAll(@Param("id") String id);
 
-    @Query("select s.stamp from SingleRoom s where s.member = :member")
-    List<Stamp> findStampByMember(@Param("member") Member member);
+    @Query("select s.stamp from SingleRoom s where s.member.id = :id")
+    List<Stamp> findStampByMember(@Param("id") String id);
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,11 +25,7 @@ public class ReportController {
 
     //신고 생성
     @PostMapping("/feed/report")
-    public ResponseEntity<?> report(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                    @RequestBody ReportRequestDto dto) {
-
-        checkLogin(memberAdapter.getMember());
-
+    public ResponseEntity<?> report(Principal principal, @RequestBody ReportRequestDto dto) {
         Report report = reportService.report(dto.getDajim(), dto.getCause(), dto.getIsDajim(), dto.getContent());
         ReportResponseDto savedReport = ReportResponseDto.builder()
                 .report(report.getNumber())
@@ -43,10 +40,4 @@ public class ReportController {
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedReport);
     }
 
-    //로그인 검증
-    private void checkLogin(Member member) {
-        if (member == null) {
-            throw new RuntimeException("로그인한 멤버만 사용할 수 있습니다.");
-        }
-    }
 }

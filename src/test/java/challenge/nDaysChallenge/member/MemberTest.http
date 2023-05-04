@@ -1,17 +1,17 @@
 ### 회원정보 조회
 GET http://localhost:8080/user/details
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjYzODI1fQ.b5CwSseC6pa9IKi0yWu5siljRFAyJefE4I2QPQmerTs
 
 
 ### 회원정보 수정
 PATCH http://localhost:8080/user/edit
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjY0OTI3fQ.tHjGo9-CjOKgM7TdRn8fWOSKfv_YWTjhEHxnf0VEsM8
 
 {
-  "pw": "",
-  "nickname": "",
-  "image": 1
+  "pw": "123",
+  "nickname": "바꾸깅2",
+  "image": 3
 }
 
 
