@@ -4,7 +4,9 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
+import challenge.nDaysChallenge.dto.request.Room.GroupRoomRequestDto;
 import challenge.nDaysChallenge.dto.request.StampDto;
+import challenge.nDaysChallenge.dto.response.room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
@@ -36,11 +38,11 @@ public class RoomService {
     /**
      * 챌린지 조회(메인)
      */
-    public List<SingleRoom> findSingleRooms(String id) {
-        return singleRoomRepository.findSingleRooms(id);
-    }
-    public List<GroupRoom> findGroupRooms(String id) {
-        return groupRoomRepository.findGroupRooms(id);
+    public List<RoomResponseDto> findRooms(String id) {
+        List<SingleRoom> singleRooms = singleRoomRepository.findSingleRooms(id);
+        List<GroupRoom> groupRooms = groupRoomRepository.findGroupRooms(id);
+        List<Room> rooms = Stream.concat(singleRooms.stream(), groupRooms.stream()).collect(Collectors.toList());
+        return roomDtos(rooms);
     }
 
     /**
@@ -62,16 +64,14 @@ public class RoomService {
         stampRepository.save(stamp);
         singleRoomRepository.save(newRoom);
 
-        RoomResponseDto roomDto = createRoomDto(newRoom, stamp);
-
-        return roomDto;
+        return createRoomDto(newRoom, stamp);
     }
 
     /**
      * 그룹 챌린지 생성
      */
     @Transactional
-    public GroupRoom groupRoom(String id, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
+    public GroupRoomResponseDto groupRoom(String id, String name, Period period, Category category, int passCount, String reward, Set<Long> selectedMember) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
 
@@ -109,7 +109,7 @@ public class RoomService {
             roomMemberRepository.save(result);
         }
 
-        return newRoom;
+        return createGroupRoomDto(newRoom, selectedMember);
     }
 
     /**
@@ -188,22 +188,16 @@ public class RoomService {
      * 전체 완료 챌린지 조회
      */
     public List<RoomResponseDto> findFinishedRooms(String id) {
-        List<Room> rooms = Stream.concat(
-                singleRoomRepository.finishedSingleRooms(id).stream(),
-                groupRoomRepository.finishedGroupRoom(id).stream())
-                .collect(Collectors.toList());
-        List<RoomResponseDto> roomList = getFinishedRoomDtos(rooms);
-        return roomList;
+        List<SingleRoom> singleRooms = singleRoomRepository.finishedSingleRooms(id);
+        List<GroupRoom> groupRooms = groupRoomRepository.finishedGroupRoom(id);
+        List<Room> rooms = Stream.concat(singleRooms.stream(), groupRooms.stream()).collect(Collectors.toList());
+        return roomDtos(rooms);
     }
 
 
-/*    public List<GroupRoom> findFinishedGroupRooms(Member member) {
-        return groupRoomRepository.finishedGroupRoom(member);
-    }*/
-
     //==공통 메서드==//
     //
-    private static List<RoomResponseDto> getFinishedRoomDtos(List<Room> rooms) {
+    private static List<RoomResponseDto> roomDtos(List<Room> rooms) {
         List<RoomResponseDto> roomList = new ArrayList<>();
         rooms.forEach(room -> roomList.add(
                         RoomResponseDto.builder()
@@ -221,7 +215,24 @@ public class RoomService {
         return roomList;
     }
 
-    //roomDto 생성
+    //챌린지 조회 응답 dto
+    private RoomResponseDto createRoomDto(Room room) {
+        RoomResponseDto roomResponseDto = RoomResponseDto.builder()
+                .roomNumber(room.getNumber())
+                .type(room.getType().name())
+                .name(room.getName())
+                .category(room.getCategory().name())
+                .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .passCount(room.getPassCount())
+                .reward(room.getReward())
+                .status(room.getStatus().name())
+                .build();
+        return roomResponseDto;
+    }
+
+    //개인챌린지 생성 응답 dto
     private RoomResponseDto createRoomDto(Room room, Stamp stamp) {
         RoomResponseDto roomResponseDto = RoomResponseDto.builder()
                 .roomNumber(room.getNumber())
@@ -239,6 +250,24 @@ public class RoomService {
         return roomResponseDto;
     }
 
+    //그룹챌린지 생성 응답 dto
+    private static GroupRoomResponseDto createGroupRoomDto(GroupRoom room, Set<Long> members) {
+        GroupRoomResponseDto savedRoom = GroupRoomResponseDto.builder()
+                .roomNumber(room.getNumber())
+                .type(room.getType().name())
+                .name(room.getName())
+                .category(room.getCategory().name())
+                .totalDays(room.getPeriod().getTotalDays())
+                .startDate(room.getPeriod().getStartDate())
+                .endDate(room.getPeriod().getEndDate())
+                .passCount(room.getPassCount())
+                .reward(room.getReward())
+                .status(room.getStatus().name())
+                .groupMembers(members)
+                .build();
+        return savedRoom;
+    }
+
     //stampDto 생성
     private static StampDto getStampDto(Long roomNumber, Stamp updateStamp) {
         StampDto stampDto = StampDto.builder()
@@ -254,9 +283,9 @@ public class RoomService {
     //챌린지 삭제 시 인가 확인(방장만 삭제 가능)
     private void checkRoomAndMember(Member member, Room room) {
         Member findMember = roomRepository.findMemberByRoomNumber(room.getNumber()).orElseThrow(
-                () -> new NoSuchElementException("방장만 삭제 가능합니다."));
+                () -> new NoSuchElementException("삭제 권한이 없습니다."));
         if (findMember != member) {
-            throw new RuntimeException("삭제 권한이 없습니다");
+            throw new RuntimeException("삭제 권한이 없습니다.");
         }
     }
 
