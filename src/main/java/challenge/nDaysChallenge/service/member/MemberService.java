@@ -67,7 +67,7 @@ public class MemberService {
             throw new RuntimeException("해당 닉네임이 이미 존재합니다.");
         }
 
-        Member updatedMember = member.update(memberEditRequestDto, passwordEncoder);
+        Member updatedMember = member.update(memberEditRequestDto.getNickname(), passwordEncoder.encode(memberEditRequestDto.getPw()), memberEditRequestDto.getImage());
 
         return MemberInfoResponseDto.of(updatedMember);
     }

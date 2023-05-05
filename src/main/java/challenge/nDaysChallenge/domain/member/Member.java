@@ -48,10 +48,10 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleRoom> singleRooms = new ArrayList<>();
 
-    public Member update (MemberEditRequestDto dto, PasswordEncoder passwordEncoder){
-        this.nickname = dto.getNickname();
-        this.pw = passwordEncoder.encode(dto.getPw());
-        this.image = dto.getImage();
+    public Member update (String nickname, String pw, int image){
+        this.nickname = nickname;
+        this.pw = pw;
+        this.image = image;
         return this;
     }
 

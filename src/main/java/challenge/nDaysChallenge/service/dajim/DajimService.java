@@ -82,7 +82,14 @@ public class DajimService {
         List<Dajim> dajims = dajimRepository.findAllByRoomNumber(roomNumber)
                     .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
 
-        return Dajim.toDajimResponseDto(dajims);
+        return toDajimResponseDto(dajims);
+    }
+
+    //다짐 리스트 -> 다짐 응답 dto 리스트 변환
+    private List<DajimResponseDto> toDajimResponseDto(List<Dajim> dajims){
+        return dajims.stream()
+                .map(dajim -> DajimResponseDto.of(dajim))
+                .collect(Collectors.toList());
     }
 
     //다짐 수정 시 작성자/룸 체크
