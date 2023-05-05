@@ -9,6 +9,7 @@ import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RelationshipRepository;
+import challenge.nDaysChallenge.repository.relationship.FriendSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,29 +29,14 @@ import java.util.Optional;
 @Slf4j
 public class RelationshipService {
 
+    private final FriendSearchRepository friendSearchRepository;
+
     private final RelationshipRepository relationshipRepository;
     private final MemberRepository memberRepository;
 
-    private final EntityManager em;
-
     //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
-        String jpql = "select m from Member m where ";
-
-        if (nickname!=null&&!nickname.isEmpty()) {
-            jpql += "m.nickname = :nickname";
-        } else if (id!=null&&!id.isEmpty()) {
-            jpql += "m.id = :id";
-        }
-
-        TypedQuery<Member> query = em.createQuery(jpql, Member.class);
-        if (nickname!=null&&!nickname.isEmpty()) {
-            query = query.setParameter("nickname", nickname);
-        } else if (id!=null&&!id.isEmpty()) {
-            query = query.setParameter("id", id);
-        }
-
-        return query.getSingleResult();
+        return friendSearchRepository.findByIdOrNickname(id, nickname);
     }
 
     //relationship 생성//

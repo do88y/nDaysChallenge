@@ -31,5 +31,4 @@ public interface SingleRoomRepository extends JpaRepository<SingleRoom, Long> {
 
     @Query("select s.stamp from SingleRoom s where s.member.id = :id")
     List<Stamp> findStampByMember(@Param("id") String id);
-
 }

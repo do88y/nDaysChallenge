@@ -1,3 +1,3 @@
-GET http://localhost:8080/friends/find?id=&nickname=ab
+GET http://localhost:8080/friends/find?id=&nickname=닉네임3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3Nzg1MjgzNX0.EivmwySsdWpbUTrpvWUwj7cdd_bZJVkiQwRxYgrwQBo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgzMzA3MzI5fQ.xuEssxsQZtMpfNX38gyzUjEIruLjLuAKq1kJeRLdUyk

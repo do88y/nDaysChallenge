@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -121,6 +123,9 @@ public class RoomService {
                 () -> new NoSuchElementException("해당 스탬프가 존재하지 않습니다."));
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("해당 멤버가 존재하지 않습니다."));
+        checkStampAndMember(member, room, stamp);
 
         //스탬프 엔티티 업데이트
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
@@ -149,6 +154,9 @@ public class RoomService {
         //엔티티 조회
         Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("해당 멤버가 존재하지 않습니다."));
+        checkRoomAndMember(member, room);
 
         if (room.getType() == RoomType.SINGLE) {
             //개인 챌린지 삭제
@@ -179,22 +187,40 @@ public class RoomService {
     /**
      * 전체 완료 챌린지 조회
      */
-    public List<SingleRoom> findFinishedSingleRooms(String id) {
-        try {
-            return singleRoomRepository.finishedSingleRooms(id);
-        } catch (Exception e) {
-            throw new RuntimeException("완료된 개인 챌린지가 없습니다.");
-        }
-    }
-    public List<GroupRoom> findFinishedGroupRooms(String id) {
-        try {
-            return groupRoomRepository.finishedGroupRoom(id);
-        } catch (Exception e) {
-            throw new RuntimeException("완료된 단체 챌린지가 없습니다.");
-        }
+    public List<RoomResponseDto> findFinishedRooms(String id) {
+        List<Room> rooms = Stream.concat(
+                singleRoomRepository.finishedSingleRooms(id).stream(),
+                groupRoomRepository.finishedGroupRoom(id).stream())
+                .collect(Collectors.toList());
+        List<RoomResponseDto> roomList = getFinishedRoomDtos(rooms);
+        return roomList;
     }
 
+
+/*    public List<GroupRoom> findFinishedGroupRooms(Member member) {
+        return groupRoomRepository.finishedGroupRoom(member);
+    }*/
+
     //==공통 메서드==//
+    //
+    private static List<RoomResponseDto> getFinishedRoomDtos(List<Room> rooms) {
+        List<RoomResponseDto> roomList = new ArrayList<>();
+        rooms.forEach(room -> roomList.add(
+                        RoomResponseDto.builder()
+                                .roomNumber(room.getNumber())
+                                .type(room.getType().name())
+                                .name(room.getName())
+                                .category(room.getCategory().name())
+                                .totalDays(room.getPeriod().getTotalDays())
+                                .startDate(room.getPeriod().getStartDate())
+                                .endDate(room.getPeriod().getEndDate())
+                                .passCount(room.getPassCount())
+                                .reward(room.getReward())
+                                .status(room.getStatus().name())
+                                .build()));
+        return roomList;
+    }
+
     //roomDto 생성
     private RoomResponseDto createRoomDto(Room room, Stamp stamp) {
         RoomResponseDto roomResponseDto = RoomResponseDto.builder()
@@ -225,4 +251,29 @@ public class RoomService {
         return stampDto;
     }
 
+    //챌린지 삭제 시 인가 확인(방장만 삭제 가능)
+    private void checkRoomAndMember(Member member, Room room) {
+        Member findMember = roomRepository.findMemberByRoomNumber(room.getNumber()).orElseThrow(
+                () -> new NoSuchElementException("방장만 삭제 가능합니다."));
+        if (findMember != member) {
+            throw new RuntimeException("삭제 권한이 없습니다");
+        }
+    }
+
+    //스탬프 업데이트 시 인가 확인
+    private void checkStampAndMember(Member member, Room room, Stamp stamp) {
+        if (RoomType.SINGLE == room.getType()) {
+            Member findMember = roomRepository.findMemberByRoomNumber(room.getNumber()).orElseThrow(
+                    () -> new NoSuchElementException("해당 챌린지에 member 데이터가 없습니다."));
+            if (findMember != member) {
+                throw new RuntimeException("스탬프에 접근 권한이 없습니다.");
+            }
+
+        } else if (RoomType.GROUP == room.getType()) {
+            Member findMember = roomMemberRepository.findMemberByStamp(stamp);
+            if (findMember != member) {
+                throw new RuntimeException("스탬프에 접근 권한이 없습니다.");
+            }
+        }
+    }
 }

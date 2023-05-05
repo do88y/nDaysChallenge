@@ -15,7 +15,7 @@ POST {{review-api}}/auth/login
 Content-Type: application/json
 
 {
-  "id": "id1323@gmail.com",
+  "id": "id123@gmail.com",
   "pw": "123"
 }
 

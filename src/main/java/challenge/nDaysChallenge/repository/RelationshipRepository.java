@@ -13,8 +13,6 @@ import java.util.List;
 @Repository
 public interface RelationshipRepository extends JpaRepository<Relationship, Long > {
 
-
-
     @Query("select r from Relationship r where r.user.id=:myId and r.friend.id=:friendId")
     Relationship findByUserIdAndFriendId(String myId, String friendId);
 
