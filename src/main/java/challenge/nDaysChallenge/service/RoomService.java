@@ -17,6 +17,7 @@ import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -131,18 +132,11 @@ public class RoomService {
         Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
 
         //count 업데이트
-        if (dto.getDay().equals("o")) {
-            stamp.addSuccess();
-        } else if (dto.getDay().equals("x")) {
-            stamp.addPass();
-        } else {
-            throw new RuntimeException("스탬프 정보를 얻을 수 없습니다.");
+        if (StringUtils.hasText(dto.getDay())) {
+            updateStamp.updateCount(dto.getDay());
         }
 
-        //dto 생성
-        StampDto stampDto = getStampDto(roomNumber, updateStamp);
-
-        return stampDto;
+        return getStampDto(roomNumber, updateStamp);
     }
 
     /**
