@@ -1,27 +1,26 @@
 package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.member.Member;
-import challenge.nDaysChallenge.domain.member.MemberAdapter;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.RelationshipStatus;
 import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
-import challenge.nDaysChallenge.repository.RelationshipRepository;
+import challenge.nDaysChallenge.repository.relationship.RelationshipRepository;
 import challenge.nDaysChallenge.repository.relationship.FriendSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +35,11 @@ public class RelationshipService {
 
     //id, nickname 검색//
     public Member findFriends(String id, String nickname) {
+
+        if (!hasText(id)&&!hasText(nickname)){
+            throw new RuntimeException("아이디 또는 닉네임을 입력해주세요.");
+        }
+
         return friendSearchRepository.findByIdOrNickname(id, nickname);
     }
 

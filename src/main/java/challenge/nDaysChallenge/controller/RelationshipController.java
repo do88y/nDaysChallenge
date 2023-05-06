@@ -1,24 +1,20 @@
 package challenge.nDaysChallenge.controller;
 import challenge.nDaysChallenge.domain.Relationship;
 import challenge.nDaysChallenge.domain.member.Member;
-import challenge.nDaysChallenge.domain.member.MemberAdapter;
-import challenge.nDaysChallenge.dto.request.FindFriendsRequestDTO;
 import challenge.nDaysChallenge.dto.request.relationship.RelationshipRequestDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 import challenge.nDaysChallenge.dto.response.relationship.AskResponseDTO;
 import challenge.nDaysChallenge.dto.response.FindFriendsResponseDTO;
-import challenge.nDaysChallenge.repository.RelationshipRepository;
+import challenge.nDaysChallenge.repository.relationship.RelationshipRepository;
 import challenge.nDaysChallenge.service.RelationshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
