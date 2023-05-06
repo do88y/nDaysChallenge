@@ -8,7 +8,7 @@ import challenge.nDaysChallenge.domain.dajim.Open;
 import challenge.nDaysChallenge.domain.room.Category;
 import challenge.nDaysChallenge.domain.room.Period;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
-import challenge.nDaysChallenge.repository.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;

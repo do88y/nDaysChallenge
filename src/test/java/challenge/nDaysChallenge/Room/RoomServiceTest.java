@@ -12,7 +12,6 @@ import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
-import challenge.nDaysChallenge.repository.room.RoomSearch;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import challenge.nDaysChallenge.service.RoomService;
 import org.junit.Test;
@@ -189,11 +188,11 @@ public class RoomServiceTest {
         em.clear();
 
         //when
-        Long roomNumber = room.getRoomNumber();
-        roomService.deleteRoom(member.getId(), room.getRoomNumber());
+        Member findMember = roomRepository.findMemberByRoomNumber(room.getRoomNumber()).get();
+        roomService.deleteRoom(findMember.getId(), room.getRoomNumber());
 
         //then
-        assertThat(roomRepository.findByNumber(roomNumber).get());
+        assertThat(roomRepository.findByNumber(room.getRoomNumber()).get());
 
         fail("exception should be accrued");
     }
@@ -283,36 +282,9 @@ public class RoomServiceTest {
         singleRoom2.addRoom(member, stamp2);
         singleRoom3.addRoom(member, stamp3);
 
-        singleRoom1.end();
-        singleRoom2.end();
-
-        em.flush();
-        em.clear();
-
-        //when
-        List<SingleRoom> finishedRooms = roomService.findFinishedSingleRooms(member.getId());
-
-        //then
-        assertThat(finishedRooms.size()).isEqualTo(2);
-        assertThat(finishedRooms)
-                .extracting("name")
-                .containsExactly("기상", "공부");
-    }
-
-    @Test
-    public void 완료_그룹챌린지_리스트() throws Exception {
-        //given
-        Member member = Member.builder()
-                .id("use1r@naver.com")
-                .pw("12345")
-                .nickname("abc")
-                .authority(Authority.ROLE_USER)
-                .build();
-        memberRepository.save(member);
-
-        GroupRoom groupRoom1 = new GroupRoom(member, "명상", this.period, Category.MINDFULNESS, 20, "여행");
-        GroupRoom groupRoom2 = new GroupRoom(member, "기상", this.period, Category.MINDFULNESS, 20, "여행");
-        GroupRoom groupRoom3 = new GroupRoom(member, "운동", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom1 = new GroupRoom(member, "그룹기상", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom2 = new GroupRoom(member, "그룹공부", this.period, Category.MINDFULNESS, 20, "여행");
+        GroupRoom groupRoom3 = new GroupRoom(member, "그룹청소", this.period, Category.MINDFULNESS, 20, "여행");
         groupRoomRepository.save(groupRoom1);
         groupRoomRepository.save(groupRoom2);
         groupRoomRepository.save(groupRoom3);
@@ -324,19 +296,22 @@ public class RoomServiceTest {
         roomMemberRepository.save(roomMember2);
         roomMemberRepository.save(roomMember3);
 
+        singleRoom1.end();
+        singleRoom2.end();
         groupRoom1.end();
         groupRoom2.end();
+
         em.flush();
         em.clear();
 
         //when
-        List<GroupRoom> finishedRooms = roomService.findFinishedGroupRooms(member.getId());
+        List<RoomResponseDto> finishedRooms = roomService.findFinishedRooms(member.getId());
 
         //then
-        assertThat(finishedRooms.size()).isEqualTo(2);
+        assertThat(finishedRooms.size()).isEqualTo(4);
         assertThat(finishedRooms)
                 .extracting("name")
-                .containsExactly("명상", "기상");
+                .containsExactly("기상", "공부", "그룹기상", "그룹공부");
     }
 
     @Test
@@ -394,5 +369,4 @@ public class RoomServiceTest {
 
     //기간
     Period period = new Period(LocalDate.now(),30);
-
 }

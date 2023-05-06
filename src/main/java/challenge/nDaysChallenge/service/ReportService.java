@@ -2,7 +2,7 @@ package challenge.nDaysChallenge.service;
 
 import challenge.nDaysChallenge.domain.Report;
 import challenge.nDaysChallenge.domain.dajim.Dajim;
-import challenge.nDaysChallenge.repository.ReportRepository;
+import challenge.nDaysChallenge.repository.report.ReportRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

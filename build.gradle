@@ -55,8 +55,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	//보안
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-security' //스프링 시큐리티
 	testImplementation 'org.springframework.security:spring-security-test'
 
@@ -70,7 +68,6 @@ dependencies {
 	implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
 }
 
 tasks.named('test') {
@@ -104,19 +101,31 @@ task('release') {
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
+
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
+
 sourceSets {
 	main.java.srcDir querydslDir
 }
+
 configurations {
 	querydsl.extendsFrom compileClasspath
 }
+
 compileQuerydsl {
+	if(file(querydslDir).exists() )
+		delete(file(querydslDir))
 	options.annotationProcessorPath = configurations.querydsl
 }
+
+task deleteGeneratedSources(type: Delete) {
+	delete file(querydslDir)
+}
+
+tasks.withType(JavaCompile) { it.dependsOn('deleteGeneratedSources') }
 //querydsl 추가 끝
 
 jar {

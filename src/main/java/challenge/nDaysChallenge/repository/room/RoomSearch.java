@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomSearch {
 
+    private String type;
     private String status;
     private String id;
 
-    public RoomSearch(String status, String id) {
+    public RoomSearch(String type, String status, String id) {
+        this.type = type;
         this.status = status;
         this.id = id;
     }

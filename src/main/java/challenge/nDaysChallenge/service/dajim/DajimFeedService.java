@@ -40,7 +40,7 @@ public class DajimFeedService {
     public Slice<DajimFeedResponseDto> viewFeedWithoutLogin(Pageable pageable) {
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        List<DajimFeedResponseDto> dajimFeedList = Dajim.toUnloggedInFeedDto(dajimPage);
+        List<DajimFeedResponseDto> dajimFeedList = toUnloggedInFeedDto(dajimPage);
 
         return new CustomSliceImpl<>(dajimFeedList, pageable, dajimPage.hasNext());
     }
@@ -54,9 +54,23 @@ public class DajimFeedService {
 
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 
-        List<DajimFeedResponseDto> dajimFeedList = Dajim.toLoggedInFeedDto(member, dajimPage);
+        List<DajimFeedResponseDto> dajimFeedList = toLoggedInFeedDto(member, dajimPage);
 
         return new CustomSliceImpl<>(dajimFeedList,pageable, dajimPage.hasNext());
+    }
+
+    //미로그인 - 다짐 슬라이스 -> 피드 dto 리스트 변환
+    private List<DajimFeedResponseDto> toUnloggedInFeedDto(Slice<Dajim> dajimPage){
+        return dajimPage.getContent().stream()
+                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
+                .collect(toList());
+    }
+
+    //로그인 - 다짐 슬라이스 -> 피드 dto 리스트 변환
+    private List<DajimFeedResponseDto> toLoggedInFeedDto(Member member, Slice<Dajim> dajimPage) {
+        return dajimPage.getContent().stream()
+                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
+                .collect(toList());
     }
 
 }

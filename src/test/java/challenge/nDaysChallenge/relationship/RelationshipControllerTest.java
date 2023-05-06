@@ -3,7 +3,7 @@
 //import challenge.nDaysChallenge.domain.Relationship;
 //import challenge.nDaysChallenge.domain.member.Authority;
 //import challenge.nDaysChallenge.domain.member.Member;
-//import challenge.nDaysChallenge.repository.RelationshipRepository;
+//import challenge.nDaysChallenge.repository.relationship.RelationshipRepository;
 //import challenge.nDaysChallenge.repository.member.MemberRepository;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
