@@ -83,11 +83,11 @@ public class RoomController {
 
     //완료 챌린지 상태 변경
     @PostMapping("/challenge/{challengeId}")
-    public ResponseEntity<?> end(@PathVariable("challengeId") Long roomNumber) {
+    public ResponseEntity<?> end(Principal principal, @PathVariable("challengeId") Long roomNumber) {
 
         Room findRoom = roomRepository.findByNumber(roomNumber).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
-        roomService.changeStatus(findRoom.getNumber());
+        roomService.changeStatus(principal.getName(), findRoom);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
