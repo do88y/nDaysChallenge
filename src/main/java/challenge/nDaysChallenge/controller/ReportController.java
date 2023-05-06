@@ -26,11 +26,10 @@ public class ReportController {
     //신고 생성
     @PostMapping("/feed/report")
     public ResponseEntity<?> report(Principal principal, @RequestBody ReportRequestDto dto) {
-        Report report = reportService.report(dto.getDajim(), dto.getCause(), dto.getIsDajim(), dto.getContent());
+        Report report = reportService.report(dto.getDajim(), dto.getCause(), dto.getContent());
         ReportResponseDto savedReport = ReportResponseDto.builder()
                 .report(report.getNumber())
                 .cause(report.getCause())
-                .isDajim(report.getIsDajim())
                 .content(report.getContent())
                 .dajim(report.getDajim().getNumber())
                 .build();

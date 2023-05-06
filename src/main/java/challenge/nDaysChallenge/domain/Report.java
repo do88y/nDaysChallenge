@@ -22,21 +22,15 @@ public class Report {
 
     private int cause;
 
-    private boolean isDajim;
-
     private String content;
 
 
-    public boolean getIsDajim() {
-        return isDajim;
-    }
 
     //==생성 메서드==//
-    public static Report createReport(Dajim dajim, int cause, boolean isDajim, String content) {
+    public static Report createReport(Dajim dajim, int cause, String content) {
         Report report = new Report();
         report.dajim = dajim;
         report.cause = cause;
-        report.isDajim = isDajim;
         report.content = content;
 
         return report;

@@ -13,16 +13,6 @@
     <form th:action="@{report}" th:object="${reportSearch}" method="post">
         <div class="row g-3 align-items-center justify-content-center">
             <div class="col-auto">
-                <label for="isDajim">다짐 여부:</label>
-            </div>
-            <div class="col-auto">
-                <select class="form-control form-select" id="isDajim" name="isDajim">
-                    <option value="">전체</option>
-                    <option value=true>다짐</option>
-                    <option value=false>그 외</option>
-                </select>
-            </div>
-            <div class="col-auto">
                 <label for="dajim">다짐 번호:</label>
             </div>
             <div class="col-auto">
@@ -47,8 +37,7 @@
             <tr>
                 <th><input class="form-check-input" type="checkbox" id="select-all"/></th>
                 <th>ID</th>
-                <th>이유</th>
-                <th>다짐 여부</th>
+                <th>사유</th>
                 <th>내용</th>
                 <th>다짐 번호</th>
             </tr>
@@ -58,7 +47,6 @@
                 <td><input class="form-check-input" type="checkbox" th:value="${report.report}" name="numbers"/></td>
                 <td th:text="${report.report}"></td>
                 <td th:text="${report.cause}"></td>
-                <td th:text="${report.isDajim}"></td>
                 <td th:text="${report.content}"></td>
                 <td th:text="${report.dajim}"></td>
             </tr>

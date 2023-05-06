@@ -22,13 +22,13 @@ public class ReportService {
     /**
      * 신고 생성
      */
-    public Report report(Long dajimNumber, int cause, boolean oDajim, String content) {
+    public Report report(Long dajimNumber, int cause, String content) {
 
         //엔티티 조회
         Optional<Dajim> findDajim = dajimRepository.findByNumber(dajimNumber);
         Dajim dajim = findDajim.orElseThrow(() -> new NoSuchElementException("해당 다짐이 없습니다. "));
 
-        Report report = Report.createReport(dajim, cause, oDajim, content);
+        Report report = Report.createReport(dajim, cause, content);
 
         reportRepository.save(report);
 

@@ -8,15 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReportSearch {
 
-    private Boolean isDajim;
     private Long dajimNumber;
 
-    public Boolean getIsDajim() {
-        return isDajim;
-    }
-
-    public ReportSearch(Boolean isDajim, Long dajimNumber) {
-        this.isDajim = isDajim;
+    public ReportSearch(Long dajimNumber) {
         this.dajimNumber = dajimNumber;
     }
 }

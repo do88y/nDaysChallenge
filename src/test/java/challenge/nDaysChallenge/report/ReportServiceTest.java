@@ -48,7 +48,7 @@ public class ReportServiceTest {
         dajimRepository.save(newDajim);
 
         //when
-        Report report = Report.createReport(newDajim, 1, true, "저를 욕해요");
+        Report report = Report.createReport(newDajim, 1, "저를 욕해요");
         Report saveReport = reportRepository.save(report);
 
         //then

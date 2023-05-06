@@ -28,17 +28,11 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
                 .select(new QReportResponseDto(
                             report.number.as("report"),
                             report.cause,
-                            report.isDajim,
                             report.content,
                             report.dajim.number.as("dajim")))
                 .from(report)
-                .where(isDajimEq(reportSearch.getIsDajim()),
-                        dajimNumberEq(reportSearch.getDajimNumber()))
+                .where(dajimNumberEq(reportSearch.getDajimNumber()))
                 .fetch();
-    }
-
-    private static BooleanExpression isDajimEq(Boolean isDajim) {
-        return isNull(isDajim) ? null : report.isDajim.eq(isDajim);
     }
 
     private static BooleanExpression dajimNumberEq(Long dajim) {

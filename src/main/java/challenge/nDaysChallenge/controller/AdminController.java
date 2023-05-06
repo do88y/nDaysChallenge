@@ -118,7 +118,6 @@ public class AdminController {
             ReportResponseDto dto = ReportResponseDto.builder()
                     .report(one.getNumber())
                     .cause(one.getCause())
-                    .isDajim(one.getIsDajim())
                     .content(one.getContent())
                     .dajim(one.getDajim().getNumber())
                     .build();
