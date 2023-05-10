@@ -5,6 +5,8 @@ import challenge.nDaysChallenge.domain.dajim.Sticker;
 import challenge.nDaysChallenge.domain.member.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @Builder

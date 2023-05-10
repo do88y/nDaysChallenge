@@ -187,6 +187,7 @@ public class RoomServiceTest {
         em.persist(member);
 
         RoomResponseDto room = roomService.singleRoom(member.getId(), "기상", period, Category.ROUTINE, 2, "");
+
         em.flush();
         em.clear();
 

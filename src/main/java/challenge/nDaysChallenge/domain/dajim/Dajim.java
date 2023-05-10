@@ -66,35 +66,4 @@ public class Dajim extends BaseEntity {
         this.emotions.remove(emotion);
     }
 
-
-    //dto 변환
-
-    //챌린지 내 다짐 조회 dto로 변환
-    public static List<DajimResponseDto> toDajimResponseDto(List<Dajim> dajims){
-        List<DajimResponseDto> dajimsList = dajims
-                .stream()
-                .map(dajim -> DajimResponseDto.of(dajim))
-                .collect(Collectors.toList());
-
-        return dajimsList;
-    }
-
-    //피드 다짐 조회 dto (미로그인)
-    public static List<DajimFeedResponseDto> toUnloggedInFeedDto(Slice<Dajim> dajimPage){ //다짐 슬라이스 -> 다짐피드 응답 dto 변환 (미로그인)
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, null))
-                .collect(toList());
-
-        return dajimFeedList;
-    }
-
-    //피드 다짐 조회 dto (로그인)
-    public static List<DajimFeedResponseDto> toLoggedInFeedDto(Member member, Slice<Dajim> dajimPage) { //다짐 슬라이스 -> 다짐피드 응답 dto 변환 (로그인)
-        List<DajimFeedResponseDto> dajimFeedList = dajimPage.getContent().stream()
-                .map(dajim -> DajimFeedResponseDto.of(dajim, member))
-                .collect(toList());
-
-        return dajimFeedList;
-    }
-
 }

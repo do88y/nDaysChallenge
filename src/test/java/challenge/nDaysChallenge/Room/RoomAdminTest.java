@@ -90,6 +90,7 @@ public class RoomAdminTest {
         RoomResponseDto room1 = roomService.singleRoom(member1.getId(), "기상", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
         RoomResponseDto room2 = roomService.singleRoom(member1.getId(), "명상", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
         RoomResponseDto room3 = roomService.singleRoom(member2.getId(), "운동", new Period(LocalDate.now(), 15), Category.ROUTINE, 2, "");
+
 //        roomService.groupRoom(member1, "커밋", new Period(LocalDate.now(), 15), 0, "", new Set<Long>(member2.getNumber()));
 
         Room findRoom1 = roomRepository.findByNumber(room1.getRoomNumber()).get();

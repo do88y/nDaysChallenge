@@ -11,10 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import java.util.List;
-
 import static challenge.nDaysChallenge.domain.member.QMember.*;
 import static challenge.nDaysChallenge.domain.room.QGroupRoom.*;
 import static challenge.nDaysChallenge.domain.room.QRoomMember.*;

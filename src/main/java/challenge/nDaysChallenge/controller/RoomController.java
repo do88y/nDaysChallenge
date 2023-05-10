@@ -95,7 +95,6 @@ public class RoomController {
     //마이페이지 - 완료 챌린지 조회
     @GetMapping("/user/challenges")
     public ResponseEntity<?> finishedRooms(Principal principal) {
-
         List<RoomResponseDto> roomList = roomService.findFinishedRooms(principal.getName());
         return ResponseEntity.status(HttpStatus.OK).body(roomList);
     }

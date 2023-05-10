@@ -10,6 +10,8 @@ import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.service.jwt.AuthService;
 import challenge.nDaysChallenge.service.member.MemberService;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -38,10 +40,18 @@ public class AuthServiceTest {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private MemberService memberService;
+
+    @After
+    public void 세팅한_회원_삭제(){
+        memberService.deleteMember("testest@naver.com");
+    }
+
     @Test
     public void 회원가입(){
         //given
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc111@naver.com", "123", "닉네임", 4);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("testest@naver.com", "123", "fortest", 4);
 
         //when
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
@@ -55,10 +65,10 @@ public class AuthServiceTest {
     @Test
     public void 로그인(){
         //given
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1@naver.com", "123", "닉네임23", 4);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("testest@naver.com", "123", "fortest", 4);
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
 
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abc1@naver.com", "123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("testest@naver.com", "123");
 
         //when
         TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
@@ -74,14 +84,14 @@ public class AuthServiceTest {
     @Test
     public void 로그아웃(){
         //given
-        MemberRequestDto memberRequestDto = new MemberRequestDto("abc1234@naver.com", "123", "닉네임3", 4);
+        MemberRequestDto memberRequestDto = new MemberRequestDto("testest@naver.com", "123", "fortest", 4);
         authService.signup(memberRequestDto);
 
-        LoginRequestDto loginRequestDto = new LoginRequestDto("abc1234@naver.com", "123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("testest@naver.com", "123");
         authService.login(loginRequestDto); //로그인
 
         //when
-        authService.logout("abc1234@naver.com");
+        authService.logout("testest@naver.com");
 
         //then
         assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull(); //로그아웃 시 시큐리티 컨텍스트에 로그인 정보 X
