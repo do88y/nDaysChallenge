@@ -31,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,6 +73,9 @@ public class MemberServiceTest {
 
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    EntityManager em;
 
     @Test
     void 아이디_중복_검사(){
@@ -117,7 +121,9 @@ public class MemberServiceTest {
         MemberEditRequestDto memberEditRequestDto = new MemberEditRequestDto("123", "abc", 4);
 
         //when
-        MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member.getNickname(), memberEditRequestDto);
+        when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
+        when(memberRepository.existsByNickname(anyString())).thenReturn(false);
+        MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member.getId(), memberEditRequestDto);
 
         //then
         assertThat(memberInfoResponseDto.getNickname()).isEqualTo(memberEditRequestDto.getNickname());
@@ -130,6 +136,7 @@ public class MemberServiceTest {
         //회원 세팅
         MemberRequestDto memberRequestDto = new MemberRequestDto("abc@naver.com","123","aaa",1);
         Member member = memberRequestDto.toMember(passwordEncoder);
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(member));
 
         SingleRoom room1 = new SingleRoom("기상", new Period(LocalDate.now(),30), Category.ROUTINE, 2, "");
         SingleRoom room2 = new SingleRoom("공부", new Period(LocalDate.now(),30), Category.ETC, 4, "");
@@ -138,11 +145,11 @@ public class MemberServiceTest {
         List<Stamp> stamps = Arrays.asList(stamp);
 
         List<SingleRoom> singleRooms = Arrays.asList(room1, room2);
-        when(singleRoomRepository.findAll(member.getId()));
+        when(singleRoomRepository.findAll(member.getId())).thenReturn(singleRooms);
+        when(singleRoomRepository.findStampByMember(member.getId())).thenReturn(stamps);
+        when(roomMemberRepository.findStampByMember(member)).thenReturn(new ArrayList<>());
         when(roomMemberRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(new ArrayList<>()));
-        when(groupRoomRepository.findAll(member.getId()));
-        when(singleRoomRepository.findStampByMember(member.getId()));
-//        when(stampRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.ofNullable(stamps));
+        when(groupRoomRepository.findAll(member.getId())).thenReturn(new ArrayList<>());
 
         Dajim dajim1 = Dajim.builder()
                 .number(1L)

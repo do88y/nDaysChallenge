@@ -7,7 +7,7 @@
 //import challenge.nDaysChallenge.dto.response.relationship.AcceptResponseDTO;
 //import challenge.nDaysChallenge.dto.response.relationship.RequestResponseDTO;
 //import challenge.nDaysChallenge.repository.MemberRepository;
-//import challenge.nDaysChallenge.repository.RelationshipRepository;
+//import challenge.nDaysChallenge.repository.relationship.RelationshipRepository;
 //import challenge.nDaysChallenge.service.RelationshipService;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
