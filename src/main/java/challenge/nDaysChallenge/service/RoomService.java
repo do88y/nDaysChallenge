@@ -117,12 +117,12 @@ public class RoomService {
      * 스탬프 찍기
      */
     @Transactional
-    public StampDto updateStamp(String id, Long roomNumber, StampDto dto) {
+    public StampDto updateStamp(String id, StampDto dto) {
 
         //엔티티 조회
         Stamp stamp = stampRepository.findById(dto.getStampNumber()).orElseThrow(
                 () -> new NoSuchElementException("해당 스탬프가 존재하지 않습니다."));
-        Room room = roomRepository.findByNumber(roomNumber).orElseThrow(
+        Room room = roomRepository.findByNumber(dto.getRoomNumber()).orElseThrow(
                 () -> new NoSuchElementException("해당 챌린지가 존재하지 않습니다."));
         Member member = memberRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("해당 멤버가 존재하지 않습니다."));
@@ -136,7 +136,7 @@ public class RoomService {
             updateStamp.updateCount(dto.getDay());
         }
 
-        return getStampDto(roomNumber, updateStamp);
+        return getStampDto(dto.getRoomNumber(), updateStamp);
     }
 
     /**
@@ -278,7 +278,9 @@ public class RoomService {
         }
         else if (RoomType.GROUP == room.getType()) {
             RoomMember roomMember = roomMemberRepository.findByMemberAndRoom(member, room);
-            if (Objects.isNull(roomMember)) throw new RuntimeException("챌린지 상태 변경 권한이 없습니다.");
+            if (Objects.isNull(roomMember)) {
+                throw new RuntimeException("챌린지 상태 변경 권한이 없습니다.");
+            }
         }
     }
 

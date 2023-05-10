@@ -68,7 +68,7 @@ public class RoomController {
     //스탬프 찍기
     @PostMapping("/challenge/stamp")
     public ResponseEntity<?> stamp(Principal principal, @RequestBody StampDto dto) {
-        StampDto updatedStamp = roomService.updateStamp(principal.getName(), dto.getRoomNumber(), dto);
+        StampDto updatedStamp = roomService.updateStamp(principal.getName(), dto);
 
         URI location = URI.create("/challenge/" + updatedStamp.getStampNumber());
         return ResponseEntity.status(HttpStatus.OK).location(location).body(updatedStamp);
