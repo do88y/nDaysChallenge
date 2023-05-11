@@ -14,16 +14,14 @@ public class ReportResponseDto {
     private Long report;
     private int cause;
     @JsonProperty
-    private Boolean isDajim;  //is필드명에 쓰면 안돼서 오류 가능성 있음
     private String content;
     private Long dajim;
 
     @QueryProjection
     @Builder
-    public ReportResponseDto(Long report, int cause, boolean isDajim, String content, Long dajim) {
+    public ReportResponseDto(Long report, int cause, String content, Long dajim) {
         this.report = report;
         this.cause = cause;
-        this.isDajim = isDajim;
         this.content = content;
         this.dajim = dajim;
     }
@@ -33,7 +31,6 @@ public class ReportResponseDto {
         return "ReportResponseDto{" +
                 "report=" + report +
                 ", cause=" + cause +
-                ", isDajim=" + isDajim +
                 ", content='" + content + '\'' +
                 ", dajim=" + dajim +
                 '}';

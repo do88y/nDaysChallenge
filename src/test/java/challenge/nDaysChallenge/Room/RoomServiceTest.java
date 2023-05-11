@@ -6,6 +6,7 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.Stamp;
 import challenge.nDaysChallenge.domain.room.*;
 import challenge.nDaysChallenge.dto.request.StampDto;
+import challenge.nDaysChallenge.dto.response.room.GroupRoomResponseDto;
 import challenge.nDaysChallenge.dto.response.room.RoomResponseDto;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
@@ -93,9 +94,10 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoomResponseDto dto = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
+        GroupRoom groupRoom = groupRoomRepository.findById(dto.getRoomNumber()).get();
 
         //then
         assertThat(groupRoom.getRoomMemberList().size()).isEqualTo(3);
@@ -161,13 +163,15 @@ public class RoomServiceTest {
         selectedMembers.add(member3.getNumber());
 
         //when
-        GroupRoom groupRoom1 = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
+        GroupRoomResponseDto dto = roomService.groupRoom(member1.getId(), "내일까지 마무으리", period, Category.MINDFULNESS, 0,"", selectedMembers);
         em.flush();
         em.clear();
+        GroupRoom groupRoom = groupRoomRepository.findById(dto.getRoomNumber()).get();
 
         //then
-        RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom1);
-        assertThat(groupRoom1.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
+        assertThat(groupRoom.getNumber()).isEqualTo(dto.getRoomNumber());
+        RoomMember findRoomByMember = roomMemberRepository.findByMemberAndRoom(member1, groupRoom);
+        assertThat(groupRoom.getNumber()).isEqualTo(findRoomByMember.getRoom().getNumber());
 
     }
 
@@ -239,18 +243,13 @@ public class RoomServiceTest {
         em.flush();
         em.clear();
 
-        List<SingleRoom> singleRooms = roomService.findSingleRooms(member.getId());
-        List<GroupRoom> groupRooms = roomService.findGroupRooms(member.getId());
+        List<RoomResponseDto> rooms = roomService.findRooms(member.getId());
 
         //then
-        assertThat(singleRooms.size()).isEqualTo(2);
-        assertThat(groupRooms.size()).isEqualTo(1);
-        assertThat(singleRooms)
+        assertThat(rooms.size()).isEqualTo(3);
+        assertThat(rooms)
                 .extracting("name")
-                .containsExactly("공부", "청소");
-        assertThat(groupRooms)
-                .extracting("name")
-                .containsExactly("명상");
+                .containsExactly("공부", "청소", "명상");
     }
 
     @Test
@@ -355,9 +354,9 @@ public class RoomServiceTest {
         Room room = roomRepository.findByNumber(roomDto.getRoomNumber()).orElseThrow(() -> new RuntimeException("해당 챌린지가 없습니다."));
 
         //when
-        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
-        roomService.updateStamp(member.getId(), room.getNumber(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "o", room.getStamp().getSuccessCount(), room.getPassCount()));
+        roomService.updateStamp(member.getId(), new StampDto(room.getNumber(), room.getStamp().getNumber(), "x", room.getStamp().getSuccessCount(), room.getPassCount()));
 
         em.flush();
         em.clear();

@@ -126,7 +126,7 @@ public class RoomAdminTest {
 
     @Test
     public void 다짐_쿼리_테스트() {
-        List<ReportResponseDto> reports = reportRepository.findReports(new ReportSearch(true, 1L));
+        List<ReportResponseDto> reports = reportRepository.findReports(new ReportSearch(1L));
         for (ReportResponseDto report : reports) {
             System.out.println("report = " + report);
         }

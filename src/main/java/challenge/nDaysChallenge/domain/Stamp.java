@@ -55,14 +55,13 @@ public class Stamp {
         return this;
     }
 
-    //성공 +1
-    public void addSuccess() {
-        successCount += 1;
-    }
-
-    //실패 +1
-    public void addPass() {
-        usedPassCount += 1;
+    //성공, 실패 카운트 업데이트
+    public void updateCount(String day) {
+        if (day.equals("o")) {
+            successCount += 1;
+        } else if (day.equals("x")) {
+            usedPassCount += 1;
+        }
     }
 
     public void deleteConnection(){
