@@ -122,7 +122,6 @@ public class MemberServiceTest {
 
         //when
         when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
-        when(memberRepository.existsByNickname(anyString())).thenReturn(false);
         MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member.getId(), memberEditRequestDto);
 
         //then
