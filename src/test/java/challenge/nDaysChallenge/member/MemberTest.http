@@ -6,16 +6,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhd
 ### 회원정보 수정
 PATCH http://localhost:8080/user/edit
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjY0OTI3fQ.tHjGo9-CjOKgM7TdRn8fWOSKfv_YWTjhEHxnf0VEsM8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjg0NzQzNTE2fQ.R7RFFsaPyPSXFcTgZHmbQdWk-QFC4sI2mJHwRHwTUFk
 
 {
   "pw": "123",
-  "nickname": "바꾸깅2",
+  "nickname": "바꾸깅깅깅",
   "image": 3
 }
 
 
 ### 회원 탈퇴
 DELETE http://localhost:8080/user/withdrawal
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MTAyODY2NX0.ch-6PPxd9OYa8pfuYVFF5_7F5uZZm6kQ3UXut4hGKlU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjg0NzQzNTE2fQ.R7RFFsaPyPSXFcTgZHmbQdWk-QFC4sI2mJHwRHwTUFk
 
