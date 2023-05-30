@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import javax.validation.Valid;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         } else if (memberRepository.existsByNickname(memberRequestDto.getNickname())){
             throw new RuntimeException("이미 존재하는 닉네임입니다.");
+        }
+
+        //비밀번호 regex 확인 (영문대소문자, 숫자, 특문 하나 이상 포함)
+        if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\\\\\\\":{}|<>]).{8,}$",memberRequestDto.getPw())){
+            throw new RuntimeException("정해진 형식에 맞게 비밀번호를 입력해주세요.");
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
