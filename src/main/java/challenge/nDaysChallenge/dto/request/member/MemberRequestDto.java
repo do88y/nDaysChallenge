@@ -19,9 +19,11 @@ public class MemberRequestDto {
     private String id;
 
     @NotEmpty(message = "비밀번호를 입력해 주세요.")
+    @Size(min = 8)
     private String pw;
 
     @NotEmpty(message = "닉네임을 입력해 주세요.")
+    @Size(min = 2, max = 6)
     private String nickname;
 
     @NotNull(message = "프로필 사진을 선택해 주세요.")

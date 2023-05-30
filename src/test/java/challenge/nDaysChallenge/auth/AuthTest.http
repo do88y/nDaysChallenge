@@ -3,9 +3,9 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "id123@gmail.com",
-  "pw": "123",
-  "nickname": "닉네임2",
+  "id": "id1231@gmail.com",
+  "pw": "Aa!!dd2d",
+  "nickname": "닉네im",
   "image": 2
 }
 
