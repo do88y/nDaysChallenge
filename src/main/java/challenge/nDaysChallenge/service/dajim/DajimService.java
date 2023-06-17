@@ -66,10 +66,8 @@ public class DajimService {
 
     //다짐 수정
     public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, String id) {
-        Dajim dajim = dajimRepository.findByMember_IdAndRoom_Number(id, roomNumber)
-                .orElseThrow(()->new RuntimeException("다짐을 찾을 수 없습니다."));
-
-        checkRoomAndMember(dajim, id, roomNumber); //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
+        Dajim dajim = dajimRepository.findByMember_IdAndRoom_Number(id, roomNumber) //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
+                .orElseThrow(()->new RuntimeException("해당 멤버 아이디와 룸 넘버를 가진 다짐을 찾을 수 없습니다."));
 
         Dajim updatedDajim = dajim.update(Open.valueOf(dajimUpdateRequestDto.getOpen()), dajimUpdateRequestDto.getContent());
 
@@ -90,13 +88,6 @@ public class DajimService {
         return dajims.stream()
                 .map(dajim -> DajimResponseDto.of(dajim))
                 .collect(Collectors.toList());
-    }
-
-    //다짐 수정 시 작성자/룸 체크
-    private void checkRoomAndMember(Dajim dajim, String id, Long roomNumber){
-        if (!dajim.getMember().getId().equals(id) || !dajim.getRoom().getNumber().equals(roomNumber)){
-            throw new RuntimeException("해당 챌린지 룸에 대한 접근 권한이 없습니다.");
-        }
     }
 
 }
