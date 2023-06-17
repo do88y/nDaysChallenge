@@ -1,28 +1,28 @@
 ### 다짐 등록
-POST http://localhost:8080/challenge/6/dajim
+POST http://localhost:8080/challenge/314/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..sFQYvr6nBtDJbHGwWbvWuRzYTu_PC6dnqO65BXJXMKM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2ODY5ODY1NDF9.eGNPFtvyZemYC2IXJXbdKhfSMG-u1zhN0Vb36Wh_dEE
 
 {
-  "content": "",
+  "content": "다짐",
   "open": "PUBLIC"
 }
 
 ### 다짐 수정
-PATCH http://localhost:8080/challenge/3/dajim
+PATCH http://localhost:8080/challenge/314/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY4MTAyNzkwNH0.E1fgMBeNF05yXzXNWPSIOyPgPKJnwRrM9oiZQUMT9bU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2ODY5ODY4MjB9.H0NSdQHi1xsqwn0Qzm-PQXA67KsohjY4xd1j2_a7Vqs
 
 {
-  "dajimNumber": 3,
-  "content": "",
+  "dajimNumber": 90,
+  "content": "내용 수정",
   "open": "PUBLIC"
 }
 
 ### 챌린지룸 내 다짐 조회
-GET http://localhost:8080/challenge/1/dajim
+GET http://localhost:8080/challenge/314/dajim
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2ODY5ODY4MjB9.H0NSdQHi1xsqwn0Qzm-PQXA67KsohjY4xd1j2_a7Vqs
 
 ### 피드 조회 (미로그인)
 GET {{review-api}}/feed?page=0

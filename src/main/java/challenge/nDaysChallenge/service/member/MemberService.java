@@ -119,7 +119,7 @@ public class MemberService {
     @Transactional
     public void deleteRelatedEntities(Member member){
         //참조 엔티티들 불러오기
-        List<Dajim> dajims = dajimRepository.findAllByMemberNickname(member.getNickname()).orElseGet(ArrayList::new);
+        List<Dajim> dajims = dajimRepository.findAllByMember_Nickname(member.getNickname()).orElseGet(ArrayList::new);
         List<RoomMember> roomMembers = roomMemberRepository.findAllByMemberNickname(member.getNickname()).orElseGet(ArrayList::new);
         List<Stamp> stamps = Stream
                 .concat(singleRoomRepository.findStampByMember(member.getId()).stream(), roomMemberRepository.findStampByMember(member).stream())
