@@ -91,10 +91,10 @@ public class EmotionRepositoryTest {
 
     @Test
     void 이모션_불러오기(){
-        Emotion savedEmotion1 = emotionRepository.findByDajimAndMember(savedDajim.getNumber(), savedMember1.getNumber())
+        Emotion savedEmotion1 = emotionRepository.findByDajim_NumberAndMember_Number(savedDajim.getNumber(), savedMember1.getNumber())
                 .orElseThrow(()->new RuntimeException("이모션을 찾을 수 없습니다."));
 
-        Emotion savedEmotion2 = emotionRepository.findByDajimAndMember(savedDajim.getNumber(), savedMember2.getNumber())
+        Emotion savedEmotion2 = emotionRepository.findByDajim_NumberAndMember_Number(savedDajim.getNumber(), savedMember2.getNumber())
                 .orElseThrow(()->new RuntimeException("이모션을 찾을 수 없습니다."));
 
         assertThat(savedEmotion1.getSticker().toString()).isEqualTo("CHEER");

@@ -13,9 +13,6 @@ import java.util.Optional;
 public interface EmotionRepository extends JpaRepository<Emotion, Long> {
 
     //수정/삭제할 이모션 불러오기
-    @Query("select e from Emotion e " +
-            "where e.dajim.number = :dajimNumber " +
-            "and e.member.number = :memberNumber")
-    Optional<Emotion> findByDajimAndMember(@Param("dajimNumber")Long dajimNumber, @Param("memberNumber")Long memberNumber);
+    Optional<Emotion> findByDajim_NumberAndMember_Number(Long dajimNumber, Long memberNumber);
 
 }

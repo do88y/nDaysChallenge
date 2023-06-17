@@ -132,7 +132,7 @@ public class EmotionServiceTest {
 
         //when
         when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
-        when(emotionRepository.findByDajimAndMember(any(),any())).thenReturn(Optional.of(emotion));
+        when(emotionRepository.findByDajim_NumberAndMember_Number(any(),any())).thenReturn(Optional.of(emotion));
 
         EmotionRequestDto emotionRequestDto = new EmotionRequestDto(dajim.getNumber(), "SURPRISE");
         EmotionResponseDto emotionResponseDto = emotionService.updateEmotion(emotionRequestDto, member.getId());
@@ -161,7 +161,7 @@ public class EmotionServiceTest {
         //when
         when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         when(dajimRepository.findByNumber(any())).thenReturn(Optional.of(dajim));
-        when(emotionRepository.findByDajimAndMember(any(),any())).thenReturn(Optional.of(emotion));
+        when(emotionRepository.findByDajim_NumberAndMember_Number(any(),any())).thenReturn(Optional.of(emotion));
 
         emotionService.deleteEmotion(emotionRequestDto, member.getId());
 
