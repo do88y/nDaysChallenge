@@ -92,7 +92,7 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     //로그아웃
     public void logout(String id){
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(id)
+        RefreshToken refreshToken = refreshTokenRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("사용자의 리프레시 토큰을 찾을 수 없습니다."));
 
         refreshTokenRepository.delete(refreshToken); //리프레쉬 토큰 삭제
@@ -116,11 +116,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         //id 기반으로 저장소에서 refresh 토큰 값 가져오기
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+        RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("로그아웃된 사용자입니다"));
 
         //refresh 토큰 일치(저장소 - 파라미터) 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
+        if (!refreshToken.getToken().equals(tokenRequestDto.getRefreshToken())){
             throw new RuntimeException("토큰의 사용자 정보가 일치하지 않습니다");
         }
 
