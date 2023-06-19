@@ -4,31 +4,25 @@ import challenge.nDaysChallenge.domain.dajim.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@RedisHash(value = "refreshToken", timeToLive = 1000 * 60 * 60 * 24 * 7) //7일
 @Getter
-@NoArgsConstructor
-@Entity
 public class RefreshToken { //db에 저장
 
     @Id
-    @Column(name = "rt_key")
-    private String key;
+    private String id;
 
-    @Column(name = "rt_value")
-    private String value;
+    private String token;
 
-    @Column
-    private LocalDateTime createdDate;
-
-    public RefreshToken(String key, String value){
-        this.key=key;
-        this.value=value;
-        this.createdDate=LocalDateTime.now();
+    public RefreshToken(String id, String token){
+        this.id=id;
+        this.token=token;
     }
 
 }
