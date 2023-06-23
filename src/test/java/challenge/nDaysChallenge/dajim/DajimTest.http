@@ -11,7 +11,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsI
 ### 다짐 수정
 PATCH http://localhost:8080/challenge/314/dajim
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2ODY5ODgyMzZ9.EjfB3vDLuLv4Ml5jtGuDnNQ6xuSoxgl0gnxQ2Qc-34I
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzQ1NjdAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4NzUxNzMzOX0.k8w5MbsJG3pWPdDeOwc4rPIm5SgGuwPr3LkN2DmuU5Q
 
 {
   "dajimNumber": 90,

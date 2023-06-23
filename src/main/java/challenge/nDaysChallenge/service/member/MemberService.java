@@ -8,6 +8,8 @@ import challenge.nDaysChallenge.domain.room.RoomMember;
 import challenge.nDaysChallenge.domain.room.SingleRoom;
 import challenge.nDaysChallenge.dto.request.member.MemberEditRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberInfoResponseDto;
+import challenge.nDaysChallenge.exception.CustomError;
+import challenge.nDaysChallenge.exception.CustomException;
 import challenge.nDaysChallenge.repository.RoomMemberRepository;
 import challenge.nDaysChallenge.repository.StampRepository;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
@@ -108,12 +110,12 @@ public class MemberService {
 
     public Member validateMember(String id){
         return memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.USER_NOT_FOUND));
     }
 
     public Member validateNickname(String id){
         return memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.USER_NOT_FOUND));
     }
 
     @Transactional

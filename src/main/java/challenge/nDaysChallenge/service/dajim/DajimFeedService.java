@@ -8,6 +8,8 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUpdateRequestDto;
 import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
+import challenge.nDaysChallenge.exception.CustomError;
+import challenge.nDaysChallenge.exception.CustomException;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
@@ -50,7 +52,7 @@ public class DajimFeedService {
     @Transactional(readOnly = true)
     public Slice<DajimFeedResponseDto> viewFeedLoggedIn(String id, Pageable pageable) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.USER_NOT_FOUND));
 
         Slice<Dajim> dajimPage = dajimRepository.findByOpen(Open.PUBLIC, pageable);
 

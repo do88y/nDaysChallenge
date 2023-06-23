@@ -11,6 +11,8 @@ import challenge.nDaysChallenge.dto.request.dajim.DajimUploadRequestDto;
 import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.dto.response.dajim.DajimFeedResponseDto;
 import challenge.nDaysChallenge.dto.response.dajim.DajimResponseDto;
+import challenge.nDaysChallenge.exception.CustomError;
+import challenge.nDaysChallenge.exception.CustomException;
 import challenge.nDaysChallenge.repository.dajim.DajimRepository;
 import challenge.nDaysChallenge.repository.dajim.EmotionRepository;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
@@ -49,15 +51,15 @@ public class DajimService {
     //다짐 등록
     public DajimResponseDto uploadDajim(Long roomNumber, DajimUploadRequestDto dajimUploadRequestDto, String id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 사용자를 찾아오는 데 실패했습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.USER_NOT_FOUND));
 
         //다짐 존재 여부 확인 (같은 룸-멤버에선 하나의 다짐만 허용)
         if (dajimRepository.findByMember_IdAndRoom_Number(id, roomNumber).isPresent()){
-            throw new RuntimeException("이미 존재하는 다짐입니다.");
+            throw new CustomException(CustomError.SPECIFIC_DAJIM_NOT_FOUND);
         }
 
         Room room = roomRepository.findByNumber(roomNumber)
-                .orElseThrow(() -> new RuntimeException("챌린지룸을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.ROOM_NOT_FOUND));
 
         Dajim newDajim = dajimUploadRequestDto.toDajim(room, member, dajimUploadRequestDto.getContent(), dajimUploadRequestDto.getOpen());
 
@@ -67,7 +69,7 @@ public class DajimService {
     //다짐 수정
     public DajimResponseDto updateDajim(Long roomNumber, DajimUpdateRequestDto dajimUpdateRequestDto, String id) {
         Dajim dajim = dajimRepository.findByMember_IdAndRoom_Number(id, roomNumber) //다짐이 소속된 룸에서 실행 중인지, 작성한 다짐을 수정하는지 확인
-                .orElseThrow(()->new RuntimeException("해당 멤버 아이디와 룸 넘버를 가진 다짐을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.SPECIFIC_DAJIM_NOT_FOUND));
 
         Dajim updatedDajim = dajim.update(Open.valueOf(dajimUpdateRequestDto.getOpen()), dajimUpdateRequestDto.getContent());
 
@@ -78,7 +80,7 @@ public class DajimService {
     @Transactional(readOnly = true)
     public List<DajimResponseDto> viewDajimInRoom(Long roomNumber){
         List<Dajim> dajims = dajimRepository.findAllByRoomNumber(roomNumber)
-                    .orElseThrow(()-> new RuntimeException("다짐을 확인할 수 없습니다."));
+                .orElseThrow(() -> new CustomException(CustomError.DAJIM_NOT_FOUND));
 
         return toDajimResponseDto(dajims);
     }
