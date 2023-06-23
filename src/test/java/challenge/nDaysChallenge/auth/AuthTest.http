@@ -3,9 +3,9 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "id": "id1234567@gmail.com",
+  "id": "id1234555@gmail.com",
   "pw": "Aa!!dd2df",
-  "nickname": "test",
+  "nickname": "test2",
   "image": 2
 }
 
@@ -27,10 +27,10 @@ Content-Type: application/json
 
 ###액세스 토큰 재발급
 POST http://localhost:8080/auth/reissue
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3OTM4MTc5MH0.8n8O0K7AkFJyXF__VMt7VD3awyuoP-EVNGhBnaYL9-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzQ1NjdAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4NzA5NTE2MH0.o80t-Fq80M790kr2KaMu-pJoiVHqA36gywrAxm8kJs8
 Content-Type: application/json
 
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoibnVsbCIsImV4cCI6MTY3OTM4MTc5MH0.8n8O0K7AkFJyXF__VMt7VD3awyuoP-EVNGhBnaYL9-8",
-  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk5ODQ3OTB9.QfqDDA8b9YobpJS8idgCEt3Idx-q0e0ZAunYK_8qhGk"
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzQ1NjdAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4NzA5NTE2MH0.o80t-Fq80M790kr2KaMu-pJoiVHqA36gywrAxm8kJs8",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODc2OTgxNjB9.IvQHzKy0X8_RivxF8Tnw347XK2nvfT6h_sBL-T5L0gc"
 }

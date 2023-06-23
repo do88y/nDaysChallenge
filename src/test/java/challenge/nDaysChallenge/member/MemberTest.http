@@ -1,6 +1,6 @@
 ### 회원정보 조회
 GET http://localhost:8080/user/details
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjYzODI1fQ.b5CwSseC6pa9IKi0yWu5siljRFAyJefE4I2QPQmerTs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzQ1NjdAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4NzUxNzMzOX0.k8w5MbsJG3pWPdDeOwc4rPIm5SgGuwPr3LkN2DmuU5Q
 
 
 ### 회원정보 수정
