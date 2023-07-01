@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -25,20 +26,20 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
-    //IllegalArgument
-    @org.springframework.web.bind.annotation.ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
-        log.warn("handleIllegalArgument", e);
-        ErrorCode errorCode = CommonError.BAD_REQUEST;
-        return handleExceptionInternal(errorCode, e.getMessage());
+    //NotFound
+    @org.springframework.web.bind.annotation.ExceptionHandler(HttpClientErrorException.NotFound.class)
+    public ResponseEntity<Object> handleNotFound(HttpClientErrorException.NotFound e) {
+        log.warn("handleNotFound", e);
+        ErrorCode errorCode = CommonError.NOT_FOUND;
+        return handleExceptionInternal(errorCode);
     }
 
-    //BadRequest
-    @org.springframework.web.bind.annotation.ExceptionHandler(HttpClientErrorException.BadRequest.class)
-    public ResponseEntity<Object> handleBadRequest(HttpClientErrorException.BadRequest e) {
-        log.warn("handleBadRequest", e);
-        ErrorCode errorCode = CommonError.BAD_REQUEST;
-        return handleExceptionInternal(errorCode, e.getMessage());
+    //Forbidden
+    @org.springframework.web.bind.annotation.ExceptionHandler(HttpClientErrorException.Forbidden.class)
+    public ResponseEntity<Object> handleForbidden(HttpClientErrorException.Forbidden e) {
+        log.warn("handleForbidden", e);
+        ErrorCode errorCode = CommonError.FORBIDDEN;
+        return handleExceptionInternal(errorCode);
     }
 
     //Unauthorized
@@ -46,15 +47,15 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUnauthorized(HttpClientErrorException.Unauthorized e) {
         log.warn("handleUnauthorized", e);
         ErrorCode errorCode = CommonError.UNAUTHORIZED;
-        return handleExceptionInternal(errorCode, e.getMessage());
+        return handleExceptionInternal(errorCode);
     }
 
-    //MethodArgumentNotValid
-    @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        log.warn("handleIllegalArgument", e);
-        ErrorCode errorCode = CommonError.BAD_REQUEST;
-        return handleExceptionInternal(e, errorCode);
+    //Internal Server
+    @org.springframework.web.bind.annotation.ExceptionHandler(HttpServerErrorException.InternalServerError.class)
+    public ResponseEntity<Object> handleInternalServer(HttpServerErrorException.InternalServerError e) {
+        log.warn("handleInternalServer", e);
+        ErrorCode errorCode = CommonError.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternal(errorCode);
     }
 
     //모든 예외
@@ -70,41 +71,10 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(makeErrorResponse(errorCode));
     }
 
-    private ResponseEntity<Object> handleExceptionInternal(MethodArgumentNotValidException e, ErrorCode errorCode) {
-        return ResponseEntity.status(errorCode.getHttpStatus())
-                .body(makeErrorResponse(e, errorCode));
-    }
-
-    private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode, String message) {
-        return ResponseEntity.status(errorCode.getHttpStatus())
-                .body(makeErrorResponse(errorCode, message));
-    }
-
     private ErrorResponse makeErrorResponse(ErrorCode errorCode) {
         return ErrorResponse.builder()
                 .code(errorCode.name())
                 .message(errorCode.getMessage())
-                .build();
-    }
-
-    private ErrorResponse makeErrorResponse(ErrorCode errorCode, String message) {
-        return ErrorResponse.builder()
-                .code(errorCode.name())
-                .message(message)
-                .build();
-    }
-
-    private ErrorResponse makeErrorResponse(org.springframework.validation.BindException e, ErrorCode errorCode) {
-        List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(ErrorResponse.ValidationError::of)
-                .collect(Collectors.toList());
-
-        return ErrorResponse.builder()
-                .code(errorCode.name())
-                .message(errorCode.getMessage())
-                .errors(validationErrorList)
                 .build();
     }
 
