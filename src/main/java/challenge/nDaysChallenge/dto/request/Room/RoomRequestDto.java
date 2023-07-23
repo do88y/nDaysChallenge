@@ -2,28 +2,29 @@ package challenge.nDaysChallenge.dto.request.Room;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
 public class RoomRequestDto {
 
-    private String type;
-    private String name;
-    private String category;
-    private int totalDays;
+    protected String type;
+    protected String name;
+    protected String category;
+    protected int totalDays;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
-    private int passCount;
-    private String reward;
+    protected LocalDate startDate;
+    protected int passCount;
+    protected String reward;
 
-    private int successCount;
-    private int usedPassCount;
+    protected int successCount;
+    protected int usedPassCount;
 
 
-    @Builder
     public RoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, int totalDays, String type, int successCount, int usedPassCount) {
         this.type = type;
         this.name = name;

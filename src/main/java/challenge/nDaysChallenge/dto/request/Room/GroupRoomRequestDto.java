@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -12,23 +13,11 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupRoomRequestDto {
-
-    private String type;
-    private String name;
-    private String category;
-    private int totalDays;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
-    private int passCount;
-    private String reward;
-
-    private int successCount;
-    private int usedPassCount;
+@SuperBuilder
+public class GroupRoomRequestDto extends RoomRequestDto {
 
     private Set<Long> groupMembers = new HashSet<>();
 
-    @Builder
     public GroupRoomRequestDto(String name, String category, String reward, int passCount, LocalDate startDate, int totalDays, String type, int successCount, int usedPassCount, Set<Long> groupMembers) {
         this.type = type;
         this.name = name;
