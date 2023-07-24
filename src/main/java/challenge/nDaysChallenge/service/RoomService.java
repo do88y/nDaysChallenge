@@ -15,6 +15,7 @@ import challenge.nDaysChallenge.repository.room.GroupRoomRepository;
 import challenge.nDaysChallenge.repository.room.RoomRepository;
 import challenge.nDaysChallenge.repository.room.SingleRoomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -63,7 +65,9 @@ public class RoomService {
 
         //저장
         stampRepository.save(stamp);
+        log.info("created stamp = {}", stamp);
         singleRoomRepository.save(newRoom);
+        log.info("created room = {}", newRoom);
 
         return createRoomDto(newRoom, stamp);
     }
@@ -93,20 +97,25 @@ public class RoomService {
 
         //저장
         groupRoomRepository.save(newRoom);
+        log.info("created room = {}", newRoom);
         stampRepository.save(stamp);
+        log.info("created stamp = {}", stamp);
         roomMemberRepository.save(roomMember);
+        log.info("created room member = {}", roomMember);
 
-        //그 외 멤버
-        for (Member findMember : memberList) {
+        //그 외
+        memberList.forEach(mem -> {
             //스탬프 생성
             Stamp newStamp = Stamp.createStamp(newRoom);
             //룸멤버 생성
-            RoomMember result = RoomMember.createRoomMember(findMember, newRoom, newStamp);
+            RoomMember result = RoomMember.createRoomMember(mem, newRoom, newStamp);
 
             //저장
             stampRepository.save(newStamp);
+            log.info("created stamp = {}", newStamp);
             roomMemberRepository.save(result);
-        }
+            log.info("created room member = {}", result);
+        });
 
         return createGroupRoomDto(newRoom, selectedMember);
     }
