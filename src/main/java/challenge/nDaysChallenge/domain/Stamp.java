@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.member.Member;
 import challenge.nDaysChallenge.domain.room.Room;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -66,5 +67,16 @@ public class Stamp {
 
     public void deleteConnection(){
         this.room=null;
+    }
+
+    @Override
+    public String toString() {
+        return "Stamp{" +
+                "number=" + number +
+                ", day='" + day + '\'' +
+                ", latestDate=" + latestDate +
+                ", usedPassCount=" + usedPassCount +
+                ", successCount=" + successCount +
+                '}';
     }
 }

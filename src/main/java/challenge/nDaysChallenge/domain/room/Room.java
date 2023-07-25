@@ -56,4 +56,17 @@ public class Room {
         this.status = RoomStatus.END;
     }
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "number=" + number +
+                ", name='" + name + '\'' +
+                ", period=" + period +
+                ", category=" + category +
+                ", reward='" + reward + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", passCount=" + passCount +
+                '}';
+    }
 }
