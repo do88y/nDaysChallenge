@@ -4,6 +4,7 @@ import challenge.nDaysChallenge.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,5 +34,4 @@ public class GroupRoom extends Room {
     public void deleteHostConnection(){
         this.member=null;
     }
-
 }

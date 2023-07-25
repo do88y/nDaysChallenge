@@ -36,11 +36,4 @@ public class SingleRoom extends Room {
         this.member=null;
         this.stamp=null;
     }
-
-    @Override
-    public String toString() {
-        return "SingleRoom{" +
-                "member=" + member +
-                '}';
-    }
 }

@@ -15,7 +15,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@ToString
 public class Stamp {
 
     @Id
@@ -68,5 +67,16 @@ public class Stamp {
 
     public void deleteConnection(){
         this.room=null;
+    }
+
+    @Override
+    public String toString() {
+        return "Stamp{" +
+                "number=" + number +
+                ", day='" + day + '\'' +
+                ", latestDate=" + latestDate +
+                ", usedPassCount=" + usedPassCount +
+                ", successCount=" + successCount +
+                '}';
     }
 }

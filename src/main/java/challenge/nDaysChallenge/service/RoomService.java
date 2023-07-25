@@ -136,14 +136,15 @@ public class RoomService {
         stampCheckMember(member, room, stamp);
 
         //스탬프 엔티티 업데이트
-        Stamp updateStamp = stamp.updateStamp(room, dto.getDay());
+        Stamp updatedStamp = stamp.updateStamp(room, dto.getDay());
 
         //count 업데이트
         if (StringUtils.hasText(dto.getDay())) {
-            updateStamp.updateCount(dto.getDay());
+            updatedStamp.updateCount(dto.getDay());
         }
+        log.info("updated stamp = {}", updatedStamp);
 
-        return getStampDto(dto.getRoomNumber(), updateStamp);
+        return getStampDto(dto.getRoomNumber(), updatedStamp);
     }
 
     /**
