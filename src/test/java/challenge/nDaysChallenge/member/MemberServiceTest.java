@@ -122,7 +122,6 @@ public class MemberServiceTest {
 
         //when
         when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
-        when(memberRepository.existsByNickname(anyString())).thenReturn(false);
         MemberInfoResponseDto memberInfoResponseDto = memberService.editMemberInfo(member.getId(), memberEditRequestDto);
 
         //then
@@ -166,7 +165,7 @@ public class MemberServiceTest {
                 .open(Open.PUBLIC).build();
 
         List<Dajim> dajims = Arrays.asList(dajim1, dajim2);
-        when(dajimRepository.findAllByMemberNickname(member.getNickname())).thenReturn(Optional.of(dajims));
+        when(dajimRepository.findAllByMember_Nickname(member.getNickname())).thenReturn(Optional.of(dajims));
 
         //when
         doNothing().when(memberRepository).delete(member);

@@ -20,11 +20,9 @@ public interface DajimRepository extends JpaRepository<Dajim, Long> {
 
     Optional<Dajim> findByNumber(Long dajimNumber);
 
-    @Query("SELECT d FROM Dajim d WHERE d.member.id = :memberId AND d.room.number = :roomNumber")
-    Optional<Dajim> findByMemberIdAndRoomNumber(@Param("memberId") String memberId, @Param("roomNumber") Long roomNumber);
+    Optional<Dajim> findByMember_IdAndRoom_Number(String memberId, Long roomNumber);
 
-    @Query("SELECT d FROM Dajim d WHERE d.member.nickname = :nickname")
-    Optional<List<Dajim>> findAllByMemberNickname(@Param("nickname") String nickname);
+    Optional<List<Dajim>> findAllByMember_Nickname(String nickname);
 
     //챌린지 룸 다짐 조회 - 룸멤버 (1~4명) 다짐 상세 조회
     @Query("SELECT d FROM Dajim d JOIN d.room r" +

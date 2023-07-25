@@ -150,7 +150,7 @@ public class DajimServiceTest {
         DajimUpdateRequestDto dajimUpdateRequestDto = new DajimUpdateRequestDto(dajim.getNumber(), "수정한 내용", "PRIVATE");
 
         //when
-        when(dajimRepository.findByMemberIdAndRoomNumber(any(),any())).thenReturn(Optional.ofNullable(dajim));
+        when(dajimRepository.findByMember_IdAndRoom_Number(any(),any())).thenReturn(Optional.ofNullable(dajim));
         DajimResponseDto dajimResponseDto = dajimService.updateDajim(room.getNumber(), dajimUpdateRequestDto, member.getId());
 
         //then

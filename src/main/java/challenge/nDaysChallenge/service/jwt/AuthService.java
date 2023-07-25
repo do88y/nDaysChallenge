@@ -6,6 +6,9 @@ import challenge.nDaysChallenge.dto.request.jwt.TokenRequestDto;
 import challenge.nDaysChallenge.dto.request.jwt.LoginRequestDto;
 import challenge.nDaysChallenge.dto.request.member.MemberRequestDto;
 import challenge.nDaysChallenge.dto.response.member.MemberResponseDto;
+import challenge.nDaysChallenge.exception.CustomError;
+import challenge.nDaysChallenge.exception.CustomException;
+import challenge.nDaysChallenge.exception.ErrorCode;
 import challenge.nDaysChallenge.jwt.TokenProvider;
 import challenge.nDaysChallenge.jwt.RefreshToken;
 import challenge.nDaysChallenge.repository.member.MemberRepository;
@@ -23,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import javax.validation.Valid;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +43,14 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     //회원가입
     public MemberResponseDto signup(@Valid MemberRequestDto memberRequestDto) {
         if (memberRepository.existsById(memberRequestDto.getId())){
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
+            throw new CustomException(CustomError.EXISTING_ID);
         } else if (memberRepository.existsByNickname(memberRequestDto.getNickname())){
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
+            throw new CustomException(CustomError.EXISTING_NICKNAME);
+        }
+
+        //비밀번호 regex 확인 (영문대소문자, 숫자, 특문 하나 이상 포함)
+        if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\\\\\\\":{}|<>]).{8,}$",memberRequestDto.getPw())){
+            throw new CustomException(CustomError.WRONG_REGEX);
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -55,10 +64,11 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
     public TokenResponseDto login(LoginRequestDto loginRequestDto) {
         //id, pw 검증
         Member member = memberRepository.findById(loginRequestDto.getId())
-                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일입니다."));
+                .orElseThrow(()->new CustomException(CustomError.USER_NOT_FOUND));
+
 
         if (!passwordEncoder.matches(loginRequestDto.getPw(),member.getPw())){
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new CustomException(CustomError.WRONG_PASSWORD);
         }
 
         //로그인 id, pw 기반으로 authenticationToken (인증 객체) 생성
@@ -86,8 +96,8 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
 
     //로그아웃
     public void logout(String id){
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(id)
-                .orElseThrow(() -> new RuntimeException("사용자의 리프레시 토큰을 찾을 수 없습니다."));
+        RefreshToken refreshToken = refreshTokenRepository.findById(id)
+                .orElseThrow(() -> new CustomException(CustomError.TOKEN_NOT_FOUND));
 
         refreshTokenRepository.delete(refreshToken); //리프레쉬 토큰 삭제
 
@@ -101,21 +111,21 @@ public class AuthService { //회원가입 & 로그인 & 토큰 재발급
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken()).equals("true")){
             if (tokenProvider.validateToken(tokenRequestDto.getRefreshToken()).equals("expired")){
                 logout(id);
-                throw new RuntimeException("리프레시 토큰이 만료되었습니다");
+                throw new CustomException(CustomError.EXPIRED_TOKEN);
             }
-            throw new RuntimeException("리프레시 토큰이 유효하지 않습니다");
+            throw new CustomException(CustomError.INVALID_TOKEN);
         }
 
         //access 토큰에서 id 가져오기
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         //id 기반으로 저장소에서 refresh 토큰 값 가져오기
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("로그아웃된 사용자입니다"));
+        RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
+                .orElseThrow(() -> new CustomException(CustomError.USER_LOGOUT));
 
         //refresh 토큰 일치(저장소 - 파라미터) 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
-            throw new RuntimeException("토큰의 사용자 정보가 일치하지 않습니다");
+        if (!refreshToken.getToken().equals(tokenRequestDto.getRefreshToken())){
+            throw new CustomException(CustomError.WRONG_TOKEN);
         }
 
         //토큰 생성

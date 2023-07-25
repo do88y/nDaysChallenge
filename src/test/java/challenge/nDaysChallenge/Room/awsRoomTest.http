@@ -9,7 +9,7 @@ Content-Type: application/json
 ### 개인 챌린지 생성
 POST http://localhost:8080/challenge
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyM0BnbWFpbC5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNjgyNjYzODI1fQ.b5CwSseC6pa9IKi0yWu5siljRFAyJefE4I2QPQmerTs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZDEyMzEyQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2ODY5ODQ1NDR9.ZqnpCp1ENHT2obfkRPvqbuddft9wtNG4cli5QkzkPjE
 
 {
   "name": "명상",
